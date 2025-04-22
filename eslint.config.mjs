@@ -10,10 +10,27 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript","plugin:jest/recommended",
+  // Legacy config compatibility
+  ...compat.extends(
+    "next/core-web-vitals",
+    "next/typescript",
+    "plugin:jest/recommended",
     "plugin:jest-dom/recommended",
-    "plugin:testing-library/react"),
-    
+    "plugin:testing-library/react"
+  ),
+
+  // Add custom config directly using flat config syntax
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
+    },
+    env: {
+      jest: true,
+    },
+  },
 ];
 
 export default eslintConfig;
