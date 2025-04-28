@@ -12,7 +12,8 @@
     "coverage": "jest --coverage",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=chpt_63b29bbeaa870ab"
+    "chromatic": "npx chromatic --project-token=chpt_63b29bbeaa870ab",
+    "cypress:open": "cypress open"
   },
   "dependencies": {
     "eslint-plugin-jest-dom": "^5.5.0",
