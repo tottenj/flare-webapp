@@ -2,33 +2,46 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-  --font-nunito: var(--font-nunito)
+  --foreground: oklch(16.15% 0.0828 273.4);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: oklch(16.15% 0.0828 273.4);
+  --color-secondary: #5F4A4A;
+  --color-tertiary: rgba(221, 218, 218, 0.5);
+  --color-red: oklch(64.73% 0.2385 27.3);
+  --color-orange: oklch(76.97% 0.1627 74.52);
+  --color-yellow: oklch(91.41% 0.1528 104.99);
+  --color-green: oklch(74.62% 0.1947 152.04);
+  --color-blue: oklch(48.68% 0.1387 270.64);
   --font-nunito: var(--font-nunito)
   --font-pt_sans: var(--font-pt_sans)
 }
 
+/*
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: var(--color-white);
   }
 }
+  */
 
 h1{
   font-family: var(--font-nunito);
   font-weight: bold;
+  color: var(--color-primary);
+  font-size: 40;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-pt_sans);
+}
+
+.gradient{
+  background: linear-gradient(135deg, #ffa301, #ff005c);
 }

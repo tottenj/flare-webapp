@@ -1,9 +1,11 @@
 import { User } from "firebase/auth";
 import { useEffect } from "react";
-
-import { auth } from "../firebase/clientApp"; // Assuming this is where you initialize Firebase Auth
 import { setCookie, deleteCookie } from "cookies-next"; // Make sure cookies-next is installed
-import { onIdTokenChanged } from "../firebase/auth";
+import firebaseConfig from "../../../firebaseconfig";
+import { onIdTokenChanged } from "../firebase/auth/auth";
+
+
+
 
 export default function useUserSession(initialUser: any) {
   useEffect(() => {

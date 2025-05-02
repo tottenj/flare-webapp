@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Nunito, PT_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/context/AuthContext";
-import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
+
 import UserContext from "@/components/context/UserContext";
+import { getAuthenticatedAppForUser } from "@/lib/firebase/auth/serverApp";
 
 const nunito = Nunito({
   variable: "--font-nunito",

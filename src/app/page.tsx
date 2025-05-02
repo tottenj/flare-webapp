@@ -1,3 +1,9 @@
-export default async function Home() {
-  return (<h1>hello world</h1>);
+import SignInForm from "@/components/forms/SignInForm";
+
+export default async function Login() {
+  return (
+  <div className="gradient w-lvw h-lvh flex justify-center items-center">
+    <SignInForm/>
+  </div>
+);
 }
