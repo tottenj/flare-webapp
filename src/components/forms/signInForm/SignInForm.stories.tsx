@@ -1,12 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import SignInForm from './SignInForm';
+import { AuthProvider } from '@/components/context/AuthContext';
 
 const meta = {
   decorators: [
     (Story) => (
+      <AuthProvider>
       <div className="flex w-[95vw] justify-center">
         <Story />
       </div>
+      </AuthProvider>
     ),
   ],
   component: SignInForm,
