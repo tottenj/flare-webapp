@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -9,15 +9,15 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: oklch(16.15% 0.0828 273.4);
-  --color-secondary: #5F4A4A;
+  --color-secondary: #5f4a4a;
   --color-tertiary: rgba(221, 218, 218, 0.5);
   --color-red: oklch(64.73% 0.2385 27.3);
   --color-orange: oklch(76.97% 0.1627 74.52);
   --color-yellow: oklch(91.41% 0.1528 104.99);
   --color-green: oklch(74.62% 0.1947 152.04);
   --color-blue: oklch(48.68% 0.1387 270.64);
-  --font-nunito: var(--font-nunito)
-  --font-pt_sans: var(--font-pt_sans)
+  --font-nunito: var(--font-nunito);
+   --font-pt_sans: var(--font-pt_sans);
 }
 
 /*
@@ -29,7 +29,7 @@
 }
   */
 
-h1{
+h1 {
   font-family: var(--font-nunito);
   font-weight: bold;
   color: var(--color-primary);
@@ -42,6 +42,6 @@ body {
   font-family: var(--font-pt_sans);
 }
 
-.gradient{
+.gradient {
   background: linear-gradient(135deg, #ffa301, #ff005c);
 }

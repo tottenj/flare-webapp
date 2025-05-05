@@ -1,22 +1,19 @@
-import "server-only";
+import 'server-only';
 
-import { cookies, headers } from "next/headers";
-import { initializeServerApp, initializeApp, FirebaseServerAppSettings } from "firebase/app";
+import { cookies, headers } from 'next/headers';
+import { initializeServerApp, FirebaseServerAppSettings } from 'firebase/app';
 
-import { getAuth } from "firebase/auth";
-import firebaseConfig from "../../../../firebaseconfig";
-
-
+import { getAuth } from 'firebase/auth';
+import firebaseConfig from '../../../../firebaseconfig';
 
 export async function getAuthenticatedAppForUser() {
-  const headersObj = await headers()
-  const token = (await cookies()).get("__session")?.value;
+  const headersObj = await headers();
+  const token = (await cookies()).get('__session')?.value;
 
   let appSettings: FirebaseServerAppSettings = { authIdToken: token };
   appSettings.releaseOnDeref = headersObj;
 
-
-  const firebaseServerApp = initializeServerApp(firebaseConfig, appSettings)
+  const firebaseServerApp = initializeServerApp(firebaseConfig, appSettings);
 
   const auth = getAuth(firebaseServerApp);
   await auth.authStateReady();

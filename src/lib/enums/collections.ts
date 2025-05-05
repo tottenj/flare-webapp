@@ -1,6 +1,5 @@
-enum Collections{
-    Users = "Users"
+enum Collections {
+  Users = 'Users',
 }
 
-
-export default Collections
+export default Collections;

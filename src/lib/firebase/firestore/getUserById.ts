@@ -1,7 +1,6 @@
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "../auth/clientApp";
-import Collections from "@/lib/enums/collections";
-
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../auth/clientApp';
+import Collections from '@/lib/enums/collections';
 
 export default async function getUserById(uid: string, dab = db) {
   const docRef = doc(dab, Collections.Users, uid);
