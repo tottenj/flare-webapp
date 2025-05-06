@@ -1,6 +1,17 @@
 // .storybook/__mocks__/firebase/firestore.ts
-export const getDoc = jest.fn().mockResolvedValue({ data: () => ({ uid: 'mock-user' }) });
-export const addDoc = jest.fn().mockResolvedValue({});
-export const collection = jest.fn();
-export const doc = jest.fn();
-export const setDoc = jest.fn().mockResolvedValue({});
+export const getFirestore = () => ({
+  collection: () => ({
+    doc: () => ({
+      get: () => Promise.resolve({ data: () => ({ uid: 'mock-user' }) }),
+      set: () => Promise.resolve(),
+      add: () => Promise.resolve(),
+    }),
+  }),
+  doc: () => ({
+    get: () => Promise.resolve({ data: () => ({ uid: 'mock-user' }) }),
+    set: () => Promise.resolve(),
+  }),
+  setDoc: () => Promise.resolve(),
+  getDoc: () => Promise.resolve({ data: () => ({ uid: 'mock-user' }) }),
+  addDoc: () => Promise.resolve(),
+});
