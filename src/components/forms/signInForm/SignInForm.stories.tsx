@@ -5,11 +5,9 @@ import { AuthProvider } from '@/components/context/AuthContext';
 const meta = {
   decorators: [
     (Story) => (
-      <AuthProvider>
       <div className="flex w-[95vw] justify-center">
         <Story />
       </div>
-      </AuthProvider>
     ),
   ],
   tags: ["autodocs"],

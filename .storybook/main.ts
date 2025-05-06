@@ -1,3 +1,4 @@
+import path from 'path';
 import type { StorybookConfig } from '@storybook/nextjs';
 
 const config: StorybookConfig = {
@@ -16,5 +17,19 @@ const config: StorybookConfig = {
   core: {
     builder: '@storybook/builder-webpack5',
   },
+  webpackFinal: async (config) => {
+    if (!config.resolve) config.resolve = {};
+    if (!config.resolve.alias) config.resolve.alias = {};
+
+    // 👉 Aliasing Firebase modules to local mock file
+    config.resolve.alias['@/lib/firebase/auth/auth.ts'] = path.resolve(
+      __dirname,
+      '__mocks__/authHelpers.ts'
+    );
+
+
+    return config;
+  },
 };
+
 export default config;
