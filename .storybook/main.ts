@@ -27,6 +27,12 @@ const config: StorybookConfig = {
       '__mocks__/authHelpers.ts'
     );
 
+     config.resolve.alias['firebase/auth'] = path.resolve(__dirname, '__mocks__/firebase/auth.ts');
+     config.resolve.alias['firebase/firestore'] = path.resolve(
+       __dirname,
+       '__mocks__/firebase/firestore.ts'
+     );
+
 
     return config;
   },
