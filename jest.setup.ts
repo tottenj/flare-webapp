@@ -23,3 +23,21 @@ jest.mock('firebase/firestore', () => ({
     addDoc: jest.fn().mockResolvedValue({}),
   })),
 }));
+
+// jest.setup.js
+jest.mock('firebase/auth', () => {
+  return {
+    getAuth: jest.fn(() => ({
+      onAuthStateChanged: jest.fn(),
+      signInWithPopup: jest.fn(),
+      signOut: jest.fn(),
+      currentUser: {
+        uid: 'mock-user',
+        email: 'mock-email@example.com',
+      },
+    })),
+    onAuthStateChanged: jest.fn(),
+    signInWithPopup: jest.fn(),
+    signOut: jest.fn(),
+  };
+});
