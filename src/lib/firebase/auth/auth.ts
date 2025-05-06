@@ -20,12 +20,11 @@ export function onIdTokenChanged(cb: NextOrObserver<User>) {
   return _onIdTokenChanged(auth, cb);
 }
 
+
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
-
   try {
     const result = await signInWithPopup(auth, provider);
-
     const user = result.user;
     const userData = await getUserById(user.uid);
 
