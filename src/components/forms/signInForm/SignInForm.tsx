@@ -1,6 +1,6 @@
 'use client';
 import { useActionState } from 'react';
-import GoogleSignInButton from '../../buttons/SignInWithGoogleButton';
+import GoogleSignInButton from '../../buttons/googleButton/SignInWithGoogleButton';
 import TextInput from '../../inputs/textInput/TextInput';
 import emailAndPasswordAction from '@/lib/firebase/auth/emailAndPasswordAuth/emailAndPasswordActionCreation';
 import SubmitButton from '@/components/inputs/submitButton/SubmitButton';

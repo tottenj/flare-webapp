@@ -1,6 +1,22 @@
 import type { Preview } from '@storybook/react';
 import '../src/app/globals.css';
 
+if (typeof window !== 'undefined' && process.env.STORYBOOK === 'true') {
+  jest.mock('firebase/auth', () => ({
+    getAuth: () => ({
+      currentUser: null,
+      signInWithEmailAndPassword: jest.fn(),
+      createUserWithEmailAndPassword: jest.fn(),
+      signOut: jest.fn(),
+    }),
+  }));
+
+  jest.mock('firebase/app', () => ({
+    initializeApp: jest.fn(),
+    getApps: () => [],
+  }));
+}
+
 const preview: Preview = {
   parameters: {
     backgrounds: {

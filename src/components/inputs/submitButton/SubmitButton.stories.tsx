@@ -14,5 +14,17 @@ export const Default: Story = {
   },
   args: {
     text: 'Submit',
+    disabled: false,
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    text: 'Submit',
+    disabled: true,
+  },
+
+  parameters: {
+    layout: 'centered',
   },
 };

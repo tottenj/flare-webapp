@@ -12,6 +12,7 @@ const meta = {
       </AuthProvider>
     ),
   ],
+  tags: ["autodocs"],
   component: SignInForm,
   title: 'Forms/Login Form',
   parameters: {

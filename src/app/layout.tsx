@@ -4,7 +4,7 @@ import './globals.css';
 import { AuthProvider } from '@/components/context/AuthContext';
 import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/serverApp';
 import { ServerUserProvider } from '@/components/context/ServerUserContext';
-import SignOutButton from '@/components/buttons/SignOutButton';
+import SignOutButton from '@/components/buttons/signOutButton/SignOutButton';
 import { ToastContainer } from 'react-toastify';
 
 const nunito = Nunito({
