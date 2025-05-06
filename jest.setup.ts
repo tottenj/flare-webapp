@@ -4,10 +4,23 @@ require('dotenv').config({path: '.env.test'})
 // jest.setup.js (or in your test file)
 // Mock the `firebase/app` module
 jest.mock('firebase/app', () => {
+  const actualApp = jest.requireActual('firebase/app');
+
   return {
-    initializeApp: jest.fn(() => ({ app: 'mockApp' })),
+    ...actualApp,
+    initializeApp: jest.fn(() => ({
+      name: '[DEFAULT]',
+      options: {},
+      automaticDataCollectionEnabled: false,
+      // Mock the container with getProvider to avoid undefined error
+      container: {
+        getProvider: jest.fn(() => ({
+          getImmediate: jest.fn(),
+        })),
+      },
+    })),
+    getApps: jest.fn(() => []),
     getApp: jest.fn(),
-    getApps: jest.fn(() => []), // Mocking the list of apps
   };
 });
 

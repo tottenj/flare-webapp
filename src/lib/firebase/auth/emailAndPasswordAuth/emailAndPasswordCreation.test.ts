@@ -6,13 +6,7 @@ import emailAndPasswordAction from './emailAndPasswordActionCreation';
 
 
 
-jest.mock('firebase/auth', () => {
-    const originalModule = jest.requireActual('firebase/auth');
-    return{
-        ...originalModule,
-        createUserWithEmailAndPassword: jest.fn(),
-    }
-});
+
 
 describe('emailAndPasswordAction', () => {
   afterEach(() => {
