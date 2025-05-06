@@ -1,5 +1,9 @@
 // .storybook/__mocks__/firebase/auth.ts
 export const GoogleAuthProvider = function () {}; // Mock constructor
+
+
+
+
 export const signInWithPopup = function () {
   return Promise.resolve({ user: { uid: 'mock-user', email: 'mock@example.com' } });
 };
