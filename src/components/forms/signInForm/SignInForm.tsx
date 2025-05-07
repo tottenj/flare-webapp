@@ -7,9 +7,14 @@ import SubmitButton from '@/components/inputs/submitButton/SubmitButton';
 import { toast } from 'react-toastify';
 import { useActionToast } from '@/lib/hooks/useActionToast';
 
-export default function SignInForm() {
+
+
+type SignInFormProps = {
+  overrideAction?: typeof emailAndPasswordAction;
+};
+export default function SignInForm({overrideAction}: SignInFormProps) {
   const initialState = { message: '' };
-  const [state, formAction, pending] = useActionState(emailAndPasswordAction, initialState);
+  const [state, formAction, pending] = useActionState(overrideAction ?? emailAndPasswordAction, initialState);
 
   useActionToast(state, pending, {
     successMessage: "User created successfully",
@@ -23,7 +28,7 @@ export default function SignInForm() {
       <h1 className="mb-4">Sign Up</h1>
       <form action={formAction} className="mb-8 w-5/6 @lg:w-2/3">
         <TextInput label="Email" name="email" placeholder="example@gmail.com" />
-        <TextInput label="Password" name="password" placeholder="**********" />
+        <TextInput label="Password" name="password" placeholder="**********" password={true}/>
         <div className="flex justify-center">
           <SubmitButton disabled={pending}/>
         </div>
