@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import SignInForm from './SignInForm';
 import { expect, userEvent, within } from '@storybook/test';
-import * as authModule from '@/lib/firebase/auth/emailAndPasswordAuth/emailAndPasswordActionCreation';
 
 let submittedData: Record<string, FormDataEntryValue> | null = null;
 

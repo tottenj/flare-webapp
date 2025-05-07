@@ -5,7 +5,7 @@ import TextInput from '../../inputs/textInput/TextInput';
 import emailAndPasswordAction from '@/lib/firebase/auth/emailAndPasswordAuth/emailAndPasswordActionCreation';
 import SubmitButton from '@/components/inputs/submitButton/SubmitButton';
 import { toast } from 'react-toastify';
-import { useActionToast } from '@/lib/hooks/useActionToast';
+import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
 
 
 
