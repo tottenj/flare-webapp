@@ -15,10 +15,11 @@ before_script:
 
 jest:
   stage: test
+  # Regex to extract code coverage percentage from Jest output
+  coverage: /All files[^|]*\|[^|]*\s+([\d.]+)%/
   script:
     - npm test -- --coverage
-
-    # Upload to Codecov using the official bash uploader (simplest and recommended)
+    # Upload to Codecov using the official bash uploader
     - curl -s https://codecov.io/bash | bash -s -- -t $CODECOV_TOKEN -f coverage/lcov.info
   artifacts:
     paths:
