@@ -1,0 +1,38 @@
+stages:
+  - test
+  - chromatic
+
+variables:
+  NODE_VERSION: "22.12.0"
+
+before_script:
+  - apt-get update -y
+  - apt-get install -y curl
+  - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+  - apt-get install -y nodejs
+  - node -v
+  - npm ci
+
+jest:
+  stage: test
+  script:
+    - npm test -- --coverage
+
+    # Upload to Codecov using the official bash uploader (simplest and recommended)
+    - curl -s https://codecov.io/bash | bash -s -- -t $CODECOV_TOKEN -f coverage/lcov.info
+  artifacts:
+    paths:
+      - coverage/lcov.info
+      - coverage/
+    expire_in: 1 week
+  only:
+    - branches
+    - merge_requests
+
+chromatic:
+  stage: chromatic
+  script:
+    - npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN
+  only:
+    - branches
+    - merge_requests
