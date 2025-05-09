@@ -25,7 +25,6 @@ export default async function emailAndPasswordAction(
       }else{
         return {message: "An error occurred. Please try again."}
       }
-      
     }
   } else {
     return { message: 'Error with email or password' };

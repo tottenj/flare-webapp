@@ -5,9 +5,6 @@ import { auth } from '../clientApp';
 import emailAndPasswordAction from './emailAndPasswordActionCreation';
 
 
-
-
-
 describe('emailAndPasswordAction', () => {
   afterEach(() => {
     jest.clearAllMocks();

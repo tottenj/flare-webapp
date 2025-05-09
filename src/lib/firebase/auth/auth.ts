@@ -8,9 +8,7 @@ import {
   User,
 } from 'firebase/auth';
 import { auth, db } from './clientApp';
-import getUserById from '../firestore/getUserById';
-import { doc, setDoc } from 'firebase/firestore';
-import Collections from '@/lib/enums/collections';
+import FlareUser from '@/lib/classes/FlareUser';
 
 export function onAuthStateChanged(cb: NextOrObserver<User>) {
   return _onAuthStateChanged(auth, cb);
@@ -26,13 +24,14 @@ export async function signInWithGoogle() {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    const userData = await getUserById(user.uid);
+    const userData = await FlareUser.getUserById(user.uid)
 
     if (userData) {
       return userData;
     } else {
-      const docRef = doc(db, Collections.Users, user.uid);
-      await setDoc(docRef, { id: user.uid });
+      const flar = new FlareUser(user)
+      await flar.addUser()
+      return flar
     }
   } catch (error) {
     console.error('Error signing in with Google', error);
@@ -41,7 +40,6 @@ export async function signInWithGoogle() {
 
 export async function signOut() {
   try {
-    console.log('SIGN OUT');
     auth.signOut();
   } catch (error) {
     console.error('Error signing out with Google', error);
