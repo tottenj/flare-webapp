@@ -17,7 +17,7 @@ jest:
   stage: test
   script:
     - npm test -- --coverage
-    - bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN -s ./ -f coverage/lcov.info -F unittests
+    - npx @codecov/cli upload-process -t $CODECOV_TOKEN --file coverage/lcov.info
   artifacts:
     paths:
       - coverage/lcov.info
@@ -32,5 +32,3 @@ chromatic:
     - npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN
   only:
     - branches
-
-
