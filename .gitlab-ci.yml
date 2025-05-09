@@ -32,3 +32,5 @@ chromatic:
     - npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN
   only:
     - branches
+
+
