@@ -9,6 +9,7 @@ import { expect } from '@jest/globals';
 describe('emailAndPasswordAction', () => {
   afterEach(() => {
     jest.clearAllMocks();
+
   });
 
   it('should create a user when valid email and password are provided', async () => {
