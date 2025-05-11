@@ -32,7 +32,7 @@ jest:
     - branches
     - merge_requests
 
-test:
+cypress:
   image: cypress/browsers:22.15.0
   stage: test
   script:
