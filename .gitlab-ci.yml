@@ -1,10 +1,11 @@
 stages:
   - test
+  - cypress
   - chromatic
 
 variables:
-  NODE_VERSION: "22.12.0"
-  FIREBASE_PROJECT_ID: "flare-7091a"  # Add your Firebase project ID
+  NODE_VERSION: '22.12.0'
+  FIREBASE_PROJECT_ID: 'flare-7091a' # Add your Firebase project ID
 
 before_script:
   - apt-get update -y
@@ -30,6 +31,17 @@ jest:
   only:
     - branches
     - merge_requests
+
+test:
+  image: cypress/browsers:22.15.0
+  stage: test
+  script:
+    # install dependencies
+    - npm ci
+    # start the server in the background
+    - npm start &
+    # run Cypress tests
+    - npx cypress run --browser chrome
 
 chromatic:
   stage: chromatic
