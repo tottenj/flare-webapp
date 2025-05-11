@@ -11,12 +11,17 @@ variables:
 
 before_script:
   - apt-get update -y
-  - apt-get install -y curl git openjdk-17-jre xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
+  - apt-get install -y curl git openjdk-17-jre xvfb \
+      libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 \
+      libxss1 libasound2 libxtst6 libx11-xcb1 libdrm2 \
+      libgbm1 libxcomposite1 libxdamage1 libxrandr2 \
+      libpango-1.0-0 libatk1.0-0 libcups2 libxinerama1
   - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
   - apt-get install -y nodejs
   - node -v
   - npm ci
   - npm install -g firebase-tools
+
 
 jest:
   stage: test
