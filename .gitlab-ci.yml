@@ -45,7 +45,8 @@ cypress:
     # Wait for app and emulators
     - npx wait-on -t 30000 https://localhost:3000 http://localhost:9099
 
-    - npm run cypress:run
+    # Run Cypress with correct config
+    - npx cypress run --config baseUrl=https://localhost:3000
 
     # Stop background processes
     - pkill -f "firebase emulators"
@@ -59,6 +60,7 @@ cypress:
   only:
     - branches
     - merge_requests
+
 
 chromatic:
   stage: chromatic
