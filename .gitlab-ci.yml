@@ -6,7 +6,6 @@ stages:
 variables:
   NODE_VERSION: "22.12.0"
   FIREBASE_PROJECT_ID: "flare-7091a"  # Add your Firebase project ID
-  CYPRESS_BASE_URL: "https://localhost:3000"
 
 before_script:
   - apt-get update -y
