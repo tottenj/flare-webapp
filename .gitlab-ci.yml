@@ -7,7 +7,8 @@ variables:
   NODE_VERSION: '22.12.0'
   FIREBASE_PROJECT_ID: 'flare-7091a' # Add your Firebase project ID
   CYPRESS_BASE_URL: 'https://localhost:3000'
-
+  FIREBASE_API_KEY: 'AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU',
+  
 before_script:
   - apt-get update -y
   - apt-get install -y curl
