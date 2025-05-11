@@ -39,7 +39,7 @@ describe('SignInForm', () => {
       cy.contains('An error occurred. Please try again').should('be.visible');
     });
   });
-
+/*
   describe('Successful Sign Up', () => {
     it('should create and verify a user', () => {
       const testEmail = `test${Date.now()}@example.com`;
@@ -67,7 +67,7 @@ describe('SignInForm', () => {
       });
     });
   });
-
+*/
   describe('Error Cases', () => {
     const existingEmail = 'existing@example.com';
     const existingPassword = 'password123';

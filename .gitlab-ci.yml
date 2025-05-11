@@ -34,7 +34,7 @@ jest:
 
 cypress:
   image: cypress/browsers:22.15.0
-  stage: test
+  stage: cypress
   script:
     # install dependencies
     - npm ci
