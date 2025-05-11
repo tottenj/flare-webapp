@@ -44,7 +44,7 @@ cypress:
     - firebase emulators:start --project $FIREBASE_PROJECT_ID --only auth,firestore > /dev/null 2>&1 &
 
     # Start Next.js dev server with HTTPS (you must configure this in your project)
-    - npm run dev-https &
+    - npm run dev &
 
     # Wait for app and emulators
     - npx wait-on -t 30000 https://localhost:3000 http://localhost:9099
