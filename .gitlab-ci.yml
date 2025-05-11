@@ -1,4 +1,4 @@
-image: cypress/browsers:node-22.2.0-chrome118-ff117
+image: cypress/included:12.5.0
 
 stages:
   - test
