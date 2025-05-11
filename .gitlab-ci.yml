@@ -1,6 +1,5 @@
 stages:
   - test
-  - cypress
   - chromatic
 
 variables:
