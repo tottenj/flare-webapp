@@ -3,6 +3,7 @@ import {
   doc,
   DocumentData,
   DocumentReference,
+  Firestore,
   getDoc,
   QueryDocumentSnapshot,
   setDoc,
@@ -14,7 +15,6 @@ import { db } from '../firebase/auth/configs/clientApp';
 export default class FlareUser {
   id: string;
   email: string;
-  docRef: DocumentReference;
 
   constructor(user: User);
   constructor(id: string, email: string);
@@ -27,12 +27,11 @@ export default class FlareUser {
       this.id = id as string;
       this.email = email || '';
     }
-    this.docRef = doc(db, Collections.Users, this.id).withConverter(userConverter);
   }
 
-  static async getUserById(id: string): Promise<FlareUser | null> {
+  static async getUserById(id: string, dab: Firestore = db): Promise<FlareUser | null> {
     try {
-      const docuRef = doc(db, Collections.Users, id).withConverter(userConverter);
+      const docuRef = doc(dab, Collections.Users, id).withConverter(userConverter);
       const document = await getDoc(docuRef);
       if (document.exists()) {
         return document.data();
@@ -43,12 +42,13 @@ export default class FlareUser {
     return null;
   }
 
-  async addUser(): Promise<boolean> {
+  async addUser(dab:Firestore = db): Promise<boolean> {
     try {
       if (!this.id) {
         return false;
       }
-      await setDoc(this.docRef, this);
+      const docuRef = doc(dab, Collections.Users, this.id)
+      await setDoc(docuRef, this);
     } catch (error) {
       console.log(error);
       return false;

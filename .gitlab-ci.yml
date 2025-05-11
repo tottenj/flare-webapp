@@ -38,7 +38,7 @@ cypress:
   stage: cypress
   script:
     # Start Firebase emulator in background
-    - firebase emulators:start --project $FIREBASE_PROJECT_ID &
+    - firebase emulators:exec --project $FIREBASE_PROJECT_ID &
     # Start Next.js dev server in background
     - npm run dev &
     # Wait for services to be ready
