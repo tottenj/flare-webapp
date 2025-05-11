@@ -1,7 +1,7 @@
 'use server';
 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../clientApp';
+import { auth } from '../configs/clientApp';
 
 
 

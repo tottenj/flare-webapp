@@ -4,7 +4,8 @@ import { cookies, headers } from 'next/headers';
 import { initializeServerApp, FirebaseServerAppSettings } from 'firebase/app';
 
 import { getAuth } from 'firebase/auth';
-import firebaseConfig from '../../../../firebaseconfig';
+import firebaseConfig from '../../../../../firebaseconfig';
+
 
 export async function getAuthenticatedAppForUser() {
   const headersObj = await headers();

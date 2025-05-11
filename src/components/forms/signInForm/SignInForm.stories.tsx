@@ -51,6 +51,7 @@ export const Default: Story = {
     await userEvent.click(but)
     await new Promise((r) => setTimeout(r, 500));
 
+    
     expect(submittedData).toEqual({
       email: 'example@gmail.com',
       password: "password"

@@ -35,3 +35,21 @@
 //     }
 //   }
 // }
+// cypress/support/commands.js
+// cypress/support/commands.ts
+// cypress/support/commands.ts
+import './auth';
+
+Cypress.Commands.add('signUpWithEmailAndPassword', (email: string, password: string) => {
+  cy.get('input[name="email"]').type(email);
+  cy.get('input[name="password"]').type(password);
+  cy.get('form').submit();
+});
+
+Cypress.Commands.add('clearAuthEmulator', () => {
+  cy.request({
+    method: 'DELETE',
+    url: `http://localhost:9099/emulator/v1/projects/${Cypress.env('FIREBASE_PROJECT_ID')}/accounts`,
+    failOnStatusCode: false
+  });
+});

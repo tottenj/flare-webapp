@@ -1,10 +1,9 @@
 // emailAndPasswordAction.test.ts
 
 import { createUserWithEmailAndPassword } from 'firebase/auth'; // Import the Firebase method
-import { auth } from '../clientApp';
 import emailAndPasswordAction from './emailAndPasswordActionCreation';
 import { expect } from '@jest/globals';
-
+import { auth } from '../configs/clientApp';
 
 describe('emailAndPasswordAction', () => {
   afterEach(() => {

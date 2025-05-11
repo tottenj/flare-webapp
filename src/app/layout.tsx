@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import { Nunito, PT_Sans } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/context/AuthContext';
-import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/serverApp';
 import { ServerUserProvider } from '@/components/context/ServerUserContext';
-import SignOutButton from '@/components/buttons/signOutButton/SignOutButton';
 import { ToastContainer } from 'react-toastify';
+import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+import { signOutUser } from '@/lib/firebase/auth/signOutUser';
+import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverApp';
 
 const nunito = Nunito({
   variable: '--font-nunito',
@@ -42,7 +43,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en">
       <body className={`${nunito.variable} ${pt_sans.variable} antialiased`}>
         <ServerUserProvider user={userData}>
-          <AuthProvider>{children}<ToastContainer position='bottom-right'/></AuthProvider>
+          <AuthProvider><PrimaryButton click={signOutUser} text='signOut' size='medium'/>{children}<ToastContainer position='bottom-right'/></AuthProvider>
         </ServerUserProvider>
       </body>
     </html>

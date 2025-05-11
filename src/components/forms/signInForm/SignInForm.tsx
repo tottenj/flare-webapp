@@ -3,9 +3,9 @@ import { useActionState } from 'react';
 import GoogleSignInButton from '../../buttons/googleButton/SignInWithGoogleButton';
 import TextInput from '../../inputs/textInput/TextInput';
 import emailAndPasswordAction from '@/lib/firebase/auth/emailAndPasswordAuth/emailAndPasswordActionCreation';
-import SubmitButton from '@/components/inputs/submitButton/SubmitButton';
-import { toast } from 'react-toastify';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
+import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+
 
 
 
@@ -30,7 +30,7 @@ export default function SignInForm({overrideAction}: SignInFormProps) {
         <TextInput label="Email" name="email" placeholder="example@gmail.com" />
         <TextInput label="Password" name="password" placeholder="**********" password={true}/>
         <div className="flex justify-center">
-          <SubmitButton disabled={pending}/>
+          <PrimaryButton text='Submit' type='submit' disabled={pending} size='full' />
         </div>
       </form>
       <GoogleSignInButton signIn={false} />

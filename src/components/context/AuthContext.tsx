@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
 import { setCookie, deleteCookie } from 'cookies-next'; // this works in the browser
-import { auth } from '@/lib/firebase/auth/clientApp';
+import { auth } from '@/lib/firebase/auth/configs/clientApp';
 
 interface AuthContextType {
   user: User | null;

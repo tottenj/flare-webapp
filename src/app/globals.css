@@ -45,3 +45,9 @@ body {
 .gradient {
   background: linear-gradient(135deg, #ffa301, #ff005c);
 }
+
+.gradientBack{
+  background: linear-gradient(135deg, #ffa301, #ff005c);
+  width: 100vw;
+  height: 100lvh;
+}

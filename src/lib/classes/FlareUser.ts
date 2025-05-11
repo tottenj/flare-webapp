@@ -8,9 +8,8 @@ import {
   setDoc,
   SnapshotOptions,
 } from 'firebase/firestore';
-import { db } from '../firebase/auth/clientApp';
 import Collections from '../enums/collections';
-import { SnapshotMatchOptions } from 'vitest';
+import { db } from '../firebase/auth/configs/clientApp';
 
 export default class FlareUser {
   id: string;
@@ -24,7 +23,6 @@ export default class FlareUser {
       const user = id as User;
       this.id = user.uid;
       this.email = user.email || '';
-
     } else {
       this.id = id as string;
       this.email = email || '';
@@ -47,8 +45,8 @@ export default class FlareUser {
 
   async addUser(): Promise<boolean> {
     try {
-      if(!this.id){
-        return false
+      if (!this.id) {
+        return false;
       }
       await setDoc(this.docRef, this);
     } catch (error) {
