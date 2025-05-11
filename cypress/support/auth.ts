@@ -18,9 +18,9 @@ declare global {
 
 export const setupFirebase = (): void => {
   const firebaseConfig = {
-    apiKey: Cypress.env('AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU'),
-    authDomain: Cypress.env('flare-7091a.firebaseapp.com'),
-    projectId: Cypress.env('flare-7091a'),
+    apiKey: Cypress.env('FIREBASE_API_KEY'),
+    authDomain: Cypress.env('FIREBASE_AUTH_DOMAIN'),
+    projectId: Cypress.env('FIREBASE_PROJECT_ID'),
     // Add other config values as needed
   };
 

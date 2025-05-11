@@ -17,6 +17,7 @@
     "format": "prettier --write .",
     "test-storybook": "vitest --project=storybook",
     "emulators:start": "firebase emulators:start",
+    "cypress:run": "cypress run",
     "cypressFire": "concurrently -k -s first \"npm run emulators:start\" \"npm run dev\" \"npm run cypress:open\""
   },
   "dependencies": {

@@ -1,6 +1,7 @@
 'use client';
 
-import { signInWithGoogle } from '@/lib/firebase/auth/auth';
+import { signInWithGoogle } from "@/lib/firebase/auth/google/signInWithGoogle";
+
 
 interface googleSignInButtonProps {
   signIn: boolean;
@@ -9,6 +10,7 @@ interface googleSignInButtonProps {
 export default function GoogleSignInButton({ signIn }: googleSignInButtonProps) {
   return (
     <button
+      data-testid="google-signin-button"
       onClick={signInWithGoogle}
       className="flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 shadow-sm transition duration-300 hover:bg-gray-100"
     >

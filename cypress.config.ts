@@ -8,9 +8,9 @@ export default defineConfig({
     },
     baseUrl: 'https://localhost:3000', // Adjust to your app's URL
     env: {
-      FIREBASE_API_KEY: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-      FIREBASE_AUTH_DOMAIN: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-      FIREBASE_PROJECT_ID: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+      FIREBASE_API_KEY: 'AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU',
+      FIREBASE_AUTH_DOMAIN: 'flare-7091a.firebaseapp.com',
+      FIREBASE_PROJECT_ID: "flare-7091a",
     },
   },
   component: {

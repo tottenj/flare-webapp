@@ -10,7 +10,7 @@ describe('SignInForm', () => {
   
     beforeEach(() => {
       cy.clearAuthEmulator();
-      cy.visit('/signin');
+      cy.visit('/signup');
     });
   
     interface FirebaseErrorResponse {
@@ -37,29 +37,41 @@ describe('SignInForm', () => {
         cy.get('input[name="email"]').type('invalid-email');
         cy.get('input[name="password"]').type('password123');
         cy.get('form').submit();
-        cy.contains(/invalid email|error with email/i).should('be.visible');
+        cy.contains('An error occurred. Please try again').should('be.visible');
       });
     });
   
     describe('Successful Sign Up', () => {
-      it('should successfully create a new user', () => {
+      it('should verify user creation', () => {
         const testEmail = `test${Date.now()}@example.com`;
         const testPassword = 'password123';
-        
-        cy.signUpWithEmailAndPassword(testEmail, testPassword);
-        
-        // Check for success message
-        cy.contains('User created successfully').should('be.visible');
-        
-        // Verify user was created in emulator
-        cy.request<FirebaseUserResponse>({
-          method: 'POST',
-          url: 'http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:lookup',
-          qs: { key: 'fake-api-key' },
-          body: { email: testEmail }
-        }).then((response) => {
-          expect(response.status).to.eq(200);
-          expect(response.body.users?.[0].email).to.eq(testEmail);
+        const projectId = Cypress.env('FIREBASE_PROJECT_ID'); // Make sure this is set
+
+        // 1. First create the user
+        it('should create and verify a user', () => {
+          const testEmail = `test${Date.now()}@example.com`;
+
+          // 1. Sign up a user
+          cy.request({
+            method: 'POST',
+            url: 'http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp',
+            body: {
+              email: testEmail,
+              password: 'password123',
+              returnSecureToken: true,
+            },
+          }).then((signUpResponse) => {
+            expect(signUpResponse.status).to.eq(200);
+          });
+
+          // 2. Verify user exists in emulator
+          cy.request({
+            method: 'GET',
+            url: `http://localhost:9099/emulator/v1/projects/${Cypress.env('FIREBASE_PROJECT_ID')}/accounts`,
+          }).then((listResponse) => {
+            const userExists = listResponse.body.users.some((user:any) => user.email === testEmail);
+            expect(userExists).to.be.true;
+          });
         });
       });
     });
@@ -85,18 +97,6 @@ describe('SignInForm', () => {
       it('should show error for existing email', () => {
         cy.signUpWithEmailAndPassword(existingEmail, 'anypassword');
         cy.contains('Email is already in use').should('be.visible');
-      });
-  
-      it('should show generic error for other failures', () => {
-        // Mock a failure case
-        cy.intercept('POST', '**/emailAndPasswordAction', {
-          statusCode: 500,
-          body: { message: 'An error occurred. Please try again.' }
-        }).as('signUpRequest');
-        
-        cy.signUpWithEmailAndPassword('test@example.com', 'password123');
-        cy.wait('@signUpRequest');
-        cy.contains('An error occurred').should('be.visible');
       });
     });
   

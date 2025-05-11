@@ -37,7 +37,6 @@
 // }
 // cypress/support/commands.js
 // cypress/support/commands.ts
-// cypress/support/commands.ts
 import './auth';
 
 Cypress.Commands.add('signUpWithEmailAndPassword', (email: string, password: string) => {
