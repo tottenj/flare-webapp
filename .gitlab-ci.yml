@@ -5,16 +5,14 @@ stages:
 
 variables:
   NODE_VERSION: '22.12.0'
-  FIREBASE_PROJECT_ID: 'flare-7091a' # Add your Firebase project ID
+  FIREBASE_PROJECT_ID: 'flare-7091a'
   CYPRESS_BASE_URL: 'https://localhost:3000'
   FIREBASE_API_KEY: 'AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU'
 
 before_script:
   - apt-get update -y
-  - apt-get install -y curl
   - apt-get install -y curl git openjdk-17-jre xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
   - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
-  - apt-get install -y openjdk-17-jre
   - apt-get install -y nodejs
   - node -v
   - npm ci
@@ -22,11 +20,9 @@ before_script:
 
 jest:
   stage: test
-  # Regex to extract code coverage percentage from Jest output
   coverage: /All files[^|]*\|[^|]*\s+([\d.]+)%/
   script:
     - npm test -- --coverage
-    # Upload to Codecov using the official bash uploader
     - curl -s https://codecov.io/bash | bash -s -- -t $CODECOV_TOKEN -f coverage/lcov.info
   artifacts:
     paths:
@@ -42,17 +38,19 @@ cypress:
   script:
     - export DISPLAY=:99
     - Xvfb :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
-    
-    # Start Firebase Emulator
     - export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-    # Start Firebase emulator in background
-    - firebase emulators:start --project $FIREBASE_PROJECT_ID &
-    # Start Next.js dev server in background
-    - npm run dev &
-    # Wait for services to be ready
+
+    # Start Firebase emulators
+    - firebase emulators:start --project $FIREBASE_PROJECT_ID --only auth,firestore > /dev/null 2>&1 &
+
+    # Start Next.js dev server with HTTPS (you must configure this in your project)
+    - npm run dev-https &
+
+    # Wait for app and emulators
     - npx wait-on -t 30000 https://localhost:3000 http://localhost:9099
-    # Run Cypress tests
+
     - npm run cypress:run
+
     # Stop background processes
     - pkill -f "firebase emulators"
     - pkill -f "next dev"
