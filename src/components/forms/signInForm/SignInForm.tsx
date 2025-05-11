@@ -11,11 +11,13 @@ import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 
 type SignInFormProps = {
   overrideAction?: typeof emailAndPasswordAction;
+  signUp?: boolean
 };
-export default function SignInForm({overrideAction}: SignInFormProps) {
+export default function SignInForm({overrideAction, signUp = true}: SignInFormProps) {
   const initialState = { message: '' };
   const [state, formAction, pending] = useActionState(overrideAction ?? emailAndPasswordAction, initialState);
 
+  
   useActionToast(state, pending, {
     successMessage: "User created successfully",
     loadingMessage: 'Creating your account'

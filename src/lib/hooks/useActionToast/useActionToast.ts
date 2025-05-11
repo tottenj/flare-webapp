@@ -29,7 +29,7 @@ export function useActionToast<T extends { message?: string }>(
         toastId.current = null;
       }
 
-      if (state.message === 'User created successfully') {
+      if (state.message === successMessage) {
         toast.success(successMessage);
       } else {
         toast.error(state.message);
