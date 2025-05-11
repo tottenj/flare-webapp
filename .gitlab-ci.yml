@@ -13,6 +13,7 @@ before_script:
   - apt-get update -y
   - apt-get install -y curl
   - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+  - apt-get install -y openjdk-17-jre
   - apt-get install -y nodejs
   - node -v
   - npm ci
