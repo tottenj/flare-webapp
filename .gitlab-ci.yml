@@ -41,7 +41,7 @@ cypress:
     # Start Next.js dev server in background
     - npm run dev &
     # Wait for services to be ready
-    - npx wait-on -t 30000 http://localhost:3000 http://localhost:9099
+    - npx wait-on -t 30000 https://localhost:3000 http://localhost:9099
     # Run Cypress tests
     - npm run cypress:run
     # Stop background processes
