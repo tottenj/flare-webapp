@@ -5,6 +5,7 @@ import TextInput from '../../inputs/textInput/TextInput';
 import emailAndPasswordAction from '@/lib/firebase/auth/emailAndPasswordAuth/emailAndPasswordActionCreation';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+import emailAndPasswordSignIn from '@/lib/firebase/emailAndPasswordSignIn/emailAndPasswordSignIn';
 
 
 
@@ -15,19 +16,20 @@ type SignInFormProps = {
 };
 export default function SignInForm({overrideAction, signUp = true}: SignInFormProps) {
   const initialState = { message: '' };
-  const [state, formAction, pending] = useActionState(overrideAction ?? emailAndPasswordAction, initialState);
+  const action = signUp ?  emailAndPasswordAction : emailAndPasswordSignIn
+  const [state, formAction, pending] = useActionState(overrideAction ?? action, initialState);
 
-  
+
   useActionToast(state, pending, {
-    successMessage: "User created successfully",
-    loadingMessage: 'Creating your account'
+    successMessage: signUp ?  "User created successfully" : "User logged In successfully",
+    loadingMessage: signUp ? 'Creating your account' : "Logging In..."
   })
 
   
 
   return (
     <div className="@container flex w-5/6 lg:w-1/2 flex-col items-center rounded-xl bg-white p-10">
-      <h1 className="mb-4">Sign Up</h1>
+      <h1 className="mb-4">{signUp == true ? "Sign Up" : "Login"}</h1>
       <form action={formAction} className="mb-8 w-5/6 @lg:w-2/3">
         <TextInput label="Email" name="email" placeholder="example@gmail.com" />
         <TextInput label="Password" name="password" placeholder="**********" password={true}/>
@@ -35,7 +37,7 @@ export default function SignInForm({overrideAction, signUp = true}: SignInFormPr
           <PrimaryButton text='Submit' type='submit' disabled={pending} size='full' />
         </div>
       </form>
-      <GoogleSignInButton signIn={false} />
+      <GoogleSignInButton signIn={!signUp} />
     </div>
   );
 }
