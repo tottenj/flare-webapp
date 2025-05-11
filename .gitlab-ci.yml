@@ -5,8 +5,10 @@ stages:
 
 variables:
   NODE_VERSION: '22.12.0'
-  FIREBASE_PROJECT_ID: 'flare-7091a' # Add your Firebase project ID
   CYPRESS_BASE_URL: 'https://localhost:3000'
+  FIREBASE_API_KEY: 'AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU',
+  FIREBASE_AUTH_DOMAIN: 'flare-7091a.firebaseapp.com',
+  FIREBASE_PROJECT_ID: "flare-7091a",
 
 before_script:
   - apt-get update -y
@@ -37,7 +39,7 @@ cypress:
   stage: cypress
   script:
     # Start Firebase emulator in background
-    - firebase emulators:start --only auth --project $FIREBASE_PROJECT_ID &
+    - firebase emulators:start --project $FIREBASE_PROJECT_ID &
     # Start Next.js dev server in background
     - npm run dev &
     # Wait for services to be ready
