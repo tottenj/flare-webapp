@@ -39,7 +39,8 @@ cypress:
   image: cypress/browsers:22.15.0
   stage: cypress
   variables:
-    "CYPRESS_FIREBASE_WEB_API_KEY": $FIREBASE_API_KEY
+    CYPRESS_FIREBASE_WEB_API_KEY: $FIREBASE_API_KEY
+    FIREBASE_AUTH_EMULATOR_HOST: 'localhost:9099'
   script:
     # install dependencies
     - npm ci
@@ -51,7 +52,7 @@ cypress:
     # start the server in the background
     - npm run dev &
     # run Cypress tests
-    - npx cypress run --browser chrome --env FIREBASE_WEB_API_KEY=$CYPRESS_FIREBASE_WEB_API_KEY
+    - npx cypress run --browser chrome --env FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID,FIREBASE_WEB_API_KEY=$CYPRESS_FIREBASE_WEB_API_KEY
 
 chromatic:
   stage: chromatic

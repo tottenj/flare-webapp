@@ -50,7 +50,7 @@ jest.mock('firebase/firestore', () => {
     getFirestore: jest.fn(() => ({ firestore: 'mockFirestore' })),
     collection: jest.fn(),
     doc: jest.fn().mockReturnValue({
-      withConverter: jest.fn().mockReturnThis(),
+      withConverter: jest.fn().mockReturnThis()
     }),
     setDoc: jest.fn(),
     getDoc: jest.fn(),
