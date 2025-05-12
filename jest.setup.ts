@@ -36,6 +36,7 @@ jest.mock('firebase/auth', () => {
     getAuth: jest.fn(() => ({
       currentUser: { uid: 'mock-uid', email: 'test@example.com' },
     })),
+    connectAuthEmulator: jest.fn(),
     onAuthStateChanged: jest.fn(),
     // Add more Firebase Auth methods you need to mock
   };
