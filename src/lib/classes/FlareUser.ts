@@ -38,6 +38,7 @@ export default class FlareUser {
       }
     } catch (error) {
       console.log(error);
+      return null
     }
     return null;
   }
