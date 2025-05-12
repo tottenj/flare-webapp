@@ -40,7 +40,10 @@ cypress:
     # install dependencies
     - npm ci
 
-    - firebase emulators:start &
+    - firebase emulators:start & 
+    - echo "Waiting for Firebase Emulators to start..."
+    - timeout 60 bash -c 'until curl --silent --output /dev/null http://localhost:4000; do printf "."; sleep 1; done; echo "Emulators started."' || { echo "Timed out waiting for emulators"; exit 1; }
+
     # start the server in the background
     - npm run dev &
     # run Cypress tests
