@@ -19,17 +19,17 @@ export default function SignInForm({overrideAction, signUp = true}: SignInFormPr
   const initialState = { message: '' };
   const action = signUp ?  emailAndPasswordAction : emailAndPasswordSignIn
   const [state, formAction, pending] = useActionState(overrideAction ?? action, initialState);
-  const router = useRouter()
+  //const router = useRouter()
 
   useActionToast(state, pending, {
     successMessage: signUp ?  "User created successfully" : "User logged In successfully",
     loadingMessage: signUp ? 'Creating your account' : "Logging In..."
   })
-
+/*
   if (state.message == 'Please Verify Account'){
     router.push("/")
   }
-
+*/
 
   
     return (
