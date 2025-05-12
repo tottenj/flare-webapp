@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
 
   // 2. Define protected and public routes
   const isProtectedRoute = request.nextUrl.pathname.startsWith('/home');
-  const isAuthRoute = ['/login', '/signup'].includes(request.nextUrl.pathname);
+  const isAuthRoute = ['/signin', '/signup'].includes(request.nextUrl.pathname);
 
   // 3. Redirect unauthenticated users from protected routes
   if (isProtectedRoute && !session) {
