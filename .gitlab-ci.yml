@@ -44,6 +44,9 @@ cypress:
   script:
     # install dependencies
     - npm ci
+    - export NEXT_PUBLIC_FIREBASE_API_KEY=$FIREBASE_API_KEY
+    - export NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=flare-7091a.firebaseapp.com # Or use a variable if you have one
+    - export NEXT_PUBLIC_FIREBASE_PROJECT_ID=flare-7091a # Or use your $FIREBASE_PROJECT_ID variable
 
     - firebase emulators:start &
     - echo "Waiting for Firebase Emulators to start..."

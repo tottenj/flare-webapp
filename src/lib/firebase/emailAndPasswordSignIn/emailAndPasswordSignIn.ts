@@ -10,21 +10,18 @@ export default async function emailAndPasswordSignIn(prevState: any, formData: F
 
   if (rawFormData.email && rawFormData.password) {
     const { email, password } = rawFormData;
-
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
-      try {
-        if (!user.user.emailVerified) {
-          await signOut(auth);
-          return { message: 'Please Verify Account' };
-        }
-      } catch (error) {
-        return { message: 'ldsj' };
+      if (!user.user.emailVerified) {
+        await signOut(auth);
+        return { message: 'Please Verify Account' };
+      }else{
+        return { message: 'User logged In successfully' };
       }
     } catch (error) {
-      return { message: 'ERROR' };
+      return { message: 'Error Logging In' };
     }
   }
 
-  return { message: '' };
+  return { message: 'Error Logging In' };
 }
