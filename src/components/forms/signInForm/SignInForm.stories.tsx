@@ -59,3 +59,16 @@ export const Default: Story = {
    
   }
 };
+
+
+export const Login: Story = {
+  args: {
+    overrideAction: mockAction,
+    signUp: false
+  },
+  play: async ({canvasElement}) => {
+    const canvas = within(canvasElement);
+    const test = await canvas.findByText("Login")
+    expect(test).toBeInTheDocument()
+  }
+};
