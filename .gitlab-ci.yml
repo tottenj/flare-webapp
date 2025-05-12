@@ -13,7 +13,8 @@ before_script:
   - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
   - apt-get install -y nodejs
   - node -v
-  - apt-get install -y openjdk-11-jdk
+  - apt-get install -y openjdk-17-jdk
+  - java -version # Optional: Verify Java installation succeeded
   - npm ci
   - npm install -g firebase-tools
 
@@ -41,7 +42,7 @@ cypress:
     # install dependencies
     - npm ci
 
-    - firebase emulators:start & 
+    - firebase emulators:start &
     - echo "Waiting for Firebase Emulators to start..."
     - timeout 60 bash -c 'until curl --silent --output /dev/null http://localhost:4000; do printf "."; sleep 1; done; echo "Emulators started."' || { echo "Timed out waiting for emulators"; exit 1; }
 
