@@ -1,6 +1,9 @@
 /// <reference types="cypress" />
 
 import { setupFirebase } from '../../support/auth';
+const projectId = Cypress.env('FIREBASE_PROJECT_ID');
+const apiKey = Cypress.env('FIREBASE_WEB_API_KEY'); // Get the API Key from Cypress env
+
 
 describe('SignInForm', () => {
   before(() => {
@@ -75,7 +78,7 @@ describe('SignInForm', () => {
     before(() => {
       cy.request<FirebaseErrorResponse>({
         method: 'POST',
-        url: 'http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp',
+        url: `http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`, // <-- API Key added here!
         body: {
           email: existingEmail,
           password: existingPassword,

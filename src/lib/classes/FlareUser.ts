@@ -29,6 +29,9 @@ export default class FlareUser {
     }
   }
 
+
+  static emptyUser = new FlareUser("123", "example@gmail.com")
+
   static async getUserById(id: string, dab: Firestore = db): Promise<FlareUser | null> {
     try {
       const docuRef = doc(dab, Collections.Users, id).withConverter(userConverter);

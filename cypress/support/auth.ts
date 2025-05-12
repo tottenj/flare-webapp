@@ -3,6 +3,7 @@ import { Auth as FirebaseAuth, connectAuthEmulator, getAuth } from 'firebase/aut
 import { initializeApp } from 'firebase/app';
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 
+
 declare global {
   namespace Cypress {
     interface Chainable {
