@@ -14,6 +14,7 @@ before_script:
   - apt-get install -y nodejs
   - node -v
   - npm ci
+  - npm install -g firebase-tools
 
 jest:
   stage: test
@@ -38,6 +39,8 @@ cypress:
   script:
     # install dependencies
     - npm ci
+
+    - firebase emulators:start &
     # start the server in the background
     - npm run dev &
     # run Cypress tests
