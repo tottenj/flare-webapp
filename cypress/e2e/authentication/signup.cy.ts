@@ -76,7 +76,6 @@ describe('SignInForm', () => {
       cy.request<FirebaseErrorResponse>({
         method: 'POST',
         url: 'http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp',
-        qs: { key: 'fake-api-key' },
         body: {
           email: existingEmail,
           password: existingPassword,
