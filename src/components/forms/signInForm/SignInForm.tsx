@@ -7,7 +7,8 @@ import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import emailAndPasswordSignIn from '@/lib/firebase/emailAndPasswordSignIn/emailAndPasswordSignIn';
 import { useRouter } from 'next/navigation';
-
+import Link from 'next/link';
+import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 
 
 
@@ -19,22 +20,18 @@ export default function SignInForm({overrideAction, signUp = true}: SignInFormPr
   const initialState = { message: '' };
   const action = signUp ?  emailAndPasswordAction : emailAndPasswordSignIn
   const [state, formAction, pending] = useActionState(overrideAction ?? action, initialState);
+  const signUpOrIn = signUp == true ? 'Sign Up' : 'Login';
+  const link = signUp == true ? "./flare-signin" : "./FlareSignIn"
   //const router = useRouter()
 
   useActionToast(state, pending, {
     successMessage: signUp ?  "User created successfully" : "User logged In successfully",
     loadingMessage: signUp ? 'Creating your account' : "Logging In..."
   })
-/*
-  if (state.message == 'Please Verify Account'){
-    router.push("/")
-  }
-*/
 
-  
     return (
       <div className="@container flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
-        <h1 className="mb-4">{signUp == true ? 'Sign Up' : 'Login'}</h1>
+        <h1 className="mb-4">{signUpOrIn}</h1>
         <form action={formAction} className="mb-8 w-5/6 @lg:w-2/3">
           <TextInput label="Email" name="email" placeholder="example@gmail.com" />
           <TextInput label="Password" name="password" placeholder="**********" password={true} />
@@ -43,6 +40,7 @@ export default function SignInForm({overrideAction, signUp = true}: SignInFormPr
           </div>
         </form>
         <GoogleSignInButton signIn={!signUp} />
+        <Link href={link}  className='text-blue-400 hover:text-primary  mt-4'>Organization? {signUpOrIn} here </Link>
       </div>
     );
 }

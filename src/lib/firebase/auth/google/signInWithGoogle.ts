@@ -1,9 +1,8 @@
-"use server"
-import FlareUser from "@/lib/classes/FlareUser";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+'use server';
+import FlareUser from '@/lib/classes/flareUser/FlareUser';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
-import { auth } from "../configs/clientApp";
-
+import { auth } from '../configs/clientApp';
 
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
@@ -21,6 +20,6 @@ export async function signInWithGoogle() {
     }
   } catch (error) {
     console.error('Error signing in with Google', error);
-    return undefined
+    return undefined;
   }
 }

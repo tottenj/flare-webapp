@@ -1,7 +1,7 @@
 // signInWithGoogle.test.ts
 import { signInWithGoogle } from './signInWithGoogle';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import FlareUser from '@/lib/classes/FlareUser';
+import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { auth } from '../configs/clientApp';
 import { expect } from '@jest/globals';
 
