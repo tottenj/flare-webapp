@@ -1,6 +1,9 @@
 import '@testing-library/jest-dom';
 require('dotenv').config({ path: '.env.test' });
 
+
+
+
 // jest.setup.js (or in your test file)
 // Mock the `firebase/app` module
 jest.mock('firebase/app', () => {
