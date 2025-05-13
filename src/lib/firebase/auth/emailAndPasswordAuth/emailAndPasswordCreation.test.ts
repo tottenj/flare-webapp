@@ -5,11 +5,28 @@ import emailAndPasswordAction from './emailAndPasswordActionCreation';
 import { expect } from '@jest/globals';
 import { auth } from '../configs/clientApp';
 
+
+
+
+jest.mock('../configs/getFirestoreFromServer', () => ({
+  __esModule: true,
+  default: jest.fn().mockResolvedValue({}),
+}));
+
+const mockAddUser = jest.fn();
+jest.mock('@/lib/classes/flareUser/FlareUser', () => {
+  return jest.fn().mockImplementation(() => ({
+    addUser: mockAddUser,
+  }));
+});
+
 describe('emailAndPasswordAction', () => {
   afterEach(() => {
     jest.clearAllMocks();
 
   });
+
+ 
 
   it('should create a user when valid email and password are provided', async () => {
     const formData = new FormData();

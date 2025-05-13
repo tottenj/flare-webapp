@@ -14,7 +14,7 @@ jest.mock('../configs/clientApp', () => ({
   auth: {},
 }));
 
-jest.mock('@/lib/classes/FlareUser', () => {
+jest.mock('@/lib/classes/flareUser/FlareUser', () => {
   return {
     __esModule: true,
     default: class MockFlareUser {

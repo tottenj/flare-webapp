@@ -1,8 +1,8 @@
 'use server';
-import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 import { auth } from '../configs/clientApp';
+import FlareUser from '@/lib/classes/flareUser/FlareUser';
 
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();

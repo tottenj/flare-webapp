@@ -12,7 +12,7 @@ const config: Config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1', // Map @/ to ./src/
+    '^@/(.*)$': '<rootDir>/src/$1', // <- THIS IS CORRECT
   },
   clearMocks: true,
   // Add more setup options before each test is run

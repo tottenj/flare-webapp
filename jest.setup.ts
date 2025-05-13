@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-require('dotenv').config({path: '.env.test'})
+require('dotenv').config({ path: '.env.test' });
 
 // jest.setup.js (or in your test file)
 // Mock the `firebase/app` module
@@ -49,9 +49,10 @@ jest.mock('firebase/firestore', () => {
   return {
     ...originalModule,
     getFirestore: jest.fn(() => ({ firestore: 'mockFirestore' })),
+    initializeFirestore: jest.fn(() => ({ firestore: 'mockFirestore' })),
     collection: jest.fn(),
     doc: jest.fn().mockReturnValue({
-      withConverter: jest.fn().mockReturnThis()
+      withConverter: jest.fn().mockReturnThis(),
     }),
     setDoc: jest.fn(),
     getDoc: jest.fn(),
@@ -70,3 +71,4 @@ jest.mock('firebase/storage', () => {
     // Add more Storage methods if needed
   };
 });
+
