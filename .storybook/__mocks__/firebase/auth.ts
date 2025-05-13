@@ -36,3 +36,5 @@ export const signOut = function () {
 export const getAuth = function () {
   return { currentUser: null, onAuthStateChanged };
 };
+
+

@@ -15,3 +15,20 @@ export const getFirestore = () => ({
   getDoc: () => Promise.resolve({ data: () => ({ uid: 'mock-user' }) }),
   addDoc: () => Promise.resolve(),
 });
+
+export const initializeFirestore = () => ({
+  collection: () => ({
+    doc: () => ({
+      get: () => Promise.resolve({ data: () => ({ uid: 'mock-user' }) }),
+      set: () => Promise.resolve(),
+      add: () => Promise.resolve(),
+    }),
+  }),
+  doc: () => ({
+    get: () => Promise.resolve({ data: () => ({ uid: 'mock-user' }) }),
+    set: () => Promise.resolve(),
+  }),
+  setDoc: () => Promise.resolve(),
+  getDoc: () => Promise.resolve({ data: () => ({ uid: 'mock-user' }) }),
+  addDoc: () => Promise.resolve(),
+});

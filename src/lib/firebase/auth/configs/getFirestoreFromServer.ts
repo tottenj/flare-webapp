@@ -1,3 +1,4 @@
+"use server"
 import { getFirestore } from "firebase/firestore";
 import { getAuthenticatedAppForUser } from "./serverApp";
 
