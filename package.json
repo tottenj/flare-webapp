@@ -21,6 +21,7 @@
     "cypressFire": "concurrently -k -s first \"npm run emulators:start\" \"npm run dev\" \"npm run cypress:open\""
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.20.6",
     "cookies-next": "^5.1.0",
     "dotenv": "^16.5.0",
     "eslint-plugin-jest-dom": "^5.5.0",

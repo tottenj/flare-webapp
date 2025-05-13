@@ -1,4 +1,9 @@
 // cypress.config.ts
+import dotenv from 'dotenv';
+dotenv.config({path: '.env.local'});
+
+
+
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
@@ -8,9 +13,9 @@ export default defineConfig({
     },
     baseUrl: 'https://localhost:3000', // Adjust to your app's URL
     env: {
-      FIREBASE_API_KEY: 'AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU',
-      FIREBASE_AUTH_DOMAIN: 'flare-7091a.firebaseapp.com',
-      FIREBASE_PROJECT_ID: "flare-7091a",
+      FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+      FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
+      FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
     },
   },
   component: {

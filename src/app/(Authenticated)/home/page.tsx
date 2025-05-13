@@ -1,4 +1,4 @@
-export default function page() {
+export default async function page() {
   return (
     <>
       <div className="gradientBack">page</div>

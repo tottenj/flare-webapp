@@ -1,4 +1,4 @@
-//import 'server-only'; // TO DO
+import 'server-only';
 
 import { cookies, headers } from 'next/headers';
 import { initializeServerApp, FirebaseServerAppSettings } from 'firebase/app';
