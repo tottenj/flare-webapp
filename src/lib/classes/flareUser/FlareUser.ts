@@ -11,6 +11,7 @@ import {
 import Collections from '../../enums/collections';
 import { db } from '../../firebase/auth/configs/clientApp';
 import { addDocument, getDocument } from '@/lib/firebase/firestore/firestoreOperations';
+import { isUser } from '@/lib/utils/other/isUser';
 
 export default class FlareUser {
   id: string;
@@ -50,18 +51,15 @@ export default class FlareUser {
   }
 
   async addUser(dab: Firestore = db): Promise<boolean> {
+    if(!this.id) return false
     await addDocument(dab, `${Collections.Users}/${this.id}`, userConverter)
     return true
   }
 }
 
-// Type guard to distinguish Firebase User object
-function isUser(obj: any): obj is User {
-  return typeof obj === 'object' && obj !== null && 'uid' in obj && 'email' in obj;
-}
 
 // Firestore data converter
-const userConverter = {
+export const userConverter = {
   toFirestore(user: FlareUser): DocumentData {
     return {
       id: user.id,

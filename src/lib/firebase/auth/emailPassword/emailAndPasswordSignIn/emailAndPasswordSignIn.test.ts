@@ -1,7 +1,8 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import emailAndPasswordSignIn from "./emailAndPasswordSignIn";
 import {expect} from "@jest/globals"
-import { auth } from "../auth/configs/clientApp";
+import { auth } from "../../configs/clientApp";
+
 
 describe('emailAndPasswordSignIn', () =>{
     afterEach(() => {

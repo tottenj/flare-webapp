@@ -5,7 +5,8 @@ import emailAndPasswordAction from './emailAndPasswordAction';
 import { expect } from '@jest/globals';
 import { auth } from '../../configs/clientApp';
 
-jest.mock('../configs/getFirestoreFromServer', () => ({
+
+jest.mock('../../configs/getFirestoreFromServer', () => ({
   __esModule: true,
   default: jest.fn().mockResolvedValue({}),
 }));

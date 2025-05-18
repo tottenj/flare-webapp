@@ -1,6 +1,7 @@
 "use server"
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { auth } from '../auth/configs/clientApp';
+import { auth } from '../../configs/clientApp';
+
 
 export default async function emailAndPasswordSignIn(prevState: any, formData: FormData) {
   const rawFormData = {
