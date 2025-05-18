@@ -1,8 +1,9 @@
 'use server';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../configs/clientApp';
+
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
-import getFirestoreFromServer from '../configs/getFirestoreFromServer';
+import { auth } from '../../configs/clientApp';
+import getFirestoreFromServer from '../../configs/getFirestoreFromServer';
 
 export default async function emailAndPasswordAction(prevState: any, formData: FormData) {
   const rawFormData = {

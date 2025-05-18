@@ -1,12 +1,9 @@
 // emailAndPasswordAction.test.ts
 
 import { createUserWithEmailAndPassword } from 'firebase/auth'; // Import the Firebase method
-import emailAndPasswordAction from './emailAndPasswordActionCreation';
+import emailAndPasswordAction from './emailAndPasswordAction';
 import { expect } from '@jest/globals';
-import { auth } from '../configs/clientApp';
-
-
-
+import { auth } from '../../configs/clientApp';
 
 jest.mock('../configs/getFirestoreFromServer', () => ({
   __esModule: true,
@@ -23,10 +20,7 @@ jest.mock('@/lib/classes/flareUser/FlareUser', () => {
 describe('emailAndPasswordAction', () => {
   afterEach(() => {
     jest.clearAllMocks();
-
   });
-
- 
 
   it('should create a user when valid email and password are provided', async () => {
     const formData = new FormData();
