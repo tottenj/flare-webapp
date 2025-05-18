@@ -33,7 +33,7 @@ export default function SignInForm({overrideAction, signUp = true}: SignInFormPr
         <h1 className="mb-4">{signUpOrIn}</h1>
         <form action={formAction} className="mb-8 w-5/6 @lg:w-2/3">
           <TextInput label="Email" name="email" placeholder="example@gmail.com" />
-          <TextInput label="Password" name="password" placeholder="**********" password={true} />
+          <TextInput label="Password" name="password" placeholder="**********" type='password' />
           <div className="flex justify-center">
             <PrimaryButton text="Submit" type="submit" disabled={pending} size="full" />
           </div>

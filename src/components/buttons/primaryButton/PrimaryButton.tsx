@@ -1,6 +1,9 @@
 'use client';
 
-interface primaryButtonProps {
+import GeneralLoader from "@/components/loading/GeneralLoader";
+
+
+export interface primaryButtonProps {
   text?: string;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
@@ -35,7 +38,8 @@ export default function PrimaryButton({
       disabled={disabled}
       className={`border-primary font-nunito hover:text-primary bg-primary mt-4 ${sizeClass} cursor-pointer rounded-xl border-2 p-2 font-bold text-white transition-all duration-300 ease-in-out hover:bg-white`}
     >
-      {text}
+    
+      {disabled ? <GeneralLoader/> : text}
     </button>
   );
 }

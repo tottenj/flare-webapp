@@ -16,9 +16,10 @@ interface placeOption {
 interface placeSearchProps {
   loc: (loc:flareLocation | null) => void
   lab?: string;
+  required?: boolean;
 }
 
-export default function PlaceSearch({ loc, lab }: placeSearchProps) {
+export default function PlaceSearch({ loc, lab, required = true }: placeSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
@@ -66,6 +67,14 @@ export default function PlaceSearch({ loc, lab }: placeSearchProps) {
     <>
       <PrimaryLabel label={lab} />
       <AsyncSelect<placeOption>
+        required={required}
+        styles={{
+          control: (baseStyles, state) => ({
+            ...baseStyles,
+            backgroundColor: 'rgba(221, 218, 218, 0.5)',
+            color: '#5f4a4a',
+          }),
+        }}
         placeholder={'Select Location...'}
         loadOptions={promiseOptions}
         onChange={(newVal) => changed(newVal)}

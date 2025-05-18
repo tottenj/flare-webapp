@@ -1,15 +1,22 @@
+// jest.setup.ts or wherever you mock Loader globally
+
+// Create a fetchFields mock that tests can control
+export const fetchFieldsMock = jest.fn().mockResolvedValue({
+  id: 'test123',
+  location: { lat: 43.5448, lng: -80.2482 },
+  displayName: 'Mocked Place Name',
+});
+
+export const PlaceMock = jest.fn().mockImplementation(({ id }) => ({
+  fetchFields: fetchFieldsMock,
+}));
 
 export class Loader {
   constructor(config: any) {}
+
   async importLibrary(lib: string) {
     return {
-      Place: jest.fn().mockImplementation(({ id }) => ({
-        fetchFields: jest.fn().mockResolvedValue({
-          id,
-          location: { lat: 43.5448, lng: -80.2482 },
-          displayName: 'Mocked Place Name',
-        }),
-      })),
+      Place: PlaceMock,
       AutocompleteSuggestion: {
         fetchAutocompleteSuggestions: jest.fn().mockResolvedValue({
           suggestions: [

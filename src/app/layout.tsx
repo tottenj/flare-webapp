@@ -43,7 +43,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en">
       <body className={`${nunito.variable} ${pt_sans.variable} antialiased`}>
         <ServerUserProvider user={userData}>
-          <AuthProvider><PrimaryButton click={signOutUser} text='signOut' size='medium'/>{children}<ToastContainer position='bottom-right'/></AuthProvider>
+          <AuthProvider>{children}<ToastContainer position='bottom-right'/></AuthProvider>
         </ServerUserProvider>
       </body>
     </html>

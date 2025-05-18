@@ -1,19 +1,25 @@
+import { CSSProperties, HTMLInputTypeAttribute } from "react";
 import PrimaryLabel from "../labels/primaryLabel/PrimaryLabel";
 
 interface textInputProps {
   label: string;
   name: string;
   placeholder?: string;
-  password?: boolean;
+  type?: "password" | "text" | "email"
   reqired?: boolean
   error?: boolean
   size?: "XLarge" | "Large" | "Medium" | "Small" | "Auto" | "Double"
+  onChange?: (newVal:string) => void
+  errorText?: string
+  showErrorText?:boolean
+  testId?: string
+  styleOverDiv?: CSSProperties
 }
 
 
 
 
-export default function TextInput({ label, name, placeholder, password = false, reqired=true, error = false, size = "Auto" }: textInputProps) {
+export default function TextInput({ label, name, placeholder, styleOverDiv, showErrorText = false, testId = name, type = "text", reqired=true, error = false, size = "Auto", onChange, errorText }: textInputProps) {
   const sizeClass = {
     XLarge: 'w-full',
     Large: 'w-3/4',
@@ -26,16 +32,18 @@ export default function TextInput({ label, name, placeholder, password = false, 
 
 
   return (
-    <div className={`mb-4 flex flex-col ${sizeClass}`}>
+    <div style={styleOverDiv} className={`mb-4 flex flex-col ${sizeClass}`}>
       <PrimaryLabel label={label}/>
       <input 
+        data-testid={testId}
         required={reqired}
         className="bg-tertiary text-secondary rounded-2xl p-2 pl-4"
-        type={password ? "password" : "text"}
+        type={type}
         placeholder={placeholder}
         name={name}
+        onChange={(e) => onChange && onChange(e.target.value)}
       />
+      {showErrorText && errorText && <p className={`errorText`}>{errorText}</p>}
     </div>
   );
 }
-''

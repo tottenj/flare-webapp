@@ -36,6 +36,13 @@ h1 {
   font-size: 40;
 }
 
+h2{
+  font-family: var(--font-nunito);
+  font-weight: bold;
+  color: var(--color-primary);
+  font-size: 20px;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -49,5 +56,10 @@ body {
 .gradientBack{
   background: linear-gradient(135deg, #ffa301, #ff005c);
   width: 100vw;
-  height: 100lvh;
+  height: 100%;
+}
+
+.errorText{
+  color: var(--color-red);
+  font-weight: bold;
 }

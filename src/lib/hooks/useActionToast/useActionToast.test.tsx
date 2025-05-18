@@ -38,7 +38,7 @@ describe('useActionToast', () => {
 
     expect(toast.loading).toHaveBeenCalledWith('Hold on...');
 
-    rerender(<TestComponent state={{ message: 'User created successfully' }} pending={false} />);
+    rerender(<TestComponent state={{ message: 'success' }} pending={false} />);
 
     expect(toast.dismiss).toHaveBeenCalledWith('toast-id');
     expect(toast.success).toHaveBeenCalledWith('It worked!');

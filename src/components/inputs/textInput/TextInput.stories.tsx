@@ -20,7 +20,6 @@ export const Default: Story = {
     label: 'Label',
     name: '',
     placeholder: 'placeholder',
-    password: false,
   },
 };
 
@@ -29,7 +28,6 @@ export const noLabel: Story = {
         label: '',
         name: '',
         placeholder: 'placeholder',
-        password: false
     }
 }
 
@@ -38,12 +36,12 @@ export const password: Story = {
         label: "Password",
         name: '',
         placeholder: 'password',
-        password: true
+        type: 'password'
     },
     play: async ({canvasElement}) => {
         const canvas = within(canvasElement)
         const passInput = canvas.getByPlaceholderText('password');
-        await userEvent.type(passInput, 'password123', {delay: 400})
+        await userEvent.type(passInput, 'password123')
         const test = canvas.queryByText('password123')
         expect(passInput).toHaveAttribute('type', 'password');
         await expect(passInput).toHaveValue('password123')
