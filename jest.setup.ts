@@ -1,9 +1,6 @@
 import '@testing-library/jest-dom';
 require('dotenv').config({ path: '.env.test' });
 
-
-
-
 // jest.setup.js (or in your test file)
 // Mock the `firebase/app` module
 jest.mock('firebase/app', () => {
@@ -75,4 +72,15 @@ jest.mock('firebase/storage', () => {
   };
 });
 
-jest.mock('@googlemaps/js-api-loader', () => require('./__jestMocks__/@googlemaps/js-api-loader'))
+jest.mock('@googlemaps/js-api-loader', () => require('./__jestMocks__/@googlemaps/js-api-loader'));
+
+jest.mock('@/lib/firebase/auth/configs/getFirestoreFromServer');
+jest.mock('@/lib/utils/error/logErrors');
+jest.mock('@/lib/firebase/firestore/firestoreOperations', () => ({
+  addDocument: jest.fn(),
+  getDocument: jest.fn(),
+}));
+jest.mock('@/lib/firebase/storage/storageOperations', () => ({
+  addFile: jest.fn(),
+}));
+

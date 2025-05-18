@@ -1,5 +1,5 @@
 import { User } from 'firebase/auth';
-import { DocumentData, Firestore, getFirestore, QueryDocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
+import { DocumentData, Firestore, GeoPoint, getFirestore, QueryDocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
 import flareLocation from '@/lib/types/Location';
 import { addDocument, getDocument } from '@/lib/firebase/firestore/firestoreOperations';
 import Collections from '@/lib/enums/collections';
@@ -64,6 +64,8 @@ export default class FlareOrg {
       this.verified = verified
     }
   }
+
+  static sampleOrg = new FlareOrg("abc", "name", "email", "", "",{id: "", coordinates: new GeoPoint(0,0)} , true)
 
   static async getOrg(firestoredb: Firestore, id:string){
     getDocument(firestoredb, `${Collections.Organizations}/${id}`, orgConverter)
