@@ -1,6 +1,3 @@
-default:
-  image: registry.gitlab.com/tottenj/flare-webapp/flare-ci:latest
-
 stages:
   - test
   - cypress
@@ -10,16 +7,16 @@ variables:
   NODE_VERSION: '22.12.0'
   FIREBASE_PROJECT_ID: 'flare-7091a' # Add your Firebase project ID
 
-cache:
-  key: ${CI_COMMIT_REF_SLUG} # or use "node-modules" if you want to share across branches
-  paths:
-    - node_modules/
-
 before_script:
   - apt-get update -y
+  - apt-get install -y curl
+  - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+  - apt-get install -y nodejs
+  - node -v
   - apt-get install -y openjdk-17-jdk
-  - java -version
+  - java -version # Optional: Verify Java installation succeeded
   - npm ci
+  - npm install -g firebase-tools
 
 jest:
   stage: test
@@ -39,26 +36,26 @@ jest:
     - merge_requests
 
 cypress:
-  image: registry.gitlab.com/tottenj/flare-webapp/cypress-firebase:latest
+  image: cypress/browsers:22.15.0
   stage: cypress
-  services:
-    - name: docker:dind
   variables:
     CYPRESS_FIREBASE_WEB_API_KEY: $FIREBASE_API_KEY
     FIREBASE_AUTH_EMULATOR_HOST: 'localhost:9099'
   script:
+    # install dependencies
+    - npm ci
     - export NEXT_PUBLIC_FIREBASE_API_KEY=$FIREBASE_API_KEY
-    - export NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=flare-7091a.firebaseapp.com
-    - export NEXT_PUBLIC_FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID
+    - export NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=flare-7091a.firebaseapp.com # Or use a variable if you have one
+    - export NEXT_PUBLIC_FIREBASE_PROJECT_ID=flare-7091a # Or use your $FIREBASE_PROJECT_ID variable
 
-    # Build your Next.js app for production output
-    - npm run build
+    - firebase emulators:start &
+    - echo "Waiting for Firebase Emulators to start..."
+    - timeout 60 bash -c 'until curl --silent --output /dev/null http://localhost:4000; do printf "."; sleep 1; done; echo "Emulators started."' || { echo "Timed out waiting for emulators"; exit 1; }
 
-    # Run Firebase emulators and inside that run your static server and Cypress tests
-    - firebase emulators:exec --only auth,firestore --project=$FIREBASE_PROJECT_ID "
-        npx serve out & \
-        npx cypress run --browser chrome --env FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID,FIREBASE_WEB_API_KEY=$CYPRESS_FIREBASE_WEB_API_KEY
-      "
+    # start the server in the background
+    - npm run dev &
+    # run Cypress tests
+    - npx cypress run --browser chrome --env FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID,FIREBASE_WEB_API_KEY=$CYPRESS_FIREBASE_WEB_API_KEY
 
 chromatic:
   stage: chromatic
