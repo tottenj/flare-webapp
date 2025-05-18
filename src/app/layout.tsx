@@ -4,9 +4,9 @@ import './globals.css';
 import { AuthProvider } from '@/components/context/AuthContext';
 import { ServerUserProvider } from '@/components/context/ServerUserContext';
 import { ToastContainer } from 'react-toastify';
-import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
-import { signOutUser } from '@/lib/firebase/auth/signOutUser';
 import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverApp';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const nunito = Nunito({
   variable: '--font-nunito',
@@ -43,7 +43,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en">
       <body className={`${nunito.variable} ${pt_sans.variable} antialiased`}>
         <ServerUserProvider user={userData}>
-          <AuthProvider>{children}<ToastContainer position='bottom-right'/></AuthProvider>
+          <AuthProvider>{children}<Analytics/><SpeedInsights/><ToastContainer position='bottom-right'/></AuthProvider>
         </ServerUserProvider>
       </body>
     </html>
