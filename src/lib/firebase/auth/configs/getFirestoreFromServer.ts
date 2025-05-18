@@ -12,12 +12,11 @@ const EMULATORS_ENABLED = process.env.NODE_ENV === 'development' || process.env.
 
 export  default async function getFirestoreFromServer() {
   const serv = await getAuthenticatedAppForUser()
-
+  const fire = initializeFirestore(serv.firebaseServerApp, firestoreSettings);
   if(EMULATORS_ENABLED){
-    const fire = initializeFirestore(serv.firebaseServerApp, firestoreSettings);
-    return connectFirestoreEmulator(fire, '127.0.0.1', 8080);
+    connectFirestoreEmulator(fire, '127.0.0.1', 8080);
   }
-  return initializeFirestore(serv.firebaseServerApp, firestoreSettings)
+  return fire
 }
 
 export async function getStorageFromServer() {
