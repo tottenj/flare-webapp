@@ -4,7 +4,7 @@ import MockAuthProvider from './__mocks__/MockAuthProvider';
 import React from 'react';
 import { initialize, mswLoader } from 'msw-storybook-addon';
 
-// Initialize MSW if you're using it
+
 initialize();
 
 const preview: Preview = {
@@ -16,17 +16,7 @@ const preview: Preview = {
     )
   ],
   parameters: {
-    nextjs: {
-      router: {
-        basePath: '',
-        pathname: '/',
-        query: {},
-        asPath: '/',
-        push: () => Promise.resolve(true),
-        replace: () => Promise.resolve(true),
-        // Add other router methods you need
-      },
-    },
+
     backgrounds: {
       values: [
         { name: 'light', value: '#fff' },

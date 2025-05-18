@@ -1,12 +1,12 @@
 import type { StoryObj, Meta } from '@storybook/react';
+import GeneralLoader from './GeneralLoader';
 
-import generalLoader from './generalLoader';
 
 export default {
-  component: generalLoader,
-} satisfies Meta<typeof generalLoader>;
+  component: GeneralLoader,
+} satisfies Meta<typeof GeneralLoader>;
 
-type Story = StoryObj<typeof generalLoader>;
+type Story = StoryObj<typeof GeneralLoader>;
 
 export const Default: Story = {
   args: {},

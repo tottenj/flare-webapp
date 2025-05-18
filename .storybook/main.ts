@@ -35,6 +35,11 @@ const config: StorybookConfig = {
       __dirname,
       '__mocks__/firebase/firestore.ts'
     );
+    config.resolve.alias['next/navigation'] = path.resolve(
+      __dirname,
+      '__mocks__/next/navigation.ts'
+    );
+
 
     return config;
   },

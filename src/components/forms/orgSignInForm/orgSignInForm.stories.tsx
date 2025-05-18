@@ -34,7 +34,7 @@ export const PasswordMisMatch: Story = {
     await userEvent.type(pass, 'password123');
     const confPass = canvas.getByTestId('confirmOrgPassword');
     await userEvent.type(confPass, 'password12');
-    const err = canvas.queryByText('Passwords Must Match');
+    const err = canvas.queryByText('Passwords must match');
     expect(err).toBeInTheDocument()
   }
 }

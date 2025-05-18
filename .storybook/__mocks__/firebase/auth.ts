@@ -30,11 +30,17 @@ export const onIdTokenChanged = function (auth, callback) {
 export const createUserWithEmailAndPassword = function () {
   return Promise.resolve();
 };
+
+export const sendEmailVerification = function() {
+  return Promise.resolve();
+}
+
 export const signOut = function () {
   console.log('Mock sign out');
 };
 export const getAuth = function () {
   return { currentUser: null, onAuthStateChanged };
 };
+export const signInWithEmailAndPassword = () => Promise.resolve({ user: { uid: 'mock-user' } });
 
 

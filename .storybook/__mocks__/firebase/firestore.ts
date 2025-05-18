@@ -32,3 +32,23 @@ export const initializeFirestore = () => ({
   getDoc: () => Promise.resolve({ data: () => ({ uid: 'mock-user' }) }),
   addDoc: () => Promise.resolve(),
 });
+
+export class GeoPoint {
+  constructor(
+    public latitude: number,
+    public longitude: number
+  ) {}
+}
+
+export const connectFirestoreEmulator = () => {};
+
+export const doc = () => ({
+  get: () => Promise.resolve({ data: () => ({ uid: 'mock-user' }) }),
+  set: () => Promise.resolve(),
+});
+
+export const getDoc = () => Promise.resolve({ data: () => ({ uid: 'mock-user' }) });
+
+export const setDoc = () => Promise.resolve();
+
+export const addDoc = () => Promise.resolve();

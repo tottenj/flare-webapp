@@ -37,25 +37,30 @@ jest:
     - merge_requests
 
 cypress:
-  image: cypress/browsers:22.15.0
+  image: registry.gitlab.com/tottenj/flare-webapp/cypress-firebase:latest
   stage: cypress
+  services:
+    - name: docker:dind
   variables:
     CYPRESS_FIREBASE_WEB_API_KEY: $FIREBASE_API_KEY
     FIREBASE_AUTH_EMULATOR_HOST: 'localhost:9099'
   script:
-    # install dependencies
-    - npm ci
     - export NEXT_PUBLIC_FIREBASE_API_KEY=$FIREBASE_API_KEY
-    - export NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=flare-7091a.firebaseapp.com # Or use a variable if you have one
-    - export NEXT_PUBLIC_FIREBASE_PROJECT_ID=flare-7091a # Or use your $FIREBASE_PROJECT_ID variable
+    - export NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=flare-7091a.firebaseapp.com
+    - export NEXT_PUBLIC_FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID
 
-    - firebase emulators:start &
-    - echo "Waiting for Firebase Emulators to start..."
-    - timeout 60 bash -c 'until curl --silent --output /dev/null http://localhost:4000; do printf "."; sleep 1; done; echo "Emulators started."' || { echo "Timed out waiting for emulators"; exit 1; }
+    # Start Firebase emulators
+    - firebase emulators:start --only auth,firestore --project=$FIREBASE_PROJECT_ID &
+    
+    # Wait for Firebase to start (port 4000 is default UI)
+    - echo "Waiting for Firebase Emulators..."
+    - timeout 60 bash -c 'until curl --silent http://localhost:4000 > /dev/null; do echo -n "."; sleep 1; done; echo " Firebase ready!"'
 
-    # start the server in the background
-    - npm run dev &
-    # run Cypress tests
+    # Build and serve the app
+    - npm run build
+    - npx serve out &
+
+    # Run Cypress tests
     - npx cypress run --browser chrome --env FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID,FIREBASE_WEB_API_KEY=$CYPRESS_FIREBASE_WEB_API_KEY
 
 chromatic:
