@@ -7,6 +7,7 @@ import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import Link from 'next/link';
 import emailAndPasswordAction from '@/lib/firebase/auth/emailPassword/emailAndPasswordSignUp/emailAndPasswordAction';
 import emailAndPasswordSignIn from '@/lib/firebase/auth/emailPassword/emailAndPasswordSignIn/emailAndPasswordSignIn';
+import { useRouter } from 'next/navigation';
 
 type SignInFormProps = {
   overrideAction?: typeof emailAndPasswordAction;
@@ -18,12 +19,16 @@ export default function SignInForm({ overrideAction, signUp = true }: SignInForm
   const [state, formAction, pending] = useActionState(overrideAction ?? action, initialState);
   const signUpOrIn = signUp == true ? 'Sign Up' : 'Login';
   const link = signUp == true ? './flare-signin' : './FlareSignIn';
-  //const router = useRouter()
+  const router = useRouter()
 
   useActionToast(state, pending, {
     successMessage: signUp ? 'User created successfully' : 'User logged In successfully',
     loadingMessage: signUp ? 'Creating your account' : 'Logging In...',
   });
+
+  if(signUpOrIn == "Sign Up" && state.message == "success"){
+    router.push("/confirmation")
+  }
 
   return (
     <div className="@container flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">

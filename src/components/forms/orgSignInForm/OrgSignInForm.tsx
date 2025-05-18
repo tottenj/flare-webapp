@@ -7,8 +7,10 @@ import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import TextInput from '@/components/inputs/textInput/TextInput';
 import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
+import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
 import FlareLocation from '@/lib/types/Location';
 import { formErrors, orgSocials } from '@/lib/utils/text/text';
+import { useRouter } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
 
 export default function OrgSignInForm() {
@@ -18,11 +20,18 @@ export default function OrgSignInForm() {
   const [pass, setPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [passStatus, setPassStatus] = useState(false);
+  const router = useRouter()
+
 
   useActionToast(state, pending, {
     successMessage: 'success',
     loadingMessage: 'loading',
   });
+
+
+  if(state.message === "success"){
+    router.push("/confirmation")
+  }
 
   useEffect(() => {
     if (pass == confirmPass || pass == '') {

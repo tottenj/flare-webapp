@@ -11,6 +11,8 @@ export default async function emailAndPasswordAction(prevState: any, formData: F
     password: formData.get('password')?.toString(),
   };
 
+
+
   if (rawFormData.email && rawFormData.password) {
     const { email, password } = rawFormData;
     try {
