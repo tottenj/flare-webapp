@@ -1,3 +1,6 @@
+default:
+  image: registry.gitlab.com/tottenj/flare-webapp/flare-ci:latest
+
 stages:
   - test
   - cypress
@@ -7,16 +10,14 @@ variables:
   NODE_VERSION: '22.12.0'
   FIREBASE_PROJECT_ID: 'flare-7091a' # Add your Firebase project ID
 
+cache:
+  key: ${CI_COMMIT_REF_SLUG} # or use "node-modules" if you want to share across branches
+  paths:
+    - node_modules/
+
 before_script:
-  - apt-get update -y
-  - apt-get install -y curl
-  - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
-  - apt-get install -y nodejs
-  - node -v
-  - apt-get install -y openjdk-17-jdk
-  - java -version # Optional: Verify Java installation succeeded
   - npm ci
-  - npm install -g firebase-tools
+
 
 jest:
   stage: test
