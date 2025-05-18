@@ -1,22 +1,25 @@
-"use server"
-import { getAuthenticatedAppForUser } from "@/lib/firebase/auth/configs/serverApp";
-import storageHelper from "@/lib/firebase/storage/storageHelper";
-import flareLocation from "@/lib/types/Location";
-import { formErrors, orgSocials } from "@/lib/utils/places/text/text";
+'use server';
+import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
+import { auth } from '@/lib/firebase/auth/configs/clientApp';
+import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import flareLocation from '@/lib/types/Location';
+import { formErrors, orgSocials } from '@/lib/utils/text/text';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-export default async function orgSignUp(prevState: any, formData:FormData) {
 
+export default async function orgSignUp(prevState: any, formData: FormData) {
   const req = {
-    name: formData.get("orgName")?.toString(),
-    email: formData.get("orgEmail")?.toString(),
-    locationString: formData.get("location")?.toString(),
-    pass: formData.get("orgPassword")?.toString(),
-    confPass: formData.get("confirmOrgPassword")
-  }
+    name: formData.get('orgName')?.toString(),
+    email: formData.get('orgEmail')?.toString(),
+    locationString: formData.get('location')?.toString(),
+    pass: formData.get('orgPassword')?.toString(),
+    confPass: formData.get('confirmOrgPassword')?.toString(),
+  };
   const location: flareLocation | null = req.locationString ? JSON.parse(req.locationString) : null;
 
-  if(req.pass != req.confPass)return {message: formErrors.passwordMisMatch}
-  if((Object.values(req).some((value) => value === null) || (!location))) return {message: formErrors.requiredError}
+  if (req.pass != req.confPass) return { message: formErrors.passwordMisMatch };
+  if (Object.values(req).some((value) => value === null || value === undefined) || !location)
+    return { message: formErrors.requiredError };
 
   const optional = {
     instagram: formData.get(orgSocials.instagram) as File | null,
@@ -25,18 +28,17 @@ export default async function orgSignUp(prevState: any, formData:FormData) {
     other: formData.get('other') as File | null,
   };
 
-  const validFiles = Object.entries(optional).filter(([_, file]) => file && file.size > 0).map(([key, file]) => ({key, file: file!}))
 
-  for(const ent of validFiles){
-    
-  }
-
-  const {firebaseServerApp} = await getAuthenticatedAppForUser()
-  const helper = new storageHelper(firebaseServerApp)
-  
-  
+  const validFiles = Object.entries(optional)
+    .filter(([_, file]) => file && file.size > 0)
+    .map(([key, file]) => ({ key, file: file! }));
 
 
-  return {message: "success"}
-  
+  const cred = await createUserWithEmailAndPassword(auth, req.email!, req.pass!);
+  const {storage, firestore} = await getServicesFromServer()
+  const org = new FlareOrg(cred.user, req.name!, location);
+  await org.addOrg(firestore, storage, validFiles)
+  return { message: 'success' };
+
+
 }

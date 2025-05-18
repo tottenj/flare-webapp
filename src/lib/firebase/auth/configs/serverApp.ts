@@ -14,6 +14,7 @@ export async function getAuthenticatedAppForUser() {
 
   const firebaseServerApp = initializeServerApp(firebaseConfig, appSettings);
 
+
   const auth = getAuth(firebaseServerApp);
   await auth.authStateReady();
 

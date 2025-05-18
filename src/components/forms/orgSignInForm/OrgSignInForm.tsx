@@ -8,11 +8,11 @@ import TextInput from '@/components/inputs/textInput/TextInput';
 import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
 import FlareLocation from '@/lib/types/Location';
-import { formErrors, orgSocials } from '@/lib/utils/places/text/text';
+import { formErrors, orgSocials } from '@/lib/utils/text/text';
 import { useActionState, useEffect, useState } from 'react';
 
 export default function OrgSignInForm() {
-  const initialState = {message: ''}
+  const initialState = { message: '' };
   const [loc, setloc] = useState<FlareLocation | null>(null);
   const [state, action, pending] = useActionState(orgSignUp, initialState);
   const [pass, setPass] = useState('');
@@ -20,9 +20,9 @@ export default function OrgSignInForm() {
   const [passStatus, setPassStatus] = useState(false);
 
   useActionToast(state, pending, {
-    successMessage: "success",
-    loadingMessage: "loading"
-  })
+    successMessage: 'success',
+    loadingMessage: 'loading',
+  });
 
   useEffect(() => {
     if (pass == confirmPass || pass == '') {
@@ -87,11 +87,16 @@ This information stays private and is only used for verification purposes."
         >
           <div className="mt-8 flex justify-between">
             <div className="flex w-[30%] flex-col">
-              <TextInput reqired={false} label="Instagram" name={orgSocials.instagram} size="Large" />
+              <TextInput
+                reqired={false}
+                label="Instagram"
+                name={orgSocials.instagram}
+                size="Large"
+              />
               <FileInput name="instagram" />
             </div>
             <div className="flex w-[30%] flex-col">
-              <TextInput reqired={false}  label="Facebook" name={orgSocials.facebook} size="Large" />
+              <TextInput reqired={false} label="Facebook" name={orgSocials.facebook} size="Large" />
               <FileInput name="facebook" />
             </div>
             <div className="flex w-[30%] flex-col">
@@ -106,7 +111,12 @@ This information stays private and is only used for verification purposes."
             business card, or a selfie at your venue with signage in the background.
           </p>
 
-          <TextInput reqired={false} styleOverDiv={{ marginTop: '2rem' }} label="Other Proof" name="other" />
+          <TextInput
+            reqired={false}
+            styleOverDiv={{ marginTop: '2rem' }}
+            label="Other Proof"
+            name="other"
+          />
           <FileInput name="other" />
         </FormSection>
         <PrimaryButton disabled={pending} type="submit" />
