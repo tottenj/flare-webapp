@@ -23,6 +23,7 @@ export default async function orgSignUp(prevState: any, formData: FormData) {
     return { message: formErrors.requiredError };
 
   const optional = {
+    
     instagram: formData.get(orgSocials.instagram) as File | null,
     facebook: formData.get(orgSocials.facebook) as File | null,
     twitter: formData.get(orgSocials.twitter) as File | null,

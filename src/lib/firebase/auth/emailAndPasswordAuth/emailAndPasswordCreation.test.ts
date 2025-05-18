@@ -40,7 +40,7 @@ describe('emailAndPasswordAction', () => {
 
     const result = await emailAndPasswordAction({}, formData);
 
-    expect(result).toEqual({ message: 'User created successfully' });
+    expect(result).toEqual({ message: 'success' });
     expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(
       auth,
       'test@example.com',

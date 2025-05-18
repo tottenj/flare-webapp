@@ -19,7 +19,7 @@ describe('emailAndPasswordSignIn', () =>{
 
         const result = await emailAndPasswordSignIn({}, formData)
 
-        expect(result).toEqual({ message: 'User logged In successfully' });
+        expect(result).toEqual({ message: 'success' });
         expect(signInWithEmailAndPassword).toHaveBeenCalledWith(
             auth,
             'test@example.com',

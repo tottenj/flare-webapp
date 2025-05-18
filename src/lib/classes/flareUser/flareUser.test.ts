@@ -1,7 +1,8 @@
 import { doc, Firestore, getDoc, setDoc } from 'firebase/firestore';
 import FlareUser from './FlareUser';
 import { expect } from '@jest/globals';
-import Collections from '../../enums/collections';
+import Collections from '@/lib/enums/collections';
+import { addDocument, getDocument } from '@/lib/firebase/firestore/firestoreOperations';
 
 describe('getUserById', () => {
   afterEach(() => {
@@ -14,7 +15,7 @@ describe('getUserById', () => {
   };
 
   it('should return user data when document exists', async () => {
-    (getDoc as jest.Mock).mockResolvedValueOnce({
+    (getDocument as jest.Mock).mockResolvedValueOnce({
       exists: () => true,
       data: () => mockUser,
     });
@@ -39,6 +40,8 @@ describe('addUser', () => {
   });
 
   it('should return true and call setDoc when successful', async () => {
+    (addDocument as jest.Mock).mockResolvedValueOnce(true);
+
     const result = await user.addUser();
 
     expect(result).toBe(true);
