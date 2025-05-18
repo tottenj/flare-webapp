@@ -75,3 +75,4 @@ jest.mock('firebase/storage', () => {
   };
 });
 
+jest.mock('@googlemaps/js-api-loader', () => require('./__jestMocks__/@googlemaps/js-api-loader'))

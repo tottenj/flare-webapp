@@ -17,6 +17,9 @@ const config: StorybookConfig = {
   core: {
     builder: '@storybook/builder-webpack5',
   },
+  features: {
+    experimentalRSC: true,
+  },
   webpackFinal: async (config) => {
     if (!config.resolve) config.resolve = {};
     if (!config.resolve.alias) config.resolve.alias = {};
@@ -27,12 +30,11 @@ const config: StorybookConfig = {
       '__mocks__/authHelpers.ts'
     );
 
-     config.resolve.alias['firebase/auth'] = path.resolve(__dirname, '__mocks__/firebase/auth.ts');
-     config.resolve.alias['firebase/firestore'] = path.resolve(
-       __dirname,
-       '__mocks__/firebase/firestore.ts'
-     );
-
+    config.resolve.alias['firebase/auth'] = path.resolve(__dirname, '__mocks__/firebase/auth.ts');
+    config.resolve.alias['firebase/firestore'] = path.resolve(
+      __dirname,
+      '__mocks__/firebase/firestore.ts'
+    );
 
     return config;
   },

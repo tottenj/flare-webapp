@@ -1,6 +1,6 @@
 import type { StoryObj, Meta } from '@storybook/react';
 import TextInput from './TextInput';
-import {  userEvent, within } from '@storybook/test';
+import {  expect, userEvent, within } from '@storybook/test';
 
 export default {
   component: TextInput,
@@ -43,6 +43,10 @@ export const password: Story = {
     play: async ({canvasElement}) => {
         const canvas = within(canvasElement)
         const passInput = canvas.getByPlaceholderText('password');
-        await userEvent.type(passInput, 'password123', {delay: 100})
+        await userEvent.type(passInput, 'password123', {delay: 400})
+        const test = canvas.queryByText('password123')
+        expect(passInput).toHaveAttribute('type', 'password');
+        await expect(passInput).toHaveValue('password123')
+        expect(test).not.toBeInTheDocument()
     }
 }

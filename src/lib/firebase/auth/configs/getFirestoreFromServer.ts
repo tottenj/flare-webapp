@@ -1,4 +1,4 @@
-"use server"
+import 'server-only'
 import { getFirestore } from "firebase/firestore";
 import { getAuthenticatedAppForUser } from "./serverApp";
 

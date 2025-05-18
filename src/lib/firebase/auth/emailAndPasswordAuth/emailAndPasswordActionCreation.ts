@@ -1,5 +1,4 @@
 'use server';
-
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../configs/clientApp';
 import FlareUser from '@/lib/classes/flareUser/FlareUser';

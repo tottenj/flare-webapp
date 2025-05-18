@@ -1,3 +1,5 @@
+import PrimaryLabel from "../labels/primaryLabel/PrimaryLabel";
+
 interface textInputProps {
   label: string;
   name: string;
@@ -25,7 +27,7 @@ export default function TextInput({ label, name, placeholder, password = false, 
 
   return (
     <div className={`mb-4 flex flex-col ${sizeClass}`}>
-      <label className="font-nunito mb-2 font-black">{label}</label>
+      <PrimaryLabel label={label}/>
       <input 
         required={reqired}
         className="bg-tertiary text-secondary rounded-2xl p-2 pl-4"
