@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { sendEmailVerification } from 'firebase/auth';
 require('dotenv').config({ path: '.env.test' });
 
 // jest.setup.js (or in your test file)
@@ -36,6 +37,7 @@ jest.mock('firebase/auth', () => {
     getAuth: jest.fn(() => ({
       currentUser: { uid: 'mock-uid', email: 'test@example.com' },
     })),
+    sendEmailVerification: jest.fn(),
     connectAuthEmulator: jest.fn(),
     onAuthStateChanged: jest.fn(),
     // Add more Firebase Auth methods you need to mock

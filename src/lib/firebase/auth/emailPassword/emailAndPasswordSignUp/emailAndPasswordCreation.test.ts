@@ -1,6 +1,6 @@
 // emailAndPasswordAction.test.ts
 
-import { createUserWithEmailAndPassword } from 'firebase/auth'; // Import the Firebase method
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'; // Import the Firebase method
 import emailAndPasswordAction from './emailAndPasswordAction';
 import { expect } from '@jest/globals';
 import { auth } from '../../configs/clientApp';
@@ -41,6 +41,7 @@ describe('emailAndPasswordAction', () => {
       'test@example.com',
       'password123'
     );
+    expect(sendEmailVerification).toHaveBeenCalled()
   });
 
   it('should return an error when email is already in use', async () => {

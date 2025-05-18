@@ -6,7 +6,7 @@ import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreF
 import flareLocation from '@/lib/types/Location';
 import logErrors from '@/lib/utils/error/logErrors';
 import { formErrors, orgSocials } from '@/lib/utils/text/text';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 export default async function orgSignUp(prevState: any, formData: FormData) {
   const req = {
@@ -39,6 +39,7 @@ export default async function orgSignUp(prevState: any, formData: FormData) {
     const { storage, firestore } = await getServicesFromServer();
     const org = new FlareOrg(cred.user, req.name!, location);
     await org.addOrg(firestore, storage, validFiles);
+    await sendEmailVerification(cred.user)
     return { message: 'success' };
   } catch (error) {
     await logErrors({errors: error as Error, errorLocation: errorLocation.auth})

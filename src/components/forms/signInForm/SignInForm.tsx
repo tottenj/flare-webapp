@@ -2,11 +2,11 @@
 import { useActionState } from 'react';
 import GoogleSignInButton from '../../buttons/googleButton/SignInWithGoogleButton';
 import TextInput from '../../inputs/textInput/TextInput';
-import emailAndPasswordAction from '@/lib/firebase/auth/emailAndPasswordAuth/emailAndPasswordAction';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
-import emailAndPasswordSignIn from '@/lib/firebase/emailAndPasswordSignIn/emailAndPasswordSignIn';
 import Link from 'next/link';
+import emailAndPasswordAction from '@/lib/firebase/auth/emailPassword/emailAndPasswordSignUp/emailAndPasswordAction';
+import emailAndPasswordSignIn from '@/lib/firebase/auth/emailPassword/emailAndPasswordSignIn/emailAndPasswordSignIn';
 
 type SignInFormProps = {
   overrideAction?: typeof emailAndPasswordAction;

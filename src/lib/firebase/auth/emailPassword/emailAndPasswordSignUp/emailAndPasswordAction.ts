@@ -1,5 +1,5 @@
 'use server';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { auth } from '../../configs/clientApp';
@@ -17,6 +17,7 @@ export default async function emailAndPasswordAction(prevState: any, formData: F
       const usr = await createUserWithEmailAndPassword(auth, email, password);
       const db = await getFirestoreFromServer();
       await new FlareUser(usr.user).addUser(db);
+      await sendEmailVerification(usr.user);
       return { message: 'success' };
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') {

@@ -4,7 +4,7 @@ import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
 import logErrors from '@/lib/utils/error/logErrors';
 import { formErrors } from '@/lib/utils/text/text';
 import { expect } from '@jest/globals';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 
 
@@ -75,6 +75,7 @@ describe('orgSignUp', () => {
     const result = await orgSignUp(null, formData);
     expect(result).toEqual({ message: 'success' });
     expect(addOrgMock).toHaveBeenCalled();
+    expect(sendEmailVerification).toHaveBeenCalled()
   });
 
 
