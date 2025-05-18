@@ -1,11 +1,12 @@
 'use server';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
+import errorLocation from '@/lib/enums/errorLocations';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import flareLocation from '@/lib/types/Location';
+import logErrors from '@/lib/utils/error/logErrors';
 import { formErrors, orgSocials } from '@/lib/utils/text/text';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-
 
 export default async function orgSignUp(prevState: any, formData: FormData) {
   const req = {
@@ -28,17 +29,18 @@ export default async function orgSignUp(prevState: any, formData: FormData) {
     other: formData.get('other') as File | null,
   };
 
-
   const validFiles = Object.entries(optional)
     .filter(([_, file]) => file && file.size > 0)
     .map(([key, file]) => ({ key, file: file! }));
 
-
-  const cred = await createUserWithEmailAndPassword(auth, req.email!, req.pass!);
-  const {storage, firestore} = await getServicesFromServer()
-  const org = new FlareOrg(cred.user, req.name!, location);
-  await org.addOrg(firestore, storage, validFiles)
-  return { message: 'success' };
-
-
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, req.email!, req.pass!);
+    const { storage, firestore } = await getServicesFromServer();
+    const org = new FlareOrg(cred.user, req.name!, location);
+    await org.addOrg(firestore, storage, validFiles);
+    return { message: 'success' };
+  } catch (error) {
+    await logErrors({errors: error as Error, errorLocation: errorLocation.auth})
+    return {message: 'Unable to create user at this time'}
+  }
 }

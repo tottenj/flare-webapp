@@ -1,11 +1,15 @@
 import 'server-only'
-import { getFirestore } from "firebase/firestore";
+import { FirestoreSettings, getFirestore, initializeFirestore } from "firebase/firestore";
 import { getAuthenticatedAppForUser } from "./serverApp";
 import { getStorage } from 'firebase/storage';
 
+const firestoreSettings:  FirestoreSettings = {
+  ignoreUndefinedProperties: true,
+};
+
 export  default async function getFirestoreFromServer() {
   const serv = await getAuthenticatedAppForUser()
-  return getFirestore(serv.firebaseServerApp)
+  return initializeFirestore(serv.firebaseServerApp, firestoreSettings)
 }
 
 export async function getStorageFromServer() {
@@ -17,7 +21,7 @@ export async function getStorageFromServer() {
 
 export async function getServicesFromServer(){
   const {firebaseServerApp} = await getAuthenticatedAppForUser()
-  const firestore = getFirestore(firebaseServerApp)
+  const firestore = initializeFirestore(firebaseServerApp, firestoreSettings)
   const storage = getStorage(firebaseServerApp)
   return{storage, firestore}
 }

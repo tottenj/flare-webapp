@@ -5,7 +5,6 @@ import { addDocument, getDocument } from '@/lib/firebase/firestore/firestoreOper
 import Collections from '@/lib/enums/collections';
 import { FirebaseStorage } from 'firebase/storage';
 import { addFile } from '@/lib/firebase/storage/storageOperations';
-// No longer need to import FirebaseApp or FirebaseServerApp here if passing Firestore instance
 
 export default class FlareOrg {
   id: string;
@@ -15,6 +14,7 @@ export default class FlareOrg {
   description?: string;
   location?: flareLocation;
   verified?: boolean
+
 
 
   // Simplify overloads to focus on how you initialize the Org *data*,
@@ -27,6 +27,7 @@ export default class FlareOrg {
     profilePic?: string,
     description?: string,
     location?: flareLocation,
+    verified?: boolean
   );
 
   // The implementation signature matches the first overload, but we handle both cases inside
@@ -37,6 +38,7 @@ export default class FlareOrg {
     profilePicOrLocation?: string | flareLocation, // Can be profilePic (string) or location (flareLocation)
     description?: string,
     location?: flareLocation,
+    verified: boolean = false
   ) {
 
     if (isUser(idOrUser)) {
@@ -47,7 +49,7 @@ export default class FlareOrg {
       this.name = name; // Use the 'name' parameter here
       // The third parameter in the overload (emailOrLocation) is the location for the User case
       this.location = emailOrLocation as flareLocation | undefined;
-      this.verified = false
+      this.verified = verified
 
       // We no longer need 'this.app' or call getFirestore here
     } else {
@@ -59,7 +61,7 @@ export default class FlareOrg {
       this.profilePic = profilePicOrLocation as string | undefined;
       this.description = description
       this.location = location;
-      this.verified = false
+      this.verified = verified
     }
   }
 
@@ -80,11 +82,11 @@ export default class FlareOrg {
 
 export const orgConverter = {
   toFirestore(user: FlareOrg): DocumentData {
-    return { id: user.id, email: user.email, name: user.name, location: user.location, profilePic: user.profilePic, description: user.description };
+    return { id: user.id, email: user.email, name: user.name, location: user.location, profilePic: user.profilePic, description: user.description, verified: user.verified };
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): FlareOrg {
     const data = snapshot.data(options);
-    return new FlareOrg(data.id, data.name, data.email, data.profilePic, data.description, data.location)
+    return new FlareOrg(data.id, data.name, data.email, data.profilePic, data.description, data.location, data.verified)
   },
 };
 

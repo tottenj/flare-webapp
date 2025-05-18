@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import Collections from '../../enums/collections';
 import { db } from '../../firebase/auth/configs/clientApp';
+import { addDocument, getDocument } from '@/lib/firebase/firestore/firestoreOperations';
 
 export default class FlareUser {
   id: string;
@@ -40,28 +41,17 @@ export default class FlareUser {
   static emptyUser = new FlareUser('123', 'example@gmail.com');
 
   static async getUserById(id: string, dab: Firestore = db): Promise<FlareUser | null> {
-    try {
-      const docuRef = doc(dab, Collections.Users, id).withConverter(userConverter);
-      const document = await getDoc(docuRef);
-      if (document.exists()) {
-        return document.data();
-      }
-    } catch (error) {
-      console.log(error);
+    const userDoc = await getDocument(dab, `${Collections.Users}/${id}`, userConverter)
+    if(userDoc.exists()){
+      return userDoc.data()
+    }else{
+      return null
     }
-    return null;
   }
 
   async addUser(dab: Firestore = db): Promise<boolean> {
-    try {
-      if (!this.id) return false;
-      const docuRef = doc(dab, Collections.Users, this.id).withConverter(userConverter);
-      await setDoc(docuRef, this);
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
-    }
+    await addDocument(dab, `${Collections.Users}/${this.id}`, userConverter)
+    return true
   }
 }
 
