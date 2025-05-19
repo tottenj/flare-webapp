@@ -1,0 +1,95 @@
+.calendarWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', sans-serif;
+    font-family: var(--font-nunito);
+    font-weight: bold;
+  }
+
+ .calendarWrapper :global(.rdp-root){
+  background-color: white;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 1rem;
+  height: fit-content;
+ }
+
+ .calendarWrapper :global(.rdp-caption_label){
+  margin-left: auto;
+  margin-right: auto;
+ }
+
+ .calendarWrapper :global(.rdp-nav){
+    justify-content: space-between;
+    width: 100%;
+ }
+
+ .calendarWrapper :global(.rdp-weekday){
+  text-align: left;
+  font-family: var(--font-nunito);
+  font-weight: bold;
+ }
+
+ .calendarWrapper td {
+  min-height: 60px;
+  height: 125px;
+  vertical-align: top;
+  border: 1px solid var(--color-secondary);
+  width: 14.5%;
+}
+
+ .calendarWrapper :global(.rdp-months){
+  width: 100%;
+  max-width: unset;
+ }
+
+ .calendarWrapper :global(.rdp-month){
+  width: 100%;
+  height: 100%;
+ }
+  
+
+ .calendarWrapper :global(.rdp-month_grid){
+  width: 100%;
+ }
+
+
+ .dayCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 0.85rem;
+  padding: 4px;
+  height: 100%;
+  width: 100%;
+}
+  
+.dotContainer {
+  display: flex;
+  margin-top: 2px;
+  position: relative;
+  height: 8px; /* enough room for overlap */
+}
+
+.dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: relative;
+  margin-left: -2px;
+  z-index: 1;
+  transition: transform 0.2s ease, z-index 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+  color: var(--color-primary);
+}
+
+.dot:hover {
+  transform: translateY(-3px) scale(1.2);
+  z-index: 10;
+}
+
+
+  

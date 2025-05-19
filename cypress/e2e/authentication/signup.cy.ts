@@ -2,7 +2,7 @@
 
 import { setupFirebase } from '../../support/auth';
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
-const apiKey = Cypress.env('FIREBASE_WEB_API_KEY'); // Get the API Key from Cypress env
+const apiKey = Cypress.env('FIREBASE_API_KEY'); // Get the API Key from Cypress env
 
 
 describe('SignInForm', () => {
@@ -51,7 +51,7 @@ describe('SignInForm', () => {
 
       cy.request({
         method: 'POST',
-        url: 'http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp',
+        url: 'http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}',
         body: {
           email: testEmail,
           password: testPassword,
@@ -63,6 +63,7 @@ describe('SignInForm', () => {
         cy.request({
           method: 'GET',
           url: `http://localhost:9099/emulator/v1/projects/${projectId}/accounts`,
+         
         }).then((listResponse) => {
           const userExists = listResponse.body.users.some((user: any) => user.email === testEmail);
           expect(userExists).to.be.true;
@@ -71,6 +72,7 @@ describe('SignInForm', () => {
     });
   });
 */
+
   describe('Error Cases', () => {
     const existingEmail = 'existing@example.com';
     const existingPassword = 'password123';
@@ -78,7 +80,7 @@ describe('SignInForm', () => {
     before(() => {
       cy.request<FirebaseErrorResponse>({
         method: 'POST',
-        url: `http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`, // <-- API Key added here!
+        url: `http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
         body: {
           email: existingEmail,
           password: existingPassword,

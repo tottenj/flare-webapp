@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverApp';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import MainBanner from '@/components/banners/mainBanner/MainBanner';
 
 const nunito = Nunito({
   variable: '--font-nunito',

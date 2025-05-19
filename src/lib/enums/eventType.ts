@@ -1,0 +1,9 @@
+enum eventType {
+  "Special Events" = 'oklch(64.73% 0.2385 27.3)', //red
+  "Drag Events" = 'oklch(76.97% 0.1627 74.52)', //orange
+  "Casual Events" = 'oklch(91.41% 0.1528 104.99)', //yellow
+  "Organizations" = 'oklch(74.62% 0.1947 152.04)', //green
+  "Other" = 'oklch(48.68% 0.1387 270.64)', //blue
+}
+
+export default eventType
