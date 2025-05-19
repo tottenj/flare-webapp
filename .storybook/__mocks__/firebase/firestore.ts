@@ -1,3 +1,5 @@
+
+
 // .storybook/__mocks__/firebase/firestore.ts
 export const getFirestore = () => ({
   collection: () => ({
@@ -52,3 +54,10 @@ export const getDoc = () => Promise.resolve({ data: () => ({ uid: 'mock-user' })
 export const setDoc = () => Promise.resolve();
 
 export const addDoc = () => Promise.resolve();
+export const getDocs = () => Promise.resolve();
+
+export const collection = () => Promise.resolve();
+export const where = () => Promise.resolve();
+export const orderBy = () => Promise.resolve();
+export const limit = () => Promise.resolve();
+export const query = () => Promise.resolve();

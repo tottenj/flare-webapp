@@ -5,6 +5,7 @@ import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverAp
 export default async function MainBanner() {
   const { currentUser } = await getAuthenticatedAppForUser();
 
+  
  return (
     <div className='w-full p-4 flex justify-between'>
         <LogoWithText size={60}/>

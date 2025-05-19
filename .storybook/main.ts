@@ -40,6 +40,10 @@ const config: StorybookConfig = {
       '__mocks__/next/navigation.ts'
     );
 
+    config.resolve.alias['@/lib/firebase/auth/configs/serverApp'] = path.resolve(
+      __dirname,
+      '__mocks__/serverApp/getAuthenticatedAppForUser'
+    );
 
     return config;
   },
