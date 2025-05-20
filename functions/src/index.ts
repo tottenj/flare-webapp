@@ -1,16 +1,25 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import { onDocumentCreatedWithAuthContext } from 'firebase-functions/v2/firestore';
+import Collections from '../../enums/Collections';
+const { logger } = require('firebase-functions');
+import { getAuth } from 'firebase-admin/auth';
+const { initializeApp } = require('firebase-admin/app');
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+initializeApp();
+const auth = getAuth();
+
+
+
+exports.createOrganization = onDocumentCreatedWithAuthContext(
+  `${Collections.Organizations}/{orgId}`,
+  async (event) => {
+    if (!event.authId || event.authId != undefined) logger.log('No auth id');
+    try {
+      await auth.setCustomUserClaims(event.authId!, { organization: true });
+      return { message: 'Succesfully Added Claim' };
+    } catch (error) {
+      logger.log("Failed to add claim")
+      return {message: "Failed to add claim"}
+    }
+  }
+);

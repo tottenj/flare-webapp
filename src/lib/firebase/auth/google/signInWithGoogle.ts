@@ -1,21 +1,19 @@
 'use server';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-
-import { auth } from '../configs/clientApp';
+import { User } from 'firebase/auth';
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
+import getFirestoreFromServer from '../configs/getFirestoreFromServer';
 
-export async function signInWithGoogle() {
-  const provider = new GoogleAuthProvider();
+export async function signInWithGoogle(user:User) {
+  const fire = await getFirestoreFromServer()
+
   try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
-    const userData = await FlareUser.getUserById(user.uid);
-
+    const userData = await FlareUser.getUserById(user.uid, fire);
     if (userData) {
       return userData;
     } else {
       const flar = new FlareUser(user);
-      await flar.addUser();
+      console.log(flar)
+      await flar.addUser(fire);
       return flar;
     }
   } catch (error) {

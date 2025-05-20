@@ -1,3 +1,4 @@
+"use server"
 import LogoWithText from '@/components/flare/logoWithText/LogoWithText';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
 import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverApp';
@@ -7,9 +8,10 @@ export default async function MainBanner() {
 
   
  return (
-    <div className='w-full p-4 flex justify-between'>
+    <div className='w-full p-4 flex justify-between bg-white'>
         <LogoWithText size={60}/>
         <ProfilePicture size={65}/>
+        
     </div>
  )
 }

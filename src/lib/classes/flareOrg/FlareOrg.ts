@@ -68,7 +68,9 @@ export default class FlareOrg {
   static sampleOrg = new FlareOrg("abc", "name", "email", "", "",{id: "", coordinates: new GeoPoint(0,0)} , true)
 
   static async getOrg(firestoredb: Firestore, id:string){
-    getDocument(firestoredb, `${Collections.Organizations}/${id}`, orgConverter)
+    const org = await getDocument(firestoredb, `${Collections.Organizations}/${id}`, orgConverter)
+    if(!org.exists()) return null
+    return org.data()
   }
 
   async addOrg(firestoredb: Firestore, storagedb: FirebaseStorage, validFiles: {key:string, file:File}[]) {

@@ -1,7 +1,18 @@
 import AgeGroup from '@/lib/enums/AgeGroup';
+import Collections from '@/lib/enums/collections';
 import eventType from '@/lib/enums/eventType';
+import { addDocument, getCollectionByFields, getDocument, WhereClause } from '@/lib/firebase/firestore/firestoreOperations';
+import EventFilters from '@/lib/types/FilterType';
 import flareLocation from '@/lib/types/Location';
-import { GeoPoint } from 'firebase/firestore';
+import { QueryOptions } from '@testing-library/dom';
+import {
+  DocumentData,
+  Firestore,
+  GeoPoint,
+  QueryDocumentSnapshot,
+  SnapshotOptions,
+} from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class Event {
   id: string;
@@ -16,7 +27,7 @@ export default class Event {
   ticketLink?: string;
 
   constructor(
-    id: string,
+    id: string = uuidv4(),
     flare_id: string,
     title: string,
     desciption: string,
@@ -37,6 +48,30 @@ export default class Event {
     this.location = location;
     this.price = price;
     this.ticketLink = ticketLink;
+  }
+
+  async addEvent(dab: Firestore) {
+    await addDocument(dab, `${Collections.Events}/${this.id}`, this, eventConverter);
+  }
+
+  static async getEvent(dab: Firestore, eventId: string){
+    const even =  await getDocument(dab, `${Collections.Events}/${eventId}`, eventConverter)
+    if(!even.exists())return null
+    return even.data()
+  }
+
+
+  static async queryEvents(dab: Firestore, filters: EventFilters = {}, options?: QueryOptions){
+    const whereClauses: WhereClause[] = []
+
+    if(filters.flare_id) whereClauses.push(['flareId', "==", filters.flare_id])
+    if(filters.onDate) whereClauses.push(['date', '==', filters.onDate])
+    if(filters.ageGroup) whereClauses.push(['type', 'in', filters.ageGroup])
+    if(filters.type) whereClauses.push(['type', "in", filters.type])
+    if(filters.afterDate) whereClauses.push(['date', "<", filters.afterDate])
+    if(filters.beforeDate) whereClauses.push(['date', '>=', filters.beforeDate])
+    return await getCollectionByFields(dab, `${Collections.Events}`,whereClauses, eventConverter, options )
+    
   }
 
   static sampleEvents: Event[] = [
@@ -216,3 +251,35 @@ export default class Event {
     };
   }
 }
+
+export const eventConverter = {
+  toFirestore(event: Event): DocumentData {
+    return {
+      id: event.id,
+      flareId: event.flare_id,
+      title: event.title,
+      description: event.description,
+      type: event.type,
+      ageGroup: event.ageGroup,
+      date: event.date,
+      location: event.location,
+      price: event.price,
+      ticketLink: event.ticketLink,
+    };
+  },
+  fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Event {
+    const data = snapshot.data(options);
+    return new Event(
+      data.id,
+      data.flareId,
+      data.title,
+      data.description,
+      data.type,
+      data.ageGroup,
+      data.date,
+      data.location,
+      data.price,
+      data.ticketLink
+    );
+  },
+};

@@ -8,6 +8,7 @@ import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverAp
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import MainBanner from '@/components/banners/mainBanner/MainBanner';
+import { signInWithGoogle } from '@/lib/firebase/auth/google/signInWithGoogle';
 
 const nunito = Nunito({
   variable: '--font-nunito',
@@ -30,7 +31,6 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const { currentUser } = await getAuthenticatedAppForUser();
 
-  
 
   const userData = currentUser
     ? {
@@ -44,7 +44,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en">
       <body className={`${nunito.variable} ${pt_sans.variable} antialiased`}>
         <ServerUserProvider user={userData}>
-          <AuthProvider>{children}<Analytics/><SpeedInsights/><ToastContainer position='bottom-right'/></AuthProvider>
+          <AuthProvider>{children}</AuthProvider>
+          <Analytics />
+          <SpeedInsights />
+          <ToastContainer position="bottom-right" />
         </ServerUserProvider>
       </body>
     </html>

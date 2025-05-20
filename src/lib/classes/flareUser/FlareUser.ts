@@ -9,7 +9,6 @@ import {
   SnapshotOptions,
 } from 'firebase/firestore';
 import Collections from '../../enums/collections';
-import { db } from '../../firebase/auth/configs/clientApp';
 import { addDocument, getDocument } from '@/lib/firebase/firestore/firestoreOperations';
 import { isUser } from '@/lib/utils/other/isUser';
 
@@ -41,7 +40,7 @@ export default class FlareUser {
 
   static emptyUser = new FlareUser('123', 'example@gmail.com');
 
-  static async getUserById(id: string, dab: Firestore = db): Promise<FlareUser | null> {
+  static async getUserById(id: string, dab: Firestore): Promise<FlareUser | null> {
     const userDoc = await getDocument(dab, `${Collections.Users}/${id}`, userConverter)
     if(userDoc.exists()){
       return userDoc.data()
@@ -50,9 +49,9 @@ export default class FlareUser {
     }
   }
 
-  async addUser(dab: Firestore = db): Promise<boolean> {
+  async addUser(dab: Firestore): Promise<boolean> {
     if(!this.id) return false
-    await addDocument(dab, `${Collections.Users}/${this.id}`, userConverter)
+    await addDocument(dab, `${Collections.Users}/${this.id}`,this, userConverter)
     return true
   }
 }

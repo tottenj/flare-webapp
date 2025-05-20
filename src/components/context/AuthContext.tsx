@@ -3,7 +3,11 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
 import { setCookie, deleteCookie } from 'cookies-next'; // this works in the browser
-import { auth } from '@/lib/firebase/auth/configs/clientApp';
+import { auth, db } from '@/lib/firebase/auth/configs/clientApp';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import Collections from '@/lib/enums/collections';
+import FlareUserStart from '@/lib/types/FlareUserStart';
+
 
 interface AuthContextType {
   user: User | null;
@@ -19,7 +23,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const unsubscribe = onIdTokenChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        const token = await firebaseUser.getIdToken();
+        const token = await firebaseUser.getIdToken(true);
+        
 
         setCookie('__session', token, {
           secure: true,
@@ -27,7 +32,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           path: '/',
           maxAge: 60 * 60, // 1 hour
         });
+
         setUser(firebaseUser);
+
+        if(firebaseUser.providerId == "google"){
+          const docRef = doc(db, Collections.Users, firebaseUser.uid)
+          const secondDocRef = doc(db, Collections.Organizations, firebaseUser.uid)
+          const user = await getDoc(docRef)
+          const userTwo = await getDoc(secondDocRef)
+          if(!user.exists() && !userTwo.exists()){
+            const test:FlareUserStart = {id:firebaseUser.uid, email: firebaseUser.email, profilePic:firebaseUser.photoURL, name: firebaseUser.displayName}
+            await setDoc(docRef, test)
+          }
+        }
+
         if (!localStorage.getItem('reloadedAfterLogin')) {
           localStorage.setItem('reloadedAfterLogin', 'true');
           window.location.reload();
@@ -40,10 +58,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         localStorage.removeItem('reloadedAfterLogin'); // Reset flag on logout
       }
-
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 

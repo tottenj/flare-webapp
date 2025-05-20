@@ -19,7 +19,7 @@ export default async function emailAndPasswordSignIn(prevState: any, formData: F
           await signOut(auth);
           return { message: 'Please Verify Account' };
         } else {
-          return { message: 'success' };
+          return { message: 'success', email, password };
         }
       } else {
         return { message: 'No user exists with that account' };

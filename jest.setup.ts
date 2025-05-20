@@ -80,7 +80,9 @@ jest.mock('@/lib/firebase/auth/configs/getFirestoreFromServer');
 jest.mock('@/lib/utils/error/logErrors');
 jest.mock('@/lib/firebase/firestore/firestoreOperations', () => ({
   addDocument: jest.fn(),
-  getDocument: jest.fn(),
+  getDocument: jest.fn(() => ({
+    exists: jest.fn()
+  })),
 }));
 jest.mock('@/lib/firebase/storage/storageOperations', () => ({
   addFile: jest.fn(),

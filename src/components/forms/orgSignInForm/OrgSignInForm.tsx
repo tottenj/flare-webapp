@@ -5,11 +5,13 @@ import FileInput from '@/components/inputs/file/FileInput';
 import FormSection from '@/components/inputs/formSection/FormSection';
 import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import TextInput from '@/components/inputs/textInput/TextInput';
+import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
 import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
 import FlareLocation from '@/lib/types/Location';
 import { formErrors, orgSocials } from '@/lib/utils/text/text';
+import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
 
@@ -28,10 +30,15 @@ export default function OrgSignInForm() {
     loadingMessage: 'loading',
   });
 
+  useEffect(() => {
+    (async () => {
+      if (state.message === 'success' && pending == false) {
+        await signOut(auth)
+        router.push("/confirmation")
+      }
+    })()
 
-  if(state.message === "success"){
-    router.push("/confirmation")
-  }
+  },[state])
 
   useEffect(() => {
     if (pass == confirmPass || pass == '') {
