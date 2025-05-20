@@ -14,7 +14,7 @@ export default function SignInForm() {
     async function handleFormSubmit(e:any){
       e.preventDefault()
         if(email.current?.value && pass.current?.value){
-            signInWithEmailAndPassword(auth, email.current.value, pass.current.value)
+           const usr = await signInWithEmailAndPassword(auth, email.current.value, pass.current.value)
         }
     }
   

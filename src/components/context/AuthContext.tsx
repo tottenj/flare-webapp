@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, onIdTokenChanged, getAuth } from 'firebase/auth';
+import { User, onIdTokenChanged, getAuth, signOut } from 'firebase/auth';
 import { setCookie, deleteCookie } from 'cookies-next'; // this works in the browser
 import { auth, db } from '@/lib/firebase/auth/configs/clientApp';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -24,7 +24,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onIdTokenChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const token = await firebaseUser.getIdToken(true);
-        
+        if(firebaseUser.emailVerified == false){
+          await signOut(auth)
+          return
+        }
 
         setCookie('__session', token, {
           secure: true,
