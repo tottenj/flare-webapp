@@ -6,18 +6,12 @@ import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 
 declare global {
   namespace Cypress {
-    interface Chainable {
-      signUpWithEmailAndPassword(email: string, password: string): Chainable<void>;
-      clearAuthEmulator(): Chainable<void>;
-    }
+    
 
-    // Add this interface to extend Cypress namespace
-    interface Cypress {
-      firebaseAuth: FirebaseAuth;
-    }
+  
   }
 }
-
+/*
 export const setupFirebase = (): void => {
   const firebaseConfig = {
     apiKey: Cypress.env('FIREBASE_API_KEY'),
@@ -34,3 +28,4 @@ export const setupFirebase = (): void => {
   // Assign to the correct property
   Cypress.firebaseAuth = auth;
 };
+*/

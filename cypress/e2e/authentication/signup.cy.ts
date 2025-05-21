@@ -1,17 +1,15 @@
 /// <reference types="cypress" />
 
-import { setupFirebase } from '../../support/auth';
+import { password } from "@/components/inputs/textInput/TextInput.stories";
+
+
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
 const apiKey = Cypress.env('FIREBASE_API_KEY'); // Get the API Key from Cypress env
 
 
 describe('SignInForm', () => {
-  before(() => {
-    setupFirebase();
-  });
 
   beforeEach(() => {
-    cy.clearAuthEmulator();
     cy.visit('/signup');
   });
 
@@ -20,13 +18,6 @@ describe('SignInForm', () => {
       message: string;
       code: number;
     };
-  }
-
-  interface FirebaseUserResponse {
-    users?: Array<{
-      email: string;
-      localId: string;
-    }>;
   }
 
   describe('Form Validation', () => {
@@ -42,7 +33,7 @@ describe('SignInForm', () => {
       cy.contains('An error occurred. Please try again').should('be.visible');
     });
   });
-/*
+
   describe('Successful Sign Up', () => {
     it('should create and verify a user', () => {
       const testEmail = `test${Date.now()}@example.com`;
@@ -51,7 +42,7 @@ describe('SignInForm', () => {
 
       cy.request({
         method: 'POST',
-        url: 'http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}',
+        url: `http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
         body: {
           email: testEmail,
           password: testPassword,
@@ -60,22 +51,43 @@ describe('SignInForm', () => {
       }).then((signUpResponse) => {
         expect(signUpResponse.status).to.eq(200);
 
+        const idToken = signUpResponse.body.idToken
+        const userId = signUpResponse.body.localId
+        Cypress.env('createdUserId', userId)
+
         cy.request({
-          method: 'GET',
-          url: `http://localhost:9099/emulator/v1/projects/${projectId}/accounts`,
-         
+          method: 'POST',
+          url: `http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:lookup?key=${apiKey}`,
+          body: {
+            idToken: idToken, // <-- INCLUDE THE ID TOKEN IN THE BODY
+          },
         }).then((listResponse) => {
-          const userExists = listResponse.body.users.some((user: any) => user.email === testEmail);
-          expect(userExists).to.be.true;
+          expect(listResponse.body).to.have.property('users').and.be.an('array').with.lengthOf(1);
+
+          cy.request({
+            method: 'GET',
+            url: `http://localhost:9099/emulator/v1/projects/${projectId}/oobCodes`,
+          }).then((oobResponse) => {
+            expect(oobResponse.allRequestResponses.length > 0)
+            console.log(oobResponse.allRequestResponses)
+          });
+
         });
       });
     });
   });
-*/
+
 
   describe('Error Cases', () => {
     const existingEmail = 'existing@example.com';
     const existingPassword = 'password123';
+
+    beforeEach(() => {
+      cy.request({
+        method: 'DELETE',
+        url: `http://localhost:9099/emulator/v1/projects/${projectId}/accounts`,
+      });
+    })
 
     before(() => {
       cy.request<FirebaseErrorResponse>({
@@ -90,7 +102,15 @@ describe('SignInForm', () => {
     });
 
     it('should show error for existing email', () => {
-      cy.signUpWithEmailAndPassword(existingEmail, 'anypassword');
+      cy.request({
+        method: "POST",
+        url: `https://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
+        body: {
+          email: existingEmail,
+          password: existingPassword,
+          returnSecureToken: true
+        }
+      })
       cy.contains('Email is already in use').should('be.visible');
     });
   });

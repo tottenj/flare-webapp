@@ -19,8 +19,6 @@ export  default async function getFirestoreFromServer() {
 export async function getStorageFromServer() {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
   const storage = getStorage(firebaseServerApp);
- 
-
   return { storage };
 }
 
