@@ -28,6 +28,7 @@ const eslintConfig = [
         project: './tsconfig.json',
       },
     },
+    ignorePatterns: ['functions/**'],
     env: {
       jest: true,
     },
