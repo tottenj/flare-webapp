@@ -48,6 +48,8 @@ cypress:
   variables:
     CYPRESS_FIREBASE_WEB_API_KEY: $FIREBASE_API_KEY
     FIREBASE_AUTH_EMULATOR_HOST: 'localhost:9099'
+    NEXT_PUBLIC_MODE: "test"
+    MODE: "test"
   script:
     # install dependencies
     - npm ci
