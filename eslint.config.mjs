@@ -29,6 +29,7 @@ const eslintConfig = [
       },
     },
     ignorePatterns: ['functions/'],
+    ignores: ['./functions'],
     env: {
       jest: true,
     },
