@@ -4,6 +4,7 @@ import PrimaryButton from './PrimaryButton';
 
 export default {
   component: PrimaryButton,
+  title: "buttons/Primary Button"
 } satisfies Meta<typeof PrimaryButton>;
 
 type Story = StoryObj<typeof PrimaryButton>;

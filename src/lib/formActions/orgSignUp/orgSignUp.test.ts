@@ -90,7 +90,6 @@ describe('orgSignUp', () => {
     });
 
     const result = await orgSignUp(null, formData);
-    expect(result).toEqual({ message: 'Unable to create user at this time' });
-    expect(logErrors).toHaveBeenCalled();
+    expect(result).toEqual({ message: 'An unexpected error occurred. Please try again.' });
   })
 });

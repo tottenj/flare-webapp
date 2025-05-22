@@ -8,7 +8,6 @@ import TextInput from '@/components/inputs/textInput/TextInput';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
-import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
 import FlareLocation from '@/lib/types/Location';
 import { formErrors, orgSocials } from '@/lib/utils/text/text';
 import { signOut } from 'firebase/auth';

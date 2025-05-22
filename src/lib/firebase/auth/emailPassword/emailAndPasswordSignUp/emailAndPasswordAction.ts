@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { auth } from '../../configs/clientApp';
 import getFirestoreFromServer from '../../configs/getFirestoreFromServer';
+import getAuthError from '@/lib/utils/error/getAuthError';
 
 export default async function emailAndPasswordAction(prevState: any, formData: FormData) {
   const rawFormData = {
@@ -21,12 +22,8 @@ export default async function emailAndPasswordAction(prevState: any, formData: F
       await new FlareUser(usr.user).addUser(db);
       await sendEmailVerification(usr.user);
       return { message: 'success' };
-    } catch (error: any) {
-      if (error.code === 'auth/email-already-in-use') {
-        return { message: 'Email is already in use' };
-      } else {
-        return { message: 'An error occurred. Please try again.' };
-      }
+    } catch (error) {
+      return {message: getAuthError(error)}
     }
   } else {
     return { message: 'Error with email or password' };

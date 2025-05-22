@@ -8,7 +8,6 @@ import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverAp
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import MainBanner from '@/components/banners/mainBanner/MainBanner';
-import { signInWithGoogle } from '@/lib/firebase/auth/google/signInWithGoogle';
 
 const nunito = Nunito({
   variable: '--font-nunito',

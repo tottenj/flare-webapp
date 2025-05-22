@@ -22,7 +22,7 @@ const meta = {
   ],
   tags: ['autodocs'],
   component: SignInForm,
-  title: 'Forms/Login Form',
+  title: 'Forms/Sign Up Form',
   parameters: {
     layout: 'centered',
     backgrounds: {
@@ -56,14 +56,3 @@ export const Default: Story = {
   },
 };
 
-export const Login: Story = {
-  args: {
-    overrideAction: mockAction,
-    signUp: false,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const test = await canvas.findByText('Login');
-    expect(test).toBeInTheDocument();
-  },
-};

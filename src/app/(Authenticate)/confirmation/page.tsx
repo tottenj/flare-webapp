@@ -1,10 +1,22 @@
+import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+import Logo from '@/components/flare/logo/Logo';
+import LinkInput from '@/components/inputs/link/LinkInput';
+import Image from 'next/image';
+import Link from 'next/link';
+
 export default function Confirmation() {
   return (
-    <div className="gradientBack">
-        <div className="bg-white p-4 rounded-xl w-1/2">
-            <h1>Thank you for signing up!</h1>
-            <p>Please check your email for to confirm access</p>
+    <div className="gradientBackFull flex items-center justify-center">
+      <div className="flex h-1/2 w-1/2 flex-col items-center justify-around rounded-xl bg-white p-4 text-center">
+        <div>
+          <Logo size={150} />
         </div>
+        <div>
+          <h1>Thank You For Signing Up!</h1>
+          <p>Please Check Your Email To Verify Your Account!</p>
+        </div>
+       <LinkInput href='/signin'/>
+      </div>
     </div>
-  )
+  );
 }

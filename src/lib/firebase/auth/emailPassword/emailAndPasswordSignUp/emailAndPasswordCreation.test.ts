@@ -86,6 +86,6 @@ describe('emailAndPasswordAction', () => {
 
     const result = await emailAndPasswordAction({}, formData);
 
-    expect(result).toEqual({ message: 'An error occurred. Please try again.' });
+    expect(result).toEqual({ message: 'An unexpected error occurred. Please try again.' });
   });
 });

@@ -4,6 +4,7 @@ import errorLocation from '@/lib/enums/errorLocations';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import flareLocation from '@/lib/types/Location';
+import getAuthError from '@/lib/utils/error/getAuthError';
 import logErrors from '@/lib/utils/error/logErrors';
 import { formErrors, orgSocials } from '@/lib/utils/text/text';
 import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from 'firebase/auth';
@@ -43,7 +44,6 @@ export default async function orgSignUp(prevState: any, formData: FormData) {
     await sendEmailVerification(cred.user)
     return { message: 'success' };
   } catch (error) {
-    await logErrors({errors: error as Error, errorLocation: errorLocation.auth})
-    return {message: 'Unable to create user at this time'}
+    return {message: getAuthError(error)}
   }
 }

@@ -4,6 +4,7 @@ import MainModal  from './MainModal';
 
 export default {
   component: MainModal,
+  title: "modals/Main Modal"
 } satisfies Meta<typeof MainModal>;
 
 type Story = StoryObj<typeof MainModal>;
