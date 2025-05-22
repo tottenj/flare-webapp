@@ -19,8 +19,8 @@
     "emulators:start": "firebase emulators:start",
     "cypress:run": "cypress run",
     "test:cypress": "cross-env MODE=test NEXT_PUBLIC_MODE=test FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 STORAGE_EMULATOR_HOST=127.0.0.1:9199 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 firebase emulators:exec --only auth,firestore,storage,functions \"cypress open\"",
-    "cypressFire": "concurrently -k -s first \"npm run emulators:start\" \"npm run dev\" \"npm run cypress:open\""
-  
+    "cypressFire": "concurrently -k -s first \"npm run emulators:start\" \"npm run dev\" \"npm run cypress:open\"",
+    "dev:emulators": "concurrently -k -s first \"npm run emulators:start\" \"cross-env FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 STORAGE_EMULATOR_HOST=127.0.0.1:9199 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 NEXT_PUBLIC_MODE=test MODE=test npm run dev\""
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.8",

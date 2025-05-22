@@ -9,25 +9,24 @@ const firestoreSettings:  FirestoreSettings = {
 };
 
 
-
 export  default async function getFirestoreFromServer() {
-  const serv = await getAuthenticatedAppForUser()
-  const fire = initializeFirestore(serv.firebaseServerApp, firestoreSettings);
-  return fire
+  const {firebaseServerApp, currentUser} = await getAuthenticatedAppForUser()
+  const fire = initializeFirestore(firebaseServerApp, firestoreSettings);
+  return {firebaseServerApp, currentUser, fire}
 }
 
 export async function getStorageFromServer() {
-  const { firebaseServerApp } = await getAuthenticatedAppForUser();
+  const { firebaseServerApp, currentUser } = await getAuthenticatedAppForUser();
   const storage = getStorage(firebaseServerApp);
-  return { storage };
+  return { storage, currentUser };
 }
 
 
 export async function getServicesFromServer(){
-  const {firebaseServerApp} = await getAuthenticatedAppForUser()
+  const {firebaseServerApp, currentUser} = await getAuthenticatedAppForUser()
   const firestore = initializeFirestore(firebaseServerApp, firestoreSettings)
   const storage = getStorage(firebaseServerApp)
-  return{storage, firestore}
+  return{storage, firestore, currentUser}
 }
 
 

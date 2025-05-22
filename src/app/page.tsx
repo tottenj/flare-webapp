@@ -16,7 +16,7 @@ function searchParamDate(dateParam: string | string[] | undefined){
 }
 
 
-export default async function Dashboard({
+export default async function EventView({
   params,
   searchParams,
 }: {
@@ -25,7 +25,7 @@ export default async function Dashboard({
 }) {
   const filters: EventFilters = {}
   const dateParam = searchParamDate((await searchParams).date);
-  const fire = await getFirestoreFromServer()
+  const {fire} = await getFirestoreFromServer()
 
 
   if(dateParam){
