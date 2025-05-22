@@ -1,0 +1,4 @@
+functions/
+functions/src
+functions/src/index.ts
+./functions/src/index.ts
