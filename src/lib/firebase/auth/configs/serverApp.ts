@@ -9,7 +9,6 @@ export async function getAuthenticatedAppForUser() {
   const headersObj = await headers();
   const token = (await cookies()).get('__session')?.value;
 
-
   let appSettings: FirebaseServerAppSettings = { authIdToken: token };
   appSettings.releaseOnDeref = headersObj;
 

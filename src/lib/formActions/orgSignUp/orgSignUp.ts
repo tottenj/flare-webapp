@@ -39,8 +39,9 @@ export default async function orgSignUp(prevState: any, formData: FormData) {
     const cred = await createUserWithEmailAndPassword(auth, req.email!, req.pass!);
     const { storage, firestore } = await getServicesFromServer();
     const org = new FlareOrg(cred.user, req.name!, location);
+    console.log(org)
     await org.addOrg(firestore, storage, validFiles);
-    
+    console.log("added")
     await sendEmailVerification(cred.user)
     return { message: 'success' };
   } catch (error) {

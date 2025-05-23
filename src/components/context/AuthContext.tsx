@@ -33,9 +33,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           return
         }
 
+        const isLocal = process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_MODE === 'test';
+
+
         setCookie('__session', token, {
-          secure: true,
-          sameSite: 'strict',
+          secure: !isLocal,
+          sameSite: true,
           path: '/',
           maxAge: 60 * 60, // 1 hour
         });

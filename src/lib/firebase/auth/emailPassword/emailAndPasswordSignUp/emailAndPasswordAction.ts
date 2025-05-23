@@ -18,8 +18,8 @@ export default async function emailAndPasswordAction(prevState: any, formData: F
     const { email, password } = rawFormData;
     try {
       const usr = await createUserWithEmailAndPassword(auth, email, password);
-      const db = await getFirestoreFromServer();
-      await new FlareUser(usr.user).addUser(db);
+      const {fire} = await getFirestoreFromServer();
+      await new FlareUser(usr.user).addUser(fire);
       await sendEmailVerification(usr.user);
       return { message: 'success' };
     } catch (error) {

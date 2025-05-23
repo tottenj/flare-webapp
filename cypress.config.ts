@@ -11,7 +11,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // Implement node event listeners here
     },
-    baseUrl: 'https://localhost:3000', // Adjust to your app's URL
+    baseUrl: 'http://localhost:3000', // Adjust to your app's URL
     env: {
       FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
       FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,

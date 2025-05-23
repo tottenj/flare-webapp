@@ -10,6 +10,7 @@ export default async function Dashboard() {
 
   if (currentUser) {
     const tokenResult = await currentUser.getIdTokenResult();
+    console.log(tokenResult.claims)
     const claims = tokenResult?.claims.organization === true;
 
     if (claims) {
@@ -17,7 +18,5 @@ export default async function Dashboard() {
     } else {
       return <UserDashboard fire={fire} currentUser={currentUser} firebase={firebaseServerApp} />;
     }
-  } else {
-    redirect('/');
-  }
+  } 
 }

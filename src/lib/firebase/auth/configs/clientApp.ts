@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { connectAuthEmulator, getAuth } from 'firebase/auth'; // No need for initializeAuth here unless you have specific needs
+import { browserLocalPersistence, connectAuthEmulator, getAuth, setPersistence } from 'firebase/auth'; // No need for initializeAuth here unless you have specific needs
 import { connectFirestoreEmulator, getFirestore, initializeFirestore } from 'firebase/firestore'; // Import connectFirestoreEmulator
 import { connectStorageEmulator, getStorage } from 'firebase/storage'; // Import connectStorageEmulator
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'; // Import connectFunctionsEmulator (if you use functions client-side)
