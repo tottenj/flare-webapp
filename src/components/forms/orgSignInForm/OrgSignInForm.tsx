@@ -1,11 +1,11 @@
 'use client';
-
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import FileInput from '@/components/inputs/file/FileInput';
 import FormSection from '@/components/inputs/formSection/FormSection';
 import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import TextInput from '@/components/inputs/textInput/TextInput';
-import { auth } from '@/lib/firebase/auth/configs/clientApp';
+import { auth, storage } from '@/lib/firebase/auth/configs/clientApp';
+import { addFile } from '@/lib/firebase/storage/storageOperations';
 import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
 import FlareLocation from '@/lib/types/Location';
@@ -15,14 +15,27 @@ import { useRouter } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
 
 export default function OrgSignInForm() {
-  const initialState = { message: '' };
+  const initialState = { message: '', orgId: '' };
   const [loc, setloc] = useState<FlareLocation | null>(null);
   const [state, action, pending] = useActionState(orgSignUp, initialState);
   const [pass, setPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [passStatus, setPassStatus] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
+  const [validFiles, setValidFiles] = useState<{ key: string; file: File }[]>([]);
 
+  useEffect(() => {
+    if (state.message === 'success' && state.orgId && !pending) {
+      uploadFilesToFirebase(state.orgId);
+    }
+  }, [state]);
+
+  async function uploadFilesToFirebase(orgId: string) {
+    for (const { key, file } of validFiles) {
+      const path = `Organizations/${orgId}/${key}`;
+      await addFile(storage, path, file);
+    }
+  }
 
   useActionToast(state, pending, {
     successMessage: 'success',
@@ -32,12 +45,11 @@ export default function OrgSignInForm() {
   useEffect(() => {
     (async () => {
       if (state.message === 'success' && pending == false) {
-        await signOut(auth)
-        router.push("/confirmation")
+        await signOut(auth);
+        router.push('/confirmation');
       }
-    })()
-
-  },[state])
+    })();
+  }, [state]);
 
   useEffect(() => {
     if (pass == confirmPass || pass == '') {
@@ -51,6 +63,9 @@ export default function OrgSignInForm() {
     if (passStatus) {
       e.preventDefault();
     }
+  }
+  function handleFileChange(key: string, file: File) {
+    setValidFiles((prev) => [...prev.filter((f) => f.key !== key), { key, file }]);
   }
 
   return (
@@ -101,23 +116,16 @@ A recent post clearly showing your organization’s name or branding
 This information stays private and is only used for verification purposes."
         >
           <div className="mt-8 flex justify-between">
-            <div className="flex w-[30%] flex-col">
-              <TextInput
-                reqired={false}
-                label="Instagram"
-                name={orgSocials.instagram}
-                size="Large"
-              />
-              <FileInput name="instagram" />
-            </div>
-            <div className="flex w-[30%] flex-col">
-              <TextInput reqired={false} label="Facebook" name={orgSocials.facebook} size="Large" />
-              <FileInput name="facebook" />
-            </div>
-            <div className="flex w-[30%] flex-col">
-              <TextInput reqired={false} label="Twitter" name={orgSocials.twitter} size="Large" />
-              <FileInput name="twitter" />
-            </div>
+            {Object.values(orgSocials).map((social) => (
+              <div key={social} className="flex w-[30%] flex-col">
+                <TextInput reqired={false} label={social} name={social} size="Large" />
+                <FileInput
+                  name={social}
+                  onChange={(file) => handleFileChange(social, file)}
+                  fileAdded={!!validFiles.find((f) => f.key === social)}
+                />
+              </div>
+            ))}
           </div>
 
           <p className="mt-8 pr-2 pl-2">
@@ -132,7 +140,11 @@ This information stays private and is only used for verification purposes."
             label="Other Proof"
             name="other"
           />
-          <FileInput name="other" />
+          <FileInput
+            onChange={(file) => handleFileChange('other', file)}
+            name="other"
+            fileAdded={!!validFiles.find((f) => f.key === 'other')}
+          />
         </FormSection>
         <PrimaryButton disabled={pending} type="submit" />
       </form>

@@ -73,12 +73,8 @@ export default class FlareOrg {
     return org.data()
   }
 
-  async addOrg(firestoredb: Firestore, storagedb: FirebaseStorage, validFiles: {key:string, file:File}[]) {
+  async addOrg(firestoredb: Firestore) {
     await addDocument(firestoredb, `${Collections.Organizations}/${this.id}`, this, orgConverter)
-    for(const ent of validFiles){
-      const pathRef = `Organizations/${this.id}/${ent.key}`
-      await addFile(storagedb, pathRef, ent.file)
-    }
   }
 }
 
