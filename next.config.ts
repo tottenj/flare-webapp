@@ -4,15 +4,23 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['firebasestorage.googleapis.com'],
   },
-  eslint:{
-    ignoreDuringBuilds: true
+  eslint: {
+    ignoreDuringBuilds: true,
   },
   experimental: {
     serverActions: {
       bodySizeLimit: '50mb',
     },
   },
-  /* config options here */
+  webpack(config, options) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      issuer: /\.[jt]sx?$/,
+      use: ['@svgr/webpack'],
+    });
+
+    return config;
+  },
 };
 
 export default nextConfig;
