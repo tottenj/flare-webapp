@@ -63,6 +63,8 @@ cypress:
     FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080 
     STORAGE_EMULATOR_HOST: 127.0.0.1:9199 
     FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
+    VERCEL_ORG_ID: joshs-projects-01d47aca
+    VERCEL_PROJECT_ID: prj_6rfoJToy55CwGKbPdPElv9bbApXu
   script:
     # install dependencies
     - npm ci
