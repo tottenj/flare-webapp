@@ -1,6 +1,9 @@
 'use client';
 import GoogleSignInButton from '@/components/buttons/googleButton/SignInWithGoogleButton';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+import LogoWithText from '@/components/flare/logoWithText/LogoWithText';
+import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
+import SVGLogo from '@/components/flare/svglogo/SVGLogo';
 import LinkInput from '@/components/inputs/link/LinkInput';
 import TextInput from '@/components/inputs/textInput/TextInput';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
@@ -27,6 +30,7 @@ export default function SignInForm() {
 
   return (
     <div className="@container flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
+      <ServerLogo size={200} auxSizeMain='xLarge'/>
       <div className="absolute top-0 right-0 mt-4 mr-4">
         <LinkInput style={{ padding: '0.5rem' }} href="/flare-signin" text="Organization Signup" />
       </div>

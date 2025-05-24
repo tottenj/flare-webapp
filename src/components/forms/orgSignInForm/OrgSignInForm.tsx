@@ -1,7 +1,9 @@
 'use client';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
 import FileInput from '@/components/inputs/file/FileInput';
 import FormSection from '@/components/inputs/formSection/FormSection';
+import LinkInput from '@/components/inputs/link/LinkInput';
 import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import TextInput from '@/components/inputs/textInput/TextInput';
 import { auth, storage } from '@/lib/firebase/auth/configs/clientApp';
@@ -70,7 +72,11 @@ export default function OrgSignInForm() {
 
   return (
     <div className="@container mt-8 mb-8 flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
-      <h1>Flare Sign Up</h1>
+      <ServerLogo size={200} auxSizeMain="xLarge" />
+      <div className="absolute top-0 right-0 mt-4 mr-4">
+        <LinkInput style={{ padding: '0.5rem' }} href="/signup" text="User Sign Up" />
+      </div>
+      <h1 className="mt-4">Organization Sign Up</h1>
       <p className="mt-8 mb-8 text-center">
         Welcome to Flare! We're excited to have your organization join our vibrant community. Once
         you sign up, your account will be reviewed for verification to ensure a safe and authentic
