@@ -10,6 +10,7 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  // Legacy config compatibility
   ...compat.extends(
     'next/core-web-vitals',
     'next/typescript',
@@ -19,18 +20,26 @@ const eslintConfig = [
     'plugin:prettier/recommended'
   ),
 
-  // Add custom config directly using flat config syntax
+  // Custom config for TS files
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parserOptions: {
         project: './tsconfig.json',
       },
-      env: {
-        jest: true,
+      globals: {
+        // Jest globals (readonly)
+        describe: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        jest: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
       },
     },
-    ignores: ['./functions'],
+    ignores: ['functions/**'],
   },
 ];
 
