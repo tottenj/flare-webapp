@@ -10,7 +10,6 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  // Legacy config compatibility
   ...compat.extends(
     'next/core-web-vitals',
     'next/typescript',
@@ -27,11 +26,11 @@ const eslintConfig = [
       parserOptions: {
         project: './tsconfig.json',
       },
+      env: {
+        jest: true,
+      },
     },
     ignores: ['./functions'],
-    env: {
-      jest: true,
-    },
   },
 ];
 
