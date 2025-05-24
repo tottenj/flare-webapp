@@ -55,7 +55,7 @@ cypress:
   image: cypress/browsers:22.15.0
   stage: cypress
   variables:
-    CYPRESS_FIREBASE_WEB_API_KEY: $FIREBASE_API_KEY
+    $FIREBASE_API_KEY: $FIREBASE_API_KEY
     NEXT_PUBLIC_MODE: "test"
     MODE: "test"
     FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080 
