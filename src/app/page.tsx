@@ -25,8 +25,6 @@ export default async function EventView({
 }) {
   const filters: EventFilters = {}
   const dateParam = searchParamDate((await searchParams).date);
-
-  
   const {fire} = await getFirestoreFromServer()
 
 

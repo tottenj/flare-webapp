@@ -36,7 +36,7 @@ export default function SignUpForm({ overrideAction, signUp = true }: SignInForm
 
   return (
     <div className="@container flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
-      <ServerLogo size={200} auxSizeMain='xLarge'/>
+      <ServerLogo size='xLarge'/>
       <div className='absolute right-0 top-0 mr-4 mt-4'>
         <LinkInput style={{padding: "0.5rem"}} href='/flare-signin' text='Organization Signup'/>
       </div>

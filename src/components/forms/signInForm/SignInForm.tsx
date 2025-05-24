@@ -30,7 +30,7 @@ export default function SignInForm() {
 
   return (
     <div className="@container flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
-      <ServerLogo size={200} auxSizeMain='xLarge'/>
+      <ServerLogo size="xLarge"/>
       <div className="absolute top-0 right-0 mt-4 mr-4">
         <LinkInput style={{ padding: '0.5rem' }} href="/flare-signin" text="Organization Signup" />
       </div>
