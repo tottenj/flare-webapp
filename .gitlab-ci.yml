@@ -4,6 +4,8 @@ stages:
   - cypress
   - chromatic
 
+  
+
 variables:
   NODE_VERSION: '22.12.0'
   FIREBASE_PROJECT_ID: 'flare-7091a' # Add your Firebase project ID
