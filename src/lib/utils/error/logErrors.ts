@@ -8,7 +8,7 @@ interface logErrorProps{
 }
 
 export default async function logErrors({errors}:logErrorProps) {
-  const firestore  = await getFirestoreFromServer()
+  const {fire}  = await getFirestoreFromServer()
   const data =  {
     name: errors.name,
     message: errors.message,
@@ -16,5 +16,5 @@ export default async function logErrors({errors}:logErrorProps) {
   }
  
   console.log(errors.message)
-  addDocument(firestore, `Errors/${data.date.getMilliseconds()}`, data)
+  addDocument(fire, `Errors/${data.date.getMilliseconds()}`, data)
 }

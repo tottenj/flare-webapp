@@ -35,6 +35,7 @@ deploy_to_vercel:
   only:
     - branches
 
+
 jest:
   stage: test
   # Regex to extract code coverage percentage from Jest output
