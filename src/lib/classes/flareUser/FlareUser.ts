@@ -12,6 +12,8 @@ import Collections from '../../enums/collections';
 import { addDocument, getDocument } from '@/lib/firebase/firestore/firestoreOperations';
 import { isUser } from '@/lib/utils/other/isUser';
 import { db } from '@/lib/firebase/auth/configs/clientApp';
+import { FirebaseStorage } from 'firebase/storage';
+import { getFile } from '@/lib/firebase/storage/storageOperations';
 
 export default class FlareUser {
   id: string;
@@ -47,6 +49,20 @@ export default class FlareUser {
       return userDoc.data()
     }else{
       return null
+    }
+  }
+
+  async getProfilePic(firestoredb:Firestore, storage:FirebaseStorage){
+    const pic = await getDocument(
+      firestoredb,
+      `${Collections.Organizations}/${this.id}`,
+      userConverter
+    );
+    if (pic.exists() && pic.data().profilePic) {
+      const ref = pic.data().profilePic;
+      if (ref) {
+        return await getFile(storage, ref);
+      }
     }
   }
 

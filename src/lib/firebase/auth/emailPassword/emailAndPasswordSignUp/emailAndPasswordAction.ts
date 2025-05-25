@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/
 
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { auth } from '../../configs/clientApp';
-import getFirestoreFromServer from '../../configs/getFirestoreFromServer';
+import {getFirestoreFromServer} from '../../configs/getFirestoreFromServer';
 import getAuthError from '@/lib/utils/error/getAuthError';
 
 export default async function emailAndPasswordAction(prevState: any, formData: FormData) {

@@ -12,7 +12,6 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css'; // Import the CSS
 config.autoAddCss = false;
 
-
 const nunito = Nunito({
   variable: '--font-nunito',
   subsets: ['latin'],
@@ -34,7 +33,6 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const { currentUser } = await getAuthenticatedAppForUser();
 
-
   const userData = currentUser
     ? {
         uid: currentUser.uid,
@@ -45,13 +43,15 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang="en">
-      <body className={`${nunito.variable} ${pt_sans.variable} antialiased`}>
-        <ServerUserProvider user={userData}>
-          <AuthProvider>{children}</AuthProvider>
-          <Analytics />
-          <SpeedInsights />
-          <ToastContainer position="bottom-right" />
-        </ServerUserProvider>
+      <body className={`${nunito.variable} ${pt_sans.variable} antialiased flex justify-center gradientBack bg-no-repeat`}>
+        <div className='w-11/12 mb-4 max-w-[1700px]'>
+          <ServerUserProvider user={userData}>
+            <AuthProvider>{children}</AuthProvider>
+            <Analytics />
+            <SpeedInsights />
+            <ToastContainer position="bottom-right" />
+          </ServerUserProvider>
+        </div>
       </body>
     </html>
   );

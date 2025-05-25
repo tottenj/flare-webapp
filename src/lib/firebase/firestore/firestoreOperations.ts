@@ -1,5 +1,4 @@
 import { doc, Firestore, FirestoreDataConverter, getDoc, DocumentData, DocumentSnapshot, setDoc, WithFieldValue, WhereFilterOp, collection, QueryConstraint, where, query, getDocs, OrderByDirection, orderBy, limit } from 'firebase/firestore';
-import 'server-only';
 
 
 export async function getDocument<AppModelType, DbModelType extends DocumentData>(

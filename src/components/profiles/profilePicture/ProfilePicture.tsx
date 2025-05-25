@@ -1,12 +1,49 @@
-import Image from "next/image";
+import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
+import FlareUser from '@/lib/classes/flareUser/FlareUser';
+import {
+  getFirestoreFromServer,
+  getServicesFromServer,
+} from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverApp';
+import { getClaims } from '@/lib/firebase/utils/getClaims';
+import { User } from 'firebase/auth';
+import Image from 'next/image';
 
-interface profilePictureProps{
-  size: number
+interface profilePictureProps {
+  size: number;
 }
 
-export default async function ProfilePicture({size}: profilePictureProps) {
+export default async function ProfilePicture({ size }: profilePictureProps) {
+  let retval = '/defaultProfile.svg';
+  let claimsobj = false;
+  const { currentUser, firestore, storage } = await getServicesFromServer();
+  const {claims} = await getClaims()
+  if (claims) {
+    claimsobj = claims.organization === true;
+  }
 
+  if (currentUser) {
+    if (claimsobj) {
+      const flareOrg = await FlareOrg.getOrg(firestore, currentUser.uid);
+      if (flareOrg?.profilePic) {
+        const pic = await flareOrg.getProfilePicture(firestore, storage);
+        if (pic) {
+          retval = pic;
+        }
+      }
+    } else {
+      const flareUser = await FlareUser.getUserById(currentUser.uid, firestore);
+      if (flareUser?.profilePic) {
+        const pic = await flareUser.getProfilePic(firestore, storage);
+        if (pic) {
+          retval = pic;
+        }
+      }
+    }
+  }
   return (
-    <Image src={"/defaultProfile.svg"} width={size} height={size} alt="profile" className="rounded-full"/>
-  )
+    <div className="rounded-full">
+      <Image src={retval} width={size} height={size} alt="profile" />
+    </div>
+  );
 }

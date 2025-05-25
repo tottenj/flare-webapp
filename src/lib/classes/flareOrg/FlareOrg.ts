@@ -4,7 +4,7 @@ import flareLocation from '@/lib/types/Location';
 import { addDocument, getDocument } from '@/lib/firebase/firestore/firestoreOperations';
 import Collections from '@/lib/enums/collections';
 import { FirebaseStorage } from 'firebase/storage';
-import { addFile } from '@/lib/firebase/storage/storageOperations';
+import { addFile, getFile } from '@/lib/firebase/storage/storageOperations';
 
 export default class FlareOrg {
   id: string;
@@ -73,9 +73,22 @@ export default class FlareOrg {
     return org.data()
   }
 
+  async getProfilePicture(firestoredb: Firestore, storage: FirebaseStorage){
+    const pic = await getDocument(firestoredb, `${Collections.Organizations}/${this.id}`, orgConverter)
+    if(pic.exists() && pic.data().profilePic){
+      const ref = pic.data().profilePic
+      if(ref){
+        return await getFile(storage, ref)
+      }
+    }
+  }
+
   async addOrg(firestoredb: Firestore) {
     await addDocument(firestoredb, `${Collections.Organizations}/${this.id}`, this, orgConverter)
   }
+
+
+
 }
 
 

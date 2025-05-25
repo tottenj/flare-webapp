@@ -152,7 +152,7 @@ export default class Event {
       10
     ),
     new Event(
-      '1',
+      '6',
       'flare001',
       'Annual Pride Gala',
       'A formal evening celebrating LGBTQ+ community leaders.',
@@ -168,7 +168,7 @@ export default class Event {
       'https://pridegala.org/tickets'
     ),
     new Event(
-      '2',
+      '7',
       'flare002',
       'Drag Brunch Bash',
       'Enjoy brunch and fierce performances by local drag artists.',
@@ -183,7 +183,7 @@ export default class Event {
       30
     ),
     new Event(
-      '3',
+      '8',
       'flare003',
       'Picnic in the Park',
       'A laid-back afternoon with games and music.',
@@ -198,7 +198,7 @@ export default class Event {
       'Free'
     ),
     new Event(
-      '4',
+      '9',
       'flare004',
       'Queer Youth Collective',
       'Weekly meet-up for queer youth to connect and grow.',
@@ -213,7 +213,7 @@ export default class Event {
       0
     ),
     new Event(
-      '5',
+      '10',
       'flare005',
       'Open Mic Night',
       'Share your poetry, music, or comedy in a safe space.',

@@ -44,7 +44,7 @@ describe("Sign In Form", () =>{
             cy.get('[data-testid="email"]').type(verifedUserEmail);
             cy.get('[data-testid="password"]').type(verifiedUserPassword);
             cy.get('form').submit();
-            cy.url().should("include", "/home")
+            cy.url().should("include", "/dashboard")
         })
     })
 

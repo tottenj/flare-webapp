@@ -2,14 +2,14 @@ import 'server-only'
 import { connectFirestoreEmulator, FirestoreSettings, getFirestore, initializeFirestore } from "firebase/firestore";
 import { getAuthenticatedAppForUser } from "./serverApp";
 import { connectStorageEmulator, getStorage } from 'firebase/storage';
-import { connectAuthEmulator } from 'firebase/auth';
+import { cache } from 'react';
 
 const firestoreSettings:  FirestoreSettings = {
   ignoreUndefinedProperties: true,
 };
 
 
-export  default async function getFirestoreFromServer() {
+export const getFirestoreFromServer = cache(async () => {
   const {firebaseServerApp, currentUser} = await getAuthenticatedAppForUser()
   const fire = initializeFirestore(firebaseServerApp, firestoreSettings);
   if(process.env.MODE === "test"){
@@ -17,9 +17,9 @@ export  default async function getFirestoreFromServer() {
     connectFirestoreEmulator(fire, '127.0.0.1', 8080);
   }
   return {firebaseServerApp, currentUser, fire}
-}
+})
 
-export async function getStorageFromServer() {
+export const getStorageFromServer = cache(async () => {
   const { firebaseServerApp, currentUser } = await getAuthenticatedAppForUser();
   const storage = getStorage(firebaseServerApp);
   if (process.env.MODE === 'test') {
@@ -29,10 +29,10 @@ export async function getStorageFromServer() {
 
 
   return { storage, currentUser };
-}
+})
 
 
-export async function getServicesFromServer(){
+export const getServicesFromServer = cache(async () => {
   const {firebaseServerApp, currentUser} = await getAuthenticatedAppForUser()
   const firestore = initializeFirestore(firebaseServerApp, firestoreSettings)
   const storage = getStorage(firebaseServerApp)
@@ -42,6 +42,6 @@ export async function getServicesFromServer(){
     connectStorageEmulator(storage, '127.0.0.1', 9199);
   }
   return{storage, firestore, currentUser}
-}
+})
 
 

@@ -1,18 +1,22 @@
 'use client';
 
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
+import { useRouter } from 'next/navigation';
 import { Fragment } from 'react';
 
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  route?: boolean
 };
 
-export default function Modal({ isOpen, onClose, children }: ModalProps) {
+export default function Modal({ isOpen, onClose, children, route = false }: ModalProps) {
+  const router = useRouter()
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={onClose}>
+      <Dialog as="div" className="relative z-50" onClose={route ? () => router.back() : () => onClose()}>
         {/* Background overlay */}
         <TransitionChild
           as={Fragment}

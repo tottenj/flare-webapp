@@ -17,6 +17,8 @@ export async function addFile(
   metaData?: UploadMetadata
 ) {
   const storageRef = ref(storage, pathRef);
+  console.log("Uploading File")
   const upload = await uploadBytes(storageRef, data, metaData);
+  console.log("Uploaded file: ", upload.metadata, upload.ref)
   return upload
 }

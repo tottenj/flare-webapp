@@ -7,17 +7,17 @@ export async function middleware(request: NextRequest) {
   const session = (await cookies()).get('__session')?.value;
 
   // 2. Define protected and public routes
-  const isProtectedRoute = request.nextUrl.pathname.startsWith('/home');
+  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard');
   const isAuthRoute = ['/signin', '/signup', '/flare-signin'].includes(request.nextUrl.pathname);
 
   // 3. Redirect unauthenticated users from protected routes
   if (isProtectedRoute && !session) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return NextResponse.redirect(new URL('/events', request.url));
   }
 
   // 4. Redirect authenticated users away from auth routes
   if (isAuthRoute && session) {
-    return NextResponse.redirect(new URL('/home', request.url));
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   return NextResponse.next();

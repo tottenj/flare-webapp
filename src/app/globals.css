@@ -64,12 +64,14 @@ body {
   background: linear-gradient(135deg, #ffa301, #ff005c);
   width: 100vw;
   height: 100%;
+  background-repeat: no-repeat;
 }
 
 .gradientBackFull{
   background: linear-gradient(135deg, #ffa301, #ff005c);
   width: 100vw;
   height: 100lvh;
+  background-repeat: no-repeat;
 }
 
 .errorText{

@@ -2,7 +2,7 @@
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import errorLocation from '@/lib/enums/errorLocations';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
-import getFirestoreFromServer, { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import {getFirestoreFromServer} from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import flareLocation from '@/lib/types/Location';
 import getAuthError from '@/lib/utils/error/getAuthError';
 import logErrors from '@/lib/utils/error/logErrors';

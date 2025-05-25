@@ -1,5 +1,5 @@
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
-import getFirestoreFromServer, { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import {getFirestoreFromServer} from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
 import logErrors from '@/lib/utils/error/logErrors';
 import { formErrors } from '@/lib/utils/text/text';
