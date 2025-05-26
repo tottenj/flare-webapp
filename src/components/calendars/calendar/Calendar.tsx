@@ -26,7 +26,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
 
   const eventMap: Record<string, string[]> = events.reduce(
     (acc, event) => {
-      const dateKey = new Date(event.date).toISOString().split('T')[0];
+      const dateKey = new Date(event.startDate).toISOString().split('T')[0];
       const color = event.type; // This is already an OKLCH color string
       if (!acc[dateKey]) acc[dateKey] = [];
       acc[dateKey].push(color);
@@ -91,6 +91,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
 
 
   return (
+      
     <div className={styles.calendarWrapper}>
       <DayPicker
         mode="single"

@@ -11,7 +11,8 @@ export type PlainEvent = {
   description: string;
   type: string;
   ageGroup: string;
-  date: string; // ISO string
+  startDate: string; // ISO string
+  endDate:string;
   location: {
     id: string;
     name?: string | null;
@@ -41,7 +42,8 @@ export default function EventCard({ event }: eventCardProps) {
         <SVGLogo color={event.type} size={50} />
         <div className="flex flex-col justify-center">
           <h4>{event.title}</h4>
-          <p className="text-sm">{event.date}</p>
+          <p className="text-sm">{event.startDate}</p>
+          <p className="text-sm">{event.endDate}</p>
         </div>
       </div>
     </div>

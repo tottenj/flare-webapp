@@ -1,9 +1,8 @@
-import 'server-only';
+
 import { cookies, headers } from 'next/headers';
 import { initializeServerApp, FirebaseServerAppSettings } from 'firebase/app';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import firebaseConfig from '../../../../../firebaseconfig';
-import { connect } from 'http2';
 import { cache } from 'react';
 
 

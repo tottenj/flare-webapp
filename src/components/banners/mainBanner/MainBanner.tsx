@@ -11,7 +11,7 @@ export default async function MainBanner() {
   const { claims, currentUser } = await getClaims();
 
   return (
-    <div className="relative right-1/2 left-1/2 -mr-[50vw] -ml-[50vw] flex w-screen items-center justify-between bg-white/80 p-4">
+    <div className="relative right-1/2 left-1/2 -mr-[50vw] -ml-[50vw] flex w-screen items-center mb-full justify-between bg-white/80 p-4">
       <ServerLogo size="medium" />
       {!currentUser && (
         <div className="flex border-primary border-1 p-2 rounded-lg">

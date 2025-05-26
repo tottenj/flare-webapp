@@ -2,11 +2,10 @@ import { CSSProperties, HTMLInputTypeAttribute, Ref } from "react";
 import PrimaryLabel from "../labels/primaryLabel/PrimaryLabel";
 import { ref } from "process";
 
-interface textInputProps {
+interface textAreaProps {
   label: string;
   name: string;
   placeholder?: string;
-  type?: 'password' | 'text' | 'email' | "url";
   reqired?: boolean;
   error?: boolean;
   size?: 'XLarge' | 'Large' | 'Medium' | 'Small' | 'Auto' | 'Double';
@@ -15,13 +14,12 @@ interface textInputProps {
   showErrorText?: boolean;
   testId?: string;
   styleOverDiv?: CSSProperties;
-  ref?: Ref<HTMLInputElement>;
 }
 
 
 
 
-export default function TextInput({ label, name, placeholder, styleOverDiv, ref, showErrorText = false, testId = name, type = "text", reqired=true, error = false, size = "Auto", onChange, errorText }: textInputProps) {
+export default function TextArea({ label, name, placeholder, styleOverDiv, showErrorText = false, testId = name, reqired=true, error = false, size = "Auto", onChange, errorText }: textAreaProps) {
   const sizeClass = {
     XLarge: 'w-full',
     Large: 'w-3/4',
@@ -36,16 +34,13 @@ export default function TextInput({ label, name, placeholder, styleOverDiv, ref,
   return (
     <div style={styleOverDiv} className={`mb-4 flex flex-col ${sizeClass}`}>
       <PrimaryLabel label={label}/>
-      <input 
-        ref={ref}
+      <textarea 
         data-testid={testId}
         required={reqired}
-        className="bg-tertiary text-secondary rounded-2xl p-2 pl-4"
-        type={type}
+        className="bg-tertiary text-secondary rounded-2xl p-2 pl-4 min-h-[150px]"
         placeholder={placeholder}
         name={name}
         onChange={(e) => onChange && onChange(e.target.value)}
-       
       />
       {showErrorText && errorText && <p className={`errorText`}>{errorText}</p>}
     </div>

@@ -6,6 +6,7 @@ import Event from '@/lib/classes/event/Event';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import EventFilters from '@/lib/types/FilterType';
 
+
 function searchParamDate(dateParam: string | string[] | undefined) {
   const dateStr = Array.isArray(dateParam) ? dateParam[0] : dateParam;
   const date = dateStr ? new Date(dateStr) : null;
@@ -31,18 +32,16 @@ export default async function EventView({
   const eventTwo = await Event.queryEvents(fire, filters);
   const plainEventTwo = eventTwo.map((event) => event.toPlain());
 
-  const events = Event.sampleEvents;
-  const plain = events.map((event) => event.toPlain());
-
+ 
   return (
     <>
       <MainBanner />
       <div className="flex h-screen gap-12 p-4 pt-8">
         <div className="w-3/5">
-          <FullPageCalendar events={plain} />
+          <FullPageCalendar events={plainEventTwo} />
         </div>
         <div className="flex h-[700] w-2/5 flex-col gap-4 overflow-scroll">
-          {plain.map((even) => (
+          {plainEventTwo.map((even) => (
             <EventCard key={even.id} event={even} />
           ))}
         </div>

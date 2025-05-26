@@ -1,4 +1,4 @@
-
+"use server"
 import Modal from '@/components/modals/mainModal/MainModal';
 import Event from '@/lib/classes/event/Event';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';

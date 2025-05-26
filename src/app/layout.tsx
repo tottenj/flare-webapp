@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Nunito, PT_Sans } from 'next/font/google';
 import './globals.css';
@@ -7,9 +8,9 @@ import { ToastContainer } from 'react-toastify';
 import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverApp';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import MainBanner from '@/components/banners/mainBanner/MainBanner';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css'; // Import the CSS
+
 config.autoAddCss = false;
 
 const nunito = Nunito({
@@ -43,8 +44,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang="en">
-      <body className={`${nunito.variable} ${pt_sans.variable} antialiased flex justify-center gradientBack bg-no-repeat`}>
-        <div className='w-11/12 mb-4 max-w-[1700px]'>
+      <body
+        className={`${nunito.variable} ${pt_sans.variable} gradientBack flex justify-center bg-no-repeat antialiased`}
+      >
+        <div className="mb-4 w-11/12 max-w-[1700px]">
           <ServerUserProvider user={userData}>
             <AuthProvider>{children}</AuthProvider>
             <Analytics />
@@ -54,5 +57,5 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </div>
       </body>
     </html>
-  );
+  )
 }

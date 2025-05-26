@@ -1,38 +1,32 @@
+"use server"
+import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import Event from '@/lib/classes/event/Event';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
-import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import EventFilters from '@/lib/types/FilterType';
-import { FirebaseApp } from 'firebase/app';
-import { User } from 'firebase/auth';
-import { Firestore, orderBy } from 'firebase/firestore';
 import { redirect } from 'next/navigation';
-import EventCard from '../cards/EventCard/EventCard';
 import verifyOrg from '@/lib/firebase/utils/verifyOrg';
-import AddEventForm from '../forms/addEventForm/AddEventForm';
+import EventCard from '@/components/cards/EventCard/EventCard';
+import AddEventModal from '@/components/modals/addEventModal/AddEventModal';
 
-interface orgDashboardProps {
-  firebase: FirebaseApp;
-  currentUser: User;
-  fire: Firestore;
-}
-export default async function OrgDashboard({ firebase, currentUser, fire }: orgDashboardProps) {
+export default async function OrgDashboardPage() {
+  const { fire, currentUser, firebaseServerApp } = await getFirestoreFromServer();
+  if (!currentUser) return null;
+
   let isOrg = false;
   let org = null;
   try {
-    isOrg = await verifyOrg(currentUser);
+    const { claims } = await verifyOrg(currentUser);
+    isOrg = claims;
     org = await FlareOrg.getOrg(fire, currentUser.uid);
   } catch (error) {
     console.log(error);
     redirect('/');
   }
-  if (!org || !isOrg) redirect('/');
 
+  if (!org || !isOrg) redirect('/');
 
   const eventFilters: EventFilters = { flare_id: currentUser.uid };
   const events = await Event.queryEvents(fire, eventFilters);
-
-
-
 
   return (
     <div className="flex justify-center gap-8">
@@ -49,9 +43,8 @@ export default async function OrgDashboard({ firebase, currentUser, fire }: orgD
           </p>
         </div>
       </div>
-      <div className="rounded-2xl bg-white p-4 flex w-1/3">
-
-        <AddEventForm/>
+      <div className="flex w-1/3 flex-col items-center rounded-2xl bg-white p-4">
+        <AddEventModal />
         {events.length > 0 ? (
           events.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
         ) : (

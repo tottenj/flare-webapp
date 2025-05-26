@@ -1,4 +1,4 @@
-export default function EventsLayout({
+export default async function EventsLayout({
   children,
   modal,
 }: {

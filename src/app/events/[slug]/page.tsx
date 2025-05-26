@@ -1,3 +1,4 @@
+"use server"
 import Event from "@/lib/classes/event/Event";
 import { getFirestoreFromServer } from "@/lib/firebase/auth/configs/getFirestoreFromServer";
 

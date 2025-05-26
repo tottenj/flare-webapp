@@ -5,7 +5,8 @@ interface CalendarEvent {
   description: string;
   type: string; // oklch(...) string
   ageGroup: string;
-  date: string; // ISO string
+  startDate: string; // ISO string
+  endDate:string
   location: {
     id: string;
     name?: string | null;

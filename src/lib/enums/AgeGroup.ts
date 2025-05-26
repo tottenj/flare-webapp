@@ -1,8 +1,20 @@
-enum AgeGroup{
-    AllAges = "All Ages",
-    Adults = "Adults (19+)",
-    Youth = "Youth (< 19)",
-    Mature = "Mature (50+)"
+enum AgeGroup {
+  AllAges = 'All Ages',
+  Adults = 'Adults (19+)',
+  Youth = 'Youth (< 19)',
+  Mature = 'Mature (50+)',
 }
 
-export default AgeGroup
+type AgeGroupOptions = {
+  label: string;
+  value: string;
+};
+
+export const ageGroupOptions: AgeGroupOptions[] = Object.entries(AgeGroup).map(
+  ([label, value]) => ({
+    label: value,
+    value: label,
+  })
+);
+
+export default AgeGroup;

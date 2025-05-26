@@ -10,6 +10,7 @@ import { auth, storage } from '@/lib/firebase/auth/configs/clientApp';
 import { addFile } from '@/lib/firebase/storage/storageOperations';
 import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
+import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
 import FlareLocation from '@/lib/types/Location';
 import { formErrors, orgSocials } from '@/lib/utils/text/text';
 import { signOut } from 'firebase/auth';
@@ -24,7 +25,8 @@ export default function OrgSignInForm() {
   const [confirmPass, setConfirmPass] = useState('');
   const [passStatus, setPassStatus] = useState(false);
   const router = useRouter();
-  const [validFiles, setValidFiles] = useState<{ key: string; file: File }[]>([]);
+  const {validFiles, handleFileChange} = useFileChange()
+    
 
   useEffect(() => {
     if (state.message === 'success' && state.orgId && !pending) {
@@ -66,9 +68,7 @@ export default function OrgSignInForm() {
       e.preventDefault();
     }
   }
-  function handleFileChange(key: string, file: File) {
-    setValidFiles((prev) => [...prev.filter((f) => f.key !== key), { key, file }]);
-  }
+
 
   return (
     <div className="@container mt-8 mb-8 flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">

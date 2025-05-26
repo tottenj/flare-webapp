@@ -1,12 +1,11 @@
-import { CSSProperties, HTMLInputTypeAttribute, Ref } from "react";
-import PrimaryLabel from "../labels/primaryLabel/PrimaryLabel";
-import { ref } from "process";
+import { CSSProperties, HTMLInputTypeAttribute, Ref } from 'react';
+import PrimaryLabel from '../labels/primaryLabel/PrimaryLabel';
 
-interface textInputProps {
+interface numberInputProps {
   label: string;
   name: string;
   placeholder?: string;
-  type?: 'password' | 'text' | 'email' | "url";
+  type?: 'password' | 'text' | 'email';
   reqired?: boolean;
   error?: boolean;
   size?: 'XLarge' | 'Large' | 'Medium' | 'Small' | 'Auto' | 'Double';
@@ -16,36 +15,47 @@ interface textInputProps {
   testId?: string;
   styleOverDiv?: CSSProperties;
   ref?: Ref<HTMLInputElement>;
+  defaultVal?: number;
 }
 
-
-
-
-export default function TextInput({ label, name, placeholder, styleOverDiv, ref, showErrorText = false, testId = name, type = "text", reqired=true, error = false, size = "Auto", onChange, errorText }: textInputProps) {
+export default function NumberInput({
+  defaultVal,
+  label,
+  name,
+  placeholder,
+  styleOverDiv,
+  ref,
+  showErrorText = false,
+  testId = name,
+  type = 'text',
+  reqired = true,
+  error = false,
+  size = 'Auto',
+  onChange,
+  errorText,
+}: numberInputProps) {
   const sizeClass = {
     XLarge: 'w-full',
     Large: 'w-3/4',
     Medium: 'w-1/2',
     Small: 'w-1/4',
-    Auto: "w-auto",
-    Double: "w-5/12"
+    Auto: 'w-auto',
+    Double: 'w-5/12',
   }[size];
-
-
 
   return (
     <div style={styleOverDiv} className={`mb-4 flex flex-col ${sizeClass}`}>
-      <PrimaryLabel label={label}/>
-      <input 
+      <PrimaryLabel label={label} />
+      <input
+        defaultValue={defaultVal}
         ref={ref}
         data-testid={testId}
         required={reqired}
         className="bg-tertiary text-secondary rounded-2xl p-2 pl-4"
-        type={type}
+        type="number"
         placeholder={placeholder}
         name={name}
         onChange={(e) => onChange && onChange(e.target.value)}
-       
       />
       {showErrorText && errorText && <p className={`errorText`}>{errorText}</p>}
     </div>

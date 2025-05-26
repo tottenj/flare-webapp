@@ -6,4 +6,16 @@ enum eventType {
   "Other" = 'oklch(48.68% 0.1387 270.64)', //blue
 }
 
+type ColourOption = {
+  label: string;
+  value: string;
+  color: string;
+};
+
+export const colourOptions: ColourOption[] = Object.entries(eventType).map(([label, color]) => ({
+  label,
+  value: label,
+  color,
+}));
+
 export default eventType
