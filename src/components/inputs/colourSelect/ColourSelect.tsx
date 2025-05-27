@@ -1,6 +1,4 @@
-'use client';
-
-import React from 'react';
+import React, { useState } from 'react';
 import Select, { StylesConfig, components } from 'react-select';
 import chroma from 'chroma-js';
 import SVGLogo from '@/components/flare/svglogo/SVGLogo';
@@ -10,9 +8,9 @@ export type ColourOption = {
   readonly value: string;
   readonly label: string;
   readonly color: string;
+
 };
 
-// Only apply background color changes, not text color
 const colourStyles: StylesConfig<ColourOption> = {
   control: (styles) => ({ ...styles, backgroundColor: 'white' }),
   menuPortal: (base) => ({ ...base, zIndex: 9999 }),
@@ -29,9 +27,8 @@ const colourStyles: StylesConfig<ColourOption> = {
           : isFocused
             ? color.alpha(0.1).css()
             : undefined,
-      color: '#000', // 👈 force all option labels to be black
+      color: '#000',
       cursor: isDisabled ? 'not-allowed' : 'default',
-
       ':active': {
         ...styles[':active'],
         backgroundColor: !isDisabled
@@ -46,11 +43,10 @@ const colourStyles: StylesConfig<ColourOption> = {
     ...styles,
     display: 'flex',
     alignItems: 'center',
-    color: '#000', // 👈 force selected label to be black
+    color: '#000',
   }),
 };
 
-// Custom rendering for dropdown options
 const Option = (props: any) => (
   <components.Option {...props}>
     <div className="flex items-center gap-2">
@@ -60,7 +56,6 @@ const Option = (props: any) => (
   </components.Option>
 );
 
-// Custom rendering for selected item
 const SingleValue = (props: any) => (
   <components.SingleValue {...props}>
     <div className="flex items-center gap-2">
@@ -74,23 +69,28 @@ const ColourSelect = ({
   options,
   label,
   name,
+  z
 }: {
   options: ColourOption[];
   label?: string;
   name: string;
+  z:string
 }) => {
+  const [selected, setSelected] = useState(options[0]);
+
   return (
     <div className="flex flex-col">
       <PrimaryLabel label={label} />
       <Select
-        name={name}
-        defaultValue={options[0]}
+        name={`${name}-select`} // prevent conflict
+        value={selected}
+        onChange={(opt) => setSelected(opt as ColourOption)}
         options={options}
         styles={colourStyles}
         menuPosition="fixed"
         menuPortalTarget={typeof window !== 'undefined' ? document.body : null}
         classNamePrefix="colour-select"
-        className="z-50"
+        className={`${z}`}
         components={{ SingleValue, Option }}
       />
     </div>

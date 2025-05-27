@@ -20,24 +20,26 @@ import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
 import flareLocation from '@/lib/types/Location';
 import React, { SetStateAction, useActionState, useEffect, useState } from 'react';
 
-
-interface addEventFormProps{
-  setClose: React.Dispatch<SetStateAction<boolean>>
+interface addEventFormProps {
+  setClose: React.Dispatch<SetStateAction<boolean>>;
 }
-export default function AddEventForm({setClose}:addEventFormProps) {
+export default function AddEventForm({ setClose }: addEventFormProps) {
   const initialState = { message: '', eventId: null };
   const [state, action, pending] = useActionState(addEvent, initialState);
   const { validFiles, handleFileChange } = useFileChange();
   const [loc, setloc] = useState<flareLocation | null>(null);
   useActionToast(state, pending);
 
-
   useEffect(() => {
     if (state.message === 'success' && !pending && state.eventId) {
       (async () => {
-        if(!state.eventId) return
-        await Event.uploadImages(state.eventId, storage, validFiles.map((file) => file.file))
-        setClose(false)
+        if (!state.eventId) return;
+        await Event.uploadImages(
+          state.eventId,
+          storage,
+          validFiles.map((file) => file.file)
+        );
+        setClose(false);
       })();
     }
   }, [state, pending]);
@@ -56,16 +58,23 @@ export default function AddEventForm({setClose}:addEventFormProps) {
         />
         <br></br>
         <div className="mb-4 flex justify-between">
-          <DateTime label="Event Start" name='start' />
-          <DateTime label="Event End" name='end' />
+          <DateTime label="Event Start" name="start" />
+          <DateTime label="Event End" name="end" />
         </div>
-        <PlaceSearch loc={setloc} lab="Event Location" />
+        <PlaceSearch z='z-50' loc={setloc} lab="Event Location" />
+        {loc && <input type="hidden" name="location" required={true} value={JSON.stringify(loc)} />}
         <br></br>
-        <ColourSelect label="Event Type" options={colourOptions} name="type" />
+        <ColourSelect z={"z-40"} label="Event Type" options={colourOptions} name="type" />
         <br></br>
-        <BasicSelect label="Age Range" options={ageGroupOptions} name="age" />
+        <BasicSelect z={"z-30"} label="Age Range" options={ageGroupOptions} name="age" />
         <NumberInput defaultVal={0} label="Price (Leave 0 for Free / N/A)" name="price" />
-        <TextInput type="url" label="Link To Tickets (Leave Blank if N/A)" name="tickets" />;
+        <TextInput
+          type="url"
+          label="Link To Tickets (Leave Blank if N/A)"
+          name="tickets"
+          reqired={false}
+        />
+        ;
         <PrimaryButton type="submit" />
       </form>
     </>

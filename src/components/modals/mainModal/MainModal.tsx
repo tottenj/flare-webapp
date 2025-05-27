@@ -6,12 +6,12 @@ import { Fragment } from 'react';
 
 type ModalProps = {
   isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   children: React.ReactNode;
   route?: boolean;
 };
 
-export default function Modal({ isOpen, onClose, children, route = false }: ModalProps) {
+export default function Modal({ isOpen, onClose = () => {}, children, route = false }: ModalProps) {
   const router = useRouter();
 
   return (

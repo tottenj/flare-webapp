@@ -6,8 +6,9 @@ interface basicSelectProps {
   options: any[];
   label?: string;
   name: string
+  z?:string
 }
-export default function BasicSelect({ options, label, name }: basicSelectProps) {
+export default function BasicSelect({ options, label, name, z }: basicSelectProps) {
   return (
     <div className='flex flex-col'>
       <PrimaryLabel label={label} />
@@ -19,8 +20,9 @@ export default function BasicSelect({ options, label, name }: basicSelectProps) 
           menuPosition="fixed"
           menuPortalTarget={typeof window !== 'undefined' ? document.body : null}
           styles={{
-            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+            menuPortal: (base) => ({ ...base, zIndex: 9997 }),
           }}
+          className={`${z}`}
           classNamePrefix="react-select"
         />
       </div>

@@ -72,6 +72,7 @@ export default class Event {
   static async uploadImages(id: string, storage: FirebaseStorage, files: File[]) {
     for (const file of files) {
       await addFile(storage, `Events/${id}`, file);
+      console.log("File stored")
     }
   }
 
@@ -103,7 +104,10 @@ export default class Event {
     );
   }
 
-  toPlain() {
+
+  
+
+  toPlain():PlainEvent {
     return {
       id: this.id,
       flare_id: this.flare_id,
@@ -111,7 +115,7 @@ export default class Event {
       description: this.description,
       type: this.type,
       ageGroup: this.ageGroup,
-      startDate: this.startdate.toISOString(), // stringify Date for client safety
+      startDate: this.startdate.toISOString(),
       endDate: this.endDate.toISOString(),
       location: {
         id: this.location.id,
@@ -126,6 +130,28 @@ export default class Event {
     };
   }
 }
+
+export type PlainEvent = {
+  id: string;
+  flare_id: string;
+  title: string;
+  description: string;
+  type: string;
+  ageGroup: string;
+  startDate: string; // ISO string
+  endDate: string;
+  location: {
+    id: string;
+    name?: string | null;
+    coordinates: {
+      latitude: number;
+      longitude: number;
+    };
+  };
+  price?: number | string;
+  ticketLink?: string;
+};
+
 
 export const eventConverter = {
   toFirestore(event: Event): DocumentData {
@@ -151,8 +177,8 @@ export const eventConverter = {
       data.description,
       data.type,
       data.ageGroup,
-      data.startDate,
-      data.endDate,
+      data.startDate.toDate(),
+      data.endDate.toDate(),
       data.location,
       data.price,
       data.ticketLink,

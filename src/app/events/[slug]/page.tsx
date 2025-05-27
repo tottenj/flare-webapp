@@ -4,7 +4,8 @@ import { getFirestoreFromServer } from "@/lib/firebase/auth/configs/getFirestore
 
 export default async function FullEventPage({ params }: { params: { slug: string } }) {
   const {fire} = await getFirestoreFromServer()
-  const event = await Event.getEvent(fire, params.slug);
+  const {slug} = await params
+  const event = await Event.getEvent(fire, slug);
   if (!event) return <p>Event not found</p>;
 
   return (

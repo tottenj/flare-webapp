@@ -17,9 +17,10 @@ interface placeSearchProps {
   loc: (loc: flareLocation | null) => void;
   lab?: string;
   required?: boolean;
+  z?:string
 }
 
-export default function PlaceSearch({ loc, lab, required = true }: placeSearchProps) {
+export default function PlaceSearch({ loc, lab, required = true,z }: placeSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
@@ -69,21 +70,23 @@ export default function PlaceSearch({ loc, lab, required = true }: placeSearchPr
 
   return (
     <>
-      <PrimaryLabel label={lab}/>
-        <AsyncSelect<placeOption>
-          required={required}
-          
-          styles={{
-            control: (baseStyles, state) => ({
-              ...baseStyles,
-              backgroundColor: 'rgba(221, 218, 218, 0.5)',
-              color: '#5f4a4a',
-            }),
-          }}
-          placeholder={'Select Location...'}
-          loadOptions={promiseOptions}
-          onChange={(newVal) => changed(newVal)}
-        />
+      <PrimaryLabel label={lab} />
+      <AsyncSelect<placeOption>
+        required={required}
+        menuPortalTarget={typeof window !== 'undefined' ? document.body : null}
+        styles={{
+          control: (baseStyles, state) => ({
+            ...baseStyles,
+            backgroundColor: 'rgba(221, 218, 218, 0.5)',
+            color: '#5f4a4a',
+          }),
+          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+        }}
+        className={`${z}`}
+        placeholder={'Select Location...'}
+        loadOptions={promiseOptions}
+        onChange={(newVal) => changed(newVal)}
+      />
     </>
   );
 }

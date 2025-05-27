@@ -4,6 +4,7 @@ import { CalendarDay, DayPicker, Modifiers } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import styles from './calendar.module.css';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { PlainEvent } from '@/lib/classes/event/Event';
 
 //TO DO - Write TESTs
 
@@ -15,7 +16,7 @@ type CustomDayProps = {
 
 
 interface fullPageCalendarProps {
-  events: CalendarEvent[];
+  events: PlainEvent[];
 }
 
 export default function FullPageCalendar({ events }: fullPageCalendarProps) {
