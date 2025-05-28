@@ -92,25 +92,20 @@ export default class Event {
 
   static async queryEvents(dab: Firestore, filters: EventFilters = {}, options?: QueryOptions) {
     const whereClauses: WhereClause[] = [];
-
     if (filters.onDate) {
       const startOfDay = new Date(filters.onDate);
       startOfDay.setHours(0, 0, 0, 0);
-
-      
-
       const endOfDay = new Date(filters.onDate);
       endOfDay.setHours(23, 59, 59, 999);
-
-      whereClauses.push(['startdate', '>=', startOfDay]);
-      whereClauses.push(['startdate', '<=', endOfDay]);
+      whereClauses.push(['startDate', '>=', startOfDay]);
+      whereClauses.push(['startDate', '<=', endOfDay]);
     }
 
     if (filters.flare_id) whereClauses.push(['flareId', '==', filters.flare_id]);
     if (filters.ageGroup) whereClauses.push(['type', 'in', filters.ageGroup]);
     if (filters.type) whereClauses.push(['type', 'in', filters.type]);
-    if (filters.afterDate) whereClauses.push(['date', '<', filters.afterDate]);
-    if (filters.beforeDate) whereClauses.push(['date', '>=', filters.beforeDate]);
+    if (filters.afterDate) whereClauses.push(['startDate', '<', filters.afterDate]);
+    if (filters.beforeDate) whereClauses.push(['startDate', '>=', filters.beforeDate]);
     return await getCollectionByFields(
       dab,
       `${Collections.Events}`,

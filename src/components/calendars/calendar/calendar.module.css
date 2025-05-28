@@ -68,7 +68,8 @@
   
 .dotContainer {
   display: flex;
-  margin-top: 2px;
+  margin-top: 4px;
+
   position: relative;
   height: 8px; /* enough room for overlap */
 }
