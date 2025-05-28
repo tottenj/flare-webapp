@@ -14,9 +14,17 @@ type ModalProps = {
 export default function Modal({ isOpen, onClose = () => {}, children, route = false }: ModalProps) {
   const router = useRouter();
 
+  const handleClose = () => {
+    if (route) {
+      router.back();
+    } else {
+      onClose();
+    }
+  };
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={route ? () => router.back() : onClose}>
+      <Dialog as="div" className="relative z-50 w-full" onClose={handleClose}>
         {/* Background overlay */}
         <TransitionChild
           as={Fragment}
@@ -27,10 +35,10 @@ export default function Modal({ isOpen, onClose = () => {}, children, route = fa
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="bg-opacity-25 fixed inset-0 gradientBack" />
+          <div className="bg-opacity-25 gradientBack fixed inset-0" />
         </TransitionChild>
 
-        {/* Modal container that can scroll if content overflows */}
+        {/* Modal container */}
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
             <TransitionChild
@@ -42,7 +50,25 @@ export default function Modal({ isOpen, onClose = () => {}, children, route = fa
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <DialogPanel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 shadow-xl transition-all">
+              <DialogPanel className="relative w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white p-6 shadow-xl transition-all">
+                {/* X button */}
+                <button
+                  onClick={handleClose}
+                  className="absolute top-4 right-4 cursor-pointer rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 focus:ring-2 focus:ring-gray-300 focus:outline-none"
+                  aria-label="Close"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+
                 {children}
               </DialogPanel>
             </TransitionChild>

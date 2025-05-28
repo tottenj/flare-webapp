@@ -2,7 +2,7 @@ import AgeGroup from '@/lib/enums/AgeGroup';
 import Collections from '@/lib/enums/collections';
 import eventType from '@/lib/enums/eventType';
 import { addDocument, getCollectionByFields, getDocument, WhereClause } from '@/lib/firebase/firestore/firestoreOperations';
-import { addFile } from '@/lib/firebase/storage/storageOperations';
+import { addFile, getFile } from '@/lib/firebase/storage/storageOperations';
 import EventFilters from '@/lib/types/FilterType';
 import flareLocation from '@/lib/types/Location';
 import { QueryOptions } from '@testing-library/dom';
@@ -76,6 +76,10 @@ export default class Event {
     }
   }
 
+  async getImage(storage: FirebaseStorage){
+    return await getFile(storage, this.imagePath)
+  }
+
   static async getEvent(dab: Firestore, eventId: string) {
     const even = await getDocument(dab, `${Collections.Events}/${eventId}`, eventConverter);
     if (!even.exists()) return null;
@@ -89,8 +93,20 @@ export default class Event {
   static async queryEvents(dab: Firestore, filters: EventFilters = {}, options?: QueryOptions) {
     const whereClauses: WhereClause[] = [];
 
+    if (filters.onDate) {
+      const startOfDay = new Date(filters.onDate);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      
+
+      const endOfDay = new Date(filters.onDate);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      whereClauses.push(['startdate', '>=', startOfDay]);
+      whereClauses.push(['startdate', '<=', endOfDay]);
+    }
+
     if (filters.flare_id) whereClauses.push(['flareId', '==', filters.flare_id]);
-    if (filters.onDate) whereClauses.push(['date', '==', filters.onDate]);
     if (filters.ageGroup) whereClauses.push(['type', 'in', filters.ageGroup]);
     if (filters.type) whereClauses.push(['type', 'in', filters.type]);
     if (filters.afterDate) whereClauses.push(['date', '<', filters.afterDate]);
@@ -115,8 +131,8 @@ export default class Event {
       description: this.description,
       type: this.type,
       ageGroup: this.ageGroup,
-      startDate: this.startdate.toISOString(),
-      endDate: this.endDate.toISOString(),
+      startDate: this.startdate,
+      endDate: this.endDate,
       location: {
         id: this.location.id,
         name: this.location.name,
@@ -138,8 +154,8 @@ export type PlainEvent = {
   description: string;
   type: string;
   ageGroup: string;
-  startDate: string; // ISO string
-  endDate: string;
+  startDate: Date
+  endDate: Date
   location: {
     id: string;
     name?: string | null;

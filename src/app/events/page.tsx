@@ -32,7 +32,7 @@ export default async function EventView({
   const eventTwo = await Event.queryEvents(fire, filters);
   const plainEventTwo = eventTwo.map((event) => event.toPlain());
 
- 
+
   return (
     <>
       <MainBanner />

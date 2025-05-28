@@ -5,6 +5,7 @@ import { FirebaseStorage, getBlob, getBytes, getDownloadURL, getStorage, ref, up
 
 export async function getFile(storage:FirebaseStorage, pathRef:string){
     const storageRef = ref(storage, pathRef)
+    if(!storageRef) return null
     const download = await getDownloadURL(storageRef)
     return download
 }
