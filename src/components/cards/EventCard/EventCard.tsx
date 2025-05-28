@@ -10,7 +10,7 @@ interface eventCardProps {
 }
 export default function EventCard({ event }: eventCardProps) {
   return (
-    <Link href={`/events/${event.id}`} scroll={false}>
+    <Link href={`/events/(.)${event.id}`} as={`/events/${event.id}`} scroll={false}>
       <div
         style={{ background: `${event.type}` }}
         className="flex justify-end rounded-2xl bg-white p-1"
