@@ -1,37 +1,59 @@
 'use client';
-
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
 import FileInput from '@/components/inputs/file/FileInput';
 import FormSection from '@/components/inputs/formSection/FormSection';
+import LinkInput from '@/components/inputs/link/LinkInput';
 import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import TextInput from '@/components/inputs/textInput/TextInput';
+import { auth, storage } from '@/lib/firebase/auth/configs/clientApp';
+import { addFile } from '@/lib/firebase/storage/storageOperations';
 import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
-import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
+import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
 import FlareLocation from '@/lib/types/Location';
 import { formErrors, orgSocials } from '@/lib/utils/text/text';
+import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
 
 export default function OrgSignInForm() {
-  const initialState = { message: '' };
+  const initialState = { message: '', orgId: '' };
   const [loc, setloc] = useState<FlareLocation | null>(null);
   const [state, action, pending] = useActionState(orgSignUp, initialState);
   const [pass, setPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [passStatus, setPassStatus] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
+  const {validFiles, handleFileChange} = useFileChange()
+    
 
+  useEffect(() => {
+    if (state.message === 'success' && state.orgId && !pending) {
+      uploadFilesToFirebase(state.orgId);
+    }
+  }, [state]);
+
+  async function uploadFilesToFirebase(orgId: string) {
+    for (const { key, file } of validFiles) {
+      const path = `Organizations/${orgId}/${key}`;
+      await addFile(storage, path, file);
+    }
+  }
 
   useActionToast(state, pending, {
     successMessage: 'success',
     loadingMessage: 'loading',
   });
 
-
-  if(state.message === "success"){
-    router.push("/confirmation")
-  }
+  useEffect(() => {
+    (async () => {
+      if (state.message === 'success' && pending == false) {
+        await signOut(auth);
+        router.push('/confirmation');
+      }
+    })();
+  }, [state]);
 
   useEffect(() => {
     if (pass == confirmPass || pass == '') {
@@ -47,9 +69,14 @@ export default function OrgSignInForm() {
     }
   }
 
+
   return (
     <div className="@container mt-8 mb-8 flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
-      <h1>Flare Sign Up</h1>
+      <ServerLogo size="xLarge" />
+      <div className="absolute top-0 right-0 mt-4 mr-4">
+        <LinkInput style={{ padding: '0.5rem' }} href="/signup" text="User Sign Up" />
+      </div>
+      <h1 className="mt-4">Organization Sign Up</h1>
       <p className="mt-8 mb-8 text-center">
         Welcome to Flare! We're excited to have your organization join our vibrant community. Once
         you sign up, your account will be reviewed for verification to ensure a safe and authentic
@@ -95,23 +122,16 @@ A recent post clearly showing your organization’s name or branding
 This information stays private and is only used for verification purposes."
         >
           <div className="mt-8 flex justify-between">
-            <div className="flex w-[30%] flex-col">
-              <TextInput
-                reqired={false}
-                label="Instagram"
-                name={orgSocials.instagram}
-                size="Large"
-              />
-              <FileInput name="instagram" />
-            </div>
-            <div className="flex w-[30%] flex-col">
-              <TextInput reqired={false} label="Facebook" name={orgSocials.facebook} size="Large" />
-              <FileInput name="facebook" />
-            </div>
-            <div className="flex w-[30%] flex-col">
-              <TextInput reqired={false} label="Twitter" name={orgSocials.twitter} size="Large" />
-              <FileInput name="twitter" />
-            </div>
+            {Object.values(orgSocials).map((social) => (
+              <div key={social} className="flex w-[30%] flex-col">
+                <TextInput reqired={false} label={social} name={social} size="Large" />
+                <FileInput
+                  name={social}
+                  onChange={(file) => handleFileChange(social, file)}
+                  fileAdded={!!validFiles.find((f) => f.key === social)}
+                />
+              </div>
+            ))}
           </div>
 
           <p className="mt-8 pr-2 pl-2">
@@ -126,7 +146,11 @@ This information stays private and is only used for verification purposes."
             label="Other Proof"
             name="other"
           />
-          <FileInput name="other" />
+          <FileInput
+            onChange={(file) => handleFileChange('other', file)}
+            name="other"
+            fileAdded={!!validFiles.find((f) => f.key === 'other')}
+          />
         </FormSection>
         <PrimaryButton disabled={pending} type="submit" />
       </form>

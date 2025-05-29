@@ -5,7 +5,7 @@ import GoogleSignInButton from './SignInWithGoogleButton';
 
 export default {
   component: GoogleSignInButton,
-  title: "Buttons/Google Sign In Button",
+  title: "buttons/Google Sign In Button",
   parameters: {
     layout: "centered"
   }

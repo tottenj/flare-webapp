@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { connectAuthEmulator, getAuth } from 'firebase/auth'; // No need for initializeAuth here unless you have specific needs
+import { browserLocalPersistence, connectAuthEmulator, getAuth, setPersistence } from 'firebase/auth'; // No need for initializeAuth here unless you have specific needs
 import { connectFirestoreEmulator, getFirestore, initializeFirestore } from 'firebase/firestore'; // Import connectFirestoreEmulator
 import { connectStorageEmulator, getStorage } from 'firebase/storage'; // Import connectStorageEmulator
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'; // Import connectFunctionsEmulator (if you use functions client-side)
@@ -9,19 +9,16 @@ export const fireBaseApp = initializeApp(firebaseConfig);
 
 // Get service instances BEFORE attempting to connect emulators
 export const auth = getAuth(fireBaseApp);
-export const db = initializeFirestore(fireBaseApp, {ignoreUndefinedProperties: true})
+export const db = initializeFirestore(fireBaseApp, { ignoreUndefinedProperties: true });
 export const storage = getStorage(fireBaseApp);
+export const functions = getFunctions(fireBaseApp)
 
-if (
-  typeof window !== 'undefined' &&
-  (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-) {
-  console.log(
-    'Client-side code detected on local development host. Connecting to Firebase Emulators...'
-  );
-
+if (process.env.NEXT_PUBLIC_MODE === 'test') {
+  console.log('Client Emulators Enabled: true');
   connectAuthEmulator(auth, `http://127.0.0.1:9099`, { disableWarnings: true });
-
+  connectFirestoreEmulator(db, '127.0.0.1', 8080);
+  connectFunctionsEmulator(functions, '127.0.0.1', 5001);
+  connectStorageEmulator(storage, '127.0.0.1', 9199);
 } else {
-  console.log('Running in production or server environment. Using production Firebase.');
+  console.log("Client Emulators Enabled: false")
 }

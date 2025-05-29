@@ -1,6 +1,7 @@
 enum Collections {
   Users = 'Users',
-  Organizations = "Organizations"
+  Organizations = "Organizations",
+  Events = "Events"
 }
 
 

@@ -2,11 +2,13 @@
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import errorLocation from '@/lib/enums/errorLocations';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
-import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import {getFirestoreFromServer} from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import flareLocation from '@/lib/types/Location';
+import getAuthError from '@/lib/utils/error/getAuthError';
 import logErrors from '@/lib/utils/error/logErrors';
 import { formErrors, orgSocials } from '@/lib/utils/text/text';
-import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from 'firebase/auth';
+import { or } from 'firebase/firestore';
 
 export default async function orgSignUp(prevState: any, formData: FormData) {
   const req = {
@@ -22,27 +24,16 @@ export default async function orgSignUp(prevState: any, formData: FormData) {
   if (Object.values(req).some((value) => value === null || value === undefined) || !location)
     return { message: formErrors.requiredError };
 
-  const optional = {
-    
-    instagram: formData.get(orgSocials.instagram) as File | null,
-    facebook: formData.get(orgSocials.facebook) as File | null,
-    twitter: formData.get(orgSocials.twitter) as File | null,
-    other: formData.get('other') as File | null,
-  };
-
-  const validFiles = Object.entries(optional)
-    .filter(([_, file]) => file && file.size > 0)
-    .map(([key, file]) => ({ key, file: file! }));
 
   try {
     const cred = await createUserWithEmailAndPassword(auth, req.email!, req.pass!);
-    const { storage, firestore } = await getServicesFromServer();
+    const {fire} = await getFirestoreFromServer()
     const org = new FlareOrg(cred.user, req.name!, location);
-    await org.addOrg(firestore, storage, validFiles);
+    await org.addOrg(fire);
+    console.log("added")
     await sendEmailVerification(cred.user)
-    return { message: 'success' };
+    return { message: 'success', orgId: org.id };
   } catch (error) {
-    await logErrors({errors: error as Error, errorLocation: errorLocation.auth})
-    return {message: 'Unable to create user at this time'}
+    return {message: getAuthError(error)}
   }
 }

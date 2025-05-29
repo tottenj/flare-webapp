@@ -1,3 +1,5 @@
-export default function Dashboard() {
-  return <div className="gradientBack">Dashboard</div>;
+export default function Page() {
+  return (
+    <div>page</div>
+  )
 }

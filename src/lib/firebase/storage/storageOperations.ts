@@ -1,13 +1,17 @@
-import "server-only"
-import { FirebaseServerApp } from "firebase/app";
+
 import { FirebaseStorage, getBlob, getBytes, getDownloadURL, getStorage, ref, uploadBytes, UploadMetadata } from "firebase/storage";
 
 
 
 export async function getFile(storage:FirebaseStorage, pathRef:string){
+  try{
     const storageRef = ref(storage, pathRef)
+    if(!storageRef) return null
     const download = await getDownloadURL(storageRef)
     return download
+  }catch(error){
+    return null
+  }
 }
 
 
@@ -18,6 +22,8 @@ export async function addFile(
   metaData?: UploadMetadata
 ) {
   const storageRef = ref(storage, pathRef);
+  console.log("Uploading File")
   const upload = await uploadBytes(storageRef, data, metaData);
+  console.log("Uploaded file: ", upload.metadata, upload.ref)
   return upload
 }

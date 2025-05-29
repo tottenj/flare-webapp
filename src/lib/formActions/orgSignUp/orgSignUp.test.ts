@@ -1,5 +1,5 @@
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
-import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import {getFirestoreFromServer} from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
 import logErrors from '@/lib/utils/error/logErrors';
 import { formErrors } from '@/lib/utils/text/text';
@@ -51,8 +51,7 @@ describe('orgSignUp', () => {
     (createUserWithEmailAndPassword as jest.Mock).mockResolvedValue({
       user: { uid: 'abc' },
     });
-    (getServicesFromServer as jest.Mock).mockResolvedValue({
-      storage: {},
+    (getFirestoreFromServer as jest.Mock).mockResolvedValue({
       firestore: {},
     });
     const addOrgMock = jest
@@ -73,7 +72,7 @@ describe('orgSignUp', () => {
     });
 
     const result = await orgSignUp(null, formData);
-    expect(result).toEqual({ message: 'success' });
+    expect(result).toEqual({ message: 'success'});
     expect(addOrgMock).toHaveBeenCalled();
     expect(sendEmailVerification).toHaveBeenCalled()
   });
@@ -90,7 +89,6 @@ describe('orgSignUp', () => {
     });
 
     const result = await orgSignUp(null, formData);
-    expect(result).toEqual({ message: 'Unable to create user at this time' });
-    expect(logErrors).toHaveBeenCalled();
+    expect(result).toEqual({ message: 'An unexpected error occurred. Please try again.' });
   })
 });

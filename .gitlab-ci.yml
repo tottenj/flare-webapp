@@ -1,11 +1,16 @@
 stages:
+  - deploy
   - test
   - cypress
   - chromatic
 
+  
+
 variables:
   NODE_VERSION: '22.12.0'
   FIREBASE_PROJECT_ID: 'flare-7091a' # Add your Firebase project ID
+
+
 
 before_script:
   - apt-get update -y
@@ -17,6 +22,16 @@ before_script:
   - java -version # Optional: Verify Java installation succeeded
   - npm ci
   - npm install -g firebase-tools
+
+
+deploy_to_vercel:
+  stage: deploy
+  script:
+    - npm install -g vercel
+    - vercel pull --yes --environment=preview --token $VERCEL_TOKEN
+    - vercel --token $VERCEL_TOKEN  # removed --prod for preview deployment
+  only:
+    - branches
 
 
 jest:
@@ -40,8 +55,14 @@ cypress:
   image: cypress/browsers:22.15.0
   stage: cypress
   variables:
-    CYPRESS_FIREBASE_WEB_API_KEY: $FIREBASE_API_KEY
-    FIREBASE_AUTH_EMULATOR_HOST: 'localhost:9099'
+    FIREBASE_API_KEY: $FIREBASE_API_KEY
+    NEXT_PUBLIC_MODE: "test"
+    MODE: "test"
+    FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080 
+    STORAGE_EMULATOR_HOST: 127.0.0.1:9199 
+    FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
+    VERCEL_ORG_ID: joshs-projects-01d47aca
+    VERCEL_PROJECT_ID: prj_6rfoJToy55CwGKbPdPElv9bbApXu
   script:
     # install dependencies
     - npm ci

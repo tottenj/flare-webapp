@@ -3,9 +3,11 @@
 :root {
   --background: #ffffff;
   --foreground: oklch(16.15% 0.0828 273.4);
+  --textGradients: linear-gradient(135deg, #ffa301, #ff005c);
 }
 
 @theme inline {
+  --color-gradients: linear-gradient(135deg, oklch(85.35% 0.224 97.18), oklch(43.6% 0.202 345.2));
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: oklch(16.15% 0.0828 273.4);
@@ -19,6 +21,17 @@
   --font-nunito: var(--font-nunito);
    --font-pt_sans: var(--font-pt_sans);
 }
+@layer utilities {
+  .text-gradient {
+    --textGradient: linear-gradient(135deg, #ffa301, #ff005c);
+    background: var(--textGradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
 
 /*
 @media (prefers-color-scheme: dark) {
@@ -43,6 +56,13 @@ h2{
   font-size: 20px;
 }
 
+h4{
+  font-family: var(--font-nunito);
+  font-weight: bold;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -57,9 +77,43 @@ body {
   background: linear-gradient(135deg, #ffa301, #ff005c);
   width: 100vw;
   height: 100%;
+  background-repeat: no-repeat;
+}
+
+.gradientBackFull{
+  background: linear-gradient(135deg, #ffa301, #ff005c);
+  width: 100vw;
+  height: 100lvh;
+  background-repeat: no-repeat;
 }
 
 .errorText{
   color: var(--color-red);
   font-weight: bold;
+}
+
+.basicInteraction{
+  background-color: var(--color-primary);
+  color: white;
+  border-style: solid;
+  border-width: 0.25rem;
+  border-color: var(--color-primary);
+}
+
+.basicInteraction:hover{
+  background-color: white;
+  color: var(--color-primary);
+}
+
+
+.fullGradientBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffa301, #ff005c);
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
 }
