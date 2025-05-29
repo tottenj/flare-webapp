@@ -1,0 +1,180 @@
+[debug] [2025-05-28T12:20:11.587Z] ----------------------------------------------------------------------
+[debug] [2025-05-28T12:20:11.589Z] Command:       /Users/joshtotten/.nvm/versions/node/v22.14.0/bin/node /Users/joshtotten/.nvm/versions/node/v22.14.0/bin/firebase emulators:start --import testData --export-on-exit testdata
+[debug] [2025-05-28T12:20:11.589Z] CLI Version:   14.4.0
+[debug] [2025-05-28T12:20:11.589Z] Platform:      darwin
+[debug] [2025-05-28T12:20:11.589Z] Node Version:  v22.14.0
+[debug] [2025-05-28T12:20:11.590Z] Time:          Wed May 28 2025 08:20:11 GMT-0400 (Eastern Daylight Time)
+[debug] [2025-05-28T12:20:11.590Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-05-28T12:20:11.744Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-05-28T12:20:11.745Z] > authorizing via signed-in user (josh.totten8@gmail.com)
+[debug] [2025-05-28T12:20:12.186Z] java version "15.0.1" 2020-10-20
+
+[debug] [2025-05-28T12:20:12.187Z] Java(TM) SE Runtime Environment (build 15.0.1+9-18)
+Java HotSpot(TM) 64-Bit Server VM (build 15.0.1+9-18, mixed mode, sharing)
+
+[debug] [2025-05-28T12:20:12.197Z] Parsed Java major version: 15
+[info] i  emulators: Starting emulators: auth, functions, firestore, storage, extensions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, storage, extensions"}}
+[debug] [2025-05-28T12:20:12.198Z] Checked if tokens are valid: false, expires at: 1748410401095
+[debug] [2025-05-28T12:20:12.198Z] Checked if tokens are valid: false, expires at: 1748410401095
+[debug] [2025-05-28T12:20:12.198Z] > refreshing access token with scopes: []
+[debug] [2025-05-28T12:20:12.199Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-05-28T12:20:12.200Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-05-28T12:20:12.360Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-05-28T12:20:12.360Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-05-28T12:20:12.374Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/flare-7091a/services/cloudresourcemanager.googleapis.com [none]
+[debug] [2025-05-28T12:20:12.374Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/flare-7091a/services/cloudresourcemanager.googleapis.com x-goog-quota-user=projects/flare-7091a
+[debug] [2025-05-28T12:20:12.760Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/flare-7091a/services/cloudresourcemanager.googleapis.com 200
+[debug] [2025-05-28T12:20:12.760Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/flare-7091a/services/cloudresourcemanager.googleapis.com [omitted]
+[debug] [2025-05-28T12:20:12.760Z] Checked if tokens are valid: true, expires at: 1748438411360
+[debug] [2025-05-28T12:20:12.761Z] Checked if tokens are valid: true, expires at: 1748438411360
+[debug] [2025-05-28T12:20:12.761Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a [none]
+[debug] [2025-05-28T12:20:12.944Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a 200
+[debug] [2025-05-28T12:20:12.944Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a {"projectNumber":"192465328955","projectId":"flare-7091a","lifecycleState":"ACTIVE","name":"Flare","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2025-04-22T04:14:01.811589Z"}
+[debug] [2025-05-28T12:20:13.490Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-05-28T12:20:13.490Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-05-28T12:20:13.490Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-05-28T12:20:13.490Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-05-28T12:20:13.490Z] [storage] Storage Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-05-28T12:20:13.491Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[warn] ⚠  emulators: It seems that you are running multiple instances of the emulator suite for project flare-7091a. This may result in unexpected behavior. 
+[debug] [2025-05-28T12:20:13.493Z] [hub] writing locator at /var/folders/gb/5rzbh44j51zchrk6n0cynpc40000gn/T/hub-flare-7091a.json
+[debug] [2025-05-28T12:20:13.497Z] [Extensions] Started Extensions emulator, this is a noop.
+[debug] [2025-05-28T12:20:13.719Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-05-28T12:20:13.719Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-05-28T12:20:13.719Z] [tasks] Cloud Tasks Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-05-28T12:20:13.719Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}],"tasks":[{"address":"127.0.0.1","family":"IPv4","port":9499}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: apphosting, database, hosting, pubsub, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mapphosting, database, hosting, pubsub, dataconnect\u001b[22m"}}
+[debug] [2025-05-28T12:20:13.728Z] defaultcredentials: writing to file /Users/joshtotten/.config/firebase/josh_totten8_gmail.com_application_default_credentials.json
+[debug] [2025-05-28T12:20:13.730Z] Setting GAC to /Users/joshtotten/.config/firebase/josh_totten8_gmail.com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/joshtotten/.config/firebase/josh_totten8_gmail.com_application_default_credentials.json"}}
+[debug] [2025-05-28T12:20:13.730Z] Checked if tokens are valid: true, expires at: 1748438411360
+[debug] [2025-05-28T12:20:13.730Z] Checked if tokens are valid: true, expires at: 1748438411360
+[debug] [2025-05-28T12:20:13.730Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig [none]
+[debug] [2025-05-28T12:20:14.210Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig 200
+[debug] [2025-05-28T12:20:14.210Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig {"projectId":"flare-7091a","storageBucket":"flare-7091a.firebasestorage.app"}
+[info] i  firestore: Importing data from /Users/joshtotten/Desktop/new/flare-webapp/testData/firestore_export/firestore_export.overall_export_metadata {"metadata":{"emulator":{"name":"firestore"},"message":"Importing data from /Users/joshtotten/Desktop/new/flare-webapp/testData/firestore_export/firestore_export.overall_export_metadata"}}
+[debug] [2025-05-28T12:20:14.232Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-05-28T12:20:14.232Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2025-05-28T12:20:14.232Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","/Users/joshtotten/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.8.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","flare-7091a","--seed_from_export","/Users/joshtotten/Desktop/new/flare-webapp/testData/firestore_export/firestore_export.overall_export_metadata","--rules","/Users/joshtotten/Desktop/new/flare-webapp/firestore.rules","--single_project_mode",true,"--functions_emulator","127.0.0.1:5001"],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false,"port":8080} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"/Users/joshtotten/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.8.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"flare-7091a\",\"--seed_from_export\",\"/Users/joshtotten/Desktop/new/flare-webapp/testData/firestore_export/firestore_export.overall_export_metadata\",\"--rules\",\"/Users/joshtotten/Desktop/new/flare-webapp/firestore.rules\",\"--single_project_mode\",true,\"--functions_emulator\",\"127.0.0.1:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false,\"port\":8080}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2025-05-28T12:20:16.726Z] May 28, 2025 8:20:16 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://127.0.0.1:9150
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 28, 2025 8:20:16 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\nINFO: Started WebSocket server on ws://127.0.0.1:9150\n"}}
+[debug] [2025-05-28T12:20:16.754Z] API endpoint: http:// {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://"}}
+[debug] [2025-05-28T12:20:16.754Z] 127.0.0.1:8080 {"metadata":{"emulator":{"name":"firestore"},"message":"127.0.0.1:8080"}}
+[debug] [2025-05-28T12:20:16.754Z] 
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+ {"metadata":{"emulator":{"name":"firestore"},"message":"\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\n"}}
+[debug] [2025-05-28T12:20:16.755Z] 
+   export FIRESTORE_EMULATOR_HOST= {"metadata":{"emulator":{"name":"firestore"},"message":"\n   export FIRESTORE_EMULATOR_HOST="}}
+[debug] [2025-05-28T12:20:16.755Z] 127.0.0.1:8080 {"metadata":{"emulator":{"name":"firestore"},"message":"127.0.0.1:8080"}}
+[debug] [2025-05-28T12:20:16.755Z] 
+
+If you are running a Firestore in Datastore Mode project, run:
+ {"metadata":{"emulator":{"name":"firestore"},"message":"\n\nIf you are running a Firestore in Datastore Mode project, run:\n"}}
+[debug] [2025-05-28T12:20:16.755Z] 
+   export DATASTORE_EMULATOR_HOST= {"metadata":{"emulator":{"name":"firestore"},"message":"\n   export DATASTORE_EMULATOR_HOST="}}
+[debug] [2025-05-28T12:20:16.755Z] 127.0.0.1:8080
+
+Note: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"127.0.0.1:8080\n\nNote: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.\nDev App Server is now running.\n\n"}}
+[info] ✔  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[info] i  auth: Importing config from /Users/joshtotten/Desktop/new/flare-webapp/testData/auth_export/config.json {"metadata":{"emulator":{"name":"auth"},"message":"Importing config from /Users/joshtotten/Desktop/new/flare-webapp/testData/auth_export/config.json"}}
+[info] i  auth: Importing accounts from /Users/joshtotten/Desktop/new/flare-webapp/testData/auth_export/accounts.json {"metadata":{"emulator":{"name":"auth"},"message":"Importing accounts from /Users/joshtotten/Desktop/new/flare-webapp/testData/auth_export/accounts.json"}}
+[debug] [2025-05-28T12:20:19.617Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2025-05-28T12:20:21.259Z] Temp file directory for storage emulator: /var/folders/gb/5rzbh44j51zchrk6n0cynpc40000gn/T/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: /var/folders/gb/5rzbh44j51zchrk6n0cynpc40000gn/T/firebase/storage/blobs"}}
+[warn] Could not find metadata directory at "/Users/joshtotten/Desktop/new/flare-webapp/testData/storage_export/metadata" and/or blobs directory at "/Users/joshtotten/Desktop/new/flare-webapp/testData/storage_export/blobs".
+[debug] [2025-05-28T12:20:21.264Z] [Extensions] Connecting Extensions emulator, this is a noop.
+[info] i  functions: Watching "/Users/joshtotten/Desktop/new/flare-webapp/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/joshtotten/Desktop/new/flare-webapp/functions\" for Cloud Functions..."}}
+[debug] [2025-05-28T12:20:21.267Z] Validating nodejs source
+[warn] ⚠  functions: Couldn't find firebase-functions package in your source code. Have you run 'npm install'? 
+[debug] [2025-05-28T12:20:21.268Z] getFunctionsSDKVersion encountered error: Cannot find module 'firebase-functions'
+Require stack:
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/deploy/functions/prepare.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/commandUtils.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/commands/database-get.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/commands/index.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/index.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/bin/cli.js
+- /Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/bin/firebase.js {"code":"MODULE_NOT_FOUND","requireStack":["/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/deploy/functions/prepare.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulator.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/controller.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/commandUtils.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/commands/database-get.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/commands/index.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/index.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/bin/cli.js","/Users/joshtotten/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/bin/firebase.js"]}
+[debug] [2025-05-28T12:20:21.268Z] checkFunctionsSDKVersion encountered error: Invalid Version:  {}
+[debug] [2025-05-28T12:20:21.269Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "main": "lib/functions/src/index.js",
+  "dependencies": {
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^5.8.3"
+  },
+  "private": true
+}
+[error] ⬢  functions: Failed to load function definition from source: FirebaseError: There was an error reading functions/package.json:
+
+ functions/lib/functions/src/index.js does not exist, can't deploy Cloud Functions {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: FirebaseError: There was an error reading functions/package.json:\n\n functions/lib/functions/src/index.js does not exist, can't deploy Cloud Functions"}}
+[debug] [2025-05-28T12:20:21.273Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬──────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI              │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4000/auth       │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Functions      │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Firestore      │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Storage        │ 127.0.0.1:9199 │ http://127.0.0.1:4000/storage    │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Extensions     │ 127.0.0.1:5001 │ http://127.0.0.1:4000/extensions │
+└────────────────┴────────────────┴──────────────────────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500, 9150
+┌─────────────────────────┬───────────────┬─────────────────────┐
+│ Extension Instance Name │ Extension Ref │ View in Emulator UI │
+└─────────────────────────┴───────────────┴─────────────────────┘
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2025-05-28T12:21:03.986Z] May 28, 2025 8:21:03 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 28, 2025 8:21:03 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2025-05-28T12:21:06.064Z] May 28, 2025 8:21:06 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
+INFO: Websocket client disconnected
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 28, 2025 8:21:06 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed\nINFO: Websocket client disconnected\n"}}
+[debug] [2025-05-28T12:21:06.724Z] May 28, 2025 8:21:06 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 28, 2025 8:21:06 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2025-05-28T12:21:07.039Z] May 28, 2025 8:21:07 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
+INFO: Websocket client disconnected
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 28, 2025 8:21:07 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed\nINFO: Websocket client disconnected\n"}}
+[debug] [2025-05-28T12:21:09.308Z] May 28, 2025 8:21:09 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"May 28, 2025 8:21:09 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\nINFO: Detected HTTP/2 connection.\n"}}
