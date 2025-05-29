@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Nunito, PT_Sans } from 'next/font/google';
 import './globals.css';
@@ -7,6 +8,10 @@ import { ToastContainer } from 'react-toastify';
 import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverApp';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css'; // Import the CSS
+
+config.autoAddCss = false;
 
 const nunito = Nunito({
   variable: '--font-nunito',
@@ -29,8 +34,6 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const { currentUser } = await getAuthenticatedAppForUser();
 
-  
-
   const userData = currentUser
     ? {
         uid: currentUser.uid,
@@ -41,10 +44,18 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang="en">
-      <body className={`${nunito.variable} ${pt_sans.variable} antialiased`}>
-        <ServerUserProvider user={userData}>
-          <AuthProvider>{children}<Analytics/><SpeedInsights/><ToastContainer position='bottom-right'/></AuthProvider>
-        </ServerUserProvider>
+      <body className={`${nunito.variable} ${pt_sans.variable} relative antialiased`}>
+        <div className="fullGradientBackground"/>
+        <div className='flex justify-center'>
+          <div className="mb-4 w-11/12 max-w-[1700px]">
+            <ServerUserProvider user={userData}>
+              <AuthProvider>{children}</AuthProvider>
+              <Analytics />
+              <SpeedInsights />
+              <ToastContainer position="bottom-right" />
+            </ServerUserProvider>
+          </div>
+        </div>
       </body>
     </html>
   );

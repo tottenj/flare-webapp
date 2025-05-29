@@ -15,11 +15,12 @@ export default async function emailAndPasswordSignIn(prevState: any, formData: F
       const user = await signInWithEmailAndPassword(auth, email, password);
       if (user) {
         if (!user.user.emailVerified) {
+      
           sendEmailVerification(user.user);
           await signOut(auth);
           return { message: 'Please Verify Account' };
         } else {
-          return { message: 'success' };
+          return { message: 'success', email, password };
         }
       } else {
         return { message: 'No user exists with that account' };

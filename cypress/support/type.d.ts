@@ -1,21 +1,12 @@
 // cypress/support/types.d.ts
 declare namespace Cypress {
-  interface FirebaseEmulatorUser {
-    localId: string;
-    email: string;
-    passwordHash: string;
-    salt: string;
-    createdAt: string;
+
+  interface Chainable {
+    createUser(email: string, password: string, verified:boolean = false): Chainable<Cypress.Response<any>>;
+    loginUser(email: string, password: string): Chainable<Cypress.Response<any>>;
+    clearFirestoreEmulators(): Chainable<Cypress.Response<any>>;
+    clearAllEmulators(): Chainable<Cypress.Response<any>>;
+    clearAuthEmulator(): Chainable<Cypress.Response<any>>
   }
 
-  interface FirebaseEmulatorResponse {
-    users?: FirebaseEmulatorUser[];
-  }
-
-  interface FirebaseErrorResponse {
-    error?: {
-      message: string;
-      code: number;
-    };
-  }
 }

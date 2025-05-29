@@ -1,10 +1,10 @@
 import { User } from 'firebase/auth';
 import { DocumentData, Firestore, GeoPoint, getFirestore, QueryDocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
 import flareLocation from '@/lib/types/Location';
-import { addDocument, getDocument } from '@/lib/firebase/firestore/firestoreOperations';
+import { addDocument, getDocument, updateDocument } from '@/lib/firebase/firestore/firestoreOperations';
 import Collections from '@/lib/enums/collections';
 import { FirebaseStorage } from 'firebase/storage';
-import { addFile } from '@/lib/firebase/storage/storageOperations';
+import { addFile, getFile } from '@/lib/firebase/storage/storageOperations';
 
 export default class FlareOrg {
   id: string;
@@ -68,16 +68,32 @@ export default class FlareOrg {
   static sampleOrg = new FlareOrg("abc", "name", "email", "", "",{id: "", coordinates: new GeoPoint(0,0)} , true)
 
   static async getOrg(firestoredb: Firestore, id:string){
-    getDocument(firestoredb, `${Collections.Organizations}/${id}`, orgConverter)
+    const org = await getDocument(firestoredb, `${Collections.Organizations}/${id}`, orgConverter)
+    if(!org.exists()) return null
+    return org.data()
   }
 
-  async addOrg(firestoredb: Firestore, storagedb: FirebaseStorage, validFiles: {key:string, file:File}[]) {
-    await addDocument(firestoredb, `${Collections.Organizations}/${this.id}`, this, orgConverter)
-    for(const ent of validFiles){
-      const pathRef = `Organizations/${this.id}/${ent.key}`
-      await addFile(storagedb, pathRef, ent.file)
+  async getProfilePicture(firestoredb: Firestore, storage: FirebaseStorage){
+    const pic = await getDocument(firestoredb, `${Collections.Organizations}/${this.id}`, orgConverter)
+    if(pic.exists() && pic.data().profilePic){
+      const ref = pic.data().profilePic
+      if(ref){
+        return await getFile(storage, ref)
+      }
     }
   }
+
+  async updateOrg(firestore: Firestore, data: Partial<FlareOrg>){
+    if(!this.id) return false
+    await updateDocument(firestore, `${Collections.Organizations}/${this.id}`, data, orgConverter, ['id','verified'])
+  }
+
+
+
+  async addOrg(firestoredb: Firestore) {
+    await addDocument(firestoredb, `${Collections.Organizations}/${this.id}`, this, orgConverter)
+  }
+
 }
 
 

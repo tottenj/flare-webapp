@@ -1,0 +1,12 @@
+# Dockerfile.cypress
+FROM cypress/browsers:22.15.0
+
+# Install Firebase CLI and curl
+RUN apt-get update && apt-get install -y curl gnupg && \
+    npm install -g firebase-tools
+
+# Set working directory
+WORKDIR /app
+
+# Optional: copy your code (if needed for docker builds)
+# COPY . .

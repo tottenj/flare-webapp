@@ -1,48 +1,57 @@
 'use client';
-import { useActionState } from 'react';
-import GoogleSignInButton from '../../buttons/googleButton/SignInWithGoogleButton';
-import TextInput from '../../inputs/textInput/TextInput';
-import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
+import GoogleSignInButton from '@/components/buttons/googleButton/SignInWithGoogleButton';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+import LogoWithText from '@/components/flare/logoWithText/LogoWithText';
+import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
+import SVGLogo from '@/components/flare/svglogo/SVGLogo';
+import LinkInput from '@/components/inputs/link/LinkInput';
+import TextInput from '@/components/inputs/textInput/TextInput';
+import { auth } from '@/lib/firebase/auth/configs/clientApp';
+import getAuthError from '@/lib/utils/error/getAuthError';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import Link from 'next/link';
-import emailAndPasswordAction from '@/lib/firebase/auth/emailPassword/emailAndPasswordSignUp/emailAndPasswordAction';
-import emailAndPasswordSignIn from '@/lib/firebase/auth/emailPassword/emailAndPasswordSignIn/emailAndPasswordSignIn';
-import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
+import { toast } from 'react-toastify';
 
-type SignInFormProps = {
-  overrideAction?: typeof emailAndPasswordAction;
-  signUp?: boolean;
-};
-export default function SignInForm({ overrideAction, signUp = true }: SignInFormProps) {
-  const initialState = { message: '' };
-  const action = signUp ? emailAndPasswordAction : emailAndPasswordSignIn;
-  const [state, formAction, pending] = useActionState(overrideAction ?? action, initialState);
-  const signUpOrIn = signUp == true ? 'Sign Up' : 'Login';
-  const link = signUp == true ? './flare-signin' : './FlareSignIn';
-  const router = useRouter()
+export default function SignInForm() {
+  const email = useRef<HTMLInputElement>(null);
+  const pass = useRef<HTMLInputElement>(null);
 
-  useActionToast(state, pending, {
-    successMessage: signUp ? 'User created successfully' : 'User logged In successfully',
-    loadingMessage: signUp ? 'Creating your account' : 'Logging In...',
-  });
-
-  if(signUpOrIn == "Sign Up" && state.message == "success"){
-    router.push("/confirmation")
+  async function handleFormSubmit(e: any) {
+    e.preventDefault();
+    if (email.current?.value && pass.current?.value) {
+      try {
+        await signInWithEmailAndPassword(auth, email.current.value, pass.current.value);
+      } catch (error) {
+        toast.error(getAuthError(error));
+      }
+    }
   }
 
   return (
     <div className="@container flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
-      <h1 className="mb-4">{signUpOrIn}</h1>
-      <form action={formAction} className="mb-8 w-5/6 @lg:w-2/3">
-        <TextInput label="Email" name="email" placeholder="example@gmail.com" />
-        <TextInput label="Password" name="password" placeholder="**********" type="password" />
+      <ServerLogo size="xLarge"/>
+      <div className="absolute top-0 right-0 mt-4 mr-4">
+        <LinkInput style={{ padding: '0.5rem' }} href="/flare-signin" text="Organization Signup" />
+      </div>
+
+      <h1 className="mb-4">Sign In</h1>
+      <form onSubmit={(e) => handleFormSubmit(e)} className="mb-8 flex w-5/6 flex-col @lg:w-2/3">
+        <TextInput ref={email} label="Email" name="email" placeholder="example@gmail.com" />
+        <TextInput
+          ref={pass}
+          label="Password"
+          name="password"
+          placeholder="**********"
+          type="password"
+        />
         <div className="flex justify-center">
-          <PrimaryButton text="Submit" type="submit" disabled={pending} size="full" />
+          <PrimaryButton text="Submit" type="submit" size="full" />
         </div>
       </form>
-      <GoogleSignInButton signIn={!signUp} />
-      <Link href={link} className="hover:text-primary mt-4 text-blue-400">
-        Organization? {signUpOrIn} here{' '}
+      <GoogleSignInButton signIn={true} />
+      <Link className="font-nunito mt-4 font-bold underline" href={'/signup'}>
+        Don't Have An Account? Sign Up Now!
       </Link>
     </div>
   );

@@ -1,15 +1,40 @@
-interface fileInput{
-    name: string
-    buttonText?:string
-    required?: boolean
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+
+interface fileInput {
+  name: string;
+  buttonText?: string;
+  required?: boolean;
+  onChange: (file: File) => void;
+  fileAdded?: boolean;
 }
 
-export default function FileInput({name, buttonText = "Proof of Ownership", required = false}:fileInput) {
+
+
+export default function FileInput({
+  name,
+  buttonText = 'Proof of Ownership',
+  required = false,
+  onChange,
+  fileAdded = false,
+}: fileInput) {
   return (
     <>
-    <label className="bg-primary cursor-pointer text-background font-nunito p-2 rounded-xl w-fit hover:bg-background border-2 hover:border-primary hover:text-primary transition ease-in-out transition-normal flex justify-center items-center font-bold text-xs">{buttonText}
-     <input required={required}  className="hidden" type="file" name={name}/>
-     </label>
+      <label
+        className={`${fileAdded ? 'bg-green' : 'bg-primary'} text-background font-nunito hover:bg-background hover:border-primary hover:text-primary flex w-fit cursor-pointer items-center justify-center rounded-xl border-2 p-2 text-xs font-bold transition transition-normal ease-in-out`}
+      >
+        {fileAdded ? <FontAwesomeIcon icon={faCheck} /> : buttonText}
+        <input
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) onChange(file);
+          }}
+          required={required}
+          className="hidden"
+          type="file"
+          name={name}
+        />
+      </label>
     </>
-  )
+  );
 }

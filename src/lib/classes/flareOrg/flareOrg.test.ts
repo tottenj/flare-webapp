@@ -28,30 +28,6 @@ describe("flareOrg Class", () => {
         expect(flareOrg.location).toEqual(loc);
     })
 
-    it('should call addDcoument and addFile for each valid file', async () => {
-        const firestore = {} as Firestore
-        const storage = {} as FirebaseStorage
-
-        const org = FlareOrg.sampleOrg
-
-        const file = new File(['test'], 'test.png', {type: 'image/png'})
-        const validFiles = [
-            {key: 'instagram', file},
-            {key: 'facebook', file}
-        ]
-
-        await org.addOrg(firestore, storage, validFiles);
-
-        expect(addDocument).toHaveBeenCalledWith(
-            firestore,
-            'Organizations/abc',
-            org,
-            expect.any(Object)
-        )
-
-        expect(addFile).toHaveBeenCalledTimes(validFiles.length)
-        expect(addFile).toHaveBeenCalledWith(storage, `${Collections.Organizations}/abc/instagram`, file)
-    })
 
 
     it('should call getDocument with correct path and converter', async () =>{
