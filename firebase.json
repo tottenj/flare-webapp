@@ -20,7 +20,8 @@
     }
   ],
   "storage": {
-    "rules": "storage.rules"
+    "rules": "storage.rules",
+    "defaultBucket": "flare-7091a.appspot.com"
   },
   "emulators": {
     "auth": {

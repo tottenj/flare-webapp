@@ -1,7 +1,7 @@
 import { User } from 'firebase/auth';
 import { DocumentData, Firestore, GeoPoint, getFirestore, QueryDocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
 import flareLocation from '@/lib/types/Location';
-import { addDocument, getDocument } from '@/lib/firebase/firestore/firestoreOperations';
+import { addDocument, getDocument, updateDocument } from '@/lib/firebase/firestore/firestoreOperations';
 import Collections from '@/lib/enums/collections';
 import { FirebaseStorage } from 'firebase/storage';
 import { addFile, getFile } from '@/lib/firebase/storage/storageOperations';
@@ -83,11 +83,16 @@ export default class FlareOrg {
     }
   }
 
-  async addOrg(firestoredb: Firestore) {
-    await addDocument(firestoredb, `${Collections.Organizations}/${this.id}`, this, orgConverter)
+  async updateOrg(firestore: Firestore, data: Partial<FlareOrg>){
+    if(!this.id) return false
+    await updateDocument(firestore, `${Collections.Organizations}/${this.id}`, data, orgConverter, ['id','verified'])
   }
 
 
+
+  async addOrg(firestoredb: Firestore) {
+    await addDocument(firestoredb, `${Collections.Organizations}/${this.id}`, this, orgConverter)
+  }
 
 }
 

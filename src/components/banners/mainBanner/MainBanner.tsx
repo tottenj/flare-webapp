@@ -1,17 +1,18 @@
 'use server';
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
+import GeneralLoader from '@/components/loading/GeneralLoader';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
-import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverApp';
 import { signOutUser } from '@/lib/firebase/auth/signOutUser';
 import { getClaims } from '@/lib/firebase/utils/getClaims';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 export default async function MainBanner() {
   const menuItems = [{ title: 'View Profile', href: '/dashboard' }];
-  const { claims, currentUser } = await getClaims();
+  const { currentUser } = await getClaims();
 
   return (
-    <div className="mb-full relative right-1/2 left-1/2 -mr-[50vw] -ml-[50vw] flex w-screen items-center justify-between bg-white/80 p-4">
+    <div className="relative -ml-[calc((100vw-100%)/2)] flex w-screen items-center justify-between bg-white/80 p-4">
       <Link href={'/'}>
         <ServerLogo size="medium" />
       </Link>
@@ -29,7 +30,9 @@ export default async function MainBanner() {
       {currentUser && (
         <div className="group relative flex flex-col items-end">
           <div className="z-10 cursor-pointer">
+            <Suspense fallback={<GeneralLoader/>}>
             <ProfilePicture size={65} />
+            </Suspense>
           </div>
 
           <div className="absolute top-full right-0 z-20 hidden w-40 flex-col rounded-md bg-white shadow-lg ring-1 ring-black/5 group-hover:flex">

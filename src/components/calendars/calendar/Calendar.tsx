@@ -14,16 +14,14 @@ type CustomDayProps = {
   eventColors: string[];
 } & HTMLAttributes<HTMLDivElement>;
 
-
 interface fullPageCalendarProps {
   events: PlainEvent[];
 }
 
 export default function FullPageCalendar({ events }: fullPageCalendarProps) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const eventMap: Record<string, string[]> = events.reduce(
     (acc, event) => {
@@ -41,15 +39,14 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
     return eventMap[key] || [];
   }
 
-
-  const createQueryString = useCallback((name:string, value:string) => {
-        const params = new URLSearchParams(searchParams.toString())
-        params.set(name, value)
-        return params.toString()
-    },[searchParams]
-  )
-
- 
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      return params.toString();
+    },
+    [searchParams]
+  );
 
   function CustomDay({ day, modifiers, className, eventColors, ...props }: CustomDayProps) {
     return (
@@ -75,6 +72,15 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
                     key={index}
                     className={styles.dot}
                     style={{ backgroundColor: color }}
+                    onClick={() =>
+                      router.push(
+                        pathname +
+                          '?' +
+                          createQueryString('date', day.date.toISOString().split('T')[0]) +
+                          '&' +
+                          createQueryString('type', color)
+                      )
+                    }
                     title={`${count} event${count > 1 ? 's' : ''} of this type`}
                   >
                     {count > 1 && <span className={styles.dotCount}>{count}</span>}
@@ -88,11 +94,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
     );
   }
 
-
-
-
   return (
-      
     <div className={styles.calendarWrapper}>
       <DayPicker
         mode="single"

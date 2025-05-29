@@ -1,14 +1,24 @@
+import Event from '@/lib/classes/event/Event';
+import Image from 'next/image';
+import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
+import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import Link from 'next/link';
 
+export default async function EventInfo({ slug }: { slug: string }) {
+  const { firestore, storage } = await getServicesFromServer();
+  const event = await Event.getEvent(firestore, slug);
+  if (!event) return <p>Event not found</p>;
+  const org = await FlareOrg.getOrg(firestore, event.flare_id);
+  const img = await event.getImage(storage);
 
-export default function EventInfo({event}: {event: Event}) {
   return (
-    <div className="bg-white p-4">
+    <div className="bg-white p-4 w-full rounded-2xl">
       <div className="flex h-auto w-full flex-col items-center">
         <h1>{event.title}</h1>
         <p>{org?.name ? 'Hosted By ' + org.name : ''}</p>
         <div className="mt-4 flex w-full gap-8">
           {img && (
-            <div className="relative h-auto min-h-[400px] w-full overflow-hidden rounded-xl shadow-md md:w-1/2">
+            <div className="relative h-auto min-h-[400px] w-1/2 overflow-hidden rounded-xl shadow-md md:w-1/2">
               <Image
                 src={img}
                 alt={event.title}
@@ -19,7 +29,7 @@ export default function EventInfo({event}: {event: Event}) {
               />
             </div>
           )}
-          <div className="flex flex-col justify-between">
+          <div className={`flex flex-col justify-between ${img && "w-1/2" }`}>
             <div className="flex flex-col gap-2 text-lg">
               <p>
                 <b>Date:</b> {event.startdate.toDateString()}
@@ -35,6 +45,7 @@ export default function EventInfo({event}: {event: Event}) {
               </p>
               <p className="mt-4">{event.description}</p>
             </div>
+
             {event.ticketLink && <Link href={event.ticketLink}>Purchase Tickets</Link>}
           </div>
         </div>

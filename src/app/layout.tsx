@@ -44,18 +44,19 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang="en">
-      <body
-        className={`${nunito.variable} ${pt_sans.variable} gradientBack flex justify-center bg-no-repeat antialiased`}
-      >
-        <div className="mb-4 w-11/12 max-w-[1700px]">
-          <ServerUserProvider user={userData}>
-            <AuthProvider>{children}</AuthProvider>
-            <Analytics />
-            <SpeedInsights />
-            <ToastContainer position="bottom-right" />
-          </ServerUserProvider>
+      <body className={`${nunito.variable} ${pt_sans.variable} relative antialiased`}>
+        <div className="fullGradientBackground"/>
+        <div className='flex justify-center'>
+          <div className="mb-4 w-11/12 max-w-[1700px]">
+            <ServerUserProvider user={userData}>
+              <AuthProvider>{children}</AuthProvider>
+              <Analytics />
+              <SpeedInsights />
+              <ToastContainer position="bottom-right" />
+            </ServerUserProvider>
+          </div>
         </div>
       </body>
     </html>
-  )
+  );
 }

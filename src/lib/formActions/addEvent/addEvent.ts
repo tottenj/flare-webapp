@@ -6,6 +6,7 @@ import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestore
 
 import flareLocation from '@/lib/types/Location';
 import { getEnumValueByString } from '@/lib/utils/other/getEnumValueByString';
+import { revalidatePath } from 'next/cache';
 
 export default async function addEvent(prevState: any, formData: FormData) {
   const { currentUser, fire } = await getFirestoreFromServer();
@@ -44,7 +45,9 @@ export default async function addEvent(prevState: any, formData: FormData) {
       price,
       ticketLink
     );
+
     await event.addEvent(fire);
+    revalidatePath("/dashboard")
     return { message: 'success', eventId: event.id };
   } catch (error) {
     console.log(error);

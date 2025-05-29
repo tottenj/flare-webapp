@@ -1,4 +1,4 @@
-import { User } from 'firebase/auth';
+import { updateCurrentUser, User } from 'firebase/auth';
 import {
   doc,
   DocumentData,
@@ -9,7 +9,7 @@ import {
   SnapshotOptions,
 } from 'firebase/firestore';
 import Collections from '../../enums/collections';
-import { addDocument, getDocument } from '@/lib/firebase/firestore/firestoreOperations';
+import { addDocument, getDocument, updateDocument } from '@/lib/firebase/firestore/firestoreOperations';
 import { isUser } from '@/lib/utils/other/isUser';
 import { db } from '@/lib/firebase/auth/configs/clientApp';
 import { FirebaseStorage } from 'firebase/storage';
@@ -44,7 +44,7 @@ export default class FlareUser {
   static emptyUser = new FlareUser('123', 'example@gmail.com');
 
   static async getUserById(id: string, dab: Firestore = db): Promise<FlareUser | null> {
-    const userDoc = await getDocument(dab, `${Collections.Users}/${id}`, userConverter)
+    const userDoc = await getDocument(dab, `${Collections.Users}/profile/${id}`, userConverter)
     if(userDoc.exists()){
       return userDoc.data()
     }else{
@@ -64,6 +64,11 @@ export default class FlareUser {
         return await getFile(storage, ref);
       }
     }
+  }
+
+  async updateUser(dab: Firestore, data:Partial<FlareUser>){
+    if(!this.id) return false
+    await updateDocument(dab, `${Collections.Users}/${this.id}`, data, userConverter, ['id'])
   }
 
   async addUser(dab: Firestore = db): Promise<boolean> {

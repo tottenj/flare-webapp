@@ -1,3 +1,4 @@
+import omitKeys from '@/lib/utils/other/omitKeys';
 import {
   doc,
   Firestore,
@@ -16,7 +17,11 @@ import {
   OrderByDirection,
   orderBy,
   limit,
+  DocumentReference,
+  PartialWithFieldValue,
 } from 'firebase/firestore';
+
+
 
 export async function getDocument<AppModelType, DbModelType extends DocumentData>(
   firestore: Firestore,
@@ -99,4 +104,24 @@ export async function getCollectionByFields<AppModelType, DbModelType extends Do
   const q = query(ref, ...constraints);
   const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => doc.data());
+}
+
+
+
+export async function updateDocument<
+  AppModelType extends Record<string, any>,
+  DbModelType extends DocumentData = DocumentData,
+>(
+  firestore: Firestore,
+  path: string,
+  data: PartialWithFieldValue<AppModelType>,
+  converter?: FirestoreDataConverter<AppModelType, DbModelType>,
+  excludeFields: (keyof AppModelType)[] = []
+): Promise<void> {
+  const ref = converter
+    ? doc(firestore, path).withConverter(converter)
+    : (doc(firestore, path) as DocumentReference<AppModelType>);
+
+  const cleanData = omitKeys(data, excludeFields as (keyof typeof data)[]);
+  await setDoc(ref, cleanData as PartialWithFieldValue<AppModelType>, { merge: true });
 }

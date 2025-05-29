@@ -104,3 +104,16 @@ body {
   background-color: white;
   color: var(--color-primary);
 }
+
+
+.fullGradientBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffa301, #ff005c);
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+}

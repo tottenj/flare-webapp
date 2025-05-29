@@ -1,12 +1,10 @@
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import {
-  getFirestoreFromServer,
   getServicesFromServer,
 } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
-import { getAuthenticatedAppForUser } from '@/lib/firebase/auth/configs/serverApp';
+
 import { getClaims } from '@/lib/firebase/utils/getClaims';
-import { User } from 'firebase/auth';
 import Image from 'next/image';
 
 interface profilePictureProps {
@@ -42,8 +40,8 @@ export default async function ProfilePicture({ size }: profilePictureProps) {
     }
   }
   return (
-    <div className="rounded-full">
-      <Image src={retval} width={size} height={size} alt="profile" />
+    <div className="relative overflow-hidden rounded-full" style={{ width: size, height: size }}>
+      <Image src={retval} alt="profile" fill className="object-cover" />
     </div>
   );
 }
