@@ -72,12 +72,12 @@ export default class Event {
   static async uploadImages(id: string, storage: FirebaseStorage, files: File[]) {
     for (const file of files) {
       await addFile(storage, `Events/${id}`, file);
-      console.log("File stored")
+      console.log('File stored');
     }
   }
 
-  async getImage(storage: FirebaseStorage){
-    return await getFile(storage, this.imagePath)
+  async getImage(storage: FirebaseStorage) {
+    return await getFile(storage, this.imagePath);
   }
 
   static async getEvent(dab: Firestore, eventId: string) {
@@ -89,6 +89,25 @@ export default class Event {
   get imagePath(): string {
     return `Events/${this.id}`;
   }
+
+  static sampleEvents: Event[] = [
+    new Event(
+      'flare005',
+      'Open Mic Night',
+      'Share your poetry, music, or comedy in a safe space.',
+      eventType['Other'],
+      AgeGroup.AllAges,
+      new Date('2025-07-10T18:30:00'),
+      new Date('2025-07-10T18:30:00'),
+      {
+        id: 'loc005',
+        name: 'The Cozy Corner',
+        coordinates: new GeoPoint(41.8781, -87.6298), // Chicago
+      },
+      10,
+      '1'
+    ),
+  ];
 
   static async queryEvents(dab: Firestore, filters: EventFilters = {}, options?: QueryOptions) {
     const whereClauses: WhereClause[] = [];
@@ -115,10 +134,7 @@ export default class Event {
     );
   }
 
-
-  
-
-  toPlain():PlainEvent {
+  toPlain(): PlainEvent {
     return {
       id: this.id,
       flare_id: this.flare_id,
@@ -162,6 +178,10 @@ export type PlainEvent = {
   price?: number | string;
   ticketLink?: string;
 };
+
+
+
+
 
 
 export const eventConverter = {
