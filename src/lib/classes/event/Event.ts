@@ -121,8 +121,8 @@ export default class Event {
     }
 
     if (filters.flare_id) whereClauses.push(['flareId', '==', filters.flare_id]);
-    if (filters.ageGroup) whereClauses.push(['age', 'in', filters.ageGroup]);
-    if (filters.type) whereClauses.push(['type', 'in', filters.type]);
+    if (filters.ageGroup && filters.ageGroup.length > 0) whereClauses.push(['ageGroup', 'in', filters.ageGroup]);
+    if (filters.type && filters.type.length > 0) whereClauses.push(['type', 'in', filters.type]);
     if (filters.afterDate) whereClauses.push(['startDate', '<', filters.afterDate]);
     if (filters.beforeDate) whereClauses.push(['startDate', '>=', filters.beforeDate]);
     return await getCollectionByFields(

@@ -12,7 +12,7 @@ export default async function EventInfo({ slug }: { slug: string }) {
   const img = await event.getImage(storage);
 
   return (
-    <div className="bg-white p-4 w-full rounded-2xl">
+    <div className="w-full rounded-2xl bg-white p-4">
       <div className="flex h-auto w-full flex-col items-center">
         <h1>{event.title}</h1>
         <p>{org?.name ? 'Hosted By ' + org.name : ''}</p>
@@ -29,7 +29,7 @@ export default async function EventInfo({ slug }: { slug: string }) {
               />
             </div>
           )}
-          <div className={`flex flex-col justify-between ${img && "w-1/2" }`}>
+          <div className={`flex flex-col justify-between ${img && 'w-1/2'}`}>
             <div className="flex flex-col gap-2 text-lg">
               <p>
                 <b>Date:</b> {event.startdate.toDateString()}
@@ -42,6 +42,9 @@ export default async function EventInfo({ slug }: { slug: string }) {
               </p>
               <p>
                 <b>Cost:</b> {event.price == 0 ? 'Free' : event.price}
+              </p>
+              <p>
+                <b>Age Group:</b> {event.ageGroup}
               </p>
               <p className="mt-4">{event.description}</p>
             </div>

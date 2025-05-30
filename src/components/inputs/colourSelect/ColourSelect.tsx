@@ -8,7 +8,6 @@ export type ColourOption = {
   readonly value: string;
   readonly label: string;
   readonly color: string;
-
 };
 
 const colourStyles: StylesConfig<ColourOption> = {
@@ -69,19 +68,23 @@ const ColourSelect = ({
   options,
   label,
   name,
-  z
+  z,
+  multi = false,
 }: {
   options: ColourOption[];
   label?: string;
   name: string;
-  z:string
+  z: string;
+  multi?: boolean;
 }) => {
-  const [selected, setSelected] = useState(options[0]);
+  const [selected, setSelected] = useState<ColourOption | ColourOption[] | null>(multi ? [] : null);
+
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <PrimaryLabel label={label} />
       <Select
+        isMulti={multi}
         name={`${name}-select`} // prevent conflict
         value={selected}
         onChange={(opt) => setSelected(opt as ColourOption)}

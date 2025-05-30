@@ -61,12 +61,12 @@ export default function AddEventForm({ setClose }: addEventFormProps) {
           <DateTime label="Event Start" name="start" />
           <DateTime label="Event End" name="end" />
         </div>
-        <PlaceSearch z='z-50' loc={setloc} lab="Event Location" />
+        <PlaceSearch z="z-50" loc={setloc} lab="Event Location" />
         {loc && <input type="hidden" name="location" required={true} value={JSON.stringify(loc)} />}
         <br></br>
-        <ColourSelect z={"z-40"} label="Event Type" options={colourOptions} name="type" />
+        <ColourSelect z={'z-40'} label="Event Type" options={colourOptions} name="type" />
         <br></br>
-        <BasicSelect z={"z-30"} label="Age Range" options={ageGroupOptions} name="age" />
+        <BasicSelect z={'z-30'} label="Age Range" options={ageGroupOptions} name="age" />
         <NumberInput defaultVal={0} label="Price (Leave 0 for Free / N/A)" name="price" />
         <TextInput
           type="url"

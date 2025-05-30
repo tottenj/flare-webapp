@@ -1,0 +1,92 @@
+'use client';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+type FilterKey = string;
+
+interface FilterToggleConfig {
+  label: (value: string) => string;
+  colorClass: string;
+}
+
+const FILTER_CONFIG: Record<FilterKey, FilterToggleConfig> = {
+  date: {
+    label: (value) => `Date: ${value}`,
+    colorClass: 'bg-blue-100 text-blue-700 hover:bg-blue-200',
+  },
+  type: {
+    label: (value) => `Type: ${value}`,
+    colorClass: 'bg-pink-100 text-pink-700 hover:bg-pink-200',
+  },
+
+  age: {
+    label: (value) => `Age: ${value}`,
+    colorClass: "bg-green"
+  }
+
+};
+
+export default function FilterToggles() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Helper: get all active filters including splitting 'type' values
+  const activeFilters: { key: FilterKey; value: string; config: FilterToggleConfig }[] = [];
+
+  for (const [key, config] of Object.entries(FILTER_CONFIG)) {
+    const value = searchParams.get(key);
+    if (!value) continue;
+
+    if(key === 'age'){
+      const ages = value.split(',');
+      ages.forEach((ageVal) => {
+        activeFilters.push({key, value: ageVal, config})
+      })
+    }
+
+    if (key === 'type') {
+      const types = value.split(',');
+      types.forEach((typeVal) => {
+        activeFilters.push({ key, value: typeVal, config });
+      });
+    } else {
+      // single-value filter
+      activeFilters.push({ key, value, config });
+    }
+  }
+
+  const handleRemove = (key: FilterKey, valueToRemove: string) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+
+    if (key === 'type') {
+      const currentTypes = newParams.get(key)?.split(',') ?? [];
+      const filteredTypes = currentTypes.filter((type) => type !== valueToRemove);
+      if (filteredTypes.length === 0) {
+        newParams.delete(key);
+      } else {
+        newParams.set(key, filteredTypes.join(','));
+      }
+    } else {
+      newParams.delete(key);
+    }
+
+    router.push('?' + newParams.toString());
+  };
+
+  if (activeFilters.length === 0) return null;
+
+  return (
+    <div className="mb-4 flex flex-wrap gap-2 self-start">
+      {activeFilters.map(({ key, value, config }) => (
+        <button
+          key={`${key}-${value}`}
+          onClick={() => handleRemove(key, value)}
+          className={`rounded-full px-3 py-1 text-sm ${config.colorClass}`}
+          aria-label={`Remove filter ${key} ${value}`}
+          type="button"
+        >
+          {config.label(value)} &times;
+        </button>
+      ))}
+    </div>
+  );
+}

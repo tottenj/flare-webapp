@@ -5,6 +5,8 @@ import 'react-day-picker/dist/style.css';
 import styles from './calendar.module.css';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PlainEvent } from '@/lib/classes/event/Event';
+import getKeyByValue from '@/lib/utils/other/getKeyByValue';
+import eventType from '@/lib/enums/eventType';
 
 //TO DO - Write TESTs
 
@@ -51,11 +53,14 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
   function CustomDay({ day, modifiers, className, eventColors, ...props }: CustomDayProps) {
     return (
       <td
-        onClick={() =>
-          router.push(
-            pathname + '?' + createQueryString('date', day.date.toISOString().split('T')[0])
-          )
-        }
+        onClick={() => {
+          const currentDate = searchParams.get('date');
+          const newDate = day.date.toISOString().split('T')[0];
+
+          if (currentDate === newDate) return;
+
+          router.push(pathname + '?' + createQueryString('date', newDate));
+        }}
       >
         <div {...props} className={className}>
           <div className={styles.dayCell}>
@@ -72,15 +77,41 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
                     key={index}
                     className={styles.dot}
                     style={{ backgroundColor: color }}
-                    onClick={() =>
-                      router.push(
-                        pathname +
-                          '?' +
-                          createQueryString('date', day.date.toISOString().split('T')[0]) +
-                          '&' +
-                          createQueryString('type', color)
-                      )
-                    }
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const params = new URLSearchParams(searchParams.toString());
+                      const clickedType = getKeyByValue(eventType, color);
+                      const currentType = params.get('type');
+                      const newDate = day.date.toISOString().split('T')[0];
+
+                      // Always set date
+                      params.set('date', newDate);
+
+                      // Toggle type: remove if it's the same, otherwise set
+                      if (clickedType) {
+                        // Get existing types as array
+                        const currentTypesStr = params.get('type') || '';
+                        const currentTypes = currentTypesStr ? currentTypesStr.split(',') : [];
+
+                        const index = currentTypes.indexOf(clickedType);
+
+                        if (index > -1) {
+                          // clickedType is already selected, remove it
+                          currentTypes.splice(index, 1);
+                        } else {
+                          // clickedType not selected, add it
+                          currentTypes.push(clickedType);
+                        }
+
+                        if (currentTypes.length === 0) {
+                          params.delete('type'); // no types left, remove param
+                        } else {
+                          params.set('type', currentTypes.join(',')); // join back to string
+                        }
+                      }
+
+                      router.push(`${pathname}?${params.toString()}`);
+                    }}
                     title={`${count} event${count > 1 ? 's' : ''} of this type`}
                   >
                     {count > 1 && <span className={styles.dotCount}>{count}</span>}
