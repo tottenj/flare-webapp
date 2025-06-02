@@ -70,24 +70,26 @@ const ColourSelect = ({
   name,
   z,
   multi = false,
+  defaultValue
 }: {
   options: ColourOption[];
   label?: string;
   name: string;
   z: string;
   multi?: boolean;
+  defaultValue?: ColourOption | ColourOption[] | null
 }) => {
-  const [selected, setSelected] = useState<ColourOption | ColourOption[] | null>(multi ? [] : null);
+  const [selected, setSelected] = useState<ColourOption | ColourOption[] | null>(defaultValue ?? (multi ? [] : null));
 
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex w-full flex-col">
       <PrimaryLabel label={label} />
       <Select
         isMulti={multi}
         name={`${name}-select`} // prevent conflict
         value={selected}
-        onChange={(opt) => setSelected(opt as ColourOption)}
+        onChange={(opt) => setSelected(opt as ColourOption | ColourOption[])}
         options={options}
         styles={colourStyles}
         menuPosition="fixed"

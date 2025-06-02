@@ -1,3 +1,4 @@
+"use server"
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import {

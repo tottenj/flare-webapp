@@ -55,6 +55,7 @@ export default function AddEventForm({ setClose }: addEventFormProps) {
           name="eventImage"
           onChange={(file) => handleFileChange('eventImage', file)}
           buttonText="Upload File"
+          fileAdded={validFiles.length > 0}
         />
         <br></br>
         <div className="mb-4 flex justify-between">

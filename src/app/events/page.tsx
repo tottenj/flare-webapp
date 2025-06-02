@@ -8,7 +8,6 @@ import Event from '@/lib/classes/event/Event';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import getEventFiltersFromSearchParams from '@/lib/utils/other/getEventFilters';
 
-
 export default async function EventView({
   params,
   searchParams,
@@ -16,29 +15,29 @@ export default async function EventView({
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const [resolvedSearchParams] = await Promise.all([params, searchParams]);
+  const [{ slug }, resolvedSearchParams] = await Promise.all([params, searchParams]);
   const { fire } = await getFirestoreFromServer();
 
   // Get filtered list for selected date/type
   const filters = getEventFiltersFromSearchParams(resolvedSearchParams);
-
   const queriedEvents = await Event.queryEvents(fire, filters);
   const plainQueriedEvents = queriedEvents.map((event) => event.toPlain());
 
   // Get all events for the month to display dots
-  const calendarEvents = await Event.queryEvents(fire, {});
+  delete filters.onDate;
+  const calendarEvents = await Event.queryEvents(fire, filters);
   const plainMonthsEvents = calendarEvents.map((event) => event.toPlain());
 
   return (
     <>
       <MainBanner />
-      <div className="flex h-[800px] gap-12 p-4 pt-8">
-        <div className="h-full w-4/5">
+      <div className="flex h-full flex-col gap-8 lg:gap-12 p-4 pt-8 lg:h-11/12 lg:flex-row">
+        <div className="h-auto w-full lg:h-full lg:w-4/5">
           <FullPageCalendar events={plainMonthsEvents} />
         </div>
-        <div className="flex h-full w-2/5 flex-col items-center gap-4 overflow-scroll rounded-2xl bg-white p-4">
+        <div className="flex h-full w-full flex-col items-center gap-4 overflow-scroll rounded-2xl bg-white p-4 lg:w-2/5">
           <div className="relative mb-4 w-full">
-            <FilterModal/>
+            <FilterModal />
             <h2 className="text-center text-xl font-semibold">Events</h2>
             <hr className="border-primary mt-2 w-full rounded-2xl border-2" />
           </div>

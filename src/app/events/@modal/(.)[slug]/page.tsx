@@ -1,3 +1,4 @@
+"use server"
 import Modal from '@/components/modals/mainModal/MainModal';
 import EventInfo from '../../../../components/events/EventInfo';
 

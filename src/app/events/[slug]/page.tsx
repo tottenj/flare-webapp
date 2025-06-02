@@ -1,19 +1,17 @@
-"use server"
-import MainBanner from "@/components/banners/mainBanner/MainBanner";
-import EventInfo from "@/components/events/EventInfo";
-import Event from "@/lib/classes/event/Event";
-import { getFirestoreFromServer } from "@/lib/firebase/auth/configs/getFirestoreFromServer";
+'use server';
+import MainBanner from '@/components/banners/mainBanner/MainBanner';
+import EventInfo from '@/components/events/EventInfo';
 
 export default async function FullEventPage({ params }: { params: Promise<{ slug: string }> }) {
-  const {slug} = await params
+  const { slug } = await params;
   if (!slug) return <p>Event not found</p>;
 
   return (
     <>
-    <MainBanner/>
-    <div className="h-dvh mt-[-4rem] flex justify-center items-center ">
-    <EventInfo slug={slug}/>
-    </div>
+      <MainBanner />
+      <div className="mt-[-4rem] flex h-dvh items-center justify-center">
+        <EventInfo slug={slug} />
+      </div>
     </>
   );
 }

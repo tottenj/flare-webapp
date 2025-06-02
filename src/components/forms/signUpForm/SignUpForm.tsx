@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import LinkInput from '@/components/inputs/link/LinkInput';
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
+import { useWindowSize } from '@uidotdev/usehooks';
 
 type SignInFormProps = {
   overrideAction?: typeof emailAndPasswordAction;
@@ -21,6 +22,7 @@ export default function SignUpForm({ overrideAction, signUp = true }: SignInForm
     initialState
   );
   const router = useRouter()
+  const {width} = useWindowSize()
 
   useActionToast(state, pending, {
     successMessage: 'User created successfully',
@@ -35,8 +37,8 @@ export default function SignUpForm({ overrideAction, signUp = true }: SignInForm
   },[state])
 
   return (
-    <div className="@container flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
-      <ServerLogo size='xLarge'/>
+    <div className="@container flex w-full flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
+      <ServerLogo size={width && width <= 1024 ? `medium` : "xLarge"}/>
       <div className='absolute right-0 top-0 mr-4 mt-4'>
         <LinkInput style={{padding: "0.5rem"}} href='/flare-signin' text='Organization Signup'/>
       </div>

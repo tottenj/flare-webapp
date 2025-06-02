@@ -93,20 +93,10 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
                         const currentTypesStr = params.get('type') || '';
                         const currentTypes = currentTypesStr ? currentTypesStr.split(',') : [];
 
-                        const index = currentTypes.indexOf(clickedType);
-
-                        if (index > -1) {
-                          // clickedType is already selected, remove it
-                          currentTypes.splice(index, 1);
-                        } else {
-                          // clickedType not selected, add it
+                        if (clickedType && !currentTypes.includes(clickedType)) {
                           currentTypes.push(clickedType);
-                        }
-
-                        if (currentTypes.length === 0) {
-                          params.delete('type'); // no types left, remove param
-                        } else {
-                          params.set('type', currentTypes.join(',')); // join back to string
+                          params.set('type', currentTypes.join(','));
+                          router.push(`${pathname}?${params.toString()}`);
                         }
                       }
 

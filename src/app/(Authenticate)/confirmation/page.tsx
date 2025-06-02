@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function Confirmation() {
   return (
     <div className="h-lvh flex items-center justify-center">
-      <div className="flex h-1/2 w-1/2 flex-col items-center justify-around rounded-xl bg-white p-4 text-center">
+      <div className="flex h-1/2 w-3/4 lg:w-1/2 flex-col items-center justify-around rounded-xl bg-white p-4 text-center">
         <div>
           <Logo size={150} />
         </div>

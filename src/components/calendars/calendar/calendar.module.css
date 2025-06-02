@@ -1,38 +1,38 @@
 .calendarWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Segoe UI', sans-serif;
-    font-family: var(--font-nunito);
-    font-weight: bold;
-    height: 100%;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-nunito);
+  font-weight: bold;
+  height: 100%;
+}
 
- .calendarWrapper :global(.rdp-root){
+.calendarWrapper :global(.rdp-root) {
   background-color: white;
   width: 100%;
   padding: 1rem;
   border-radius: 1rem;
   height: 100%;
- }
+}
 
- .calendarWrapper :global(.rdp-caption_label){
+.calendarWrapper :global(.rdp-caption_label) {
   margin-left: auto;
   margin-right: auto;
- }
+}
 
- .calendarWrapper :global(.rdp-nav){
-    justify-content: space-between;
-    width: 100%;
- }
+.calendarWrapper :global(.rdp-nav) {
+  justify-content: space-between;
+  width: 100%;
+}
 
- .calendarWrapper :global(.rdp-weekday){
+.calendarWrapper :global(.rdp-weekday) {
   text-align: left;
   font-family: var(--font-nunito);
   font-weight: bold;
- }
+}
 
- .calendarWrapper td {
+.calendarWrapper td {
   min-height: 60px;
   height: 125px;
   vertical-align: top;
@@ -40,23 +40,21 @@
   width: 14.5%;
 }
 
- .calendarWrapper :global(.rdp-months){
+.calendarWrapper :global(.rdp-months) {
   width: 100%;
   max-width: unset;
- }
+}
 
- .calendarWrapper :global(.rdp-month){
+.calendarWrapper :global(.rdp-month) {
   width: 100%;
   height: 100%;
- }
-  
+}
 
- .calendarWrapper :global(.rdp-month_grid){
+.calendarWrapper :global(.rdp-month_grid) {
   width: 100%;
- }
+}
 
-
- .dayCell {
+.dayCell {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -66,7 +64,7 @@
   height: 100%;
   width: 100%;
 }
-  
+
 .dotContainer {
   display: flex;
   margin-top: 4px;
@@ -82,7 +80,9 @@
   position: relative;
   margin-left: -2px;
   z-index: 1;
-  transition: transform 0.2s ease, z-index 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    z-index 0.2s ease;
   cursor: pointer;
   text-align: center;
   color: var(--color-primary);
@@ -93,5 +93,14 @@
   z-index: 10;
 }
 
+@media only screen and (max-width: 64rem) {
+  .calendarWrapper td {
+    height: unset;
+    height: 50px;
+  }
 
-  
+  .dot {
+    width: 7px;
+    height: 7px;
+  }
+}

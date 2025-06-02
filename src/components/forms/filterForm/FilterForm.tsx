@@ -9,6 +9,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 export default function FilterForm({ close }: { close: () => void }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const typeParam = searchParams.get('type');
+  const ageParam = searchParams.get('age');
+  const defaultTypes = typeParam ? typeParam.split(',') : [];
+  const defaultAges = ageParam ? ageParam.split(',') : [];
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,10 +28,10 @@ export default function FilterForm({ close }: { close: () => void }) {
       params.delete('type');
     }
 
-    if(ageRange.length > 0){
+    if (ageRange.length > 0) {
       params.set('age', ageRange.join(','));
-    }else{
-      params.delete('age')
+    } else {
+      params.delete('age');
     }
 
     router.push('?' + params.toString());
@@ -43,8 +47,15 @@ export default function FilterForm({ close }: { close: () => void }) {
         label="Event Type"
         options={colourOptions}
         name="type"
+        defaultValue={colourOptions.filter((opt) => defaultTypes.includes(opt.value))}
       />
-      <BasicSelect multi={true} label='Age Range' options={ageGroupOptions} name='ageRange' />
+      <BasicSelect
+        multi={true}
+        label="Age Range"
+        options={ageGroupOptions}
+        name="ageRange"
+        defaultValue={ageGroupOptions.filter((opt) => defaultAges.includes(opt.value))}
+      />
 
       <button
         type="submit"

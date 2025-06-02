@@ -1,23 +1,28 @@
-import { Label } from '@headlessui/react';
+"use client"
 import Select from 'react-select';
 import PrimaryLabel from '../labels/primaryLabel/PrimaryLabel';
+import { useState } from 'react';
 
 interface basicSelectProps {
   options: any[];
   label?: string;
-  name: string
-  z?:string
-  multi?:boolean
+  name: string;
+  z?: string;
+  multi?: boolean;
+  defaultValue?: any | any[] | null;
 }
-export default function BasicSelect({ options, label, name, z ,multi = false}: basicSelectProps) {
+export default function BasicSelect({ options, label, name, z ,multi = false, defaultValue}: basicSelectProps) {
+  const [selected, setSelected] = useState<any | any[] | null>(defaultValue ?? (multi ? [] : null));
+
+
   return (
-    <div className='flex flex-col w-full'>
+    <div className="flex w-full flex-col">
       <PrimaryLabel label={label} />
       <div className="relative z-50 overflow-visible">
         <Select
           name={name}
           options={options}
-          defaultValue={multi ? "" : options[0]}
+          value={selected}
           menuPosition="fixed"
           menuPortalTarget={typeof window !== 'undefined' ? document.body : null}
           styles={{
@@ -26,6 +31,7 @@ export default function BasicSelect({ options, label, name, z ,multi = false}: b
           isMulti={multi}
           className={`${z}`}
           classNamePrefix="react-select"
+          onChange={(opt) => setSelected(opt)}
         />
       </div>
       ;

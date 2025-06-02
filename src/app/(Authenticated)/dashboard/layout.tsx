@@ -1,3 +1,4 @@
+"use server"
 import MainBanner from '@/components/banners/mainBanner/MainBanner';
 import verifyOrg from '@/lib/firebase/utils/verifyOrg';
 

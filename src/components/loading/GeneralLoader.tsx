@@ -1,4 +1,5 @@
-export default function GeneralLoader() {
+"use server"
+export default async function GeneralLoader() {
   return (
     <div className="flex justify-center items-center w-full h-full">generalLoader</div>
   )

@@ -1,3 +1,4 @@
+"use server"
 import { FirebaseApp } from 'firebase/app';
 import { User } from 'firebase/auth';
 import { Firestore } from 'firebase/firestore';
@@ -7,7 +8,7 @@ interface userDashboardProps {
   currentUser: User
   fire: Firestore
 }
-export default function UserDashboard({firebase, currentUser, fire}:userDashboardProps) {
+export default async function UserDashboard({firebase, currentUser, fire}:userDashboardProps) {
   
   return <div>UserDashboard</div>;
 }

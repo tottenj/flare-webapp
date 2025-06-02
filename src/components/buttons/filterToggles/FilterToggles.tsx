@@ -20,9 +20,8 @@ const FILTER_CONFIG: Record<FilterKey, FilterToggleConfig> = {
 
   age: {
     label: (value) => `Age: ${value}`,
-    colorClass: "bg-green"
-  }
-
+    colorClass: 'bg-green',
+  },
 };
 
 export default function FilterToggles() {
@@ -36,20 +35,12 @@ export default function FilterToggles() {
     const value = searchParams.get(key);
     if (!value) continue;
 
-    if(key === 'age'){
-      const ages = value.split(',');
-      ages.forEach((ageVal) => {
-        activeFilters.push({key, value: ageVal, config})
-      })
-    }
-
-    if (key === 'type') {
-      const types = value.split(',');
-      types.forEach((typeVal) => {
-        activeFilters.push({ key, value: typeVal, config });
+    if (key === 'age' || key === 'type') {
+      const values = value.split(',');
+      values.forEach((val) => {
+        activeFilters.push({ key, value: val, config });
       });
     } else {
-      // single-value filter
       activeFilters.push({ key, value, config });
     }
   }
@@ -57,13 +48,13 @@ export default function FilterToggles() {
   const handleRemove = (key: FilterKey, valueToRemove: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
 
-    if (key === 'type') {
-      const currentTypes = newParams.get(key)?.split(',') ?? [];
-      const filteredTypes = currentTypes.filter((type) => type !== valueToRemove);
-      if (filteredTypes.length === 0) {
+    if (key === 'type' || key === 'age') {
+      const currentValues = newParams.get(key)?.split(',') ?? [];
+      const filteredValues = currentValues.filter((v) => v !== valueToRemove);
+      if (filteredValues.length === 0) {
         newParams.delete(key);
       } else {
-        newParams.set(key, filteredTypes.join(','));
+        newParams.set(key, filteredValues.join(','));
       }
     } else {
       newParams.delete(key);

@@ -12,6 +12,8 @@ export default function getEventFiltersFromSearchParams(
   const filters: EventFilters = {};
   const typeParam = searchParams.type;
   const ageParam = searchParams.age;
+  const dateParam = Array.isArray(searchParams.date) ? searchParams.date[0] : searchParams.date;
+
   if (typeParam) {
     const typeString = Array.isArray(typeParam) ? typeParam.join(',') : typeParam;
     filters.type = parseEventByKey(typeString) as eventType[];
@@ -24,12 +26,10 @@ export default function getEventFiltersFromSearchParams(
       filters.ageGroup = group;
     }
   }
-
-  const dateParam = Array.isArray(searchParams.date) ? searchParams.date[0] : searchParams.date;
-
+  
   if (dateParam) {
     const [year, month, day] = dateParam.split('-').map(Number);
-    filters.onDate = new Date(Date.UTC(year, month - 1, day)); // avoids timezone bugs
+    filters.onDate = new Date(Date.UTC(year, month - 1, day + 1)); // avoids timezone bugs
   }
 
   return filters;

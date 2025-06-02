@@ -1,5 +1,4 @@
-import MainBanner from "@/components/banners/mainBanner/MainBanner";
-
+"use server"
 export default async function EventsLayout({
   children,
   modal,

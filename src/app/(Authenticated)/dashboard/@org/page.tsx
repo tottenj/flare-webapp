@@ -11,13 +11,16 @@ import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture'
 import EditProfileButton from '@/components/buttons/editProfile/EditProfileButton';
 import { Suspense } from 'react';
 import GeneralLoader from '@/components/loading/GeneralLoader';
+import EventInfo from '@/components/events/EventInfo';
 
 export default async function OrgDashboardPage() {
-  const { fire, currentUser, firebaseServerApp } = await getFirestoreFromServer();
+  const { fire, currentUser } = await getFirestoreFromServer();
   if (!currentUser) return null;
 
   let isOrg = false;
   let org = null;
+
+  
   try {
     const { claims } = await verifyOrg(currentUser);
     isOrg = claims;
@@ -26,51 +29,52 @@ export default async function OrgDashboardPage() {
     console.log(error);
     redirect('/');
   }
-
   if (!org || !isOrg) redirect('/');
 
   const eventFilters: EventFilters = { flare_id: currentUser.uid };
   const events = await Event.queryEvents(fire, eventFilters);
 
   return (
-    <div className="flex justify-center gap-8 items-start">
-      <div className="flex w-1/2 flex-col rounded-2xl bg-white p-4">
-        <h2>Member Details</h2>
-        <div className="flex flex-col mt-4">
-          <div className="flex gap-8">
-            <div>
-              <Suspense fallback={<GeneralLoader />}>
-                <ProfilePicture size={100} />
-              </Suspense>
+    <div className="flex flex-col items-start justify-center gap-8 lg:flex-row">
+      <div className="flex w-full flex-col justify-between gap-8 lg:w-1/2">
+        <div className="flex w-full flex-col rounded-2xl bg-white p-4">
+          <h2>Member Details</h2>
+          <div className="mt-4 flex flex-col">
+            <div className="flex gap-8">
+              <div>
+                <Suspense fallback={<GeneralLoader />}>
+                  <ProfilePicture size={100} />
+                </Suspense>
 
-              <EditProfileButton />
-            </div>
-            <div>
-              <p>
-                <b>Organization Name: </b>
-                {org.name}
-              </p>
-              <p>
-                <b>Status: </b>
-                {org.verified ? 'Verified' : 'Pending'}
-              </p>
-              <p>
-                <b>Bio: </b>
-                {org.description}
-              </p>
-              <p>
-                <b>Primary Location: </b>
-                {org.location?.name}
-              </p>
+                <EditProfileButton />
+              </div>
+              <div>
+                <p>
+                  <b>Organization Name: </b>
+                  {org.name}
+                </p>
+                <p>
+                  <b>Status: </b>
+                  {org.verified ? 'Verified' : 'Pending'}
+                </p>
+                <p>
+                  <b>Bio: </b>
+                  {org.description}
+                </p>
+                <p>
+                  <b>Primary Location: </b>
+                  {org.location?.name}
+                </p>
+              </div>
             </div>
           </div>
         </div>
+        {events.length > 0 && <EventInfo slug={events[0].id} />}
       </div>
-      <div className="flex w-1/2 flex-col items-center rounded-2xl bg-white p-4 h-vh">
-      
-      <h2>My Events</h2>
+      <div className="flex w-full flex-col items-center rounded-2xl bg-white p-4 lg:min-h-[800px] lg:w-1/2">
+        <h2>My Events</h2>
         <AddEventModal />
-        <div className="mt-4 w-full flex flex-col gap-4">
+        <div className="mt-4 flex w-full flex-col gap-4">
           {events.length > 0 ? (
             events.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
           ) : (

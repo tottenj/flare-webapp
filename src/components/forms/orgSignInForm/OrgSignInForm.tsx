@@ -13,6 +13,7 @@ import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
 import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
 import FlareLocation from '@/lib/types/Location';
 import { formErrors, orgSocials } from '@/lib/utils/text/text';
+import { useWindowSize } from '@uidotdev/usehooks';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
@@ -25,8 +26,8 @@ export default function OrgSignInForm() {
   const [confirmPass, setConfirmPass] = useState('');
   const [passStatus, setPassStatus] = useState(false);
   const router = useRouter();
-  const {validFiles, handleFileChange} = useFileChange()
-    
+  const { validFiles, handleFileChange } = useFileChange();
+  const { width } = useWindowSize();
 
   useEffect(() => {
     if (state.message === 'success' && state.orgId && !pending) {
@@ -69,10 +70,9 @@ export default function OrgSignInForm() {
     }
   }
 
-
   return (
-    <div className="@container mt-8 mb-8 flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
-      <ServerLogo size="xLarge" />
+    <div className="@container mt-8 mb-8 flex w-full flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
+      <ServerLogo size={width && width <= 1024 ? `medium` : 'xLarge'} />
       <div className="absolute top-0 right-0 mt-4 mr-4">
         <LinkInput style={{ padding: '0.5rem' }} href="/signup" text="User Sign Up" />
       </div>
@@ -86,9 +86,18 @@ export default function OrgSignInForm() {
       </p>
       <form className="w-full" action={action.bind(loc)} onSubmit={handleSubmit}>
         <FormSection text="General Information">
-          <div className="mt-4 flex justify-between">
-            <TextInput label="Organization Name" name="orgName" size="Double" />
-            <TextInput label="Organization Email" name="orgEmail" size="Double" type="email" />
+          <div className="mt-4 flex flex-col justify-between lg:flex-row">
+            <TextInput
+              label="Organization Name"
+              name="orgName"
+              size={width && width <= 1024 ? 'Auto' : 'Double'}
+            />
+            <TextInput
+              label="Organization Email"
+              name="orgEmail"
+              size={width && width <= 1024 ? 'Auto' : 'Double'}
+              type="email"
+            />
           </div>
           <div className="mb-4">
             <PlaceSearch loc={setloc} lab="Location" />
@@ -121,10 +130,15 @@ A screenshot of your profile settings or admin dashboard
 A recent post clearly showing your organization’s name or branding
 This information stays private and is only used for verification purposes."
         >
-          <div className="mt-8 flex justify-between">
+          <div className="mt-8 flex flex-col justify-between lg:flex-row">
             {Object.values(orgSocials).map((social) => (
-              <div key={social} className="flex w-[30%] flex-col">
-                <TextInput reqired={false} label={social} name={social} size="Large" />
+              <div key={social} className="flex w-full flex-col lg:w-[30%]">
+                <TextInput
+                  reqired={false}
+                  label={social}
+                  name={social}
+                  size={width && width <= 1024 ? 'XLarge' : 'Large'}
+                />
                 <FileInput
                   name={social}
                   onChange={(file) => handleFileChange(social, file)}

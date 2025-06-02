@@ -12,6 +12,7 @@ import {
   GeoPoint,
   QueryDocumentSnapshot,
   SnapshotOptions,
+  Timestamp,
 } from 'firebase/firestore';
 import { FirebaseStorage } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
@@ -113,11 +114,12 @@ export default class Event {
     const whereClauses: WhereClause[] = [];
     if (filters.onDate) {
       const startOfDay = new Date(filters.onDate);
+      
       startOfDay.setHours(0, 0, 0, 0);
       const endOfDay = new Date(filters.onDate);
       endOfDay.setHours(23, 59, 59, 999);
-      whereClauses.push(['startDate', '>=', startOfDay]);
-      whereClauses.push(['startDate', '<=', endOfDay]);
+      whereClauses.push(['startDate', '>=', Timestamp.fromDate(startOfDay)]);
+      whereClauses.push(['startDate', '<=', Timestamp.fromDate(endOfDay)]);
     }
 
     if (filters.flare_id) whereClauses.push(['flareId', '==', filters.flare_id]);

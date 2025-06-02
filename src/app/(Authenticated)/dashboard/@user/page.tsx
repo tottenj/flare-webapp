@@ -1,3 +1,4 @@
+"use server"
 import UserDashboard from '@/components/dashboards/UserDashboard';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 

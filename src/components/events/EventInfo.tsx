@@ -1,3 +1,4 @@
+"use server"
 import Event from '@/lib/classes/event/Event';
 import Image from 'next/image';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
@@ -18,7 +19,7 @@ export default async function EventInfo({ slug }: { slug: string }) {
         <p>{org?.name ? 'Hosted By ' + org.name : ''}</p>
         <div className="mt-4 flex w-full gap-8">
           {img && (
-            <div className="relative h-auto min-h-[400px] w-1/2 overflow-hidden rounded-xl shadow-md md:w-1/2">
+            <div className="relative h-auto min-h-[200px] lg:min-h-[400px] w-1/2 overflow-hidden rounded-xl shadow-md md:w-1/2">
               <Image
                 src={img}
                 alt={event.title}
