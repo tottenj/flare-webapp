@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: oklch(16.15% 0.0828 273.4);
+  --flareRed: #FF005C;
   --textGradients: linear-gradient(135deg, #ffa301, #ff005c);
 }
 

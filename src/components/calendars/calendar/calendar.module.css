@@ -27,7 +27,7 @@
  }
 
  .calendarWrapper :global(.rdp-weekday){
-  text-align: left;
+  text-align: center;
   font-family: var(--font-nunito);
   font-weight: bold;
  }
@@ -46,6 +46,15 @@
   height:100%;
  }
 
+ .calendarWrapper :global(.rdp-month_caption){
+  font-size: x-large;
+ }
+
+ .calendarWrapper :global(.rdp-chevron){
+  fill: var(--foreground);
+  opacity: 0.5;
+ }
+
  .calendarWrapper :global(.rdp-month){
   width: 100%;
   height: 100%;
@@ -56,7 +65,6 @@
   width: 100%;
   height: 90%;
  }
-
 
  .dayCell {
   display: flex;
@@ -69,6 +77,10 @@
   width: 100%;
 }
   
+.calendarWrapper :global(.rdp-today:not(.rdp-outside)) {
+    color: var(--flareRed);
+}
+
 .dotContainer {
   display: flex;
   margin-top: 4px;
