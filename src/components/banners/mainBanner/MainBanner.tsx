@@ -12,7 +12,7 @@ export default async function MainBanner() {
   const { currentUser } = await getClaims();
 
   return (
-    <div className="relative -ml-[calc((100vw-100%)/2)] flex w-screen items-center justify-between bg-white/80 p-4">
+    <div className="relative -ml-[calc((100vw-100%)/2)] flex w-screen h-1/10 items-center justify-between bg-white/80 p-4">
       <Link href={'/'}>
         <ServerLogo size="medium" />
       </Link>
