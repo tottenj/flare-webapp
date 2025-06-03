@@ -9,11 +9,12 @@ import {
   SnapshotOptions,
 } from 'firebase/firestore';
 import Collections from '../../enums/collections';
-import { addDocument, getDocument, updateDocument } from '@/lib/firebase/firestore/firestoreOperations';
+import { addDocument, deleteDocument, getAllDocuments, getDocument, updateDocument } from '@/lib/firebase/firestore/firestoreOperations';
 import { isUser } from '@/lib/utils/other/isUser';
 import { db } from '@/lib/firebase/auth/configs/clientApp';
 import { FirebaseStorage } from 'firebase/storage';
 import { getFile } from '@/lib/firebase/storage/storageOperations';
+import Event from '../event/Event';
 
 export default class FlareUser {
   id: string;
@@ -44,15 +45,15 @@ export default class FlareUser {
   static emptyUser = new FlareUser('123', 'example@gmail.com');
 
   static async getUserById(id: string, dab: Firestore = db): Promise<FlareUser | null> {
-    const userDoc = await getDocument(dab, `${Collections.Users}/profile/${id}`, userConverter)
-    if(userDoc.exists()){
-      return userDoc.data()
-    }else{
-      return null
+    const userDoc = await getDocument(dab, `${Collections.Users}/${id}`, userConverter);
+    if (userDoc.exists()) {
+      return userDoc.data();
+    } else {
+      return null;
     }
   }
 
-  async getProfilePic(firestoredb:Firestore, storage:FirebaseStorage){
+  async getProfilePic(firestoredb: Firestore, storage: FirebaseStorage) {
     const pic = await getDocument(
       firestoredb,
       `${Collections.Organizations}/${this.id}`,
@@ -66,15 +67,48 @@ export default class FlareUser {
     }
   }
 
-  async updateUser(dab: Firestore, data:Partial<FlareUser>){
-    if(!this.id) return false
-    await updateDocument(dab, `${Collections.Users}/${this.id}`, data, userConverter, ['id'])
+  async updateUser(dab: Firestore, data: Partial<FlareUser>) {
+    if (!this.id) return false;
+    await updateDocument(dab, `${Collections.Users}/${this.id}`, data, userConverter, ['id']);
   }
 
   async addUser(dab: Firestore = db): Promise<boolean> {
-    if(!this.id) return false
-    await addDocument(dab, `${Collections.Users}/${this.id}`,this, userConverter)
-    return true
+    if (!this.id) return false;
+    await addDocument(dab, `${Collections.Users}/${this.id}`, this, userConverter);
+    return true;
+  }
+
+  async hasSavedEvent(firestoredb: Firestore, eventId: string) {
+    const doc = await getDocument(
+      firestoredb,
+      `${Collections.Users}/${this.id}/${Collections.Saved}/${eventId}`
+    );
+
+    if (doc.exists()) return true;
+    return false;
+  }
+
+  async addSavedEvent(firestoreDb: Firestore, eventId: string) {
+    await addDocument(
+      firestoreDb,
+      `${Collections.Users}/${this.id}/${Collections.Saved}/${eventId}`,
+      { id: eventId }
+    );
+  }
+
+  async getAllSavedEvents(firestoreDb: Firestore){
+    const docs = await getAllDocuments(firestoreDb, `${Collections.Users}/${this.id}/${Collections.Saved}`)
+    const ids = docs.map((doc) => doc.id)
+    const events = await Promise.all(ids.map((id) => Event.getEvent(firestoreDb, id)));
+    const existingEvents = events.filter((event): event is NonNullable<typeof event> =>Boolean(event));
+    return existingEvents
+  }
+
+  async removeSavedEvent(firestoreDb: Firestore, eventId: string) {
+    await deleteDocument(
+      firestoreDb,
+      `${Collections.Users}/${this.id}/${Collections.Saved}/${eventId}`
+    );
   }
 }
 

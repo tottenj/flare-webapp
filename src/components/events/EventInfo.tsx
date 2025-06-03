@@ -1,25 +1,45 @@
-"use server"
+'use server';
 import Event from '@/lib/classes/event/Event';
 import Image from 'next/image';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import Link from 'next/link';
+import BookmarkButton from '../buttons/bookmarkButton/BookmarkButton';
+import FlareUser from '@/lib/classes/flareUser/FlareUser';
 
 export default async function EventInfo({ slug }: { slug: string }) {
-  const { firestore, storage } = await getServicesFromServer();
+  const { firestore, storage, currentUser } = await getServicesFromServer();
   const event = await Event.getEvent(firestore, slug);
   if (!event) return <p>Event not found</p>;
   const org = await FlareOrg.getOrg(firestore, event.flare_id);
   const img = await event.getImage(storage);
 
+  let hasSeen = false;
+
+  if (currentUser) {
+    const a = await currentUser?.getIdTokenResult();
+    if (a?.claims.organization) {
+      const o = await FlareOrg.getOrg(firestore, currentUser.uid);
+      if(o){
+        hasSeen = await o.hasSavedEvent(firestore, event.id)
+      }
+    } else {
+      const u = await FlareUser.getUserById(currentUser.uid, firestore)
+      if(u){
+        hasSeen = await u.hasSavedEvent(firestore, event.id)
+      }
+    }
+  }
+
   return (
     <div className="w-full rounded-2xl bg-white p-4">
+      <BookmarkButton seen={hasSeen} event={event.id} />
       <div className="flex h-auto w-full flex-col items-center">
         <h1>{event.title}</h1>
         <p>{org?.name ? 'Hosted By ' + org.name : ''}</p>
         <div className="mt-4 flex w-full gap-8">
           {img && (
-            <div className="relative h-auto min-h-[200px] lg:min-h-[400px] w-1/2 overflow-hidden rounded-xl shadow-md md:w-1/2">
+            <div className="relative h-auto min-h-[200px] w-1/2 overflow-hidden rounded-xl shadow-md md:w-1/2 lg:min-h-[400px]">
               <Image
                 src={img}
                 alt={event.title}

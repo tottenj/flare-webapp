@@ -45,7 +45,6 @@ export default async function OrgDashboardPage() {
                 <Suspense fallback={<GeneralLoader />}>
                   <ProfilePicture size={100} />
                 </Suspense>
-
                 <EditProfileButton />
               </div>
               <div>

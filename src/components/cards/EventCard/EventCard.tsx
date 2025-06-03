@@ -12,9 +12,6 @@ interface eventCardProps {
   event: PlainEvent;
 }
 
-
-
-
 export default function EventCard({ event }: eventCardProps) {
   const sameDate = isSameDate(event.startDate, event.endDate)
   const sameTime = isSameTime(event.startDate, event.endDate)

@@ -12,6 +12,7 @@ const firestoreSettings:  FirestoreSettings = {
 export const getFirestoreFromServer = cache(async () => {
   const {firebaseServerApp, currentUser} = await getAuthenticatedAppForUser()
   const fire = initializeFirestore(firebaseServerApp, firestoreSettings);
+
   if(process.env.MODE === "test"){
     console.log("Connecting firestore emulator")
     connectFirestoreEmulator(fire, '127.0.0.1', 8080);
