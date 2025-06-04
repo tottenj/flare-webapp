@@ -16,7 +16,7 @@
     "cypress:open": "wait-on http://localhost:3000 && cypress open",
     "format": "prettier --write .",
     "test-storybook": "vitest --project=storybook",
-    "emulators:start": "firebase emulators:start --import testData --export-on-exit testdata",
+    "emulators:start": "firebase emulators:start --import testdata --export-on-exit testdata",
     "cypress:run": "cypress run",
     "cypressFire": "concurrently -k -s first \"npm run emulators:start\" \"npm run dev\" \"npm run cypress:open\"",
     "dev:emulators": "concurrently -k -s first \"npm run emulators:start\" \"cross-env FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 STORAGE_EMULATOR_HOST=127.0.0.1:9199 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 NEXT_PUBLIC_MODE=test MODE=test npm run dev\""

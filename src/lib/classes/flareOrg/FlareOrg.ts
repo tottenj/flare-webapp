@@ -42,7 +42,7 @@ export default class FlareOrg {
     verified?: boolean
   );
 
-  // The implementation signature matches the first overload, but we handle both cases inside
+
   constructor(
     idOrUser: string | User,
     name: string, // Renamed for clarity in the User case
@@ -57,15 +57,10 @@ export default class FlareOrg {
       this.email = idOrUser.email;
       this.profilePic = idOrUser.photoURL;
       this.description = description;
-      this.name = name; // Use the 'name' parameter here
-      // The third parameter in the overload (emailOrLocation) is the location for the User case
+      this.name = name; 
       this.location = emailOrLocation as flareLocation | undefined;
       this.verified = verified;
-
-      // We no longer need 'this.app' or call getFirestore here
     } else {
-      // This case assumes idOrUser is a string (the ID).
-      // Parameters are: id (string), name (string), email (string), profilePic (string), location (flareLocation)
       this.id = idOrUser;
       this.name = name;
       this.email = emailOrLocation as string;

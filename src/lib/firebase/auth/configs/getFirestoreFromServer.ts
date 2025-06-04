@@ -1,4 +1,4 @@
-
+"use server"
 import { connectFirestoreEmulator, FirestoreSettings, getFirestore, initializeFirestore } from "firebase/firestore";
 import { getAuthenticatedAppForUser } from "./serverApp";
 import { connectStorageEmulator, getStorage } from 'firebase/storage';

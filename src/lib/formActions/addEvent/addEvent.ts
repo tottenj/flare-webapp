@@ -1,11 +1,10 @@
 "use server"
 import Event from '@/lib/classes/event/Event';
+import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import AgeGroup from '@/lib/enums/AgeGroup';
 import eventType from '@/lib/enums/eventType';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
-
 import flareLocation from '@/lib/types/Location';
-import { getEnumValueByString } from '@/lib/utils/other/getEnumValueByString';
 import { revalidatePath } from 'next/cache';
 
 export default async function addEvent(prevState: any, formData: FormData) {
@@ -33,6 +32,11 @@ export default async function addEvent(prevState: any, formData: FormData) {
  
     const location: flareLocation | null = locationString ? JSON.parse(locationString) : null;
     if (!location) throw new Error('Invalid Location');
+
+    const org = await FlareOrg.getOrg(fire, currentUser.uid)
+    const verified = org?.verified ?? false
+
+
     const event = new Event(
       currentUser.uid,
       title,
@@ -43,6 +47,7 @@ export default async function addEvent(prevState: any, formData: FormData) {
       endDate,
       location,
       price,
+      verified,
       ticketLink
     );
 

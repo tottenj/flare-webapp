@@ -1,7 +1,12 @@
 import AgeGroup from '@/lib/enums/AgeGroup';
 import Collections from '@/lib/enums/collections';
 import eventType from '@/lib/enums/eventType';
-import { addDocument, getCollectionByFields, getDocument, WhereClause } from '@/lib/firebase/firestore/firestoreOperations';
+import {
+  addDocument,
+  getCollectionByFields,
+  getDocument,
+  WhereClause,
+} from '@/lib/firebase/firestore/firestoreOperations';
 import { addFile, getFile } from '@/lib/firebase/storage/storageOperations';
 import EventFilters from '@/lib/types/FilterType';
 import flareLocation from '@/lib/types/Location';
@@ -29,6 +34,7 @@ export default class Event {
   location: flareLocation;
   price: number | string;
   ticketLink?: string;
+  verified: boolean;
 
   constructor(
     flare_id: string,
@@ -40,6 +46,7 @@ export default class Event {
     endDate: Date,
     location: flareLocation,
     price: number | string,
+    verified: boolean = false,
     ticketLink?: string,
     id?: string
   ) {
@@ -53,6 +60,7 @@ export default class Event {
     this.endDate = endDate;
     this.location = location;
     this.price = price;
+    this.verified = verified;
     this.ticketLink = ticketLink;
   }
 
@@ -106,15 +114,25 @@ export default class Event {
         coordinates: new GeoPoint(41.8781, -87.6298), // Chicago
       },
       10,
+      false,
       '1'
     ),
   ];
 
-  static async queryEvents(dab: Firestore, filters: EventFilters = {}, options?: QueryOptions) {
+  static async queryEvents(
+    dab: Firestore,
+    filters: EventFilters = {},
+    options?: QueryOptions,
+    unVerified: boolean = false
+  ) {
     const whereClauses: WhereClause[] = [];
+
+    if (!unVerified) {
+      whereClauses.push(['verified', '==', true]);
+    }
+
     if (filters.onDate) {
       const startOfDay = new Date(filters.onDate);
-      
       startOfDay.setHours(0, 0, 0, 0);
       const endOfDay = new Date(filters.onDate);
       endOfDay.setHours(23, 59, 59, 999);
@@ -123,7 +141,8 @@ export default class Event {
     }
 
     if (filters.flare_id) whereClauses.push(['flareId', '==', filters.flare_id]);
-    if (filters.ageGroup && filters.ageGroup.length > 0) whereClauses.push(['ageGroup', 'in', filters.ageGroup]);
+    if (filters.ageGroup && filters.ageGroup.length > 0)
+      whereClauses.push(['ageGroup', 'in', filters.ageGroup]);
     if (filters.type && filters.type.length > 0) whereClauses.push(['type', 'in', filters.type]);
     if (filters.afterDate) whereClauses.push(['startDate', '<', filters.afterDate]);
     if (filters.beforeDate) whereClauses.push(['startDate', '>=', filters.beforeDate]);
@@ -154,6 +173,7 @@ export default class Event {
           longitude: this.location.coordinates.longitude,
         },
       },
+      verified: this.verified,
       price: this.price,
       ticketLink: this.ticketLink,
     };
@@ -167,8 +187,8 @@ export type PlainEvent = {
   description: string;
   type: string;
   ageGroup: string;
-  startDate: Date
-  endDate: Date
+  startDate: Date;
+  endDate: Date;
   location: {
     id: string;
     name?: string | null;
@@ -177,14 +197,10 @@ export type PlainEvent = {
       longitude: number;
     };
   };
+  verified: boolean;
   price?: number | string;
   ticketLink?: string;
 };
-
-
-
-
-
 
 export const eventConverter = {
   toFirestore(event: Event): DocumentData {
@@ -199,6 +215,7 @@ export const eventConverter = {
       endDate: event.endDate,
       location: event.location,
       price: event.price,
+      verified: event.verified,
       ticketLink: event.ticketLink,
     };
   },
@@ -214,6 +231,7 @@ export const eventConverter = {
       data.endDate.toDate(),
       data.location,
       data.price,
+      data.verified,
       data.ticketLink,
       data.id
     );
