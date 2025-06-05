@@ -55,12 +55,12 @@ export default async function EventView({
   return (
     <>
       <MainBanner />
-      <div className="flex h-9/10 gap-4 p-4 pt-8">
-        <div className="w-4/5 h-full">
+      <div className="flex flex-col sm:flex-row h-9/10 gap-2 sm:gap-4 p-2 sm:p-4 sm:pt-8">
+        <div className="w-full h-3/5 sm:w-4/5 sm:h-full">
           <FullPageCalendar events={plainMonthsEvents} />
         </div>
-        <div className="flex h-full w-2/5 bg-white rounded-[20px] flex-col gap-4 overflow-y-auto overflow-x-hidden">
-          <h2 className="p-4 text-center">Upcoming Events</h2>
+        <div className="flex w-full h-2/5 sm:h-full sm:w-2/5 bg-white rounded-[20px] flex-col gap-4 overflow-y-auto overflow-x-hidden">
+          <h2 className="p-2 sm:p-4 text-base sm:text-lg text-center">Upcoming Events</h2>
           {plainQueriedEvents.map((even) => (
             <EventCard key={even.id} event={even} />
           ))}
