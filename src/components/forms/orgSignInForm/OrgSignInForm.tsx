@@ -71,13 +71,13 @@ export default function OrgSignInForm() {
 
 
   return (
-    <div className="@container mt-8 mb-8 flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
-      <ServerLogo size="xLarge" />
+    <div className="@container mt-16 mb-8 flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
+      <ServerLogo size="medium" />
       <div className="absolute top-0 right-0 mt-4 mr-4">
         <LinkInput style={{ padding: '0.5rem' }} href="/signup" text="User Sign Up" />
       </div>
       <h1 className="mt-4">Organization Sign Up</h1>
-      <p className="mt-8 mb-8 text-center">
+      <p className="mt-2 mb-8 text-center">
         Welcome to Flare! We're excited to have your organization join our vibrant community. Once
         you sign up, your account will be reviewed for verification to ensure a safe and authentic
         space for everyone. While you're pending approval, you can still create events—but they
@@ -86,9 +86,9 @@ export default function OrgSignInForm() {
       </p>
       <form className="w-full" action={action.bind(loc)} onSubmit={handleSubmit}>
         <FormSection text="General Information">
-          <div className="mt-4 flex justify-between">
-            <TextInput label="Organization Name" name="orgName" size="Double" />
-            <TextInput label="Organization Email" name="orgEmail" size="Double" type="email" />
+          <div className="mt-4 gap-[8px] flex justify-between">
+            <TextInput label="Organization Name" name="orgName" size="XLarge" />
+            <TextInput label="Organization Email" name="orgEmail" size="XLarge" type="email" />
           </div>
           <div className="mb-4">
             <PlaceSearch loc={setloc} lab="Location" />
@@ -115,16 +115,12 @@ export default function OrgSignInForm() {
         </FormSection>
         <FormSection
           text="Proof of Ownership"
-          blurb="To help us verify your organization, you can optionally provide your social media handles (Instagram, Facebook, or Twitter/X) along with an image that proves you have access to the account. This speeds up the review process and helps us confirm you're representing a legitimate group. Examples of valid proof include:
-A screenshot showing you're logged into the account
-A screenshot of your profile settings or admin dashboard
-A recent post clearly showing your organization’s name or branding
-This information stays private and is only used for verification purposes."
+          blurb="To help us verify your organization, you can optionally provide your social media handles (Instagram, Facebook, or Twitter/X) along with an image that proves you have access to the account. This speeds up the review process and helps us confirm you're representing a legitimate group. Examples of valid proof include: a screenshot showing you're logged into the account, screenshot of your profile settings or admin dashboard, recent post clearly showing your organization’s name or branding. This information stays private and is only used for verification purposes."
         >
           <div className="mt-8 flex justify-between">
             {Object.values(orgSocials).map((social) => (
-              <div key={social} className="flex w-[30%] flex-col">
-                <TextInput reqired={false} label={social} name={social} size="Large" />
+              <div key={social} className="flex w-[32%] flex-col">
+                <TextInput reqired={false} label={social} name={social} size="XLarge" />
                 <FileInput
                   name={social}
                   onChange={(file) => handleFileChange(social, file)}
