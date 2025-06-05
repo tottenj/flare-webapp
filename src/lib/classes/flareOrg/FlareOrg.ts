@@ -6,14 +6,17 @@ import {
   getFirestore,
   QueryDocumentSnapshot,
   SnapshotOptions,
+  where,
 } from 'firebase/firestore';
 import flareLocation from '@/lib/types/Location';
 import {
   addDocument,
   deleteDocument,
   getAllDocuments,
+  getCollectionByFields,
   getDocument,
   updateDocument,
+  WhereClause,
 } from '@/lib/firebase/firestore/firestoreOperations';
 import Collections from '@/lib/enums/collections';
 import { FirebaseStorage } from 'firebase/storage';
@@ -86,6 +89,8 @@ export default class FlareOrg {
     if (!org.exists()) return null;
     return org.data();
   }
+
+ 
 
   async getProfilePicture(firestoredb: Firestore, storage: FirebaseStorage) {
     const pic = await getDocument(

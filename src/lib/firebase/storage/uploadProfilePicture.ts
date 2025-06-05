@@ -12,6 +12,7 @@ export default async function uploadProfilePicture(prevState: any, formData: For
   const { claims } = await getClaims();
   let isUser = true;
 
+  console.log(currentUser?.uid)
   if (claims && claims.organization == true) {
     isUser = false;
 

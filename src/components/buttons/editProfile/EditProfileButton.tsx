@@ -29,7 +29,6 @@ export default function EditProfileButton() {
     <form
       ref={formRef}
       action={action}
-      encType="multipart/form-data"
       method="post"
       className="inline"
     >

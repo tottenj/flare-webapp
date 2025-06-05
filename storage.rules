@@ -1,12 +1,42 @@
 rules_version = '2';
-
-// Craft rules based on data in your Firestore database
-// allow write: if firestore.get(
-//    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
 service firebase.storage {
   match /b/{bucket}/o {
-    match /{allPaths=**} {
-      allow read, write: if true;
+    
+    // ORG FILES
+    match /Organizations/{orgId}/instagram {
+      allow write: if true;
+      allow read: if request.auth != null && request.auth.token.admin == true
+    }
+
+     match /Organizations/{orgId}/facebook {
+      allow write: if true;
+      allow read: if request.auth != null && request.auth.token.admin == true
+    }
+
+     match /Organizations/{orgId}/twitter {
+      allow write: if true;
+      allow read: if request.auth != null && request.auth.token.admin == true
+    }
+
+     match /Organizations/{orgId}/other {
+      allow write: if true;
+      allow read: if request.auth != null && request.auth.token.admin == true
+    }
+    
+    match /Organization/{orgId}/Profile/{filename} {
+      allow read, write: if request.auth != null && request.auth.uid == orgId;
+    }
+
+    // USER FILES
+    match /users/{userId}/{fileName} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // EVENT FILES
+    match /Events/{eventId} {
+      allow read: if true; // All event images are public
+      allow write: if request.auth != null 
+        && request.auth.token.organization == true
     }
   }
 }
