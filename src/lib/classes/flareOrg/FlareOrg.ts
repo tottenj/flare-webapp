@@ -3,7 +3,6 @@ import {
   DocumentData,
   Firestore,
   GeoPoint,
-  getFirestore,
   QueryDocumentSnapshot,
   SnapshotOptions,
   where,
@@ -13,7 +12,6 @@ import {
   addDocument,
   deleteDocument,
   getAllDocuments,
-  getCollectionByFields,
   getDocument,
   updateDocument,
   WhereClause,
@@ -22,6 +20,7 @@ import Collections from '@/lib/enums/collections';
 import { FirebaseStorage } from 'firebase/storage';
 import { addFile, getFile } from '@/lib/firebase/storage/storageOperations';
 import Event from '../event/Event';
+import { Geohash, geohashForLocation } from 'geofire-common';
 
 export default class FlareOrg {
   id: string;
@@ -32,8 +31,6 @@ export default class FlareOrg {
   location?: flareLocation;
   verified?: boolean;
 
-  // Simplify overloads to focus on how you initialize the Org *data*,
-  // and always require the firestoreDb instance.
   constructor(user: User, name: string, location?: flareLocation);
   constructor(
     id: string,
@@ -44,7 +41,6 @@ export default class FlareOrg {
     location?: flareLocation,
     verified?: boolean
   );
-
 
   constructor(
     idOrUser: string | User,
@@ -60,7 +56,7 @@ export default class FlareOrg {
       this.email = idOrUser.email;
       this.profilePic = idOrUser.photoURL;
       this.description = description;
-      this.name = name; 
+      this.name = name;
       this.location = emailOrLocation as flareLocation | undefined;
       this.verified = verified;
     } else {
@@ -71,6 +67,17 @@ export default class FlareOrg {
       this.description = description;
       this.location = location;
       this.verified = verified;
+    }
+  }
+
+  get hash(): Geohash | null {
+    if (this.location) {
+      return geohashForLocation([
+        this.location.coordinates.latitude,
+        this.location.coordinates.longitude,
+      ]);
+    } else {
+      return null;
     }
   }
 
@@ -89,8 +96,6 @@ export default class FlareOrg {
     if (!org.exists()) return null;
     return org.data();
   }
-
- 
 
   async getProfilePicture(firestoredb: Firestore, storage: FirebaseStorage) {
     const pic = await getDocument(
@@ -167,6 +172,7 @@ export const orgConverter = {
       profilePic: user.profilePic,
       description: user.description,
       verified: user.verified,
+      hash: user.hash
     };
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): FlareOrg {

@@ -25,6 +25,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onIdTokenChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const token = await firebaseUser.getIdToken(true);
+       
+
         if(firebaseUser.emailVerified == false){
           toast.error("Please Verify Email")
           toast.error(`Verification email sent to: ${firebaseUser.email}`)
@@ -45,14 +47,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         setUser(firebaseUser);
 
-        if(firebaseUser.providerId == "google"){
-          const docRef = doc(db, Collections.Users, firebaseUser.uid)
-          const secondDocRef = doc(db, Collections.Organizations, firebaseUser.uid)
-          const user = await getDoc(docRef)
-          const userTwo = await getDoc(secondDocRef)
-          if(!user.exists() && !userTwo.exists()){
-            const test:FlareUserStart = {id:firebaseUser.uid, email: firebaseUser.email, profilePic:firebaseUser.photoURL, name: firebaseUser.displayName}
-            await setDoc(docRef, test)
+        if (firebaseUser.providerData.some((provider) => provider.providerId === 'google.com')) {
+          console.log('GOOGLE');
+          const docRef = doc(db, Collections.Users, firebaseUser.uid);
+          const secondDocRef = doc(db, Collections.Organizations, firebaseUser.uid);
+          console.log('GETTING USER');
+          const user = await getDoc(docRef);
+          console.log('GETTING USER TWO');
+          const userTwo = await getDoc(secondDocRef);
+          if (!user.exists() && !userTwo.exists()) {
+            console.log('CREATING DOC');
+            const test: FlareUserStart = {
+              id: firebaseUser.uid,
+              email: firebaseUser.email,
+              profilePic: firebaseUser.photoURL,
+              name: firebaseUser.displayName,
+            };
+            await setDoc(docRef, test);
           }
         }
 

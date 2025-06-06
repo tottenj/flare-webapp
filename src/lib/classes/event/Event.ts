@@ -1,6 +1,7 @@
 import AgeGroup from '@/lib/enums/AgeGroup';
 import Collections from '@/lib/enums/collections';
 import eventType from '@/lib/enums/eventType';
+import { distanceBetween, Geohash, geohashForLocation, geohashQueryBounds } from 'geofire-common';
 import {
   addDocument,
   getCollectionByFields,
@@ -12,12 +13,19 @@ import EventFilters from '@/lib/types/FilterType';
 import flareLocation from '@/lib/types/Location';
 import { QueryOptions } from '@testing-library/dom';
 import {
+  collection,
   DocumentData,
+  endAt,
   Firestore,
   GeoPoint,
+  getDocs,
+  orderBy,
+  query,
   QueryDocumentSnapshot,
   SnapshotOptions,
+  startAt,
   Timestamp,
+  where,
 } from 'firebase/firestore';
 import { FirebaseStorage } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
@@ -62,6 +70,13 @@ export default class Event {
     this.price = price;
     this.verified = verified;
     this.ticketLink = ticketLink;
+  }
+
+  get hash(): Geohash {
+    return geohashForLocation([
+      this.location.coordinates.latitude,
+      this.location.coordinates.longitude,
+    ]);
   }
 
   async addEvent(dab: Firestore) {
@@ -125,8 +140,75 @@ export default class Event {
     options?: QueryOptions,
     unVerified: boolean = false
   ) {
-    const whereClauses: WhereClause[] = [];
+    if (filters.location) {
+      console.log("LOCATION")
+      const { center, radius } = filters.location;
+      const bounds = geohashQueryBounds([center.lat, center.lng], radius * 1000);
 
+      const promises = [];
+      for (const b of bounds) {
+        const q = query(collection(dab, 'Events'), where("verified", "==", true), orderBy('hash'), startAt(b[0]), endAt(b[1]));
+        promises.push(getDocs(q));
+      }
+
+     
+      const snapshots = await Promise.all(promises);
+
+
+
+      const filteredEvents: Event[] = [];
+
+     
+      for (const snap of snapshots) {
+        for (const doc of snap.docs) {
+
+          console.log(doc.data())
+          const data = doc.data();
+          const lat = doc.get('location.coordinates.latitude');
+          const lng = doc.get('location.coordinates.longitude');
+
+          if (!lat || !lng) continue;
+
+          const distanceInKm = distanceBetween([lat, lng], [center.lat, center.lng]);
+          if (distanceInKm > radius) continue;
+
+          if (!unVerified && !data.verified) continue;
+          if (filters.flare_id && data.flare_id !== filters.flare_id) continue;
+          if (
+            filters.ageGroup &&
+            filters.ageGroup.length > 0 &&
+            !filters.ageGroup.includes(data.ageGroup)
+          )
+            continue;
+          if (filters.type && filters.type.length > 0 && !filters.type.includes(data.type))
+            continue;
+
+          if (filters.onDate) {
+            const eventDate = data.startdate ? data.startdate : data.startdate;
+            const startOfDay = new Date(filters.onDate);
+            startOfDay.setHours(0, 0, 0, 0);
+            const endOfDay = new Date(filters.onDate);
+            endOfDay.setHours(23, 59, 59, 999);
+
+            if (eventDate < startOfDay || eventDate > endOfDay) continue;
+          }
+
+          if (filters.afterDate) {
+            const eventDate = data.startdate? data.startdate : data.startdate;
+            if (eventDate < filters.afterDate) continue;
+          }
+          if (filters.beforeDate) {
+            const eventDate = data.startdate ? data.startdate : data.startdate;
+            if (eventDate > filters.beforeDate) continue;
+          }
+
+          filteredEvents.push(eventConverter.fromFirestore(doc, {} as SnapshotOptions));
+        }
+      }
+      return filteredEvents;
+    }
+
+    const whereClauses: WhereClause[] = [];
     if (!unVerified) {
       whereClauses.push(['verified', '==', true]);
     }
@@ -176,6 +258,7 @@ export default class Event {
       verified: this.verified,
       price: this.price,
       ticketLink: this.ticketLink,
+      hash: this.hash,
     };
   }
 }
@@ -200,6 +283,7 @@ export type PlainEvent = {
   verified: boolean;
   price?: number | string;
   ticketLink?: string;
+  hash: string;
 };
 
 export const eventConverter = {
@@ -217,6 +301,7 @@ export const eventConverter = {
       price: event.price,
       verified: event.verified,
       ticketLink: event.ticketLink,
+      hash: event.hash,
     };
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Event {

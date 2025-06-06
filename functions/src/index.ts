@@ -30,12 +30,17 @@ exports.createOrganization = onDocumentCreatedWithAuthContext(
 );
 
 exports.verify = onCall(async (request:CallableRequest) => {
-  if(!request.auth || request.auth.token.admin !== true || !request.data || request.data.orgId) return {message: "error"}
+  if(!request.auth || request.auth.token.admin !== true || !request.data || !request.data.orgId) return {message: "error"}
   const orgId = request.data.orgId
   const writer = firestore.batch();
 
   try{
-  await auth.setCustomUserClaims(orgId, {verified: true})
+    const usr = await auth.getUser(orgId)
+    const claims = usr.customClaims || {}
+
+  await auth.setCustomUserClaims(orgId, {...claims, verified: true})
+  const orgDoc = await firestore.collection("Organizations").doc(orgId).get()
+  writer.update(orgDoc.ref, {verified: true})
   const events = await firestore.collection("Events").where("flareId", "==", orgId).get()
    events.docs.forEach((doc) => {
     writer.update(doc.ref, {verified: true})

@@ -23,12 +23,12 @@ service firebase.storage {
       allow read: if request.auth != null && request.auth.token.admin == true
     }
     
-    match /Organization/{orgId}/Profile/{filename} {
+    match /Organizations/{orgId}/profile {
       allow read, write: if request.auth != null && request.auth.uid == orgId;
     }
 
     // USER FILES
-    match /users/{userId}/{fileName} {
+    match /users/{userId}/profile{
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
@@ -38,5 +38,7 @@ service firebase.storage {
       allow write: if request.auth != null 
         && request.auth.token.organization == true
     }
+
+
   }
 }

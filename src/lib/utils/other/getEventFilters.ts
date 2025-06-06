@@ -14,6 +14,24 @@ export default function getEventFiltersFromSearchParams(
   const ageParam = searchParams.age;
   const dateParam = Array.isArray(searchParams.date) ? searchParams.date[0] : searchParams.date;
 
+  const latParam = searchParams.lat
+  const lngParam = searchParams.lng
+  const radiusParam = searchParams.radius
+
+
+  if (latParam && lngParam && radiusParam) {
+    const lat = parseFloat(latParam as string);
+    const lng = parseFloat(lngParam as string);
+    const radius = parseFloat(radiusParam as string);
+
+    if (!isNaN(lat) && !isNaN(lng) && !isNaN(radius)) {
+      filters.location = {
+        center: { lat, lng },
+        radius: radius,
+      };
+    }
+  }
+
   if (typeParam) {
     const typeString = Array.isArray(typeParam) ? typeParam.join(',') : typeParam;
     filters.type = parseEventByKey(typeString) as eventType[];

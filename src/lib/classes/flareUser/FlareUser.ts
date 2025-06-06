@@ -101,6 +101,7 @@ export default class FlareUser {
     const ids = docs.map((doc) => doc.id)
     const events = await Promise.all(ids.map((id) => Event.getEvent(firestoreDb, id)));
     const existingEvents = events.filter((event): event is NonNullable<typeof event> =>Boolean(event));
+    existingEvents.sort((a, b) => a.startdate.getTime() - b.startdate.getTime());
     return existingEvents
   }
 

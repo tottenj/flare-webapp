@@ -1,5 +1,4 @@
 "use server"
-import type { Metadata } from 'next';
 import { Nunito, PT_Sans } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/context/AuthContext';
@@ -10,6 +9,8 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css'; // Import the CSS
+import { Providers } from './appProvider';
+
 
 config.autoAddCss = false;
 
@@ -46,7 +47,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <div className='flex justify-center'>
           <div className="mb-4 w-11/12 max-w-[1700px]">
             <ServerUserProvider user={userData}>
-              <AuthProvider>{children}</AuthProvider>
+              <AuthProvider><Providers>{children}</Providers></AuthProvider>
               <Analytics />
               <SpeedInsights />
               <ToastContainer position="bottom-right" />

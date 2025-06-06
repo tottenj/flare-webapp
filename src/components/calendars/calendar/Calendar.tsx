@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PlainEvent } from '@/lib/classes/event/Event';
 import getKeyByValue from '@/lib/utils/other/getKeyByValue';
 import eventType from '@/lib/enums/eventType';
+import { toLocalDateKey } from '@/lib/utils/other/toLocaleDateString';
 
 //TO DO - Write TESTs
 
@@ -27,7 +28,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
 
   const eventMap: Record<string, string[]> = events.reduce(
     (acc, event) => {
-      const dateKey = new Date(event.startDate).toISOString().split('T')[0];
+      const dateKey = toLocalDateKey(new Date(event.startDate));
       const color = event.type; // This is already an OKLCH color string
       if (!acc[dateKey]) acc[dateKey] = [];
       acc[dateKey].push(color);
@@ -37,7 +38,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
   );
 
   function isEventDay(day: Date): string[] {
-    const key = day.toISOString().split('T')[0];
+    const key = toLocalDateKey(day);
     return eventMap[key] || [];
   }
 
@@ -55,7 +56,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
       <td
         onClick={() => {
           const currentDate = searchParams.get('date');
-          const newDate = day.date.toISOString().split('T')[0];
+          const newDate = day.date.toLocaleDateString('sv-SE'); // "YYYY-MM-DD"
 
           if (currentDate === newDate) return;
 
@@ -69,7 +70,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
               <div className={styles.dotContainer}>
                 {Object.entries(
                   eventColors.reduce<Record<string, number>>((acc, color) => {
-                    acc[color] = (acc[color] || 0) + 1;
+                    acc[color] = (acc[color] || 0) ;
                     return acc;
                   }, {})
                 ).map(([color, count], index) => (
@@ -82,12 +83,14 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
                       const params = new URLSearchParams(searchParams.toString());
                       const clickedType = getKeyByValue(eventType, color);
                       const currentType = params.get('type');
-                      const newDate = day.date.toISOString().split('T')[0];
+                      const newDate = toLocalDateKey(day.date);
+                
 
-                      // Always set date
+
+                    
                       params.set('date', newDate);
 
-                      // Toggle type: remove if it's the same, otherwise set
+                    
                       if (clickedType) {
                         // Get existing types as array
                         const currentTypesStr = params.get('type') || '';
