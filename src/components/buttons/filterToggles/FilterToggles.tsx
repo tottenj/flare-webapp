@@ -22,6 +22,11 @@ const FILTER_CONFIG: Record<FilterKey, FilterToggleConfig> = {
     label: (value) => `Age: ${value}`,
     colorClass: 'bg-green',
   },
+
+  location:{
+    label: (value) => `Location ${value}`,
+    colorClass: `bg-yellow`
+  }
 };
 
 export default function FilterToggles() {
@@ -56,7 +61,13 @@ export default function FilterToggles() {
       } else {
         newParams.set(key, filteredValues.join(','));
       }
-    } else {
+    } else if (key == 'location'){
+      newParams.delete('location')
+      newParams.delete('lat')
+      newParams.delete('lng')
+      newParams.delete('radius')
+    }
+    else {
       newParams.delete(key);
     }
 

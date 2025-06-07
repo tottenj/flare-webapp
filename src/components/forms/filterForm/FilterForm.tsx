@@ -40,10 +40,12 @@ export default function FilterForm({ close }: { close: () => void }) {
       params.set('lat', loc.coordinates.latitude.toString());
       params.set('lng', loc.coordinates.longitude.toString());
       params.set('radius', distance.toString());
+      params.set('location', loc.name?.toString() ?? '')
     } else {
       params.delete('lat');
       params.delete('lng');
       params.delete('radius');
+      params.delete('location')
     }
 
     if (ageRange.length > 0) {

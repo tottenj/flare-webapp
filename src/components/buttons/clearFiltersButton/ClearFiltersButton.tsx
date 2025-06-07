@@ -13,7 +13,7 @@ export default function ClearFiltersButton() {
     const params = new URLSearchParams(searchParams.toString());
 
     // Define which filter keys to delete
-    const keysToDelete = ['onDate','date', 'type', 'category', 'location', 'lat', 'lng', 'radius', 'age']; // adjust based on your filters
+    const keysToDelete = ['onDate','date', 'type', 'category', 'location', 'lat', 'lng', 'radius', 'age', 'location']; // adjust based on your filters
 
     keysToDelete.forEach((key) => {
       params.delete(key);
