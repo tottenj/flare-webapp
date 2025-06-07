@@ -4,6 +4,7 @@ import EventCard from '@/components/cards/EventCard/EventCard';
 import EventInfo from '@/components/events/EventInfo';
 import GeneralLoader from '@/components/loading/GeneralLoader';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
+import Event from '@/lib/classes/event/Event';
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import { redirect } from 'next/navigation';
@@ -14,10 +15,13 @@ export default async function UserDashboardPage() {
   if (!currentUser) redirect('/events');
   const flareU = await FlareUser.getUserById(currentUser?.uid, fire);
   if (!flareU) return null;
-  const savedEvents = await flareU.getAllSavedEvents(fire);
 
-
-
+  let savedEvents: Event[] = [];
+  try {
+    savedEvents = await flareU.getAllSavedEvents(fire);
+  } catch (error) {
+    console.log(error);
+  }
 
   return (
     <div className="flex w-full justify-between gap-8 rounded-2xl p-4">
@@ -46,7 +50,9 @@ export default async function UserDashboardPage() {
           </div>
         </div>
         {}
-        <div className="bg-white">{savedEvents.length > 0 && <EventInfo slug={savedEvents[0].id} />}</div>
+        <div className="bg-white">
+          {savedEvents.length > 0 && <EventInfo slug={savedEvents[0].id} />}
+        </div>
       </div>
 
       <div className="flex w-1/2 flex-col rounded-2xl bg-white p-4 lg:min-h-[800px]">

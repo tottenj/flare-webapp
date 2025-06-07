@@ -18,6 +18,7 @@ import addEvent from '@/lib/formActions/addEvent/addEvent';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
 import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
 import flareLocation from '@/lib/types/Location';
+import { useRouter } from 'next/navigation';
 import React, { SetStateAction, useActionState, useEffect, useState } from 'react';
 
 interface addEventFormProps {
@@ -28,21 +29,31 @@ export default function AddEventForm({ setClose }: addEventFormProps) {
   const [state, action, pending] = useActionState(addEvent, initialState);
   const { validFiles, handleFileChange } = useFileChange();
   const [loc, setloc] = useState<flareLocation | null>(null);
+  const [loadingImage, setLoadingImage] = useState(false)
   useActionToast(state, pending);
+  const router = useRouter()
 
   useEffect(() => {
     if (state.message === 'success' && !pending && state.eventId) {
       (async () => {
+        setLoadingImage(true)
         if (!state.eventId) return;
         await Event.uploadImages(
           state.eventId,
           storage,
           validFiles.map((file) => file.file)
         );
-        setClose(false);
+        setLoadingImage(false)
       })();
     }
   }, [state, pending]);
+
+
+  useEffect(() => {
+    if(state.message == 'success' && loadingImage == false )
+      setClose(false);
+      router.refresh()
+  },[loadingImage, state.message])
 
   return (
     <>
@@ -75,7 +86,6 @@ export default function AddEventForm({ setClose }: addEventFormProps) {
           name="tickets"
           reqired={false}
         />
-        ;
         <PrimaryButton type="submit" />
       </form>
     </>

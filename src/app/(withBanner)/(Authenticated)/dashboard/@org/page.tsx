@@ -12,15 +12,26 @@ import EditProfileButton from '@/components/buttons/editProfile/EditProfileButto
 import { Suspense } from 'react';
 import GeneralLoader from '@/components/loading/GeneralLoader';
 import EventInfo from '@/components/events/EventInfo';
+import OrgTabs from '@/components/tabs/orgTabs/OrgTabs';
+import SavedEvents from '@/components/events/savedEvents/SavedEvents';
+import { QueryOptions } from '@/lib/firebase/firestore/firestoreOperations';
 
-export default async function OrgDashboardPage() {
+export default async function OrgDashboardPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const [{ slug }, resolvedSearchParams] = await Promise.all([params, searchParams]);
+  const { tab } = resolvedSearchParams;
+
   const { fire, currentUser } = await getFirestoreFromServer();
   if (!currentUser) return null;
 
   let isOrg = false;
   let org = null;
 
-  
   try {
     const { claims } = await verifyOrg(currentUser);
     isOrg = claims;
@@ -31,14 +42,21 @@ export default async function OrgDashboardPage() {
   }
   if (!org || !isOrg) redirect('/events');
 
-  const eventFilters: EventFilters = { flare_id: currentUser.uid };
-  const events = await Event.queryEvents(fire, eventFilters, {}, true);
-
+  let events: Event[] = [];
+  let saved: Event[] = [];
+  try {
+    const eventFilters: EventFilters = { flare_id: currentUser.uid };
+    const options: QueryOptions = { orderByField: 'createdAt', orderDirection: 'desc' };
+    events = await Event.queryEvents(fire, eventFilters, options, true);
+    saved = await org.getAllSavedEvents(fire);
+  } catch (error) {
+    console.log(error);
+  }
 
   return (
     <div className="flex flex-col items-start justify-center gap-8 lg:flex-row">
       <div className="flex w-full flex-col justify-between gap-8 lg:w-1/2">
-        <div className="flex w-full flex-col rounded-2xl bg-white p-4">
+        <div className="mt-[40px] flex w-full flex-col rounded-2xl bg-white p-4">
           <h2>Member Details</h2>
           <div className="mt-4 flex flex-col">
             <div className="flex gap-8">
@@ -71,15 +89,25 @@ export default async function OrgDashboardPage() {
         </div>
         {events.length > 0 && <EventInfo slug={events[0].id} />}
       </div>
-      <div className="flex w-full flex-col items-center rounded-2xl bg-white p-4  lg:min-h-[800px] lg:w-1/2">
-        <h2>My Events</h2>
-        <AddEventModal />
-        <div className="mt-4 flex w-full flex-col gap-4">
-          {events.length > 0 ? (
-            events.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
-          ) : (
-            <p className="text-gray-500">No events yet. Start by creating one!</p>
-          )}
+      <div className="flex w-full flex-col items-center lg:w-1/2">
+        <OrgTabs />
+        <div className="z-10 mt-[40px] w-full rounded-2xl bg-white p-4 lg:min-h-[800px]">
+          {!tab ||
+            (tab === 'myEvents' && (
+              <>
+                <h2>My Events</h2>
+                <AddEventModal />
+
+                <div className="mt-4 flex w-full flex-col gap-4">
+                  {events.length > 0 ? (
+                    events.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
+                  ) : (
+                    <p className="text-gray-500">No events yet. Start by creating one!</p>
+                  )}
+                </div>
+              </>
+            ))}
+          {tab && tab === 'savedEvents' && saved.length > 0 && <SavedEvents savedEvents={saved} />}
         </div>
       </div>
     </div>

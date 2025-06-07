@@ -6,12 +6,13 @@ import {
   addDocument,
   getCollectionByFields,
   getDocument,
+  QueryOptions,
   WhereClause,
 } from '@/lib/firebase/firestore/firestoreOperations';
 import { addFile, getFile } from '@/lib/firebase/storage/storageOperations';
 import EventFilters from '@/lib/types/FilterType';
 import flareLocation from '@/lib/types/Location';
-import { QueryOptions } from '@testing-library/dom';
+
 import {
   collection,
   DocumentData,
@@ -43,6 +44,7 @@ export default class Event {
   price: number | string;
   ticketLink?: string;
   verified: boolean;
+  createdAt: Date
 
   constructor(
     flare_id: string,
@@ -55,6 +57,7 @@ export default class Event {
     location: flareLocation,
     price: number | string,
     verified: boolean = false,
+    createdAt: Date = new Date(),
     ticketLink?: string,
     id?: string
   ) {
@@ -69,6 +72,7 @@ export default class Event {
     this.location = location;
     this.price = price;
     this.verified = verified;
+    this.createdAt = createdAt;
     this.ticketLink = ticketLink;
   }
 
@@ -78,6 +82,8 @@ export default class Event {
       this.location.coordinates.longitude,
     ]);
   }
+
+ 
 
   async addEvent(dab: Firestore) {
     await addDocument(dab, `${Collections.Events}/${this.id}`, this, eventConverter);
@@ -130,6 +136,7 @@ export default class Event {
       },
       10,
       false,
+      new Date(),
       '1'
     ),
   ];
@@ -141,7 +148,6 @@ export default class Event {
     unVerified: boolean = false
   ) {
     if (filters.location) {
-      console.log("LOCATION")
       const { center, radius } = filters.location;
       const bounds = geohashQueryBounds([center.lat, center.lng], radius * 1000);
 
@@ -256,8 +262,10 @@ export default class Event {
         },
       },
       verified: this.verified,
+      createdAt: this.createdAt,
       price: this.price,
       ticketLink: this.ticketLink,
+      
       hash: this.hash,
     };
   }
@@ -281,6 +289,7 @@ export type PlainEvent = {
     };
   };
   verified: boolean;
+  createdAt: Date;
   price?: number | string;
   ticketLink?: string;
   hash: string;
@@ -300,6 +309,7 @@ export const eventConverter = {
       location: event.location,
       price: event.price,
       verified: event.verified,
+      createdAt: event.createdAt,
       ticketLink: event.ticketLink,
       hash: event.hash,
     };
@@ -317,6 +327,7 @@ export const eventConverter = {
       data.location,
       data.price,
       data.verified,
+      data.createdAt.toDate(),
       data.ticketLink,
       data.id
     );

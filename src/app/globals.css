@@ -17,6 +17,7 @@
   --color-primary: oklch(16.15% 0.0828 273.4);
   --color-secondary: #5f4a4a;
   --color-tertiary: rgba(221, 218, 218, 0.5);
+  --color-danger: oklch(74.62% 0.1947 152.04);
   --color-red: oklch(64.73% 0.2385 27.3);
   --color-orange: oklch(76.97% 0.1627 74.52);
   --color-yellow: oklch(91.41% 0.1528 104.99);

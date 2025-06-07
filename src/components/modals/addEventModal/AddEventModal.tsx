@@ -22,5 +22,5 @@ export default function AddEventModal() {
         <button onClick={addMyself}>ADD MYSLF TO ADMIN</button>
       </Modal>
     </>
-  );
+  )
 }

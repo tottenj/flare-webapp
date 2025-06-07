@@ -48,6 +48,7 @@ export default async function addEvent(prevState: any, formData: FormData) {
       location,
       price,
       verified,
+      new Date(),
       ticketLink
     );
 

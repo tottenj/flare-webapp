@@ -21,21 +21,23 @@ export default async function EventInfo({ slug }: { slug: string }) {
     const a = await currentUser?.getIdTokenResult();
     if (a?.claims.organization) {
       const o = await FlareOrg.getOrg(firestore, currentUser.uid);
-      if(o){
-        hasSeen = await o.hasSavedEvent(firestore, event.id)
+      if (o) {
+        hasSeen = await o.hasSavedEvent(firestore, event.id);
       }
     } else {
-      const u = await FlareUser.getUserById(currentUser.uid, firestore)
-      if(u){
-        hasSeen = await u.hasSavedEvent(firestore, event.id)
+      const u = await FlareUser.getUserById(currentUser.uid, firestore);
+      if (u) {
+        hasSeen = await u.hasSavedEvent(firestore, event.id);
       }
     }
   }
 
   return (
     <div className="w-full rounded-2xl bg-white p-4">
-      <BookmarkButton slug={slug} seen={hasSeen} event={event.id} />
- 
+      {currentUser?.uid != event.flare_id && (
+        <BookmarkButton slug={slug} seen={hasSeen} event={event.id} />
+      )}
+
       <div className="flex h-auto w-full flex-col items-center">
         <h1>{event.title}</h1>
         <p>{org?.name ? 'Hosted By ' + org.name : ''}</p>
@@ -72,7 +74,7 @@ export default async function EventInfo({ slug }: { slug: string }) {
               <p className="mt-4">{event.description}</p>
             </div>
 
-            {event.ticketLink && <Link href={event.ticketLink}>Purchase Tickets</Link>}
+            {event.ticketLink && <Link className='bg-primary text-white border-2 border-primary text-black text-center w-full hover:bg-white hover:text-primary rounded-2xl p-1 mt-4' href={event.ticketLink}>Purchase Tickets</Link>}
           </div>
         </div>
       </div>

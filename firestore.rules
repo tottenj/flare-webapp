@@ -4,7 +4,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
   
   		match /Organizations/{orgId}{
-      	allow read: if (resource != null && resource.data.verified == true) || request.auth.uid == orgId || request.auth.token.admin == true;
+      	allow read: if (resource != null && resource.data !=null && resource.data.verified == true) || request.auth != null && request.auth.uid == orgId || request.auth.token.admin == true;
         allow create: if true;
         allow update: if request.auth != null
         	&& request.auth.uid == orgId
@@ -27,8 +27,11 @@ service cloud.firestore {
       }
 			
       match /Events/{eventId} {
-      	allow read: if resource.data.verified == true || 
-             (request.auth != null && resource.data.flareId == request.auth.uid);
+      	allow read: if resource != null && resource.data != null && (
+  resource.data.verified == true || 
+  (request.auth != null && resource.data.flareId == request.auth.uid)
+);
+
         allow create, update, delete: if request.auth != null 
         	&& request.auth.token.organization == true 
           && request.resource.data.flareId == request.auth.uid
