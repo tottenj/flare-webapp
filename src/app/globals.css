@@ -6,6 +6,7 @@
 :root {
   --background: #ffffff;
   --foreground: oklch(16.15% 0.0828 273.4);
+  --flareRed: #FF005C;
   --textGradients: linear-gradient(135deg, #ffa301, #ff005c);
 }
 
@@ -72,6 +73,10 @@ body {
   font-family: var(--font-pt_sans);
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 .gradient {
   background: linear-gradient(135deg, #ffa301, #ff005c);
 }
@@ -121,9 +126,8 @@ body {
   z-index: -1;
 }
 
-
-@media only screen and (max-width: 64rem){
-  h1{
-    font-size: 2rem;
+@media (max-width: 640px) { 
+  h2 {
+    font-size: 18px;
   }
 }

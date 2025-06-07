@@ -44,8 +44,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en">
       <body className={`${nunito.variable} ${pt_sans.variable} relative antialiased`}>
         <div className="fullGradientBackground"/>
-        <div className='flex justify-center'>
-          <div className="mb-4 w-11/12 max-w-[1700px]">
+        <div className='flex justify-center h-dvh'>
+          <div className="mb-4 w-full md:w-11/12 max-w-[1700px]">
             <ServerUserProvider user={userData}>
               <AuthProvider><Providers>{children}</Providers></AuthProvider>
               <Analytics />

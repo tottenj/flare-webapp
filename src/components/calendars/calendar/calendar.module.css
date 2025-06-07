@@ -1,20 +1,20 @@
 .calendarWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Segoe UI', sans-serif;
-  font-family: var(--font-nunito);
-  font-weight: bold;
-  height: 100%;
-}
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', sans-serif;
+    font-family: var(--font-nunito);
+    font-weight: bold;
+    height: 100%;
+  }
 
 .calendarWrapper :global(.rdp-root) {
   background-color: white;
   width: 100%;
   padding: 1rem;
-  border-radius: 1rem;
+  border-radius: 16px;
   height: 100%;
-}
+ }
 
 .calendarWrapper :global(.rdp-caption_label) {
   margin-left: auto;
@@ -26,15 +26,15 @@
   width: 100%;
 }
 
-.calendarWrapper :global(.rdp-weekday) {
-  text-align: left;
+ .calendarWrapper :global(.rdp-weekday){
+  text-align: center;
   font-family: var(--font-nunito);
   font-weight: bold;
 }
 
 .calendarWrapper td {
   min-height: 60px;
-  height: 125px;
+  height: 20%;
   vertical-align: top;
   border: 1px solid var(--color-secondary);
   width: 14.5%;
@@ -43,18 +43,29 @@
 .calendarWrapper :global(.rdp-months) {
   width: 100%;
   max-width: unset;
-}
+  height:100%;
+ }
+
+ .calendarWrapper :global(.rdp-month_caption){
+  font-size: x-large;
+ }
+
+ .calendarWrapper :global(.rdp-chevron){
+  fill: var(--foreground);
+  opacity: 0.5;
+ }
 
 .calendarWrapper :global(.rdp-month) {
   width: 100%;
   height: 100%;
-}
-
-.calendarWrapper :global(.rdp-month_grid) {
+ }
+  
+ .calendarWrapper :global(.rdp-month_grid){
   width: 100%;
-}
+  height: 90%;
+ }
 
-.dayCell {
+ .dayCell {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,11 +75,14 @@
   height: 100%;
   width: 100%;
 }
+  
+.calendarWrapper :global(.rdp-today:not(.rdp-outside)) {
+    color: var(--flareRed);
+}
 
 .dotContainer {
   display: flex;
   margin-top: 4px;
-
   position: relative;
   height: 8px; /* enough room for overlap */
 }
@@ -93,14 +107,26 @@
   z-index: 10;
 }
 
-@media only screen and (max-width: 64rem) {
-  .calendarWrapper td {
-    height: unset;
-    height: 50px;
+@media (max-width: 640px) { 
+  .calendarWrapper :global(.rdp-root){
+    padding: 0.25rem;
   }
 
-  .dot {
-    width: 7px;
-    height: 7px;
+  .calendarWrapper :global(.rdp-month_grid){
+    height: 85%;
+  }
+
+  .dayCell {
+    padding: 1px;
+    font-size: .75rem;
+  }
+
+  .calendarWrapper :global(.rdp-month_caption){
+    font-size: large;
+  }
+
+  .calendarWrapper :global(.rdp-weekday){
+    padding: 0;
   }
 }
+  

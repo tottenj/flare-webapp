@@ -23,7 +23,7 @@ export default function ServerLogo({ size }: LogoWithTextProps) {
   const logoSize = {
     small: 30,
     medium: 80,
-    large: 150,
+    large: 125,
     xLarge: 200,
   }[size];
 
