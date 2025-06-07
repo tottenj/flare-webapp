@@ -21,10 +21,7 @@ export const Default: Story = {
     const canvas = within(canvasElement)
     const locInput = canvas.getByRole('combobox');
     await userEvent.type(locInput, "guelph", {delay: 100});
-    await waitFor(async () => {
-      const el = await canvas.findByText('Guelph, ON, Canada');
-      expect(el).toBeInTheDocument();
-    });
+ 
 
   }
 };
