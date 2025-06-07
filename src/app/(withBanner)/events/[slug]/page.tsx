@@ -1,5 +1,4 @@
 'use server';
-import MainBanner from '@/components/banners/mainBanner/MainBanner';
 import EventInfo from '@/components/events/EventInfo';
 
 export default async function FullEventPage({ params }: { params: Promise<{ slug: string }> }) {

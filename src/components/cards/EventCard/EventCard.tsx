@@ -17,7 +17,7 @@ export default function EventCard({ event }: eventCardProps) {
   const sameTime = isSameTime(event.startDate, event.endDate)
 
   return (
-    <Link href={`/events/(.)${event.id}`} as={`/events/${event.id}`} scroll={false}>
+    <Link href={`/events/${event.id}`} scroll={false}>
       <div
         style={{ background: `${event.type}` }}
         className="flex justify-end rounded-2xl bg-white p-1"
@@ -26,8 +26,13 @@ export default function EventCard({ event }: eventCardProps) {
           <SVGLogo color={event.type} size={50} />
           <div className="flex flex-col justify-center">
             <h4>{event.title}</h4>
-            <p className="text-sm">{event.startDate.toDateString()} {!sameDate && " -- " + event.endDate.toDateString()}</p>
-            <p className="text-sm">{event.startDate.toLocaleTimeString()} {!sameTime && " -- " +  event.endDate.toLocaleTimeString()}</p>
+            <p className="text-sm">
+              {event.startDate.toDateString()} {!sameDate && ' -- ' + event.endDate.toDateString()}
+            </p>
+            <p className="text-sm">
+              {event.startDate.toLocaleTimeString()}{' '}
+              {!sameTime && ' -- ' + event.endDate.toLocaleTimeString()}
+            </p>
           </div>
         </div>
       </div>

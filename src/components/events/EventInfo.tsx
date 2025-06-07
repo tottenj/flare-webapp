@@ -6,6 +6,7 @@ import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreF
 import Link from 'next/link';
 import BookmarkButton from '../buttons/bookmarkButton/BookmarkButton';
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
+import Modal from '../modals/mainModal/MainModal';
 
 export default async function EventInfo({ slug }: { slug: string }) {
   const { firestore, storage, currentUser } = await getServicesFromServer();
@@ -33,7 +34,8 @@ export default async function EventInfo({ slug }: { slug: string }) {
 
   return (
     <div className="w-full rounded-2xl bg-white p-4">
-      <BookmarkButton seen={hasSeen} event={event.id} />
+      <BookmarkButton slug={slug} seen={hasSeen} event={event.id} />
+ 
       <div className="flex h-auto w-full flex-col items-center">
         <h1>{event.title}</h1>
         <p>{org?.name ? 'Hosted By ' + org.name : ''}</p>
