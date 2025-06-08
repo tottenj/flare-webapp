@@ -77,7 +77,7 @@ export default function FilterToggles() {
   if (activeFilters.length === 0) return null;
 
   return (
-    <div className="mb-4 flex flex-wrap gap-2 self-start">
+    <div className="mb-1 flex flex-wrap gap-2 self-start">
       {activeFilters.map(({ key, value, config }) => (
         <button
           key={`${key}-${value}`}

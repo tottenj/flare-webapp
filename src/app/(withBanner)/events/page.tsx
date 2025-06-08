@@ -44,10 +44,10 @@ export default async function EventView({
             {/* <hr className="border-primary mt-2 w-full rounded-2xl border-2" /> */}
           </div>
 
-          <div className="w-full h-[95%]">
+          <div className="group w-full h-[95%]">
             {Object.keys(filterCopy).length > 0 && <ClearFiltersButton />}
             <FilterToggles />
-            <div className="flex w-full flex-col gap-2 overflow-x-hidden overflow-y-scroll bg-white h-full">
+            <div className="group-has-[button]:h-[80%] flex w-full flex-col gap-2 overflow-x-hidden overflow-y-scroll bg-white h-full">
               {plainQueriedEvents.map((even) => (
                 <EventCard key={even.id} event={even} />
               ))}
