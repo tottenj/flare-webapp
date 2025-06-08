@@ -127,6 +127,10 @@ button:hover {
   z-index: -1;
 }
 
+.bg-danger {
+  background-color: var(--flareRed);
+}
+
 @media (max-width: 640px) { 
   h2 {
     font-size: 18px;

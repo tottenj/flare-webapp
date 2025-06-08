@@ -31,7 +31,7 @@ export default async function MainBanner() {
         <div className="group relative flex flex-col items-end">
           <div className="z-10 cursor-pointer">
             <Suspense fallback={<GeneralLoader/>}>
-            <ProfilePicture size={65} />
+            <ProfilePicture size={45} />
             </Suspense>
           </div>
 
