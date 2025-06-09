@@ -7,7 +7,6 @@ import FilterModal from '@/components/modals/filterModal/FilterModal';
 import Event from '@/lib/classes/event/Event';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import getEventFiltersFromSearchParams from '@/lib/utils/other/getEventFilters';
-import Link from 'next/link';
 
 export default async function EventView({
   params,

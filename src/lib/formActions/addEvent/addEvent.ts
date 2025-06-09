@@ -51,6 +51,8 @@ export default async function addEvent(prevState: any, formData: FormData) {
 
     await event.addEvent(fire);
     revalidatePath("/dashboard")
+    revalidatePath("/events")
+    revalidatePath(`/events/${event.id}`)
     return { message: 'success', eventId: event.id };
   } catch (error) {
     console.log(error);

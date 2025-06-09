@@ -73,7 +73,7 @@ export default async function OrgDashboardPage({
                   <p>
                     <b>Status: </b>
                   </p>
-                  <Tooltip text="verification text">
+                  <Tooltip text="Your organization is pending verification. You can create events now, but they won’t be visible publicly until your verification is complete. Verification usually takes up to 24 hours. Thanks for your patience!">
                     {org.verified ? 'Verified ' : 'Pending'}
                   </Tooltip>
                 </div>

@@ -5,23 +5,26 @@ import { Tooltip as Tool } from '@heroui/tooltip';
 interface toolTipProps {
   children: React.ReactNode;
   text: string;
-  placement?: "right" | "left"
+  placement?: 'right' | 'left';
 }
-export default function Tooltip({ children, text, placement = "right" }: toolTipProps) {
+export default function Tooltip({ children, text, placement = 'right' }: toolTipProps) {
   return (
     <div className="flex items-center gap-4">
       {children}
       <Tool
         closeDelay={0}
         delay={0}
-
         placement={placement}
         classNames={{
-          base: [
-            'before:bg-secondary',
-          ],
+          base: ['before:bg-secondary'],
         }}
-        content={<div className="bg-tertiary rounded-2xl p-2 drop-shadow-2xl border-tertiary border-2">{text}</div>}
+        content={
+          <div>
+            <div className="bg-primary text-white border-tertiary w-full lg:w-1/3 rounded-2xl border-2 p-2 drop-shadow-2xl">
+              {text}
+            </div>
+          </div>
+        }
       >
         <FontAwesomeIcon icon={faInfoCircle} />
       </Tool>
