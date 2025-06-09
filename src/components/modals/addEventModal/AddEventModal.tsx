@@ -16,7 +16,7 @@ export default function AddEventModal() {
 
   return (
     <>
-      <button className='flex justify-end w-full' onClick={() => setOpen(true)}><SquarePlus/></button>
+      <button className='flex justify-end' onClick={() => setOpen(true)}><SquarePlus/></button>
       <Modal isOpen={open} onClose={() => setOpen(false)}>
         <AddEventForm setClose={setOpen}/>
         <button onClick={addMyself}>ADD MYSLF TO ADMIN</button>

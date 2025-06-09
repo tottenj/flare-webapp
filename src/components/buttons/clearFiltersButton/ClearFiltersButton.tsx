@@ -22,6 +22,6 @@ export default function ClearFiltersButton() {
   };
 
   return (
-    <PrimaryButton styleOver={{marginBottom: "1rem", marginTop: "0"}} text='Clear All Filters' type='button' size='full' click={() => handleClear()} />
+    <PrimaryButton styleOver={{marginBottom: "0.5rem", marginTop: "0"}} text='Clear All Filters' type='button' size='full' click={() => handleClear()} />
   );
 }

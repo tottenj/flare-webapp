@@ -107,7 +107,14 @@
   z-index: 10;
 }
 
-@media (max-width: 640px) { 
+@media (max-width: 1024px) { 
+  .dot {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@media (max-width: 768px) { 
   .calendarWrapper :global(.rdp-root){
     padding: 0.25rem;
   }
@@ -127,6 +134,11 @@
 
   .calendarWrapper :global(.rdp-weekday){
     padding: 0;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
   }
 }
   

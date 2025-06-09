@@ -71,12 +71,12 @@ export default function OrgSignInForm() {
   }
 
   return (
-    <div className="@container mt-16 mb-8 flex w-5/6 flex-col items-center rounded-xl bg-white p-10 lg:w-1/2">
+    <div className="@container p-4 mt-16 mb-8 flex w-5/6 flex-col items-center rounded-xl bg-white md:p-10 lg:w-1/2">
       <ServerLogo size="medium" />
       <div className="absolute top-0 right-0 mt-4 mr-4">
         <LinkInput style={{ padding: '0.5rem' }} href="/signup" text="User Sign Up" />
       </div>
-      <h1 className="mt-4">Organization Sign Up</h1>
+      <h1 className="mt-4 text-center">Organization Sign Up</h1>
       <p className="mt-2 mb-8 text-center">
         Welcome to Flare! We're excited to have your organization join our vibrant community. Once
         you sign up, your account will be reviewed for verification to ensure a safe and authentic
@@ -86,7 +86,7 @@ export default function OrgSignInForm() {
       </p>
       <form className="w-full" action={action.bind(loc)} onSubmit={handleSubmit}>
         <FormSection text="General Information">
-          <div className="mt-4 gap-[8px] flex justify-between">
+          <div className="mt-4 gap-[8px] flex justify-between flex-wrap">
             <TextInput label="Organization Name" name="orgName" size="XLarge" />
             <TextInput label="Organization Email" name="orgEmail" size="XLarge" type="email" />
           </div>
@@ -119,7 +119,7 @@ export default function OrgSignInForm() {
         >
           <div className="mt-8 flex flex-col justify-between lg:flex-row">
             {Object.values(orgSocials).map((social) => (
-              <div key={social} className="flex w-[32%] flex-col">
+              <div key={social} className="flex w-[100%] md:w-[48%] lg:w-[32%] flex-col">
                 <TextInput reqired={false} label={social} name={social} size="XLarge" />
                 <FileInput
                   name={social}

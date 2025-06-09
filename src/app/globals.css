@@ -51,7 +51,7 @@ h1 {
   font-family: var(--font-nunito);
   font-weight: bold;
   color: var(--color-primary);
-  font-size: 2.75rem;
+  font-size: 2.5rem;
 }
 
 h2{
@@ -65,7 +65,7 @@ h4{
   font-family: var(--font-nunito);
   font-weight: bold;
   color: var(--color-primary);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
 }
 
 body {
@@ -125,6 +125,10 @@ button:hover {
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -1;
+}
+
+.bg-danger {
+  background-color: var(--flareRed);
 }
 
 @media (max-width: 640px) { 

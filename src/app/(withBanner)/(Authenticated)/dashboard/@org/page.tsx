@@ -52,9 +52,9 @@ export default async function OrgDashboardPage({
   }
 
   return (
-    <div className="flex flex-col items-start justify-center gap-8 lg:flex-row">
-      <div className="flex w-full flex-col justify-between gap-8 lg:w-1/2">
-        <div className="mt-[40px] flex w-full flex-col rounded-2xl bg-white p-4">
+    <div className="flex flex-col items-start justify-start gap-4 h-full lg:flex-row px-4">
+      <div className="relative flex h-auto lg:h-full w-full flex-col justify-start gap-4 lg:w-1/2">
+        <div className="flex w-full flex-col rounded-2xl bg-white p-4">
           <h2>Member Details</h2>
           <div className="mt-4 flex flex-col">
             <div className="flex gap-8">
@@ -85,16 +85,23 @@ export default async function OrgDashboardPage({
             </div>
           </div>
         </div>
-        {events.length > 0 && <EventInfo slug={events[0].id} />}
+        <div className="hidden lg:block h-full rounded-2xl bg-white p-4">
+          {events.length > 0 && <EventInfo slug={events[0].id} />}
+        </div>
+        
       </div>
-      <div className="flex w-full flex-col items-center lg:w-1/2">
+
+      <div className="relative flex w-full h-full flex-col items-center lg:w-1/2">
         <OrgTabs />
-        <div className="z-10 mt-[40px] w-full rounded-2xl bg-white p-4 lg:min-h-[800px]">
+        <div className="z-10 mt-[40px] w-full h-full rounded-2xl bg-white p-4">
           {!tab ||
             (tab === 'myEvents' && (
               <>
+              <div className="flex justify-between">
                 <h2>My Events</h2>
                 <AddEventModal />
+              </div>
+                
 
                 <div className="mt-4 flex w-full flex-col gap-4">
                   {events.length > 0 ? (

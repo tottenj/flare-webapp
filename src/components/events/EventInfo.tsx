@@ -33,7 +33,7 @@ export default async function EventInfo({ slug }: { slug: string }) {
   }
 
   return (
-    <div className="w-full rounded-2xl bg-white p-4">
+    <div className="w-full h-full">
       {currentUser?.uid != event.flare_id && (
         <BookmarkButton slug={slug} seen={hasSeen} event={event.id} />
       )}

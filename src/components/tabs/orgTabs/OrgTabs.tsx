@@ -26,7 +26,8 @@ export default function OrgTabs() {
     <Tabs
       radius="full"
       variant="solid"
-      className="absolute h-[70px] self-start rounded-2xl bg-white"
+      className="absolute h-[70px] w-full self-start rounded-2xl bg-white"
+      fullWidth = {true}
       color={'danger'}
       selectedKey={selected}
       onSelectionChange={(val) => setselected(val.toString())}
