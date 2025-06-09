@@ -45,8 +45,7 @@ export default async function EventView({
           <div className="w-full">
             {Object.keys(filterCopy).length > 0 && <ClearFiltersButton />}
             <FilterToggles />
-            <div className="flex h-2/5 w-full flex-col gap-4 overflow-x-hidden overflow-y-auto rounded-[20px] bg-white sm:h-full sm:w-2/5">
-              <h2 className="p-2 text-center text-base sm:p-4 sm:text-lg">Upcoming Events</h2>
+            <div className="flex md:h-2/5 md:w-full flex-col gap-4 overflow-x-hidden overflow-y-auto rounded-[20px] bg-white h-full">
               {plainQueriedEvents.map((even) => (
                 <EventCard key={even.id} event={even} />
               ))}
