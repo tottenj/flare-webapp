@@ -28,10 +28,10 @@ deploy_to_vercel:
   stage: deploy
   script:
     - npm install -g vercel
-    - export VERCEL_PROJECT=$VERCEL_PROJECT
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT
     - export VERCEL_ORG_ID=$VERCEL_ORG
     - vercel pull --yes --environment=preview --token $VERCEL_TOKEN
-    - vercel --token $VERCEL_TOKEN --prebuilt --project $VERCEL_PROJECT --org $VERCEL_ORG
+    - vercel --token $VERCEL_TOKEN --prebuilt --project $VERCEL_PROJECT_ID --org $VERCEL_ORG_ID
   only:
     - branches
 
