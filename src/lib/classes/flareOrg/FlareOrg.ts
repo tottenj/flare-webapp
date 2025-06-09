@@ -154,11 +154,21 @@ export default class FlareOrg {
       `${Collections.Organizations}/${this.id}/${Collections.Saved}`
     );
     const ids = docs.map((doc) => doc.id);
-    const events = await Promise.all(ids.map((id) => Event.getEvent(firestoreDb, id)));
-    const existingEvents = events.filter((event): event is NonNullable<typeof event> =>
-      Boolean(event)
-    );
-    return existingEvents;
+    const events = await Promise.allSettled(ids.map((id) => Event.getEvent(firestoreDb, id)));
+
+    const existingAndPermittedEvents: Event[] = [];
+
+    events.forEach((result) => {
+      if(result.status == 'fulfilled'){
+        const event = result.value
+        if(event !== null){
+          existingAndPermittedEvents.push(event)
+        }
+      }
+    })
+  
+    return existingAndPermittedEvents;
+ 
   }
 }
 

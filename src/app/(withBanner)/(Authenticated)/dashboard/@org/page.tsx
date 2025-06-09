@@ -15,6 +15,8 @@ import EventInfo from '@/components/events/EventInfo';
 import OrgTabs from '@/components/tabs/orgTabs/OrgTabs';
 import SavedEvents from '@/components/events/savedEvents/SavedEvents';
 import { QueryOptions } from '@/lib/firebase/firestore/firestoreOperations';
+import Tooltip from '@/components/info/toolTip/Tooltip';
+import { getClaims } from '@/lib/firebase/utils/getClaims';
 
 export default async function OrgDashboardPage({
   params,
@@ -25,25 +27,21 @@ export default async function OrgDashboardPage({
 }) {
   const [{ slug }, resolvedSearchParams] = await Promise.all([params, searchParams]);
   const { tab } = resolvedSearchParams;
-
   const { fire, currentUser } = await getFirestoreFromServer();
-  if (!currentUser) return null;
 
-  let isOrg = false;
-  let org = null;
-
+  const {claims} = await getClaims()
+  if(!claims || !claims.organization == true || !currentUser) redirect("/events")
+ 
+  let org
   try {
-    const { claims } = await verifyOrg(currentUser);
-    isOrg = claims;
     org = await FlareOrg.getOrg(fire, currentUser.uid);
   } catch (error) {
-    console.log(error);
     redirect('/events');
   }
-  if (!org || !isOrg) redirect('/events');
+  if (!org) redirect('/events');
 
   let events: Event[] = [];
-  let saved: Event[] = [];
+  let saved: Event[] = []
   try {
     const eventFilters: EventFilters = { flare_id: currentUser.uid };
     const options: QueryOptions = { orderByField: 'createdAt', orderDirection: 'desc' };
@@ -71,9 +69,9 @@ export default async function OrgDashboardPage({
                   <b>Organization Name: </b>
                   {org.name}
                 </p>
-                <p>
+                <p className='flex'>
                   <b>Status: </b>
-                  {org.verified ? 'Verified' : 'Pending'}
+                  <Tooltip text='verification text'>{org.verified ? 'Verified ' : 'Pending'}</Tooltip>
                 </p>
                 <p>
                   <b>Bio: </b>
@@ -107,7 +105,7 @@ export default async function OrgDashboardPage({
                 </div>
               </>
             ))}
-          {tab && tab === 'savedEvents' && saved.length > 0 && <SavedEvents savedEvents={saved} />}
+          {tab && tab === 'savedEvents' && <SavedEvents savedEvents={saved} />}
         </div>
       </div>
     </div>

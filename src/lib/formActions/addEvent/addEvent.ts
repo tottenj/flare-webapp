@@ -11,9 +11,6 @@ export default async function addEvent(prevState: any, formData: FormData) {
   const { currentUser, fire } = await getFirestoreFromServer();
   if (!currentUser) return { message: 'Unable to find current user', eventId: null };
 
-  for (const [key, value] of formData.entries()) {
-    console.log(`formData: ${key} = ${value}`);
-  }
 
 
   try {

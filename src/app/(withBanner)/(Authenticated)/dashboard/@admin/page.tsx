@@ -6,10 +6,14 @@ import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import Collections from '@/lib/enums/collections';
 import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import { getFile } from '@/lib/firebase/storage/storageOperations';
+import { getClaims } from '@/lib/firebase/utils/getClaims';
+import { redirect } from 'next/navigation';
 import Image from 'next/image';
 
 export default async function page() {
-  const { firestore, storage } = await getServicesFromServer();
+  const { firestore, storage, currentUser } = await getServicesFromServer();
+  const {claims} = await getClaims()
+  if(!claims || !claims.admin == true) redirect("/events")
   const orgs = await Admin.getUnverifiedOrgs(firestore);
 
   const orgsWithImages = await Promise.all(

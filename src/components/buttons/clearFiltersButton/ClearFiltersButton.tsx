@@ -9,7 +9,6 @@ export default function ClearFiltersButton() {
   const searchParams = useSearchParams();
 
   const handleClear = () => {
-    console.log("LDSFK")
     const params = new URLSearchParams(searchParams.toString());
 
     // Define which filter keys to delete
