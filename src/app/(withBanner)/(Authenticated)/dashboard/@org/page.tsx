@@ -29,10 +29,10 @@ export default async function OrgDashboardPage({
   const { tab } = resolvedSearchParams;
   const { fire, currentUser } = await getFirestoreFromServer();
 
-  const {claims} = await getClaims()
-  if(!claims || !claims.organization == true || !currentUser) redirect("/events")
- 
-  let org
+  const { claims } = await getClaims();
+  if (!claims || !claims.organization == true || !currentUser) redirect('/events');
+
+  let org;
   try {
     org = await FlareOrg.getOrg(fire, currentUser.uid);
   } catch (error) {
@@ -41,7 +41,7 @@ export default async function OrgDashboardPage({
   if (!org) redirect('/events');
 
   let events: Event[] = [];
-  let saved: Event[] = []
+  let saved: Event[] = [];
   try {
     const eventFilters: EventFilters = { flare_id: currentUser.uid };
     const options: QueryOptions = { orderByField: 'createdAt', orderDirection: 'desc' };
@@ -52,8 +52,8 @@ export default async function OrgDashboardPage({
   }
 
   return (
-    <div className="flex flex-col items-start justify-start gap-4 h-full lg:flex-row px-4">
-      <div className="relative flex h-auto lg:h-full w-full flex-col justify-start gap-4 lg:w-1/2">
+    <div className="flex h-full flex-col items-start justify-start gap-4 px-4 lg:flex-row">
+      <div className="relative flex h-auto w-full flex-col justify-start gap-4 lg:h-full lg:w-1/2">
         <div className="flex w-full flex-col rounded-2xl bg-white p-4">
           <h2>Member Details</h2>
           <div className="mt-4 flex flex-col">
@@ -69,10 +69,14 @@ export default async function OrgDashboardPage({
                   <b>Organization Name: </b>
                   {org.name}
                 </p>
-                <p className='flex'>
-                  <b>Status: </b>
-                  <Tooltip text='verification text'>{org.verified ? 'Verified ' : 'Pending'}</Tooltip>
-                </p>
+                <div className="flex">
+                  <p>
+                    <b>Status: </b>
+                  </p>
+                  <Tooltip text="verification text">
+                    {org.verified ? 'Verified ' : 'Pending'}
+                  </Tooltip>
+                </div>
                 <p>
                   <b>Bio: </b>
                   {org.description}
@@ -85,23 +89,21 @@ export default async function OrgDashboardPage({
             </div>
           </div>
         </div>
-        <div className="hidden lg:block h-full rounded-2xl bg-white p-4">
+        <div className="hidden h-full rounded-2xl bg-white p-4 lg:block">
           {events.length > 0 && <EventInfo slug={events[0].id} />}
         </div>
-        
       </div>
 
-      <div className="relative flex w-full h-full flex-col items-center lg:w-1/2">
+      <div className="relative flex h-full w-full flex-col items-center lg:w-1/2">
         <OrgTabs />
-        <div className="z-10 mt-[40px] w-full h-full rounded-2xl bg-white p-4">
+        <div className="z-10 mt-[40px] h-full w-full rounded-2xl bg-white p-4">
           {!tab ||
             (tab === 'myEvents' && (
               <>
-              <div className="flex justify-between">
-                <h2>My Events</h2>
-                <AddEventModal />
-              </div>
-                
+                <div className="flex justify-between">
+                  <h2>My Events</h2>
+                  <AddEventModal />
+                </div>
 
                 <div className="mt-4 flex w-full flex-col gap-4">
                   {events.length > 0 ? (

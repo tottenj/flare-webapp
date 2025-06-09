@@ -1,10 +1,9 @@
 "use server"
 import EventInfo from '@/components/events/EventInfo';
 import Modal from '@/components/modals/mainModal/MainModal';
-import { notFound } from 'next/navigation';
 
 
-export default async function page({ params }: { params: Promise<{ slug: string }> }) {
+export default async function EventModalInterception({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
   return (
