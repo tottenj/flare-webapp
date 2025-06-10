@@ -18,9 +18,10 @@ interface placeSearchProps {
   lab?: string;
   required?: boolean;
   z?:string
+  defVal?: placeOption
 }
 
-export default function PlaceSearch({ loc, lab, required = true,z }: placeSearchProps) {
+export default function PlaceSearch({ loc, lab, required = true,z, defVal }: placeSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
   useEffect(() => {
@@ -86,6 +87,7 @@ export default function PlaceSearch({ loc, lab, required = true,z }: placeSearch
         placeholder={'Select Location...'}
         loadOptions={promiseOptions}
         onChange={(newVal) => changed(newVal)}
+        defaultValue={defVal}
       />
     </>
   );

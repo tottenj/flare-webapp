@@ -17,6 +17,8 @@ import SavedEvents from '@/components/events/savedEvents/SavedEvents';
 import { QueryOptions } from '@/lib/firebase/firestore/firestoreOperations';
 import Tooltip from '@/components/info/toolTip/Tooltip';
 import { getClaims } from '@/lib/firebase/utils/getClaims';
+import EditModal from '@/components/modals/editModal/EditModal';
+import EditOrgForm from '@/components/forms/editOrgForm/EditOrgForm';
 
 export default async function OrgDashboardPage({
   params,
@@ -55,6 +57,11 @@ export default async function OrgDashboardPage({
     <div className="flex h-full flex-col items-start justify-start gap-4 px-4 lg:flex-row">
       <div className="relative flex h-auto w-full flex-col justify-start gap-4 lg:h-full lg:w-1/2">
         <div className="flex w-full flex-col rounded-2xl bg-white p-4">
+          <div className="absolute right-4">
+            <EditModal>
+              <EditOrgForm org={org.toPlain()} />
+            </EditModal>
+          </div>
           <h2>Member Details</h2>
           <div className="mt-4 flex flex-col">
             <div className="flex gap-8">
@@ -68,6 +75,10 @@ export default async function OrgDashboardPage({
                 <p>
                   <b>Organization Name: </b>
                   {org.name}
+                </p>
+                <p>
+                  <b>Email: </b>
+                  {org.email}
                 </p>
                 <div className="flex">
                   <p>

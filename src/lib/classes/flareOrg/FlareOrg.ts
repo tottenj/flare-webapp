@@ -159,17 +159,43 @@ export default class FlareOrg {
     const existingAndPermittedEvents: Event[] = [];
 
     events.forEach((result) => {
-      if(result.status == 'fulfilled'){
-        const event = result.value
-        if(event !== null){
-          existingAndPermittedEvents.push(event)
+      if (result.status == 'fulfilled') {
+        const event = result.value;
+        if (event !== null) {
+          existingAndPermittedEvents.push(event);
         }
       }
-    })
-  
+    });
+
     return existingAndPermittedEvents;
- 
   }
+
+
+  toPlain(): PlainOrg {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      profilePic: this.profilePic,
+      description: this.description,
+      locationName: this.location?.name,
+      locationId: this.location?.id,
+      verified: this.verified
+    }
+  }
+
+}
+
+
+export type PlainOrg = {
+  id: string
+  name: string
+  email: string | null
+  profilePic?: string | null
+  description?: string
+  locationName?: string | null
+  locationId?: string
+  verified?: boolean
 }
 
 export const orgConverter = {

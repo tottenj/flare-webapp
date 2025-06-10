@@ -1,12 +1,12 @@
-'use server';
+
 import EventInfo from '@/components/events/EventInfo';
 import Event from '@/lib/classes/event/Event';
-import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import { getFirestoreFromServer, getFirestoreFromStatic } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 export const dynamicParams = true;
 
 
 export async function generateStaticParams() {
-  const {fire} = await getFirestoreFromServer()
+  const fire = await getFirestoreFromStatic()
   const events: Event[] = await Event.queryEvents(fire, {});
   return events.map((event) => ({
     slug: String(event.id)
