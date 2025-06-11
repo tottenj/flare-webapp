@@ -66,7 +66,7 @@ export default async function OrgDashboardPage({
           <div className="mt-4 flex flex-col">
             <div className="flex gap-8">
               <div>
-                <Suspense fallback={<GeneralLoader />}>
+                <Suspense fallback={<GeneralLoader/>}>
                   <ProfilePicture size={100} />
                 </Suspense>
                 <EditProfileButton />

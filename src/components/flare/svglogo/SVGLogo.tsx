@@ -3,24 +3,25 @@ import React from 'react';
 interface SvgLogoProps extends React.SVGProps<SVGSVGElement> {
   color?: string;
   size?: number | string;
-  spin?:boolean
+  spin?: boolean;
 }
 
 const SVGLogo: React.FC<SvgLogoProps> = ({
   color = '#FF005C',
-  size = 207,
+  size,
   spin = false,
   className = '',
   ...props
 }) => {
   return (
     <svg
-      width={size}
-      height={size}
+      width={size ?? '100%'}
+      height={size ?? '100%'}
       viewBox="0 0 207 207"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`${spin ? 'animate-spin ease-linear infinite' : ''} ${className}`}
+      preserveAspectRatio="xMidYMid meet"
+      className={`${spin ? 'infinite animate-spin ease-linear' : ''} ${className}`}
       {...props}
     >
       <g fill={color}>
