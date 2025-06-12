@@ -33,51 +33,40 @@ export default async function EventInfo({ slug }: { slug: string }) {
   }
 
   return (
-    <div className="w-full h-full">
-      {currentUser?.uid != event.flare_id && (
+    <>
+      <div className="cardInner">
+        <div className="bookmarkButton">{currentUser?.uid != event.flare_id && (
         <BookmarkButton slug={slug} seen={hasSeen} event={event.id} />
-      )}
-
-      <div className="flex h-auto w-full flex-col items-center">
+      )}</div>
         <h1>{event.title}</h1>
         <p>{org?.name ? 'Hosted By ' + org.name : ''}</p>
-        <div className="mt-4 flex w-full gap-8">
+        
+        <div className="mt-4 flex h-full w-full gap-8">
           {img && (
-            <div className="relative h-full min-h-[200px] w-1/2 overflow-hidden rounded-xl shadow-md md:w-1/2 lg:min-h-[400px]">
+            <div className="eventImage">
               <Image
                 src={img}
                 alt={event.title}
                 fill
-                className="object-contain relative"
+                className="object-contain object-top"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority
               />
             </div>
           )}
-          <div className={`flex flex-col justify-between ${img && 'w-1/2'}`}>
-            <div className="flex flex-col gap-2 text-lg">
-              <p>
-                <b>Date:</b> {event.startdate.toDateString()}
-              </p>
-              <p>
-                <b>Time:</b> {event.startdate.toLocaleTimeString()}
-              </p>
-              <p>
-                <b>Location:</b> {event.location.name}
-              </p>
-              <p>
-                <b>Cost:</b> {event.price == 0 ? 'Free' : event.price}
-              </p>
-              <p>
-                <b>Age Group:</b> {event.ageGroup}
-              </p>
-              <p className="mt-4">{event.description}</p>
-            </div>
 
-            {event.ticketLink && <Link className='bg-primary text-white border-2 border-primary text-black text-center w-full hover:bg-white hover:text-primary rounded-2xl p-1 mt-4' href={event.ticketLink}>Purchase Tickets</Link>}
+          <div className="eventText">
+              <p><b>Date:</b> {event.startdate.toDateString()}</p>
+              <p><b>Time:</b> {event.startdate.toLocaleTimeString()}</p>
+              <p><b>Location:</b> {event.location.name}</p>
+              <p><b>Cost:</b> {event.price == 0 ? 'Free' : `$${event.price}`}</p>
+              <p><b>Age Group:</b> {event.ageGroup}</p>
+              <p className="eventDesc">{event.description}</p>
+              {event.ticketLink && <Link className='bg-primary text-white border-2 border-primary text-black text-center w-full hover:bg-white hover:text-primary rounded-2xl p-1 mt-4' href={event.ticketLink}>Purchase Tickets</Link>}
           </div>
         </div>
       </div>
-    </div>
+
+    </>
   );
 }
