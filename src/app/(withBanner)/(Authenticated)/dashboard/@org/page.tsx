@@ -56,7 +56,7 @@ export default async function OrgDashboardPage({
   return (
     <div className="flex flex-col items-start justify-start gap-4 h-full lg:flex-row px-4">
       <div className="relative flex h-auto lg:h-full w-full flex-col justify-start gap-4 lg:w-1/2">
-        <div className="flex w-full flex-col rounded-2xl bg-white p-4">
+        <div className="flex w-full flex-col h-full lg:h-2/5 rounded-2xl bg-white p-4">
           <h2>Member Details</h2>
           <div className="mt-4 flex flex-col">
             <div className="flex gap-8">
@@ -87,15 +87,15 @@ export default async function OrgDashboardPage({
             </div>
           </div>
         </div>
-        <div className="hidden lg:block h-full rounded-2xl bg-white p-4">
+        <div className="hidden lg:block h-3/5 rounded-2xl bg-white p-4 overflow-y-scroll">
           {events.length > 0 && <EventInfo slug={events[0].id} />}
         </div>
         
       </div>
 
-      <div className="relative flex w-full h-full flex-col items-center lg:w-1/2">
+      <div className="relative flex w-full h-auto md:h-full flex-col rounded-2xl bg-white items-center lg:w-1/2">
         <OrgTabs />
-        <div className="z-10 mt-[40px] w-full h-full rounded-2xl bg-white p-4">
+        <div className="z-10 mt-[40px] w-full h-full p-4 overflow-y-auto">
           {!tab ||
             (tab === 'myEvents' && (
               <>
@@ -105,7 +105,7 @@ export default async function OrgDashboardPage({
               </div>
                 
 
-                <div className="mt-4 flex w-full flex-col gap-4">
+                <div className="mt-4 flex w-full h-auto flex-col gap-2 mb-4">
                   {events.length > 0 ? (
                     events.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
                   ) : (

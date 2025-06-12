@@ -9,7 +9,7 @@ export default async function page({ params }: { params: Promise<{ slug: string 
 
   return (
     <Modal isOpen={true} route={true}>
-      <EventInfo slug={slug} />
+        <EventInfo slug={slug} />
     </Modal>
   );
 }

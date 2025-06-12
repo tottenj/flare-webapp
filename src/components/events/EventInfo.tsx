@@ -43,12 +43,12 @@ export default async function EventInfo({ slug }: { slug: string }) {
         <p>{org?.name ? 'Hosted By ' + org.name : ''}</p>
         <div className="mt-4 flex w-full gap-8">
           {img && (
-            <div className="relative h-auto min-h-[200px] w-1/2 overflow-hidden rounded-xl shadow-md md:w-1/2 lg:min-h-[400px]">
+            <div className="relative h-full min-h-[200px] w-1/2 overflow-hidden rounded-xl shadow-md md:w-1/2 lg:min-h-[400px]">
               <Image
                 src={img}
                 alt={event.title}
                 fill
-                className="object-cover"
+                className="object-contain relative"
                 sizes="(max-width: 768px) 100vw, 50vw"
                 priority
               />

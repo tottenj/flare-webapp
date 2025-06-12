@@ -14,7 +14,7 @@ export default async function DashboardLayout({
 
   return (
     <>
-      <div className="relative mt-4 h-[calc(100dvh-82px)] max-w-[1440px] m-auto">{isAdmin ? admin : claims ? org : user}</div>
+      <div className="relative mt-4 h-[calc(100dvh-100px)] max-w-[1440px] m-auto">{isAdmin ? admin : claims ? org : user}</div>
     </>
   );
 }
