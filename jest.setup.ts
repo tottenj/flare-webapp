@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom';
-import { sendEmailVerification } from 'firebase/auth';
 require('dotenv').config({ path: '.env.test' });
 
 // jest.setup.js (or in your test file)
@@ -76,7 +75,32 @@ jest.mock('firebase/storage', () => {
 
 jest.mock('@googlemaps/js-api-loader', () => require('./__jestMocks__/@googlemaps/js-api-loader'));
 
-jest.mock('@/lib/firebase/auth/configs/getFirestoreFromServer');
+jest.mock('@/lib/firebase/auth/configs/getFirestoreFromServer', () => {
+  const mockFirestore = {}; // or a mock object with specific methods if needed
+  const mockStorage = {}; // same as above
+  const mockApp = {}; // mock firebaseServerApp
+  const mockUser = { uid: 'mock-uid', email: 'test@example.com' };
+
+  return {
+    __esModule: true,
+    getFirestoreFromServer: jest.fn().mockResolvedValue({
+      firebaseServerApp: mockApp,
+      currentUser: mockUser,
+      fire: mockFirestore,
+    }),
+    getStorageFromServer: jest.fn().mockResolvedValue({
+      storage: mockStorage,
+      currentUser: mockUser,
+    }),
+    getServicesFromServer: jest.fn().mockResolvedValue({
+      firestore: mockFirestore,
+      storage: mockStorage,
+      currentUser: mockUser,
+    }),
+  };
+});
+
+
 jest.mock('@/lib/utils/error/logErrors');
 jest.mock('@/lib/firebase/firestore/firestoreOperations', () => ({
   addDocument: jest.fn(),
@@ -84,6 +108,8 @@ jest.mock('@/lib/firebase/firestore/firestoreOperations', () => ({
     exists: jest.fn()
   })),
 }));
+
+
 jest.mock('@/lib/firebase/storage/storageOperations', () => ({
   addFile: jest.fn(),
 }));

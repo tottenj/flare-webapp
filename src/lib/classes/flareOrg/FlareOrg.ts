@@ -154,12 +154,48 @@ export default class FlareOrg {
       `${Collections.Organizations}/${this.id}/${Collections.Saved}`
     );
     const ids = docs.map((doc) => doc.id);
-    const events = await Promise.all(ids.map((id) => Event.getEvent(firestoreDb, id)));
-    const existingEvents = events.filter((event): event is NonNullable<typeof event> =>
-      Boolean(event)
-    );
-    return existingEvents;
+    const events = await Promise.allSettled(ids.map((id) => Event.getEvent(firestoreDb, id)));
+
+    const existingAndPermittedEvents: Event[] = [];
+
+    events.forEach((result) => {
+      if (result.status == 'fulfilled') {
+        const event = result.value;
+        if (event !== null) {
+          existingAndPermittedEvents.push(event);
+        }
+      }
+    });
+
+    return existingAndPermittedEvents;
   }
+
+
+  toPlain(): PlainOrg {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      profilePic: this.profilePic,
+      description: this.description,
+      locationName: this.location?.name,
+      locationId: this.location?.id,
+      verified: this.verified
+    }
+  }
+
+}
+
+
+export type PlainOrg = {
+  id: string
+  name: string
+  email: string | null
+  profilePic?: string | null
+  description?: string
+  locationName?: string | null
+  locationId?: string
+  verified?: boolean
 }
 
 export const orgConverter = {

@@ -12,7 +12,7 @@ export default async function MainBanner() {
   const { currentUser } = await getClaims();
 
   return (
-    <div className="relative -ml-[calc((100vw-100%)/2)] flex w-screen h-[50px] items-center justify-between bg-white p-4">
+    <div className="relative -ml-[calc((100vw-100%)/2)] flex h-[50px] w-screen items-center justify-between bg-white p-4">
       <Link href={'/'}>
         <ServerLogo size="small" />
       </Link>
@@ -30,8 +30,8 @@ export default async function MainBanner() {
       {currentUser && (
         <div className="group relative flex flex-col items-end">
           <div className="z-10 cursor-pointer">
-            <Suspense fallback={<GeneralLoader/>}>
-            <ProfilePicture size={45} />
+            <Suspense fallback={<GeneralLoader />}>
+              <ProfilePicture size={45} />
             </Suspense>
           </div>
 

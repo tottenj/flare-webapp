@@ -167,8 +167,6 @@ export default class Event {
      
       for (const snap of snapshots) {
         for (const doc of snap.docs) {
-
-          console.log(doc.data())
           const data = doc.data();
           const lat = doc.get('location.coordinates.latitude');
           const lng = doc.get('location.coordinates.longitude');

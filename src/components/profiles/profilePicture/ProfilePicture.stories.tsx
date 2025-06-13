@@ -10,6 +10,7 @@ type Story = StoryObj<typeof ProfilePicture>;
 
 export const Default: Story = {
   args: {
-    size: 123,
+    size: 120,
+    src: "/defaultProfile.svg"
   },
 };
