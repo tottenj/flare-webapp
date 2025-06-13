@@ -24,12 +24,12 @@ export default async function UserDashboardPage() {
   }
 
   return (
-    <div className="flex w-full justify-between gap-8 rounded-2xl p-4">
-      <div className="flex h-fit w-1/2 flex-col gap-8 rounded-2xl">
-        <div className="rounded-2xl bg-white p-4">
+    <div className="flex w-full h-full justify-between gap-4 rounded-2xl p-4 pt-0 lg:flex-row">
+      <div className="flex h-full w-1/2 flex-col gap-4 rounded-2xl">
+        <div className="rounded-2xl bg-white h-2/5 p-4">
           <h2>Member Details</h2>
           <div className="mt-4 flex flex-col">
-            <div className="flex gap-8">
+            <div className="flex gap-4">
               <div>
                 <Suspense fallback={<GeneralLoader />}>
                   <ProfilePicture size={100} />
@@ -50,12 +50,12 @@ export default async function UserDashboardPage() {
           </div>
         </div>
         {}
-        <div className="bg-white">
-          {savedEvents.length > 0 && <EventInfo slug={savedEvents[0].id} />}
+        <div className="hidden bg-white h-4/5 p-4 rounded-2xl lg:block">
+          {savedEvents.length > 0 ? (<EventInfo slug={savedEvents[0].id} />) : (<p>lkdsjfljl</p>)}
         </div>
       </div>
 
-      <div className="flex w-1/2 flex-col rounded-2xl bg-white p-4 lg:min-h-[800px]">
+      <div className="relative flex h-full w-full flex-col items-center lg:w-1/2 rounded-2xl bg-white p-4">
         <h2>Saved Events</h2>
         <div className="mt-4 flex w-full flex-col gap-4">
           {savedEvents.length > 0 ? (

@@ -57,9 +57,9 @@ export default async function EventView({
             {Object.keys(filterCopy).length > 0 && <ClearFiltersButton />}
             <FilterToggles />
             <div className="flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto md:overflow-y-scroll bg-white group-has-[button]:h-[80%]">
-              {plainQueriedEvents && plainQueriedEvents.length > 0 && plainQueriedEvents.map((even) => (
+              {plainQueriedEvents && plainQueriedEvents.length > 0 ? plainQueriedEvents.map((even) => (
                 <EventCard key={even.id} event={even} />
-              ))}
+              )): (<p>lksdjfljsdlfjlkj</p>)}
             </div>
           </div>
         </div>

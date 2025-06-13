@@ -56,7 +56,7 @@ export default async function OrgDashboardPage({
   return (
     <div className="flex h-full flex-col items-start justify-start gap-4 px-4 lg:flex-row">
       <div className="relative flex h-auto w-full flex-col justify-start gap-4 lg:h-full lg:w-1/2">
-        <div className="flex w-full flex-col rounded-2xl bg-white p-4">
+        <div className="flex h-2/5 w-full flex-col rounded-2xl bg-white p-4">
           <div className="absolute right-4">
             <EditModal>
               <EditOrgForm org={org.toPlain()} />
@@ -100,8 +100,8 @@ export default async function OrgDashboardPage({
             </div>
           </div>
         </div>
-        <div className="hidden h-full rounded-2xl bg-white p-4 lg:block">
-          {events.length > 0 && <EventInfo slug={events[0].id} />}
+        <div className="hidden h-4/5 rounded-2xl bg-white p-4 lg:block">
+          {events.length > 0 ? (<EventInfo slug={events[0].id} />) : (<p>lskdjfa;kajfl</p>)}
         </div>
       </div>
 
