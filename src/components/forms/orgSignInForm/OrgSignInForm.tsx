@@ -71,7 +71,7 @@ export default function OrgSignInForm() {
   }
 
   return (
-    <div className="@container p-4 mt-16 mb-8 flex w-5/6 flex-col items-center rounded-xl bg-white md:p-10 lg:w-1/2">
+    <div className="@container flex w-11/12 sm:w-5/6 h-auto mt-16 mb-8 flex-col justify-center items-center rounded-xl bg-white p-4 pt-8 pb-8 sm:p-10 lg:w-1/2">
       <ServerLogo size="medium" />
       <div className="absolute top-0 right-0 mt-4 mr-4">
         <LinkInput style={{ padding: '0.5rem' }} href="/signup" text="User Sign Up" />
@@ -86,10 +86,8 @@ export default function OrgSignInForm() {
       </p>
       <form className="w-full" action={action.bind(loc)} onSubmit={handleSubmit}>
         <FormSection text="General Information">
-          <div className="mt-4 gap-[8px] flex justify-between flex-wrap">
             <TextInput label="Organization Name" name="orgName" size="XLarge" />
             <TextInput label="Organization Email" name="orgEmail" size="XLarge" type="email" />
-          </div>
           <div className="mb-4">
             <PlaceSearch loc={setloc} lab="Location" />
             {loc && (

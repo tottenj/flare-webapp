@@ -37,13 +37,13 @@ export default function SignUpForm({ overrideAction, signUp = true }: SignInForm
   },[state])
 
   return (
-    <div className="@container flex w-11/12 sm:w-4/6 h-auto mt-16 mb-8 p-4 flex-col justify-center items-center rounded-xl bg-white sm:p-10 lg:w-1/2">
+    <div className="@container flex w-11/12 sm:w-5/6 h-auto mt-16 mb-8 flex-col justify-center items-center rounded-xl bg-white p-4 pt-8 pb-8 sm:p-10 lg:w-1/2">
       <ServerLogo size='medium'/>
       <div className='absolute right-0 top-0 mr-4 mt-4'>
         <LinkInput style={{padding: "0.5rem"}} href='/flare-signin' text='Organization Signup'/>
       </div>
       <h1 className="mb-4 mt-4 text-4xl">Sign Up</h1>
-      <form action={formAction} className="mb-8 w-5/6 @lg:w-2/3">
+      <form action={formAction} className="mb-8 flex w-full sm:w-5/6 flex-col @lg:w-2/3">
         <TextInput label="Email" name="email" placeholder="example@gmail.com" />
         <TextInput label="Password" name="password" placeholder="**********" type="password" />
         <div className="flex justify-center">
@@ -51,7 +51,7 @@ export default function SignUpForm({ overrideAction, signUp = true }: SignInForm
         </div>
       </form>
       <GoogleSignInButton signIn={!signUp} />
-      <Link className="font-nunito mt-4 font-bold underline" href={'/signin'}>
+      <Link className="font-nunito mt-4 text-center text-balance font-bold underline" href={'/signin'}>
         Already Have An Account? Login
       </Link>
     </div>
