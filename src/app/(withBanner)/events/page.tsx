@@ -41,13 +41,12 @@ export default async function EventView({
 
   return (
     <>
-      <div className="relative m-auto flex h-[calc(100dvh-58px)] max-w-[1440px] flex-col gap-2 p-2 md:flex-row md:gap-4 md:p-4">
-        <div className="h-2/5 w-full md:h-full md:w-3/5">
-        
+      <div className="relative m-auto flex h-auto md:h-[calc(100dvh-58px)] max-w-[1440px] flex-col gap-2 p-2 md:flex-row md:gap-4 md:p-4">
+        <div className="h-auto w-full md:h-full md:w-3/5">
           <FullPageCalendar events={plainMonthsEvents || []} />
         </div>
 
-        <div className="relative flex h-3/5 w-full flex-col items-center gap-4 rounded-2xl bg-white p-4 md:h-full md:w-2/5">
+        <div className="relative flex h-auto w-full flex-col items-center gap-4 rounded-2xl bg-white p-2 pt-4 md:p-4 md:h-full md:w-2/5">
           <div className="relative h-[5%] w-full">
             <FilterModal />
             <h2 className="text-center text-xl font-semibold">Upcoming Events</h2>
@@ -57,7 +56,7 @@ export default async function EventView({
           <div className="group h-[95%] w-full">
             {Object.keys(filterCopy).length > 0 && <ClearFiltersButton />}
             <FilterToggles />
-            <div className="flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-scroll bg-white group-has-[button]:h-[80%]">
+            <div className="flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto md:overflow-y-scroll bg-white group-has-[button]:h-[80%]">
               {plainQueriedEvents && plainQueriedEvents.length > 0 && plainQueriedEvents.map((even) => (
                 <EventCard key={even.id} event={even} />
               ))}

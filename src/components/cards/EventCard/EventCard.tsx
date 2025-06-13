@@ -29,7 +29,7 @@ export default function EventCard({ event }: eventCardProps) {
             <p className="text-sm">
               {event.startDate.toDateString()} {!sameDate && ' -- ' + event.endDate.toDateString()}
             </p>
-            <p className="text-sm">
+            <p className="hidden md:block text-sm">
               {event.startDate.toLocaleTimeString()}{' '}
               {!sameTime && ' -- ' + event.endDate.toLocaleTimeString()}
             </p>

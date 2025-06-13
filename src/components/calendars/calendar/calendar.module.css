@@ -33,8 +33,8 @@
 }
 
 .calendarWrapper td {
-  min-height: 60px;
-  height: 20%;
+  min-height: 15%;
+  max-height: 20%;
   vertical-align: top;
   border: 1px solid var(--color-secondary);
   width: 14.5%;
@@ -66,6 +66,7 @@
  }
 
  .dayCell {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,10 +82,11 @@
 }
 
 .dotContainer {
-  display: flex;
+  height: 8px;
   margin-top: 4px;
-  position: relative;
-  height: 8px; /* enough room for overlap */
+  display: flex;
+  position: absolute;
+  top: 24px;
 }
 
 .dot {
@@ -126,6 +128,7 @@
   .dayCell {
     padding: 1px;
     font-size: .75rem;
+    height: 50px;
   }
 
   .calendarWrapper :global(.rdp-month_caption){
@@ -134,6 +137,10 @@
 
   .calendarWrapper :global(.rdp-weekday){
     padding: 0;
+  }
+
+  .dotContainer {
+    top: 16px;
   }
 
   .dot {
