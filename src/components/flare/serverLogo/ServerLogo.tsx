@@ -33,8 +33,8 @@ export default function ServerLogo({ size }: LogoWithTextProps) {
     >
       <Logo size={logoSize} />
       <div className="font-nunito flex flex-col leading-none font-black">
-        <p className={`${titleSizeClass} mb-0`}>Flare</p>
-        <p className={`text-orange ${subtitleSizeClass}`}>Ignite Community</p>
+        <p className={`hidden sm:block ${titleSizeClass} mb-0`}>Flare</p>
+        <p className={`hidden sm:block text-orange ${subtitleSizeClass}`}>Ignite Community</p>
       </div>
     </div>
   );
