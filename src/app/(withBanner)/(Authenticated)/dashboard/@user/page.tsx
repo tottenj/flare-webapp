@@ -2,6 +2,8 @@
 import EditProfileButton from '@/components/buttons/editProfile/EditProfileButton';
 import EventCard from '@/components/cards/EventCard/EventCard';
 import EventInfo from '@/components/events/EventInfo';
+import Logo from '@/components/flare/logo/Logo';
+import LinkInput from '@/components/inputs/link/LinkInput';
 import GeneralLoader from '@/components/loading/GeneralLoader';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
 import Event from '@/lib/classes/event/Event';
@@ -24,12 +26,12 @@ export default async function UserDashboardPage() {
   }
 
   return (
-    <div className="flex w-full h-full justify-between gap-4 rounded-2xl p-4 pt-0 lg:flex-row">
-      <div className="flex h-full w-1/2 flex-col gap-4 rounded-2xl">
-        <div className="rounded-2xl bg-white h-2/5 p-4">
+    <div className="flex flex-col w-full h-full justify-between gap-4 rounded-2xl p-4 pt-0 md:flex-row">
+      <div className="flex h-full w-full md:w-1/2 flex-col gap-4 rounded-2xl">
+        <div className="rounded-2xl bg-white h-full md:h-2/5 p-4">
           <h2>Member Details</h2>
-          <div className="mt-4 flex flex-col">
-            <div className="flex gap-4">
+          <div className="mt-2 h-full flex flex-col">
+            <div className="h-full flex gap-4">
               <div>
                 <Suspense fallback={<GeneralLoader />}>
                   <ProfilePicture size={100} />
@@ -50,18 +52,27 @@ export default async function UserDashboardPage() {
           </div>
         </div>
         {}
-        <div className="hidden bg-white h-4/5 p-4 rounded-2xl lg:block">
-          {savedEvents.length > 0 ? (<EventInfo slug={savedEvents[0].id} />) : (<p>lkdsjfljl</p>)}
+        <div className="hidden h-3/5 rounded-2xl bg-white p-4 md:block">
+          {savedEvents.length > 0 ? (<EventInfo slug={savedEvents[0].id} />) : (
+            <div className="w-full h-full flex flex-col items-center justify-center text-center gap-4 p-4 text-[#b3b3b3]">
+              <Logo size={45} />
+              <p className="mb-2">Your next upcoming event will appear here. Get started by saving an event!</p>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="relative flex h-full w-full flex-col items-center lg:w-1/2 rounded-2xl bg-white p-4">
+      <div className="relative flex h-full w-full flex-col items-center md:w-1/2 rounded-2xl bg-white p-4">
         <h2>Saved Events</h2>
         <div className="mt-4 flex w-full flex-col gap-4">
           {savedEvents.length > 0 ? (
             savedEvents.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
           ) : (
-            <p className="text-gray-500">No events yet. Start by saving one!</p>
+            <div className="w-full h-full flex flex-col items-center justify-center text-center gap-4 p-4 text-[#b3b3b3]">
+              <Logo size={45} />
+              <p className="mb-2">Your saved events will appear here. Get started by clicking the bookmark on an event!</p>
+              <LinkInput style={{ padding: '0.5rem' }} href="/" text="View Events" />
+            </div>
           )}
         </div>
       </div>

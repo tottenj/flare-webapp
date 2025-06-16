@@ -35,7 +35,7 @@ export default function TextInput({ label, name, placeholder, styleOverDiv, ref,
 
 
   return (
-    <div style={styleOverDiv} className={`mb-4 mt-4 lg:mt-0 flex flex-col ${sizeClass}`}>
+    <div style={styleOverDiv} className={`mb-4 lg:mt-0 flex flex-col ${sizeClass}`}>
       <PrimaryLabel label={label}/>
       <input 
         ref={ref}

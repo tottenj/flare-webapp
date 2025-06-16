@@ -19,6 +19,8 @@ import Tooltip from '@/components/info/toolTip/Tooltip';
 import { getClaims } from '@/lib/firebase/utils/getClaims';
 import EditModal from '@/components/modals/editModal/EditModal';
 import EditOrgForm from '@/components/forms/editOrgForm/EditOrgForm';
+import LinkInput from '@/components/inputs/link/LinkInput';
+import Logo from '@/components/flare/logo/Logo';
 
 export default async function OrgDashboardPage({
   params,
@@ -54,9 +56,9 @@ export default async function OrgDashboardPage({
   }
 
   return (
-    <div className="flex h-full flex-col items-start justify-start gap-4 px-4 lg:flex-row">
-      <div className="relative flex h-auto w-full flex-col justify-start gap-4 lg:h-full lg:w-1/2">
-        <div className="flex h-2/5 w-full flex-col rounded-2xl bg-white p-4">
+    <div className="flex h-full flex-col items-start justify-start gap-4 px-4 md:flex-row">
+      <div className="relative flex h-auto w-full md:w-1/2 flex-col justify-start gap-4 md:h-full lg:w-1/2">
+        <div className="flex h-full md:h-2/5 w-full flex-col rounded-2xl bg-white p-4">
           <div className="absolute right-4">
             <EditModal>
               <EditOrgForm org={org.toPlain()} />
@@ -88,10 +90,10 @@ export default async function OrgDashboardPage({
                     {org.verified ? 'Verified ' : 'Pending'}
                   </Tooltip>
                 </div>
-                <p>
+                {/* <p>
                   <b>Bio: </b>
                   {org.description}
-                </p>
+                </p> */}
                 <p>
                   <b>Primary Location: </b>
                   {org.location?.name}
@@ -100,14 +102,19 @@ export default async function OrgDashboardPage({
             </div>
           </div>
         </div>
-        <div className="hidden h-4/5 rounded-2xl bg-white p-4 lg:block">
-          {events.length > 0 ? (<EventInfo slug={events[0].id} />) : (<p>lskdjfa;kajfl</p>)}
+        <div className="hidden h-4/5 rounded-2xl bg-white p-4 md:block">
+          {events.length > 0 ? (<EventInfo slug={events[0].id} />) : (
+            <div className="w-full h-full flex flex-col items-center justify-center text-center p-4 text-[#b3b3b3]">
+              <p className="mb-2">Your next upcoming event will appear here. Start by creating one!</p>
+              <AddEventModal />
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="relative flex h-full w-full flex-col items-center lg:w-1/2">
+      <div className="relative flex h-full w-full flex-col items-center md:w-1/2">
         <OrgTabs />
-        <div className="z-10 mt-[40px] h-full w-full rounded-2xl bg-white p-4">
+        <div className="z-10 mt-[40px] h-full w-full rounded-2xl rounded-t-none bg-white p-4">
           {!tab ||
             (tab === 'myEvents' && (
               <>
@@ -120,7 +127,10 @@ export default async function OrgDashboardPage({
                   {events.length > 0 ? (
                     events.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
                   ) : (
-                    <p className="text-gray-500">No events yet. Start by creating one!</p>
+                    <div className="w-full h-full flex flex-col items-center justify-center text-center gap-4 p-4 text-[#b3b3b3]">
+                      <Logo size={45} />
+                      <p className="mb-2">Your events will appear here. Use the plus button to create one!</p>
+                    </div>
                   )}
                 </div>
               </>

@@ -22,7 +22,7 @@ export default function EditOrgForm({org}: {org: PlainOrg}) {
       <h1>Edit My Details</h1>
       <TextInput label="Organization Name" name="name" defaultVal={org.name} />
       <TextInput type="email" label="Email" name="email" defaultVal={org.email || ''} />
-      <TextArea label="Bio" name="bio" defaultVal={org.description}/>
+      {/* <TextArea label="Bio" name="bio" defaultVal={org.description}/> */}
       <PlaceSearch
         lab="Location"
         loc={setloc}

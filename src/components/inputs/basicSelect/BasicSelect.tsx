@@ -16,7 +16,7 @@ export default function BasicSelect({ options, label, name, z ,multi = false, de
 
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="mb-4 flex w-full flex-col">
       <PrimaryLabel label={label} />
       <div className="relative z-50 overflow-visible">
         <Select
@@ -34,7 +34,6 @@ export default function BasicSelect({ options, label, name, z ,multi = false, de
           onChange={(opt) => setSelected(opt)}
         />
       </div>
-      ;
     </div>
   );
 }

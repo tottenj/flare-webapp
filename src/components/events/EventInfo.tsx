@@ -41,7 +41,7 @@ export default async function EventInfo({ slug }: { slug: string }) {
         <h1>{event.title}</h1>
         <p>{org?.name ? 'Hosted By ' + org.name : ''}</p>
         
-        <div className="mt-4 flex h-full w-full gap-8">
+        <div className="mt-4 flex flex-col sm:flex-row h-full w-full gap-8">
           {img && (
             <div className="eventImage">
               <Image

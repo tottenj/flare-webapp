@@ -9,7 +9,7 @@ interface toolTipProps {
 }
 export default function Tooltip({ children, text, placement = 'right' }: toolTipProps) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center ml-2 gap-2">
       {children}
       <Tool
         closeDelay={0}

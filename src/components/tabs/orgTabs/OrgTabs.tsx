@@ -26,7 +26,7 @@ export default function OrgTabs() {
     <Tabs
       radius="full"
       variant="solid"
-      className="absolute h-[40px] w-full self-start rounded-2xl bg-white overflow-hidden"
+      className="absolute h-[40px] w-full self-start rounded-2xl rounded-b-none bg-white overflow-hidden"
       fullWidth = {true}
       color={'danger'}
       selectedKey={selected}

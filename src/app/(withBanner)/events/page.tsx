@@ -3,6 +3,7 @@ import ClearFiltersButton from '@/components/buttons/clearFiltersButton/ClearFil
 import FilterToggles from '@/components/buttons/filterToggles/FilterToggles';
 import FullPageCalendar from '@/components/calendars/calendar/Calendar';
 import EventCard from '@/components/cards/EventCard/EventCard';
+import LinkInput from '@/components/inputs/link/LinkInput';
 import FilterModal from '@/components/modals/filterModal/FilterModal';
 import Event from '@/lib/classes/event/Event';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
@@ -50,7 +51,6 @@ export default async function EventView({
           <div className="relative h-[5%] w-full">
             <FilterModal />
             <h2 className="text-center text-xl font-semibold">Upcoming Events</h2>
-            {/* <hr className="border-primary mt-2 w-full rounded-2xl border-2" /> */}
           </div>
 
           <div className="group h-[95%] w-full">
@@ -59,7 +59,12 @@ export default async function EventView({
             <div className="flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto md:overflow-y-scroll bg-white group-has-[button]:h-[80%]">
               {plainQueriedEvents && plainQueriedEvents.length > 0 ? plainQueriedEvents.map((even) => (
                 <EventCard key={even.id} event={even} />
-              )): (<p>lksdjfljsdlfjlkj</p>)}
+              )): (
+              <div className="w-full h-full flex flex-col items-center justify-center text-center p-4 text-[#b3b3b3]">
+                <p className="text-lg mb-2">No events found.</p>
+                <p className="mb-2">Part of a queer organization? Become a part of the FLARE community and help fill out our calendar!</p>
+                <LinkInput style={{ padding: '0.5rem' }} href="/flare-signin" text="Organization Signup" />
+              </div> )}
             </div>
           </div>
         </div>

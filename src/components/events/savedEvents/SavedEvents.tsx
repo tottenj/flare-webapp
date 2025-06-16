@@ -1,4 +1,6 @@
 import EventCard from '@/components/cards/EventCard/EventCard';
+import Logo from '@/components/flare/logo/Logo';
+import LinkInput from '@/components/inputs/link/LinkInput';
 import Event from '@/lib/classes/event/Event';
 
 export default async function SavedEvents({ savedEvents }: { savedEvents: Event[] }) {
@@ -9,7 +11,11 @@ export default async function SavedEvents({ savedEvents }: { savedEvents: Event[
         {savedEvents.length > 0 ? (
           savedEvents.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
         ) : (
-          <p className="text-gray-500">No events yet. Start by saving one!</p>
+          <div className="w-full h-full flex flex-col items-center justify-center text-center gap-4 p-4 text-[#b3b3b3]">
+            <Logo size={45} />
+            <p className="mb-2">Your saved events will appear here. Get started by clicking the bookmark on an event!</p>
+            <LinkInput style={{ padding: '0.5rem' }} href="/" text="View Events" />
+          </div>
         )}
       </div>
     </>

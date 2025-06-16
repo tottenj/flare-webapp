@@ -68,6 +68,10 @@ h4{
   font-size: 1.125rem;
 }
 
+p {
+  font-family: var(--font-nunito);
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -163,6 +167,7 @@ button:hover {
   position: relative;
   height: 50vh;
   width: 33%;
+  aspect-ratio: 1/1;
 }
 
 .eventText {
@@ -188,5 +193,26 @@ button:hover {
 @media (max-width: 640px) { 
   h2 {
     font-size: 18px;
+  }
+
+  .eventImage {
+    position: relative;
+    height: 70vh;
+    width: 100%;
+  }
+
+  .eventText {
+    height: 100%;
+    max-height: unset;
+  }
+}
+
+@media (max-width: 450px) { 
+  .eventImage {
+    height: auto;
+  }
+
+  .eventText p {
+    width: 100%;
   }
 }

@@ -15,7 +15,7 @@ export default function Confirmation() {
           <h1>Thank You For Signing Up!</h1>
           <p>Please Check Your Email To Verify Your Account!</p>
         </div>
-       <LinkInput text='Go To Login' href='/signin'/>
+       <LinkInput style={{ padding: '0.5rem' }} text='Go To Login' href='/signin'/>
       </div>
     </div>
   );
