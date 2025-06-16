@@ -19,8 +19,7 @@ import Tooltip from '@/components/info/toolTip/Tooltip';
 import { getClaims } from '@/lib/firebase/utils/getClaims';
 import EditModal from '@/components/modals/editModal/EditModal';
 import EditOrgForm from '@/components/forms/editOrgForm/EditOrgForm';
-import LinkInput from '@/components/inputs/link/LinkInput';
-import Logo from '@/components/flare/logo/Logo';
+import SVGLogo from '@/components/flare/svglogo/SVGLogo';
 
 export default async function OrgDashboardPage({
   params,
@@ -128,7 +127,7 @@ export default async function OrgDashboardPage({
                     events.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center text-center gap-4 p-4 text-[#b3b3b3]">
-                      <Logo size={45} />
+                      <SVGLogo color={'#b3b3b3'} size={45} />
                       <p className="mb-2">Your events will appear here. Use the plus button to create one!</p>
                     </div>
                   )}
