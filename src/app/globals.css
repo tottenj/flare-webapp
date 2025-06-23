@@ -58,7 +58,7 @@ h2{
   font-family: var(--font-nunito);
   font-weight: bold;
   color: var(--color-primary);
-  font-size: 20px;
+  font-size: 1.5rem;
 }
 
 h4{
@@ -80,6 +80,14 @@ body {
 
 button:hover {
   cursor: pointer;
+}
+
+
+.secondaryHeader{
+  font-size: 1rem;
+  font-family: var(--font-nunito);
+  font-weight: bold;
+  color: var(--color-primary);
 }
 
 .gradient {
@@ -152,6 +160,11 @@ button:hover {
   position: absolute;
   top: 16px;
   left: 16px;
+}
+
+.eventPage .bookmarkButton{
+  top: 17%;
+  left: 10%;
 }
 
 .cardInner {

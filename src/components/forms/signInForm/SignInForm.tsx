@@ -31,14 +31,17 @@ export default function SignInForm() {
   }
 
   return (
-    <div className="@container flex w-11/12 sm:w-5/6 h-auto mt-16 mb-8 flex-col justify-center items-center rounded-xl bg-white p-4 pt-8 pb-8 sm:p-10 lg:w-1/2">
-      <ServerLogo size="medium"/>
-      <div className="absolute top-0 right-0 mt-4 mr-4">
+    <div className="@container mt-16 mb-8 flex h-auto w-11/12 flex-col items-center justify-center rounded-xl bg-white p-4 pt-8 pb-8 sm:w-5/6 sm:p-10 lg:w-1/2">
+      <ServerLogo size="medium" />
+      <div className="absolute top-0 right-0 mt-3">
         <LinkInput style={{ padding: '0.5rem' }} href="/flare-signin" text="Organization Signup" />
       </div>
 
-      <h1 className="mb-4 mt-4 text-4xl">Sign In</h1>
-      <form onSubmit={(e) => handleFormSubmit(e)} className="mb-8 flex w-full sm:w-5/6 flex-col @lg:w-2/3">
+      <h1 className="mt-4 mb-4 text-4xl">Sign In</h1>
+      <form
+        onSubmit={(e) => handleFormSubmit(e)}
+        className="mb-8 flex w-full flex-col sm:w-5/6 @lg:w-2/3"
+      >
         <TextInput ref={email} label="Email" name="email" placeholder="example@gmail.com" />
         <TextInput
           ref={pass}
@@ -52,7 +55,10 @@ export default function SignInForm() {
         </div>
       </form>
       <GoogleSignInButton signIn={true} />
-      <Link className="font-nunito mt-4 text-center text-balance font-bold underline" href={'/signup'}>
+      <Link
+        className="font-nunito mt-4 text-center font-bold text-balance underline"
+        href={'/signup'}
+      >
         Don't Have An Account? Sign Up Now!
       </Link>
     </div>

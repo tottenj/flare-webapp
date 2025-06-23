@@ -73,8 +73,8 @@ export default function OrgSignInForm() {
   return (
     <div className="@container flex w-11/12 sm:w-5/6 h-auto mt-16 mb-8 flex-col justify-center items-center rounded-xl bg-white p-4 pt-8 pb-8 sm:p-10 lg:w-1/2">
       <ServerLogo size="medium" />
-      <div className="absolute top-0 right-0 mt-4 mr-4">
-        <LinkInput style={{ padding: '0.5rem' }} href="/signup" text="User Sign Up" />
+      <div className="absolute top-0 right-0 mt-3 mr-4">
+        <LinkInput style={{ padding: '0.5rem', paddingRight: '2rem', paddingLeft: '2rem' }} href="/signup" text="User Sign Up" />
       </div>
       <h1 className="mt-4 text-center">Organization Sign Up</h1>
       <p className="mt-2 mb-8 text-center">

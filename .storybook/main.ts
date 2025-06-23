@@ -45,6 +45,13 @@ const config: StorybookConfig = {
       '__mocks__/serverApp/getAuthenticatedAppForUser'
     );
 
+
+    config.resolve.alias['@/lib/classes/event/Event'] = path.resolve(
+      __dirname,
+      '__mocks__/classes/event/Event.ts'
+    );
+    
+
     return config;
   },
 };

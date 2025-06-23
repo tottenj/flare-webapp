@@ -3,11 +3,15 @@ import ClearFiltersButton from '@/components/buttons/clearFiltersButton/ClearFil
 import FilterToggles from '@/components/buttons/filterToggles/FilterToggles';
 import FullPageCalendar from '@/components/calendars/calendar/Calendar';
 import EventCard from '@/components/cards/EventCard/EventCard';
+import EventsList from '@/components/events/eventsList/EventsList';
 import LinkInput from '@/components/inputs/link/LinkInput';
 import FilterModal from '@/components/modals/filterModal/FilterModal';
+import EventCardSkeleton from '@/components/skeletons/eventCardSkeleton/EventCardSkeleton';
 import Event from '@/lib/classes/event/Event';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import getEventFiltersFromSearchParams from '@/lib/utils/other/getEventFilters';
+import { Skeleton } from '@heroui/skeleton';
+import { Suspense } from 'react';
 
 export default async function EventView({
   params,
@@ -22,32 +26,24 @@ export default async function EventView({
   const filters = getEventFiltersFromSearchParams(resolvedSearchParams);
   const filterCopy = { ...filters };
 
-  let plainQueriedEvents;
+  delete filters.onDate;
+
+  let plainMonthsEvents;
   try {
-    const queriedEvents = await Event.queryEvents(fire, filters);
-    plainQueriedEvents = queriedEvents.map((event) => event.toPlain());
+    const calendarEvents = await Event.queryEvents(fire, filters);
+    plainMonthsEvents = calendarEvents.map((event) => event.toPlain());
   } catch (error) {
     console.log(error);
   }
 
-  delete filters.onDate;
-
-  let plainMonthsEvents
-  try{
-  const calendarEvents = await Event.queryEvents(fire, filters);
-  plainMonthsEvents = calendarEvents.map((event) => event.toPlain());
-  }catch(error){
-    console.log(error)
-  }
-
   return (
     <>
-      <div className="relative m-auto flex h-auto md:h-[calc(100dvh-58px)] max-w-[1440px] flex-col gap-2 p-2 md:flex-row md:gap-4 md:p-4">
+      <div className="relative m-auto flex h-auto max-w-[1440px] flex-col gap-2 p-2 md:h-[calc(100dvh-58px)] md:flex-row md:gap-4 md:p-4">
         <div className="h-auto w-full md:h-full md:w-3/5">
           <FullPageCalendar events={plainMonthsEvents || []} />
         </div>
 
-        <div className="relative flex h-auto w-full flex-col items-center gap-4 rounded-2xl bg-white p-2 pt-4 md:p-4 md:h-full md:w-2/5">
+        <div className="relative flex h-auto w-full flex-col items-center gap-4 rounded-2xl bg-white p-2 pt-4 md:h-full md:w-2/5 md:p-4">
           <div className="relative h-[5%] w-full">
             <FilterModal />
             <h2 className="text-center text-xl font-semibold">Upcoming Events</h2>
@@ -56,15 +52,10 @@ export default async function EventView({
           <div className="group h-[95%] w-full">
             {Object.keys(filterCopy).length > 0 && <ClearFiltersButton />}
             <FilterToggles />
-            <div className="flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto md:overflow-y-scroll bg-white group-has-[button]:h-[80%]">
-              {plainQueriedEvents && plainQueriedEvents.length > 0 ? plainQueriedEvents.map((even) => (
-                <EventCard key={even.id} event={even} />
-              )): (
-              <div className="w-full h-full flex flex-col items-center justify-center text-center p-4 text-[#b3b3b3]">
-                <p className="text-lg mb-2">No events found.</p>
-                <p className="mb-2">Part of a queer organization? Become a part of the FLARE community and help fill out our calendar!</p>
-                <LinkInput style={{ padding: '0.5rem' }} href="/flare-signin" text="Organization Signup" />
-              </div> )}
+            <div className="flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto bg-white group-has-[button]:h-[80%] md:overflow-y-scroll">
+              <Suspense fallback={<EventCardSkeleton />}>
+                <EventsList filters={filters} />
+              </Suspense>
             </div>
           </div>
         </div>

@@ -33,7 +33,7 @@ export default async function UserDashboardPage() {
           <div className="mt-2 h-full flex flex-col">
             <div className="h-full flex gap-4">
               <div>
-                <Suspense fallback={<GeneralLoader />}>
+                <Suspense fallback={<GeneralLoader size='85' />}>
                   <ProfilePicture size={100} />
                 </Suspense>
                 <EditProfileButton />

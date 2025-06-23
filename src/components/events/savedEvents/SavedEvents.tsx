@@ -4,6 +4,7 @@ import LinkInput from '@/components/inputs/link/LinkInput';
 import Event from '@/lib/classes/event/Event';
 
 export default async function SavedEvents({ savedEvents }: { savedEvents: Event[] }) {
+
   return (
     <>
       <h2>Saved Events</h2>

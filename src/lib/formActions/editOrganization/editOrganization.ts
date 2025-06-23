@@ -14,8 +14,8 @@ export default async function editOrganization(prevState: any, formData: FormDat
   const name = formData.get('name')?.toString();
   const locationString = formData.get('location') as string;
   const bio = formData.get("bio")?.toString()
-
   let location: flareLocation | null = null;
+
   if (locationString) {
     try {
       location = JSON.parse(locationString);
@@ -27,7 +27,6 @@ export default async function editOrganization(prevState: any, formData: FormDat
   const flareOrg = await FlareOrg.getOrg(fire, currentUser.uid);
   if (!flareOrg) return { message: 'Organization not found' };
 
-  // Build update object dynamically
   const update: Partial<FlareOrg> = {};
   if (bio) update.description = bio;
   if (email) update.email = email;

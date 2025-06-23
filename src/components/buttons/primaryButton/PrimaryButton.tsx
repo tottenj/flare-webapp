@@ -29,6 +29,7 @@ export default function PrimaryButton({
     small: 'w-1/4',
   }[size];
 
+
   return (
     <button
       onClick={click}
@@ -39,7 +40,7 @@ export default function PrimaryButton({
       className={`border-primary font-nunito hover:text-primary bg-primary mt-4 ${sizeClass} cursor-pointer rounded-xl border-2 p-2 font-bold text-white transition-all duration-300 ease-in-out hover:bg-white`}
     >
     
-      {disabled ? <GeneralLoader/> : text}
+      {disabled ? <GeneralLoader size="40px"/> : text}
     </button>
   );
 }

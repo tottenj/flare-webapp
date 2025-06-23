@@ -1,4 +1,4 @@
-"use server"
+'use server';
 import { Nunito, PT_Sans } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/context/AuthContext';
@@ -10,7 +10,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css'; // Import the CSS
 import { Providers } from './appProvider';
-
+import MainBanner from '@/components/banners/mainBanner/MainBanner';
 
 config.autoAddCss = false;
 
@@ -27,8 +27,6 @@ const pt_sans = PT_Sans({
   subsets: ['latin'],
 });
 
-
-
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const { currentUser } = await getAuthenticatedAppForUser();
 
@@ -43,11 +41,16 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="en">
       <body className={`${nunito.variable} ${pt_sans.variable} antialiased`}>
-        <div className="fullGradientBackground"/>
-        <div className='flex justify-center h-dvh'>
-          <div className="relative h-dvh mb-4 w-full overflow-auto overflow-x-hidden">
+        <div className="fullGradientBackground" />
+        <div className="flex h-dvh justify-center">
+          <div className="relative mb-4 h-dvh w-full overflow-auto overflow-x-hidden">
             <ServerUserProvider user={userData}>
-              <AuthProvider><Providers>{children}</Providers></AuthProvider>
+              <AuthProvider>
+                <Providers>
+                  <MainBanner />
+                  {children}
+                </Providers>
+              </AuthProvider>
               <Analytics />
               <SpeedInsights />
               <ToastContainer position="bottom-right" />
@@ -56,5 +59,5 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </div>
       </body>
     </html>
-  )
+  );
 }
