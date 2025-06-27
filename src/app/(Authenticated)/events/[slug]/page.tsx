@@ -21,13 +21,13 @@ export default async function FullEventPage({ params }: { params: Promise<{ slug
   if (!slug) return <p>Event not found</p>;
 
   return (
-    <>
+    <div>
       <div className='w-1/5 ml-4 flex justify-center items-center'>
         <Link className='bg-primary w-full hover:bg-white hover:text-primary text-white p-2 rounded-2xl block text-center font-bold mt-2' href={"/events"}>Events</Link>
       </div>
       <div className="eventPage">
         <EventInfo slug={slug} />
       </div>
-    </>
+    </div>
   );
 }
