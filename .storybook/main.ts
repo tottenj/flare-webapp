@@ -50,6 +50,14 @@ const config: StorybookConfig = {
       __dirname,
       '__mocks__/classes/event/Event.ts'
     );
+
+    config.resolve.alias['@/lib/firebase/auth/configs/getFirestoreFromServer'] = path.resolve(
+      __dirname,
+      '__mocks__/serverApp/getFirestoreFromServer.ts'
+    );
+
+    console.log("Webpack aliases:", config.resolve.alias);
+
     
 
     return config;
