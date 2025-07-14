@@ -1,5 +1,4 @@
 // .storybook/__mocks__/classes/event/Event.ts
-
 import { GeoPoint } from 'firebase/firestore';
 import type { Firestore } from 'firebase/firestore';
 

@@ -1,7 +1,7 @@
-import type { StoryObj, Meta } from '@storybook/react';
+import type { StoryObj, Meta } from '@storybook/nextjs';
 import PlaceSearch from './PlaceSearch';
 import { waitFor } from '@testing-library/dom';
-import { userEvent, expect, within } from '@storybook/test';
+import { userEvent, expect, within } from 'storybook/test';
 
 
 export default {

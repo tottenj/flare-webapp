@@ -1,14 +1,18 @@
-"use server"
-import EventInfo from '@/components/events/EventInfo';
+'use server';
+import EventInfo from '@/components/events/eventInfo/EventInfo';
+import EventInfoContainer from '@/components/events/eventInfo/EventInfoContainer';
 import Modal from '@/components/modals/mainModal/MainModal';
 
-
-export default async function EventModalInterception({ params }: { params: Promise<{ slug: string }> }) {
+export default async function EventModalInterception({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
 
   return (
     <Modal isOpen={true} route={true}>
-        <EventInfo slug={slug} />
+      <EventInfoContainer slug={slug} />
     </Modal>
   );
 }

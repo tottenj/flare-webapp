@@ -44,7 +44,7 @@ export default class Event {
   price: number | string;
   ticketLink?: string;
   verified: boolean;
-  createdAt: Date
+  createdAt: Date;
 
   constructor(
     flare_id: string,
@@ -82,8 +82,6 @@ export default class Event {
       this.location.coordinates.longitude,
     ]);
   }
-
- 
 
   async addEvent(dab: Firestore) {
     await addDocument(dab, `${Collections.Events}/${this.id}`, this, eventConverter);
@@ -139,6 +137,24 @@ export default class Event {
       new Date(),
       '1'
     ),
+    new Event(
+      'flare005',
+      'Open Mic Night',
+      'Share your poetry, music, or comedy in a safe space.',
+      eventType['Drag Events'],
+      AgeGroup.AllAges,
+      new Date('2025-07-10T18:30:00'),
+      new Date('2025-07-10T18:30:00'),
+      {
+        id: 'loc005',
+        name: 'The Cozy Corner',
+        coordinates: new GeoPoint(41.8781, -87.6298), // Chicago
+      },
+      10,
+      false,
+      new Date(),
+      '1'
+    ),
   ];
 
   static async queryEvents(
@@ -153,18 +169,20 @@ export default class Event {
 
       const promises = [];
       for (const b of bounds) {
-        const q = query(collection(dab, 'Events'), where("verified", "==", true), orderBy('hash'), startAt(b[0]), endAt(b[1]));
+        const q = query(
+          collection(dab, 'Events'),
+          where('verified', '==', true),
+          orderBy('hash'),
+          startAt(b[0]),
+          endAt(b[1])
+        );
         promises.push(getDocs(q));
       }
 
-     
       const snapshots = await Promise.all(promises);
-
-
 
       const filteredEvents: Event[] = [];
 
-     
       for (const snap of snapshots) {
         for (const doc of snap.docs) {
           const data = doc.data();
@@ -198,7 +216,7 @@ export default class Event {
           }
 
           if (filters.afterDate) {
-            const eventDate = data.startdate? data.startdate : data.startdate;
+            const eventDate = data.startdate ? data.startdate : data.startdate;
             if (eventDate < filters.afterDate) continue;
           }
           if (filters.beforeDate) {
@@ -263,7 +281,7 @@ export default class Event {
       createdAt: this.createdAt,
       price: this.price,
       ticketLink: this.ticketLink,
-      
+
       hash: this.hash,
     };
   }

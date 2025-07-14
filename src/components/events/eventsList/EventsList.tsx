@@ -1,31 +1,12 @@
 import EventCard from '@/components/cards/EventCard/EventCard';
 import LinkInput from '@/components/inputs/link/LinkInput';
-import Event from '@/lib/classes/event/Event';
-import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
-import EventFilters from '@/lib/types/FilterType';
-import fakeLoading from '@/lib/utils/other/fakeLoading';
+import Event, { PlainEvent } from '@/lib/classes/event/Event';
+
 
 interface eventsList {
-  filters: EventFilters;
-  wait?: boolean;
+  plainQueriedEvents?: PlainEvent[];
 }
-export default async function EventsList({ filters, wait = false }: eventsList) {
-  let plainQueriedEvents;
-  const { fire } = await getFirestoreFromServer();
-
-  if (wait) {
-    await fakeLoading(4000);
-  }
-
-  try {
-    const queriedEvents = await Event.queryEvents(fire, filters);
-    plainQueriedEvents = queriedEvents.map((event) => event.toPlain());
-  } catch (error) {
-    console.log(error);
-  }
-
-
-
+export default async function EventsList({ plainQueriedEvents }: eventsList) {
   return (
     <>
       {plainQueriedEvents && plainQueriedEvents.length > 0 ? (

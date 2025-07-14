@@ -1,5 +1,6 @@
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
-import EventInfo from '@/components/events/EventInfo';
+import EventInfo from '@/components/events/eventInfo/EventInfo';
+import EventInfoContainer from '@/components/events/eventInfo/EventInfoContainer';
 import Event from '@/lib/classes/event/Event';
 import {
   getFirestoreFromServer,
@@ -22,11 +23,16 @@ export default async function FullEventPage({ params }: { params: Promise<{ slug
 
   return (
     <div>
-      <div className='w-1/5 ml-4 flex justify-center items-center'>
-        <Link className='bg-primary w-full hover:bg-white hover:text-primary text-white p-2 rounded-2xl block text-center font-bold mt-2' href={"/events"}>Events</Link>
+      <div className="ml-4 flex w-1/5 items-center justify-center">
+        <Link
+          className="bg-primary hover:text-primary mt-2 block w-full rounded-2xl p-2 text-center font-bold text-white hover:bg-white"
+          href={'/events'}
+        >
+          Events
+        </Link>
       </div>
       <div className="eventPage">
-        <EventInfo slug={slug} />
+        <EventInfoContainer slug={slug} />
       </div>
     </div>
   );

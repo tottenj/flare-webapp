@@ -8,7 +8,7 @@ import AddEventModal from '@/components/modals/addEventModal/AddEventModal';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
 import EditProfileButton from '@/components/buttons/editProfile/EditProfileButton';
 import { Suspense } from 'react';
-import EventInfo from '@/components/events/EventInfo';
+import EventInfo from '@/components/events/eventInfo/EventInfo';
 import OrgTabs from '@/components/tabs/orgTabs/OrgTabs';
 import SavedEvents from '@/components/events/savedEvents/SavedEvents';
 import { QueryOptions } from '@/lib/firebase/firestore/firestoreOperations';

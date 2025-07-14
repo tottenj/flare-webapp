@@ -24,6 +24,7 @@ export const getFirestoreFromServer = cache(async () => {
   return { firebaseServerApp, currentUser, fire };
 });
 
+
 export const getFirestoreFromStatic = cache(async () => {
   const fire = getFirestore();
   if (process.env.MODE === 'test') {

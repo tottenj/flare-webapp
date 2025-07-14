@@ -1,4 +1,4 @@
-import type { StoryObj, Meta } from '@storybook/react';
+import type { StoryObj, Meta } from '@storybook/nextjs';
 
 import Calendar  from './Calendar';
 import Event from '@/lib/classes/event/Event';

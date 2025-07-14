@@ -1,13 +1,17 @@
 import path from 'path';
 import type { StorybookConfig } from '@storybook/nextjs';
+import fs from 'fs';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+
+console.log('File exists?', fs.existsSync(path.resolve('src/lib/firebase/auth/configs')));
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
-    '@storybook/addon-essentials',
     '@storybook/addon-onboarding',
     '@chromatic-com/storybook',
-    '@storybook/experimental-addon-test',
+    '@storybook/addon-vitest',
+    '@storybook/addon-docs',
   ],
   framework: {
     name: '@storybook/nextjs',
@@ -24,12 +28,7 @@ const config: StorybookConfig = {
     if (!config.resolve) config.resolve = {};
     if (!config.resolve.alias) config.resolve.alias = {};
 
-    // 👉 Aliasing Firebase modules to local mock file
-    config.resolve.alias['@/lib/firebase/auth/auth.ts'] = path.resolve(
-      __dirname,
-      '__mocks__/authHelpers.ts'
-    );
-
+    // Firebase and next mocks
     config.resolve.alias['firebase/auth'] = path.resolve(__dirname, '__mocks__/firebase/auth.ts');
     config.resolve.alias['firebase/firestore'] = path.resolve(
       __dirname,
@@ -40,25 +39,11 @@ const config: StorybookConfig = {
       '__mocks__/next/navigation.ts'
     );
 
-    config.resolve.alias['@/lib/firebase/auth/configs/serverApp'] = path.resolve(
-      __dirname,
-      '__mocks__/serverApp/getAuthenticatedAppForUser'
-    );
+    config.resolve.alias['src/lib/firebase/auth/configs'] = path.resolve(__dirname, '__mocks__/lib/firebase/auth/configs/getFirestoreFromServer')
+
+  
 
 
-    config.resolve.alias['@/lib/classes/event/Event'] = path.resolve(
-      __dirname,
-      '__mocks__/classes/event/Event.ts'
-    );
-
-    config.resolve.alias['@/lib/firebase/auth/configs/getFirestoreFromServer'] = path.resolve(
-      __dirname,
-      '__mocks__/serverApp/getFirestoreFromServer.ts'
-    );
-
-    console.log("Webpack aliases:", config.resolve.alias);
-
-    
 
     return config;
   },

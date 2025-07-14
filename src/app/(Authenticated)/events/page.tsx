@@ -2,16 +2,12 @@
 import ClearFiltersButton from '@/components/buttons/clearFiltersButton/ClearFiltersButton';
 import FilterToggles from '@/components/buttons/filterToggles/FilterToggles';
 import FullPageCalendar from '@/components/calendars/calendar/Calendar';
-import EventCard from '@/components/cards/EventCard/EventCard';
-import EventsList from '@/components/events/eventsList/EventsList';
-import LinkInput from '@/components/inputs/link/LinkInput';
+import EventListContainer from '@/components/events/eventsList/EventListContainer';
 import FilterModal from '@/components/modals/filterModal/FilterModal';
-import EventCardSkeleton from '@/components/skeletons/eventCardSkeleton/EventCardSkeleton';
 import Event from '@/lib/classes/event/Event';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import getEventFiltersFromSearchParams from '@/lib/utils/other/getEventFilters';
-import { Skeleton } from '@heroui/skeleton';
-import { Suspense } from 'react';
+
 
 export default async function EventView({
   params,
@@ -52,11 +48,7 @@ export default async function EventView({
           <div className="group h-[95%] w-full">
             {Object.keys(filterCopy).length > 0 && <ClearFiltersButton />}
             <FilterToggles />
-            <div className="flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto bg-white group-has-[button]:h-[80%] md:overflow-y-scroll">
-              <Suspense fallback={<EventCardSkeleton />}>
-                <EventsList filters={filters} />
-              </Suspense>
-            </div>
+            <EventListContainer filters={filters}/>
           </div>
         </div>
       </div>

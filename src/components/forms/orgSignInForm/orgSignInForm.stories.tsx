@@ -1,6 +1,6 @@
-import type { StoryObj, Meta } from '@storybook/react';
+import type { StoryObj, Meta } from '@storybook/nextjs';
 import OrgSignInForm from './OrgSignInForm';
-import { userEvent, within, expect } from '@storybook/test';
+import { userEvent, within, expect } from 'storybook/test';
 
 
 

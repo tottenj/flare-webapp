@@ -1,5 +1,4 @@
 
-
 // .storybook/__mocks__/firebase/firestore.ts
 export const getFirestore = () => ({
   collection: () => ({
