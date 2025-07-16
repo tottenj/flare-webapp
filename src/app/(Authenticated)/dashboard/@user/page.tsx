@@ -2,6 +2,7 @@
 import EditProfileButton from '@/components/buttons/editProfile/EditProfileButton';
 import EventCard from '@/components/cards/EventCard/EventCard';
 import EventInfo from '@/components/events/eventInfo/EventInfo';
+import EventInfoContainer from '@/components/events/eventInfo/EventInfoContainer';
 import SVGLogo from '@/components/flare/svglogo/SVGLogo';
 import LinkInput from '@/components/inputs/link/LinkInput';
 import GeneralLoader from '@/components/loading/GeneralLoader';
@@ -52,9 +53,9 @@ export default async function UserDashboardPage() {
           </div>
         </div>
         {}
-        <div className="hidden h-3/5 rounded-2xl bg-white p-4 md:block">
+        <div className="hidden h-3/5 rounded-2xl bg-white md:block">
           {savedEvents.length > 0 ? (
-            <EventInfo slug={savedEvents[0].id} />
+            <EventInfoContainer slug={savedEvents[0].id} />
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4 text-center text-[#b3b3b3]">
               <SVGLogo color={'#b3b3b3'} size={45} />

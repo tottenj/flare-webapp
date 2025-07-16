@@ -19,6 +19,7 @@ import EditOrgForm from '@/components/forms/editOrgForm/EditOrgForm';
 import MyEvents from '@/components/events/myEvents/MyEvents';
 import EventsListSkeleton from '@/components/skeletons/eventCardSkeleton/EventCardSkeleton';
 import ProfilePictureSkeleton from '@/components/skeletons/ProfilePictureSkeleton/ProfilePictureSkeleton';
+import EventInfoContainer from '@/components/events/eventInfo/EventInfoContainer';
 
 export default async function OrgDashboardPage({
   params,
@@ -97,9 +98,9 @@ export default async function OrgDashboardPage({
             </div>
           </div>
         </div>
-        <div className="hidden h-4/5 rounded-2xl bg-white p-4 md:block">
+        <div className="hidden h-4/5 rounded-2xl bg-white  md:block">
           {events.length > 0 ? (
-            <EventInfo slug={events[0].id} />
+            <EventInfoContainer slug={events[0].id} />
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center p-4 text-center text-[#b3b3b3]">
               <p className="mb-2">

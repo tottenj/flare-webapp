@@ -2,21 +2,26 @@
 import Event from '@/lib/classes/event/Event';
 import Image from 'next/image';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
-import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
-import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faClock } from '@fortawesome/free-regular-svg-icons';
 import { faLocationDot, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import SecondaryHeader from '../../info/toolTip/secondaryHeader/SecondaryHeader';
+import BookmarkButton from '@/components/buttons/bookmarkButton/BookmarkButton';
 
 interface EventInfoProps {
   img?: string | null;
   event: Event;
   org?: FlareOrg | null;
+  seen: boolean;
+  curUserId?: string;
 }
-export default async function EventInfo({ img, event, org }: EventInfoProps) {
+export default async function EventInfo({ img, event, org, seen, curUserId }: EventInfoProps) {
+  if (!event) {
+    return <></>;
+  }
+
   const formattedDate = event.startdate.toLocaleDateString('en-US', {
     weekday: 'short', // Tue
     month: 'long', // June
@@ -25,13 +30,14 @@ export default async function EventInfo({ img, event, org }: EventInfoProps) {
   });
 
   return (
-    <div className="mx-auto flex h-full max-w-5xl flex-col p-4">
-      <div className="grid items-start gap-6 rounded-2xl bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl md:grid-cols-[1fr_1.2fr]">
-        <div className="relative aspect-[4/3] max-h-[500px] w-full overflow-hidden rounded-xl border border-gray-200 shadow-sm md:aspect-[3/4]">
+    <div className="relative mx-auto flex max-w-5xl flex-col p-4">
+      <div className="grid items-start gap-6 rounded-2xl bg-white p-6 transition-all duration-300 md:grid-cols-[1fr_1.2fr]">
+        {event.flare_id !== curUserId && <BookmarkButton event={event.id} seen={seen} />}
+        <div className="relative aspect-[4/3] max-h-[500px] w-full overflow-hidden rounded-xl md:aspect-[3/4]">
           {img && <Image src={img} alt="Event Image" fill className="object-cover object-top" />}
         </div>
         <div className="flex flex-col">
-          <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">{event.title}</h2>
+          <h2 className="mb-4 text-center !text-4xl font-bold md:text-4xl">{event.title}</h2>
           <div className="flex flex-col gap-2 text-sm text-gray-700"></div>
           <SecondaryHeader header="Hosted By:" text={org?.name} />
           <SecondaryHeader header={<FontAwesomeIcon icon={faCalendar} />} text={formattedDate} />

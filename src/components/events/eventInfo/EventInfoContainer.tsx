@@ -1,3 +1,4 @@
+"use server"
 import Event from "@/lib/classes/event/Event";
 import FlareOrg from "@/lib/classes/flareOrg/FlareOrg";
 import FlareUser from "@/lib/classes/flareUser/FlareUser";
@@ -27,5 +28,6 @@ export default async function EventInfoContainer({ slug }: { slug: string }) {
       }
     }
   }
-  return <EventInfo org={org} img={img} event={event}/>;
+
+  return event &&  <EventInfo org={org} img={img} event={event} seen={hasSeen} curUserId={currentUser?.uid}/>;
 }

@@ -23,7 +23,7 @@ export default async function FullEventPage({ params }: { params: Promise<{ slug
 
   return (
     <div>
-      <div className="ml-4 flex w-1/5 items-center justify-center">
+      <div className="absolute w-1/4">
         <Link
           className="bg-primary hover:text-primary mt-2 block w-full rounded-2xl p-2 text-center font-bold text-white hover:bg-white"
           href={'/events'}
@@ -31,8 +31,10 @@ export default async function FullEventPage({ params }: { params: Promise<{ slug
           Events
         </Link>
       </div>
-      <div className="eventPage">
-        <EventInfoContainer slug={slug} />
+      <div className="flex h-dvh items-center">
+        <div className="mr-auto ml-auto rounded-2xl bg-white p-4">
+          <EventInfoContainer slug={slug} />
+        </div>
       </div>
     </div>
   );

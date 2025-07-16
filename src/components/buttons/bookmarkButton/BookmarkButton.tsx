@@ -21,9 +21,8 @@ import CtaModal from '@/components/modals/ctaModal/CtaModal';
 interface bookmarkButtonProps {
   event: string;
   seen: boolean;
-  slug: string;
 }
-export default function BookmarkButton({ event, seen = false, slug }: bookmarkButtonProps) {
+export default function BookmarkButton({ event, seen = false}: bookmarkButtonProps) {
   const [state, action, pending] = useActionState(addBookmark, { message: '' });
   const [optimisticSeen, setOptimisticSeen] = useOptimistic(seen);
   const sucMessage = seen ? 'Saved Event' : 'Removed Event';
@@ -44,7 +43,7 @@ export default function BookmarkButton({ event, seen = false, slug }: bookmarkBu
   };
 
   return (
-    <form action={!user ? undefined : action} onSubmit={(e) => handleSubmit(e)}>
+    <form className='absolute left-4 top-4' action={!user ? undefined : action} onSubmit={(e) => handleSubmit(e)}>
       <button type="submit">
         <FontAwesomeIcon
           icon={optimisticSeen ? solidBookmark : regularBookmark}
