@@ -31,10 +31,8 @@ export default async function FullEventPage({ params }: { params: Promise<{ slug
           Events
         </Link>
       </div>
-      <div className="flex h-dvh items-center">
-        <div className="mr-auto ml-auto rounded-2xl bg-white p-4">
+      <div className="flex h-dvh items-center md:pt-0 pt-[15%]">
           <EventInfoContainer slug={slug} />
-        </div>
       </div>
     </div>
   );

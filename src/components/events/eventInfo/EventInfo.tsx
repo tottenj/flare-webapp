@@ -30,16 +30,16 @@ export default async function EventInfo({ img, event, org, seen, curUserId }: Ev
   });
 
   return (
-    <div className="relative mx-auto flex max-w-5xl flex-col p-4">
+    <div className="relative mx-auto flex max-w-5xl flex-col p-4 bg-white rounded-2xl min-w-3/4">
       <div className="grid items-start gap-6 rounded-2xl bg-white p-6 transition-all duration-300 md:grid-cols-[1fr_1.2fr]">
         {event.flare_id !== curUserId && <BookmarkButton event={event.id} seen={seen} />}
         <div className="relative aspect-[4/3] max-h-[500px] w-full overflow-hidden rounded-xl md:aspect-[3/4]">
           {img && <Image src={img} alt="Event Image" fill className="object-cover object-top" />}
         </div>
         <div className="flex flex-col">
-          <h2 className="mb-4 text-center !text-4xl font-bold md:text-4xl">{event.title}</h2>
+          <h2 className="text-center !text-4xl font-bold md:text-4xl">{event.title}</h2>
+          <p className="mb-4 text-center">{org?.name}</p>
           <div className="flex flex-col gap-2 text-sm text-gray-700"></div>
-          <SecondaryHeader header="Hosted By:" text={org?.name} />
           <SecondaryHeader header={<FontAwesomeIcon icon={faCalendar} />} text={formattedDate} />
           <SecondaryHeader
             header={<FontAwesomeIcon icon={faClock} />}

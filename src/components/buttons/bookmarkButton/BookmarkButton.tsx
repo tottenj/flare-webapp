@@ -43,7 +43,7 @@ export default function BookmarkButton({ event, seen = false}: bookmarkButtonPro
   };
 
   return (
-    <form className='absolute left-4 top-4' action={!user ? undefined : action} onSubmit={(e) => handleSubmit(e)}>
+    <form className='absolute left-4 top-4 lg:left-2 md:top-2' action={!user ? undefined : action} onSubmit={(e) => handleSubmit(e)}>
       <button type="submit">
         <FontAwesomeIcon
           icon={optimisticSeen ? solidBookmark : regularBookmark}

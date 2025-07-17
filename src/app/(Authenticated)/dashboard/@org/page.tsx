@@ -71,6 +71,7 @@ export default async function OrgDashboardPage({
                   <ProfilePicture size={100} />
                 </Suspense>
                 <EditProfileButton />
+              
               </div>
               <div>
                 <p className="secondaryHeader">
