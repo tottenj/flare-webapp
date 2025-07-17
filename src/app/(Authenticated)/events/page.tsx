@@ -48,7 +48,7 @@ export default async function EventView({
           <div className="group h-[95%] w-full">
             {Object.keys(filterCopy).length > 0 && <ClearFiltersButton />}
             <FilterToggles />
-            <EventListContainer filters={filters}/>
+            <EventListContainer filters={filterCopy}/>
           </div>
         </div>
       </div>

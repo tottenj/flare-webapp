@@ -1,4 +1,4 @@
-Jul 15, 2025 9:33:25 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+Jul 16, 2025 8:51:52 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
 INFO: Started WebSocket server on ws://127.0.0.1:9150
 API endpoint: http://127.0.0.1:8080
 If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
@@ -12,487 +12,283 @@ If you are running a Firestore in Datastore Mode project, run:
 Note: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.
 Dev App Server is now running.
 
-Jul 15, 2025 9:33:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 8:52:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:45:47 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 8:58:42 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:46:04 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:00:03 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:46:14 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:00:06 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:46:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:00:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:46:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:02:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:46:55 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:03:58 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:47:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:04:36 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:47:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:20:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:47:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:20:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:47:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:20:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:47:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:20:43 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:47:40 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:20:54 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:47:41 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:23:46 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:47:47 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:24:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:47:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:29:36 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:47:53 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:30:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:47:58 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:31:48 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:48:02 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:34:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:48:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:34:59 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:48:12 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:35:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:48:57 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:35:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:49:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:35:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:49:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:36:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:49:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:36:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:49:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:36:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:49:42 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:36:54 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:50:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:36:56 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:52:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:37:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:54:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:37:44 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:57:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:37:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:58:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:40:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:58:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:44:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:59:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:44:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:59:53 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:45:58 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 9:59:57 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:47:01 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:02:04 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:47:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:02:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:47:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:02:59 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:47:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:04:39 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:47:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:04:39 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:05 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:04:46 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:04:47 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:04:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:39 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:04:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:41 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:04:57 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:44 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:04:58 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:47 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:55 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:56 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:48:59 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:49:13 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:36 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:49:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:49:41 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:46 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:49:42 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:46 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:50:03 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:48 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:50:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:50:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:53 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:50:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:05:53 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:50:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:11 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:50:36 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:12 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:50:46 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:50:58 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:51:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:51:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:51:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:51:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:52:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:52:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:52:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:52:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:06:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:52:43 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:07:14 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:53:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:07:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:53:02 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:07:31 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:56:12 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:07:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:56:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:07:44 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:56:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:07:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:56:56 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:08:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:57:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:08:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:57:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:08:13 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:57:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:08:14 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:57:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:13:41 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:57:55 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:13:59 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:58:06 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:14:04 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:58:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:14:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:58:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:14:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:58:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:14:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:58:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:15:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:59:12 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:15:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:59:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:16:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:59:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:17:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:59:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:17:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:59:44 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:18:13 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 9:59:55 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:18:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:00:03 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:18:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:01:59 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:18:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:04:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:19:07 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:04:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:19:12 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:05:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:19:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:06:44 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:21:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:07:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:23:11 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:08:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:23:14 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:09:06 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:23:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:09:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:23:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:09:58 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:23:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:11:12 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:23:59 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:11:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:24:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:12:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:24:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:12:42 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:24:31 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:14:39 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:24:31 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:15:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:24:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:15:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:24:36 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:16:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:24:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:18:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:24:39 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:19:02 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:24:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:19:31 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:24:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:20:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:24:56 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:29:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:25:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:29:13 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:25:02 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:29:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:25:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:29:25 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:25:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:30:05 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:25:48 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:30:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:26:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:30:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:26:58 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:30:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:27:04 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:32:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:27:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:33:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:28:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:35:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:28:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:35:36 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:29:43 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:35:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:29:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:35:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:29:59 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:35:55 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:31:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:36:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:31:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:36:40 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:31:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:37:11 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:31:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:37:42 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:31:36 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:39:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:58:56 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:40:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 10:58:59 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+Jul 16, 2025 10:58:12 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:01:06 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:03:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:04:57 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:04:57 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:49 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:53 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:05:53 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:06:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:06:11 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:06:11 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:06:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:06:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:06:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:06:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:06:44 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:06:44 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:04 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:05 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:05 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:17 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:31 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:36 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:37 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:07:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:08:12 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:08:13 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:08:14 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:08:14 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:08:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:08:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:08:18 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:08:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:08:22 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:09:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:09:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:09:52 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:09:59 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:09:59 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:10:01 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:10:02 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:10:02 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:10:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:10:29 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:11:04 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:11:04 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:11:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:11:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:12:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:12:41 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:13:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:13:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:13:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:13:41 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:14:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:14:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:14:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:14:26 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:14:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:14:41 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:14:42 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:14:42 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:15:55 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:15:58 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:17:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:17:30 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:17:31 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:17:34 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:17:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:17:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:17:39 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:17:40 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:17:41 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:18:04 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:18:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:18:39 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:26:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:26:58 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:27:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:27:02 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:27:11 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:27:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:27:59 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:28:12 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:28:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected non-HTTP/2 connection.
-Jul 15, 2025 11:28:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-Jul 15, 2025 11:28:33 PM com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1 exportData
-INFO: Exporting emulator data to firebase-export-17526365134057acsoZ/firestore_export
-*** shutting down gRPC server since JVM is shutting down
-*** server shut down

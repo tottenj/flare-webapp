@@ -26,9 +26,19 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
+
+  function parseLocalDate(dateStr: string): Date {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day); // local midnight
+  }
+
+  const selectedDate = searchParams.get('date')
+    ? parseLocalDate(searchParams.get('date')!)
+    : undefined;
+
   const eventMap: Record<string, string[]> = events.reduce(
     (acc, event) => {
-      const dateKey = toLocalDateKey(new Date(event.startDate));
+      const dateKey = toLocalDateKey(event.startDate);
       const color = event.type; // This is already an OKLCH color string
       if (!acc[dateKey]) acc[dateKey] = [];
       acc[dateKey].push(color);
@@ -38,6 +48,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
   );
 
   function isEventDay(day: Date): string[] {
+    console.log(day);
     const key = toLocalDateKey(day);
     return eventMap[key] || [];
   }
@@ -56,7 +67,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
       <td
         onClick={() => {
           const currentDate = searchParams.get('date');
-          const newDate = day.date.toLocaleDateString('sv-SE'); // "YYYY-MM-DD"
+          const newDate = day.date.toISOString().slice(0, 10);
 
           if (currentDate === newDate) return;
 
@@ -70,7 +81,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
               <div className={styles.dotContainer}>
                 {Object.entries(
                   eventColors.reduce<Record<string, number>>((acc, color) => {
-                    acc[color] = (acc[color] || 0) ;
+                    acc[color] = acc[color] || 0;
                     return acc;
                   }, {})
                 ).map(([color, count], index) => (
@@ -84,13 +95,8 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
                       const clickedType = getKeyByValue(eventType, color);
                       const currentType = params.get('type');
                       const newDate = toLocalDateKey(day.date);
-                
-
-
-                    
                       params.set('date', newDate);
 
-                    
                       if (clickedType) {
                         // Get existing types as array
                         const currentTypesStr = params.get('type') || '';
@@ -127,8 +133,14 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
         formatters={{
           formatWeekdayName: (day) => day.toLocaleDateString('en-US', { weekday: 'short' }),
         }}
-        modifiers={{ hasEvent: (day) => isEventDay(day).length > 0 }}
-        modifiersClassNames={{ hasEvent: styles.hasEvent }}
+        modifiers={{
+          hasEvent: (day) => isEventDay(day).length > 0,
+          selected: (day) =>
+            selectedDate instanceof Date &&
+            !isNaN(selectedDate.getTime()) &&
+            toLocalDateKey(day) === toLocalDateKey(selectedDate),
+        }}
+        modifiersClassNames={{ hasEvent: styles.hasEvent, selected: styles.selectedDay }}
         classNames={{ day: styles.day }}
         components={{
           Day: ({ day, modifiers, ...props }) => (

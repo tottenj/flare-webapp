@@ -20,6 +20,11 @@ import MyEvents from '@/components/events/myEvents/MyEvents';
 import EventsListSkeleton from '@/components/skeletons/eventCardSkeleton/EventCardSkeleton';
 import ProfilePictureSkeleton from '@/components/skeletons/ProfilePictureSkeleton/ProfilePictureSkeleton';
 import EventInfoContainer from '@/components/events/eventInfo/EventInfoContainer';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+import Modal from '@/components/modals/mainModal/MainModal';
+import PassInModal from '@/components/modals/passInModal/PassInModal';
+import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+import DeleteAccountForm from '@/components/forms/deleteAccountForm/DeleteAccountForm';
 
 export default async function OrgDashboardPage({
   params,
@@ -58,9 +63,23 @@ export default async function OrgDashboardPage({
     <div className="flex h-full flex-col items-start justify-start gap-4 px-4 md:flex-row">
       <div className="relative flex h-auto w-full flex-col justify-start gap-4 md:h-full md:w-1/2 lg:w-1/2">
         <div className="flex h-full w-full flex-col rounded-2xl bg-white p-4 md:h-2/5">
-          <div className="absolute right-4">
+          <div className="absolute right-4 flex gap-4">
             <EditModal>
               <EditOrgForm org={org.toPlain()} />
+            </EditModal>
+            <EditModal icon={faGear}>
+              <div className="flex min-h-[500px] flex-col items-center justify-between">
+                <h2>Settings</h2>
+                <PassInModal
+                  trigger={
+                    <button className="bg-red w-11/12 rounded-2xl p-2 font-black text-white hover:bg-red-600">
+                      Delete Account?
+                    </button>
+                  }
+                >
+                 <DeleteAccountForm/>
+                </PassInModal>
+              </div>
             </EditModal>
           </div>
           <h2>Member Details</h2>
@@ -71,7 +90,6 @@ export default async function OrgDashboardPage({
                   <ProfilePicture size={100} />
                 </Suspense>
                 <EditProfileButton />
-              
               </div>
               <div>
                 <p className="secondaryHeader">
@@ -99,7 +117,7 @@ export default async function OrgDashboardPage({
             </div>
           </div>
         </div>
-        <div className="hidden h-4/5 rounded-2xl bg-white  md:block">
+        <div className="hidden h-4/5 rounded-2xl bg-white md:block">
           {events.length > 0 ? (
             <EventInfoContainer slug={events[0].id} />
           ) : (

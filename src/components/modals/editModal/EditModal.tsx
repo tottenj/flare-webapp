@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import Modal from '../mainModal/MainModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencil } from '@fortawesome/free-solid-svg-icons';
+import { faPencil, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
-export default function EditModal({children}: {children: React.ReactNode}) {
+export default function EditModal({children, icon = faPencil}: {children: React.ReactNode, icon?: IconDefinition}) {
   const [open, setIsOpen] = useState(false);
 
   return (
@@ -17,7 +17,7 @@ export default function EditModal({children}: {children: React.ReactNode}) {
       >
         <FontAwesomeIcon
           className="group-hover:text-foreground text-white ease-in-out"
-          icon={faPencil}
+          icon={icon}
         />
       </button>
 

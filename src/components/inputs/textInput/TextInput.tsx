@@ -17,6 +17,7 @@ interface textInputProps {
   styleOverDiv?: CSSProperties;
   ref?: Ref<HTMLInputElement>;
   defaultVal?: string
+
 }
 
 
