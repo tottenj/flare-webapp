@@ -37,7 +37,22 @@ export default function PrimaryButton({
       style={styleOver}
       type={type}
       disabled={disabled}
-      className={`border-primary font-nunito hover:text-primary bg-primary mt-4 ${sizeClass} cursor-pointer rounded-xl border-2 p-2 font-bold text-white transition-all duration-300 ease-in-out hover:bg-white`}
+      className={`${sizeClass}
+      bg-primary
+      
+      p-2
+      mt-4
+      rounded-2xl
+    text-white
+    transition
+    duration-300
+    ease-in-out
+    hover:brightness-120
+    hover:scale-[1.015]
+    hover:
+    font-bold
+    font-nunito
+    cursor-pointer`}
     >
     
       {disabled ? <GeneralLoader size="40px"/> : text}

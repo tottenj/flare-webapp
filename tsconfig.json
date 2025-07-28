@@ -20,7 +20,6 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "#lib/getFirestoreFromServer": ["./src/lib/firebase/auth/configs/getFirestoreFromServer"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "cypress/support/commands.ts", "cypress/support/e2e.ts"],

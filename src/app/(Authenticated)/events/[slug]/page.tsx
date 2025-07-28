@@ -9,6 +9,8 @@ import {
 import Link from 'next/link';
 export const dynamicParams = true;
 
+
+export const revalidate = 60;
 export async function generateStaticParams() {
   const fire = await getFirestoreFromStatic();
   const events: Event[] = await Event.queryEvents(fire, {});
@@ -22,7 +24,7 @@ export default async function FullEventPage({ params }: { params: Promise<{ slug
   if (!slug) return <p>Event not found</p>;
 
   return (
-    <div>
+    <div className='p-4'>
       <div className="absolute w-1/4">
         <Link
           className="bg-primary hover:text-primary mt-2 block w-full rounded-2xl p-2 text-center font-bold text-white hover:bg-white"
@@ -31,7 +33,7 @@ export default async function FullEventPage({ params }: { params: Promise<{ slug
           Events
         </Link>
       </div>
-      <div className="flex h-dvh items-center md:pt-0 pt-[15%]">
+      <div className="flex h-auto mt-[10%] md:pt-0 pt-[15%]">
           <EventInfoContainer slug={slug} />
       </div>
     </div>

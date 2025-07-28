@@ -1,3 +1,4 @@
+"use server"
 import EventFilters from '@/lib/types/FilterType';
 import EventsList from './EventsList';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
