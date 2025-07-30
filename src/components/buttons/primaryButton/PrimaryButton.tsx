@@ -1,7 +1,6 @@
 'use client';
 
-import GeneralLoader from "@/components/loading/GeneralLoader";
-
+import GeneralLoader from '@/components/loading/GeneralLoader';
 
 export interface primaryButtonProps {
   text?: string;
@@ -29,7 +28,6 @@ export default function PrimaryButton({
     small: 'w-1/4',
   }[size];
 
-
   return (
     <button
       onClick={click}
@@ -37,25 +35,9 @@ export default function PrimaryButton({
       style={styleOver}
       type={type}
       disabled={disabled}
-      className={`${sizeClass}
-      bg-primary
-      
-      p-2
-      mt-4
-      rounded-2xl
-    text-white
-    transition
-    duration-300
-    ease-in-out
-    hover:brightness-120
-    hover:scale-[1.015]
-    hover:
-    font-bold
-    font-nunito
-    cursor-pointer`}
+      className={`${sizeClass} bg-primary hover: font-nunito mt-4 cursor-pointer rounded-2xl p-2 font-bold text-white transition duration-300 ease-in-out hover:scale-[1.015] hover:brightness-120`}
     >
-    
-      {disabled ? <GeneralLoader size="40px"/> : text}
+      {disabled ? <GeneralLoader size="40px" /> : text}
     </button>
   );
 }
