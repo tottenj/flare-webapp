@@ -1,9 +1,9 @@
-'use client';
+"use client"
 import SVGLogo from '@/components/flare/svglogo/SVGLogo';
 import { PlainEvent } from '@/lib/classes/event/Event';
 import isSameDate from '@/lib/utils/other/isSameDate';
 import isSameTime from '@/lib/utils/other/isSameTime';
-
+import { motion } from 'framer-motion';
 
 import Link from 'next/link';
 
@@ -12,28 +12,34 @@ interface eventCardProps {
   event: PlainEvent;
 }
 
-
-
-
 export default function EventCard({ event }: eventCardProps) {
   const sameDate = isSameDate(event.startDate, event.endDate)
   const sameTime = isSameTime(event.startDate, event.endDate)
 
+
   return (
-    <Link href={`/events/(.)${event.id}`} as={`/events/${event.id}`} scroll={false}>
+    <Link href={`/events/${event.id}`} scroll={false}>
       <div
         style={{ background: `${event.type}` }}
-        className="flex justify-end rounded-2xl bg-white p-1"
+        className="flex justify-end rounded-[16px] p-1 transition-transform duration-200 hover:scale-105"
       >
-        <div className="flex w-[95%] items-center justify-start gap-4 rounded-lg bg-white p-2">
+        <div className="flex w-[95%] items-center justify-start gap-4 rounded-[15px] bg-white p-2">
           <SVGLogo color={event.type} size={50} />
           <div className="flex flex-col justify-center">
             <h4>{event.title}</h4>
-            <p className="text-sm">{event.startDate.toDateString()} {!sameDate && " -- " + event.endDate.toDateString()}</p>
-            <p className="text-sm">{event.startDate.toLocaleTimeString()} {!sameTime && " -- " +  event.endDate.toLocaleTimeString()}</p>
+            <p className="text-sm">
+              {event.startDate.toDateString()} {!sameDate && ' -- ' + event.endDate.toDateString()}
+            </p>
+            
+            <p className="hidden md:block text-sm">
+              {event.startDate.toLocaleTimeString()}{' '}
+              {!sameTime && ' -- ' + event.endDate.toLocaleTimeString()}
+            </p>
           </div>
         </div>
+       
       </div>
+    
     </Link>
   );
 }

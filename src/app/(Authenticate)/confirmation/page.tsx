@@ -7,15 +7,15 @@ import Link from 'next/link';
 export default function Confirmation() {
   return (
     <div className="h-lvh flex items-center justify-center">
-      <div className="flex h-1/2 w-1/2 flex-col items-center justify-around rounded-xl bg-white p-4 text-center">
+      <div className="flex h-auto w-3/4 lg:w-1/2 flex-col items-center justify-around rounded-xl bg-white gap-2 p-4 text-center">
         <div>
-          <Logo size={150} />
+          <Logo size={100} />
         </div>
         <div>
           <h1>Thank You For Signing Up!</h1>
           <p>Please Check Your Email To Verify Your Account!</p>
         </div>
-       <LinkInput text='Go To Login' href='/signin'/>
+       <LinkInput style={{ padding: '0.5rem' }} text='Go To Login' href='/signin'/>
       </div>
     </div>
   );

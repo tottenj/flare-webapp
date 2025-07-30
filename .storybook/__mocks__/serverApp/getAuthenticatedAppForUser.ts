@@ -1,3 +1,4 @@
+
 export async function getAuthenticatedAppForUser() {
   return {
     firebaseServerApp: {}, // mock any required methods if needed

@@ -21,20 +21,20 @@ export default function ServerLogo({ size }: LogoWithTextProps) {
   }[size];
 
   const logoSize = {
-    small: 30,
+    small: 45,
     medium: 80,
-    large: 150,
+    large: 125,
     xLarge: 200,
   }[size];
 
   return (
     <div
-      className="flex w-fit cursor-pointer flex-row items-center gap-4"
+      className="flex w-fit cursor-pointer flex-row items-center gap-2"
     >
       <Logo size={logoSize} />
       <div className="font-nunito flex flex-col leading-none font-black">
-        <p className={`${titleSizeClass} mb-0`}>Flare</p>
-        <p className={`text-orange ${subtitleSizeClass}`}>Ignite Community</p>
+        <p className={`hidden sm:block ${titleSizeClass} mb-0`}>Flare</p>
+        <p className={`hidden sm:block text-orange ${subtitleSizeClass}`}>Ignite Community</p>
       </div>
     </div>
   );

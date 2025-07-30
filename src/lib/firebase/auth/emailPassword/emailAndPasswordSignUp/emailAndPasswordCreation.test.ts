@@ -6,10 +6,6 @@ import { expect } from '@jest/globals';
 import { auth } from '../../configs/clientApp';
 
 
-jest.mock('../../configs/getFirestoreFromServer', () => ({
-  __esModule: true,
-  default: jest.fn().mockResolvedValue({}),
-}));
 
 const mockAddUser = jest.fn();
 jest.mock('@/lib/classes/flareUser/FlareUser', () => {

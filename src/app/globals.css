@@ -1,8 +1,12 @@
 @import 'tailwindcss';
 
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+
+
 :root {
   --background: #ffffff;
   --foreground: oklch(16.15% 0.0828 273.4);
+  --flareRed: #FF005C;
   --textGradients: linear-gradient(135deg, #ffa301, #ff005c);
 }
 
@@ -13,6 +17,7 @@
   --color-primary: oklch(16.15% 0.0828 273.4);
   --color-secondary: #5f4a4a;
   --color-tertiary: rgba(221, 218, 218, 0.5);
+  --color-danger: oklch(74.62% 0.1947 152.04);
   --color-red: oklch(64.73% 0.2385 27.3);
   --color-orange: oklch(76.97% 0.1627 74.52);
   --color-yellow: oklch(91.41% 0.1528 104.99);
@@ -46,27 +51,43 @@ h1 {
   font-family: var(--font-nunito);
   font-weight: bold;
   color: var(--color-primary);
-  font-size: 40;
+  font-size: 2rem;
 }
 
 h2{
   font-family: var(--font-nunito);
   font-weight: bold;
   color: var(--color-primary);
-  font-size: 20px;
+  font-size: 1.5rem;
 }
 
 h4{
   font-family: var(--font-nunito);
   font-weight: bold;
   color: var(--color-primary);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
+}
+
+p {
+  font-family: var(--font-nunito);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-pt_sans);
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+
+.secondaryHeader{
+  font-size: 1rem;
+  font-family: var(--font-nunito);
+  font-weight: bold;
+  color: var(--color-primary);
 }
 
 .gradient {
@@ -116,4 +137,91 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -1;
+}
+
+.bg-danger {
+  background-color: var(--flareRed);
+}
+
+
+/* event card */
+.eventPage {
+  height: auto;
+  max-height: 80dvh;
+  background: white;
+  border-radius: 30px;
+}
+
+.bookmarkButton {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+}
+
+.eventPage .bookmarkButton{
+  top: 17%;
+  left: 10%;
+}
+
+.cardInner {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eventImage {
+  position: relative;
+  height: 50vh;
+  width: 33%;
+  aspect-ratio: 1/1;
+}
+
+.eventText {
+  height: 100%;
+  max-height: 50vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: 8px;
+  overflow-y: auto;
+}
+
+.eventText p {
+  width: 50%;
+}
+
+.eventText p.eventDesc {
+  margin-top: 8px;
+  width: 100%;
+}
+
+@media (max-width: 640px) { 
+  h2 {
+    font-size: 18px;
+  }
+
+  .eventImage {
+    position: relative;
+    height: 70vh;
+    width: 100%;
+  }
+
+  .eventText {
+    height: 100%;
+    max-height: unset;
+  }
+}
+
+@media (max-width: 450px) { 
+  .eventImage {
+    height: auto;
+  }
+
+  .eventText p {
+    width: 100%;
+  }
 }

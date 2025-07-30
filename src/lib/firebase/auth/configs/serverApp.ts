@@ -1,4 +1,4 @@
-
+"use server"
 import { cookies, headers } from 'next/headers';
 import { initializeServerApp, FirebaseServerAppSettings } from 'firebase/app';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';

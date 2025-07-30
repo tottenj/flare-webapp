@@ -5,6 +5,9 @@ import 'react-day-picker/dist/style.css';
 import styles from './calendar.module.css';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PlainEvent } from '@/lib/classes/event/Event';
+import getKeyByValue from '@/lib/utils/other/getKeyByValue';
+import eventType from '@/lib/enums/eventType';
+import { toLocalDateKey } from '@/lib/utils/other/toLocaleDateString';
 
 //TO DO - Write TESTs
 
@@ -23,9 +26,19 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
+
+  function parseLocalDate(dateStr: string): Date {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day); // local midnight
+  }
+
+  const selectedDate = searchParams.get('date')
+    ? parseLocalDate(searchParams.get('date')!)
+    : undefined;
+
   const eventMap: Record<string, string[]> = events.reduce(
     (acc, event) => {
-      const dateKey = new Date(event.startDate).toISOString().split('T')[0];
+      const dateKey = toLocalDateKey(event.startDate);
       const color = event.type; // This is already an OKLCH color string
       if (!acc[dateKey]) acc[dateKey] = [];
       acc[dateKey].push(color);
@@ -35,7 +48,8 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
   );
 
   function isEventDay(day: Date): string[] {
-    const key = day.toISOString().split('T')[0];
+    console.log(day);
+    const key = toLocalDateKey(day);
     return eventMap[key] || [];
   }
 
@@ -51,11 +65,14 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
   function CustomDay({ day, modifiers, className, eventColors, ...props }: CustomDayProps) {
     return (
       <td
-        onClick={() =>
-          router.push(
-            pathname + '?' + createQueryString('date', day.date.toISOString().split('T')[0])
-          )
-        }
+        onClick={() => {
+          const currentDate = searchParams.get('date');
+          const newDate = day.date.toISOString().slice(0, 10);
+
+          if (currentDate === newDate) return;
+
+          router.push(pathname + '?' + createQueryString('date', newDate));
+        }}
       >
         <div {...props} className={className}>
           <div className={styles.dayCell}>
@@ -64,7 +81,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
               <div className={styles.dotContainer}>
                 {Object.entries(
                   eventColors.reduce<Record<string, number>>((acc, color) => {
-                    acc[color] = (acc[color] || 0) + 1;
+                    acc[color] = acc[color] || 0;
                     return acc;
                   }, {})
                 ).map(([color, count], index) => (
@@ -72,15 +89,28 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
                     key={index}
                     className={styles.dot}
                     style={{ backgroundColor: color }}
-                    onClick={() =>
-                      router.push(
-                        pathname +
-                          '?' +
-                          createQueryString('date', day.date.toISOString().split('T')[0]) +
-                          '&' +
-                          createQueryString('type', color)
-                      )
-                    }
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const params = new URLSearchParams(searchParams.toString());
+                      const clickedType = getKeyByValue(eventType, color);
+                      const currentType = params.get('type');
+                      const newDate = toLocalDateKey(day.date);
+                      params.set('date', newDate);
+
+                      if (clickedType) {
+                        // Get existing types as array
+                        const currentTypesStr = params.get('type') || '';
+                        const currentTypes = currentTypesStr ? currentTypesStr.split(',') : [];
+
+                        if (clickedType && !currentTypes.includes(clickedType)) {
+                          currentTypes.push(clickedType);
+                          params.set('type', currentTypes.join(','));
+                          router.push(`${pathname}?${params.toString()}`);
+                        }
+                      }
+
+                      router.push(`${pathname}?${params.toString()}`);
+                    }}
                     title={`${count} event${count > 1 ? 's' : ''} of this type`}
                   >
                     {count > 1 && <span className={styles.dotCount}>{count}</span>}
@@ -103,8 +133,14 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
         formatters={{
           formatWeekdayName: (day) => day.toLocaleDateString('en-US', { weekday: 'short' }),
         }}
-        modifiers={{ hasEvent: (day) => isEventDay(day).length > 0 }}
-        modifiersClassNames={{ hasEvent: styles.hasEvent }}
+        modifiers={{
+          hasEvent: (day) => isEventDay(day).length > 0,
+          selected: (day) =>
+            selectedDate instanceof Date &&
+            !isNaN(selectedDate.getTime()) &&
+            toLocalDateKey(day) === toLocalDateKey(selectedDate),
+        }}
+        modifiersClassNames={{ hasEvent: styles.hasEvent, selected: styles.selectedDay }}
         classNames={{ day: styles.day }}
         components={{
           Day: ({ day, modifiers, ...props }) => (

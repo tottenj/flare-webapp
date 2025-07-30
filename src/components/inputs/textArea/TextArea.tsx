@@ -14,12 +14,13 @@ interface textAreaProps {
   showErrorText?: boolean;
   testId?: string;
   styleOverDiv?: CSSProperties;
+  defaultVal?: string
 }
 
 
 
 
-export default function TextArea({ label, name, placeholder, styleOverDiv, showErrorText = false, testId = name, reqired=true, error = false, size = "Auto", onChange, errorText }: textAreaProps) {
+export default function TextArea({ label, name, placeholder, styleOverDiv, showErrorText = false, testId = name, reqired=true, error = false, size = "Auto", onChange, errorText, defaultVal }: textAreaProps) {
   const sizeClass = {
     XLarge: 'w-full',
     Large: 'w-3/4',
@@ -41,6 +42,7 @@ export default function TextArea({ label, name, placeholder, styleOverDiv, showE
         placeholder={placeholder}
         name={name}
         onChange={(e) => onChange && onChange(e.target.value)}
+        defaultValue={defaultVal}
       />
       {showErrorText && errorText && <p className={`errorText`}>{errorText}</p>}
     </div>

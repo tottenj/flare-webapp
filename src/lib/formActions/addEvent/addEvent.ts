@@ -1,20 +1,16 @@
 "use server"
 import Event from '@/lib/classes/event/Event';
+import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import AgeGroup from '@/lib/enums/AgeGroup';
 import eventType from '@/lib/enums/eventType';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
-
 import flareLocation from '@/lib/types/Location';
-import { getEnumValueByString } from '@/lib/utils/other/getEnumValueByString';
 import { revalidatePath } from 'next/cache';
 
 export default async function addEvent(prevState: any, formData: FormData) {
   const { currentUser, fire } = await getFirestoreFromServer();
   if (!currentUser) return { message: 'Unable to find current user', eventId: null };
 
-  for (const [key, value] of formData.entries()) {
-    console.log(`formData: ${key} = ${value}`);
-  }
 
 
   try {
@@ -33,6 +29,11 @@ export default async function addEvent(prevState: any, formData: FormData) {
  
     const location: flareLocation | null = locationString ? JSON.parse(locationString) : null;
     if (!location) throw new Error('Invalid Location');
+
+    const org = await FlareOrg.getOrg(fire, currentUser.uid)
+    const verified = org?.verified ?? false
+
+
     const event = new Event(
       currentUser.uid,
       title,
@@ -43,11 +44,15 @@ export default async function addEvent(prevState: any, formData: FormData) {
       endDate,
       location,
       price,
+      verified,
+      new Date(),
       ticketLink
     );
 
     await event.addEvent(fire);
     revalidatePath("/dashboard")
+    revalidatePath("/events")
+    revalidatePath(`/events/${event.id}`)
     return { message: 'success', eventId: event.id };
   } catch (error) {
     console.log(error);

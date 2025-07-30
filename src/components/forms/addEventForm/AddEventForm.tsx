@@ -18,6 +18,7 @@ import addEvent from '@/lib/formActions/addEvent/addEvent';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
 import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
 import flareLocation from '@/lib/types/Location';
+import { useRouter } from 'next/navigation';
 import React, { SetStateAction, useActionState, useEffect, useState } from 'react';
 
 interface addEventFormProps {
@@ -28,21 +29,31 @@ export default function AddEventForm({ setClose }: addEventFormProps) {
   const [state, action, pending] = useActionState(addEvent, initialState);
   const { validFiles, handleFileChange } = useFileChange();
   const [loc, setloc] = useState<flareLocation | null>(null);
+  const [loadingImage, setLoadingImage] = useState(false)
   useActionToast(state, pending);
+  const router = useRouter()
 
   useEffect(() => {
     if (state.message === 'success' && !pending && state.eventId) {
       (async () => {
+        setLoadingImage(true)
         if (!state.eventId) return;
         await Event.uploadImages(
           state.eventId,
           storage,
           validFiles.map((file) => file.file)
         );
-        setClose(false);
+        setLoadingImage(false)
       })();
     }
   }, [state, pending]);
+
+
+  useEffect(() => {
+    if(state.message == 'success' && loadingImage == false )
+      setClose(false);
+      router.refresh()
+  },[loadingImage, state.message])
 
   return (
     <>
@@ -55,18 +66,19 @@ export default function AddEventForm({ setClose }: addEventFormProps) {
           name="eventImage"
           onChange={(file) => handleFileChange('eventImage', file)}
           buttonText="Upload File"
+          fileAdded={validFiles.length > 0}
         />
         <br></br>
         <div className="mb-4 flex justify-between">
           <DateTime label="Event Start" name="start" />
           <DateTime label="Event End" name="end" />
         </div>
-        <PlaceSearch z='z-50' loc={setloc} lab="Event Location" />
+        <PlaceSearch z="z-50" loc={setloc} lab="Event Location" />
         {loc && <input type="hidden" name="location" required={true} value={JSON.stringify(loc)} />}
         <br></br>
-        <ColourSelect z={"z-40"} label="Event Type" options={colourOptions} name="type" />
+        <ColourSelect z={'z-40'} label="Event Type" options={colourOptions} name="type" />
         <br></br>
-        <BasicSelect z={"z-30"} label="Age Range" options={ageGroupOptions} name="age" />
+        <BasicSelect z={'z-30'} label="Age Range" options={ageGroupOptions} name="age" />
         <NumberInput defaultVal={0} label="Price (Leave 0 for Free / N/A)" name="price" />
         <TextInput
           type="url"
@@ -74,7 +86,6 @@ export default function AddEventForm({ setClose }: addEventFormProps) {
           name="tickets"
           reqired={false}
         />
-        ;
         <PrimaryButton type="submit" />
       </form>
     </>

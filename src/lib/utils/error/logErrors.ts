@@ -1,3 +1,4 @@
+"use server"
 import errorLocation from "@/lib/enums/errorLocations"
 import { getFirestoreFromServer } from "@/lib/firebase/auth/configs/getFirestoreFromServer"
 import { addDocument } from "@/lib/firebase/firestore/firestoreOperations"

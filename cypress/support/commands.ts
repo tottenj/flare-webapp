@@ -1,6 +1,5 @@
 /// <reference types="cypress" />
 
-import cypress from "cypress";
 
 // cypress/support/commands.ts
 const apiKey = Cypress.env('FIREBASE_API_KEY');

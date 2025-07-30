@@ -19,16 +19,22 @@ import {
   limit,
   DocumentReference,
   PartialWithFieldValue,
+  deleteDoc,
+  Query,
 } from 'firebase/firestore';
 
-
-
-export async function getDocument<AppModelType, DbModelType extends DocumentData>(
+export async function getDocument<
+  AppModelType = DocumentData,
+  DbModelType extends DocumentData = DocumentData,
+>(
   firestore: Firestore,
   path: string,
-  converter: FirestoreDataConverter<AppModelType, DbModelType>
+  converter?: FirestoreDataConverter<AppModelType, DbModelType>
 ): Promise<DocumentSnapshot<AppModelType, DbModelType>> {
-  const ref = doc(firestore, path).withConverter(converter);
+  const ref: DocumentReference<AppModelType, DbModelType> = converter
+    ? doc(firestore, path).withConverter(converter)
+    : (doc(firestore, path) as DocumentReference<AppModelType, DbModelType>);
+
   const snapshot = await getDoc(ref);
   return snapshot;
 }
@@ -106,8 +112,6 @@ export async function getCollectionByFields<AppModelType, DbModelType extends Do
   return snapshot.docs.map((doc) => doc.data());
 }
 
-
-
 export async function updateDocument<
   AppModelType extends Record<string, any>,
   DbModelType extends DocumentData = DocumentData,
@@ -125,3 +129,33 @@ export async function updateDocument<
   const cleanData = omitKeys(data, excludeFields as (keyof typeof data)[]);
   await setDoc(ref, cleanData as PartialWithFieldValue<AppModelType>, { merge: true });
 }
+
+export async function deleteDocument<AppModelType, DbModelType extends DocumentData = DocumentData>(
+  firestore: Firestore,
+  path: string,
+  converter?: FirestoreDataConverter<AppModelType, DbModelType>
+): Promise<void> {
+  const ref = converter
+    ? (doc(firestore, path).withConverter(converter) as unknown as DocumentReference<DocumentData>)
+    : doc(firestore, path);
+
+  await deleteDoc(ref);
+}
+
+export async function getAllDocuments<
+  AppModelType = DocumentData,
+  DbModelType extends DocumentData = DocumentData,
+>(
+  firestore: Firestore,
+  collectionPath: string,
+  converter?: FirestoreDataConverter<AppModelType, DbModelType>
+): Promise<AppModelType[]> {
+  const baseRef = collection(firestore, collectionPath);
+  const ref: Query<AppModelType, DbModelType> = converter
+    ? baseRef.withConverter(converter)
+    : (baseRef as unknown as Query<AppModelType, DbModelType>);
+
+  const snapshot = await getDocs(ref);
+  return snapshot.docs.map((doc) => doc.data());
+}
+

@@ -8,6 +8,10 @@ interface EventFilters {
   afterDate?: Date;
   beforeDate?: Date;
   onDate?: Date
+  location?: {
+    center: {lat: number, lng: number},
+    radius: number
+  }
 };
 
 

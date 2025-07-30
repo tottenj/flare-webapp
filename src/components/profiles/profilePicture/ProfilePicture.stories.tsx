@@ -1,4 +1,4 @@
-import type { StoryObj, Meta } from '@storybook/react';
+import type { StoryObj, Meta } from '@storybook/nextjs';
 
 import  ProfilePicture  from './ProfilePicture';
 
@@ -10,6 +10,7 @@ type Story = StoryObj<typeof ProfilePicture>;
 
 export const Default: Story = {
   args: {
-    size: 123,
+    size: 120,
+    src: "/defaultProfile.svg"
   },
 };

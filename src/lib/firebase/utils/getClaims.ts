@@ -1,4 +1,4 @@
-import "server-only"
+
 import { getAuthenticatedAppForUser } from "../auth/configs/serverApp";
 import { cache } from "react";
 
