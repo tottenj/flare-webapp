@@ -72,9 +72,9 @@ export default async function OrgDashboardPage({
                 <h2>Settings</h2>
                 <PassInModal
                   trigger={
-                    <button className="bg-red w-11/12 rounded-2xl p-2 font-black text-white hover:bg-red-600">
+                    <div className="bg-red w-11/12 rounded-2xl p-2 font-black text-white hover:bg-red-600">
                       Delete Account?
-                    </button>
+                    </div>
                   }
                 >
                  <DeleteAccountForm/>

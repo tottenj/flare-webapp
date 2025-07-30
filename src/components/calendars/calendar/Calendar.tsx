@@ -48,7 +48,6 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
   );
 
   function isEventDay(day: Date): string[] {
-    console.log(day);
     const key = toLocalDateKey(day);
     return eventMap[key] || [];
   }

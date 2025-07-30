@@ -21,6 +21,8 @@ import {
   PartialWithFieldValue,
   deleteDoc,
   Query,
+  updateDoc,
+  UpdateData,
 } from 'firebase/firestore';
 
 export async function getDocument<
@@ -112,23 +114,23 @@ export async function getCollectionByFields<AppModelType, DbModelType extends Do
   return snapshot.docs.map((doc) => doc.data());
 }
 
-export async function updateDocument<
-  AppModelType extends Record<string, any>,
-  DbModelType extends DocumentData = DocumentData,
->(
+export async function updateDocument<AppModelType extends Record<string, any>>(
   firestore: Firestore,
   path: string,
   data: PartialWithFieldValue<AppModelType>,
-  converter?: FirestoreDataConverter<AppModelType, DbModelType>,
+  converter?: FirestoreDataConverter<AppModelType, AppModelType>, // <--- make sure both types match
   excludeFields: (keyof AppModelType)[] = []
 ): Promise<void> {
   const ref = converter
-    ? doc(firestore, path).withConverter(converter)
-    : (doc(firestore, path) as DocumentReference<AppModelType>);
+    ? doc(firestore, path).withConverter<AppModelType, AppModelType>(converter)
+    : (doc(firestore, path) as DocumentReference<AppModelType, AppModelType>); // <--- match both sides
 
   const cleanData = omitKeys(data, excludeFields as (keyof typeof data)[]);
-  await setDoc(ref, cleanData as PartialWithFieldValue<AppModelType>, { merge: true });
+  await updateDoc(ref, cleanData as UpdateData<AppModelType>);
 }
+
+
+
 
 export async function deleteDocument<AppModelType, DbModelType extends DocumentData = DocumentData>(
   firestore: Firestore,

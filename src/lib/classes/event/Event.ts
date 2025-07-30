@@ -114,6 +114,8 @@ export default class Event {
     return even.data();
   }
 
+ 
+
   get imagePath(): string {
     return `Events/${this.id}`;
   }

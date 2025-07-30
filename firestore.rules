@@ -27,10 +27,7 @@ service cloud.firestore {
       }
 			
       match /Events/{eventId} {
-      	allow read: if resource != null && resource.data != null && (
-  resource.data.verified == true || 
-  (request.auth != null && resource.data.flareId == request.auth.uid)
-);
+      	allow read: if resource != null && resource.data != null && (resource.data.verified == true || (request.auth != null && resource.data.flareId == request.auth.uid));
 
         allow create, update, delete: if request.auth != null 
         	&& request.auth.token.organization == true 

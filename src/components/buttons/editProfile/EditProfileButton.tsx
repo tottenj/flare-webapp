@@ -15,6 +15,7 @@ export default function EditProfileButton() {
   };
 
   const handleFileChange = () => {
+    console.log(fileInputRef.current?.value)
     formRef.current?.requestSubmit();
   };
 
