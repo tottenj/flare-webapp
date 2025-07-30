@@ -2,6 +2,7 @@
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
 import GeneralLoader from '@/components/loading/GeneralLoader';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
+import ProfilePictureSkeleton from '@/components/skeletons/ProfilePictureSkeleton/ProfilePictureSkeleton';
 import { signOutUser } from '@/lib/firebase/auth/signOutUser';
 import { getClaims } from '@/lib/firebase/utils/getClaims';
 import Link from 'next/link';
@@ -12,9 +13,9 @@ export default async function MainBanner() {
   const { currentUser } = await getClaims();
 
   return (
-    <div className="relative -ml-[calc((100vw-100%)/2)] flex w-screen items-center justify-between bg-white/80 p-4">
+    <div className="relative -ml-[calc((100vw-100%)/2)] flex h-[50px] w-screen items-center justify-between bg-white p-4">
       <Link href={'/'}>
-        <ServerLogo size="medium" />
+        <ServerLogo size="small" />
       </Link>
       {!currentUser && (
         <div className="border-primary flex rounded-lg border-1 p-2">
@@ -30,8 +31,8 @@ export default async function MainBanner() {
       {currentUser && (
         <div className="group relative flex flex-col items-end">
           <div className="z-10 cursor-pointer">
-            <Suspense fallback={<GeneralLoader/>}>
-            <ProfilePicture size={65} />
+            <Suspense fallback={<ProfilePictureSkeleton size={45} />}>
+              <ProfilePicture size={45} />
             </Suspense>
           </div>
 

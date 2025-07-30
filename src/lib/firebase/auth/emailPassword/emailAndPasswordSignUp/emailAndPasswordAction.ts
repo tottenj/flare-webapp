@@ -5,6 +5,7 @@ import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { auth } from '../../configs/clientApp';
 import {getFirestoreFromServer} from '../../configs/getFirestoreFromServer';
 import getAuthError from '@/lib/utils/error/getAuthError';
+import { error } from 'console';
 
 export default async function emailAndPasswordAction(prevState: any, formData: FormData) {
   const rawFormData = {
@@ -26,6 +27,7 @@ export default async function emailAndPasswordAction(prevState: any, formData: F
       return {message: getAuthError(error)}
     }
   } else {
+    console.log(error)
     return { message: 'Error with email or password' };
   }
 }

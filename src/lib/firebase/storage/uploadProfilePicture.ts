@@ -12,6 +12,7 @@ export default async function uploadProfilePicture(prevState: any, formData: For
   const { claims } = await getClaims();
   let isUser = true;
 
+ 
   if (claims && claims.organization == true) {
     isUser = false;
 
@@ -37,6 +38,7 @@ export default async function uploadProfilePicture(prevState: any, formData: For
       revalidatePath('/dashboard');
       return { message: 'success' };
     } catch (error) {
+      console.log(error)
       return { message: 'Error Changing Profile Picture' };
     }
   }

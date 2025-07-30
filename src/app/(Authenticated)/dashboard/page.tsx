@@ -1,3 +1,5 @@
-export default function DashboardPage() {
-  return <p>This is the default dashboard slot</p>;
+import { redirect } from "next/navigation";
+
+export default async function DashboardPage() {
+  redirect("/events")
 }

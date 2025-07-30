@@ -1,29 +1,26 @@
-if (process.env.MODE === 'test') {
-  process.env.FIRESTORE_EMULATOR_HOST = '127.0.0.1:8080';
-  process.env.FIREBASE_AUTH_EMULATOR_HOST = '127.0.0.1:9099';
-  process.env.STORAGE_EMULATOR_HOST = '127.0.0.1:9199';
-  console.log('Running in TEST mode with emulators.');
-}
-
-
 import { onDocumentCreatedWithAuthContext } from 'firebase-functions/v2/firestore';
 import Collections from '../../enums/Collections';
 const { logger } = require('firebase-functions');
 import { getAuth } from 'firebase-admin/auth';
 const { initializeApp } = require('firebase-admin/app');
+const {onCall} = require("firebase-functions/v2/https");
+import { CallableRequest } from 'firebase-functions/v2/https';
+import { getFirestore } from 'firebase-admin/firestore';
+
+
 
 initializeApp();
 const auth = getAuth();
+const firestore = getFirestore()
 
 exports.createOrganization = onDocumentCreatedWithAuthContext(
   `${Collections.Organizations}/{orgId}`,
   async (event) => {
-    if (!event.authId || event.authId == undefined) return { message: 'No Auth Id' };
-
+    const id = event.data?.id
+    if(!id) return "Error"
     try {
-      logger.log('HELLO');
-      logger.log(event.authId);
-      await auth.setCustomUserClaims(event.authId!, { organization: true });
+      await auth.setCustomUserClaims(id, { organization: true });
+      logger.log("Success")
       return { message: 'Succesfully Added Claim' };
     } catch (error) {
       logger.log('Failed to add claim');
@@ -31,3 +28,34 @@ exports.createOrganization = onDocumentCreatedWithAuthContext(
     }
   }
 );
+
+exports.verify = onCall(async (request:CallableRequest) => {
+  if(!request.auth || request.auth.token.admin !== true || !request.data || !request.data.orgId) return {message: "error"}
+  const orgId = request.data.orgId
+  const writer = firestore.batch();
+
+  try{
+    const usr = await auth.getUser(orgId)
+    const claims = usr.customClaims || {}
+
+  await auth.setCustomUserClaims(orgId, {...claims, verified: true})
+  const orgDoc = await firestore.collection("Organizations").doc(orgId).get()
+  writer.update(orgDoc.ref, {verified: true})
+  const events = await firestore.collection("Events").where("flareId", "==", orgId).get()
+   events.docs.forEach((doc) => {
+    writer.update(doc.ref, {verified: true})
+   })
+   await writer.commit();
+   return {message: "success"}
+  }catch(error){
+    logger.log("Error")
+    return {message: "error"}
+  }
+})
+
+
+exports.addMyself = onCall((request:any) => {
+    auth.getUserByEmail("josh.totten8@gmail.com").then((val) => {
+      auth.setCustomUserClaims(val.uid, {"admin":true})
+    })
+})

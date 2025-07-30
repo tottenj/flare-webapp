@@ -40,7 +40,7 @@ export default function Modal({ isOpen, onClose = () => {}, children, route = fa
 
         {/* Modal container */}
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
+          <div className="flex min-h-full items-center justify-center">
             <TransitionChild
               as={Fragment}
               enter="ease-out duration-300"
@@ -50,11 +50,11 @@ export default function Modal({ isOpen, onClose = () => {}, children, route = fa
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <DialogPanel className="relative w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white p-6 shadow-xl transition-all">
+              <DialogPanel className="relative w-11/12 md:w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white md:p-6 shadow-xl transition-all">
                 {/* X button */}
                 <button
                   onClick={handleClose}
-                  className="absolute top-4 right-4 cursor-pointer rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 focus:ring-2 focus:ring-gray-300 focus:outline-none"
+                  className="absolute z-10 top-4 right-4 cursor-pointer rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 focus:ring-2 focus:ring-gray-300 focus:outline-none"
                   aria-label="Close"
                 >
                   <svg

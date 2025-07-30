@@ -1,0 +1,39 @@
+'use client';
+
+import { Tab, Tabs } from '@heroui/tabs';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+export default function OrgTabs() {
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab');
+  const [selected, setselected] = useState(tab ?? 'myEvents');
+  const [wasSelected, setWasSelectd] = useState('');
+
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  useEffect(() => {
+    if (!wasSelected || wasSelected != selected) {
+      const params = new URLSearchParams(searchParams);
+      params.set('tab', selected);
+      setWasSelectd(selected)
+      replace(`${pathname}?${params.toString()}`);
+    }
+  }, [selected]);
+
+  return (
+    <Tabs
+      radius="full"
+      variant="solid"
+      className="absolute h-[40px] w-full self-start rounded-2xl rounded-b-none bg-white overflow-hidden"
+      fullWidth = {true}
+      color={'danger'}
+      selectedKey={selected}
+      onSelectionChange={(val) => setselected(val.toString())}
+    >
+      <Tab key={'myEvents'} title="My Events" />
+      <Tab key={'savedEvents'} title="Saved Events" />
+    </Tabs>
+  );
+}

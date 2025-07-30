@@ -1,6 +1,6 @@
-import type { StoryObj, Meta } from '@storybook/react';
+import type { StoryObj, Meta } from '@storybook/nextjs';
 import TextInput from './TextInput';
-import {  expect, userEvent, within } from '@storybook/test';
+import {  expect, userEvent, within } from 'storybook/test';
 
 export default {
   component: TextInput,

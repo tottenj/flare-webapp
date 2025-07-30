@@ -1,4 +1,4 @@
-import type { Preview } from '@storybook/react';
+import type { Preview } from '@storybook/nextjs';
 import '../src/app/globals.css';
 import MockAuthProvider from './__mocks__/MockAuthProvider';
 import React from 'react';

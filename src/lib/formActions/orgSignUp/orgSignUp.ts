@@ -1,14 +1,16 @@
 'use server';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
-import errorLocation from '@/lib/enums/errorLocations';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
-import {getFirestoreFromServer} from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import flareLocation from '@/lib/types/Location';
 import getAuthError from '@/lib/utils/error/getAuthError';
-import logErrors from '@/lib/utils/error/logErrors';
-import { formErrors, orgSocials } from '@/lib/utils/text/text';
-import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from 'firebase/auth';
-import { or } from 'firebase/firestore';
+import { formErrors } from '@/lib/utils/text/text';
+import {
+  createUserWithEmailAndPassword,
+  deleteUser,
+  sendEmailVerification,
+  signOut,
+} from 'firebase/auth';
 
 export default async function orgSignUp(prevState: any, formData: FormData) {
   const req = {
@@ -24,16 +26,18 @@ export default async function orgSignUp(prevState: any, formData: FormData) {
   if (Object.values(req).some((value) => value === null || value === undefined) || !location)
     return { message: formErrors.requiredError };
 
-
+  let cred;
   try {
-    const cred = await createUserWithEmailAndPassword(auth, req.email!, req.pass!);
-    const {fire} = await getFirestoreFromServer()
+    cred = await createUserWithEmailAndPassword(auth, req.email!, req.pass!);
+    const { fire, currentUser } = await getFirestoreFromServer();
     const org = new FlareOrg(cred.user, req.name!, location);
     await org.addOrg(fire);
-    console.log("added")
-    await sendEmailVerification(cred.user)
+    await sendEmailVerification(cred.user);
     return { message: 'success', orgId: org.id };
   } catch (error) {
-    return {message: getAuthError(error)}
+    if (cred) {
+      await deleteUser(cred.user);
+    }
+    return { message: getAuthError(error) };
   }
 }
