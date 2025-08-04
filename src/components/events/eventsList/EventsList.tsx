@@ -30,10 +30,10 @@ const listItem = {
           variants={listContainer}
           initial="hidden"
           animate="visible"
-          className="flex flex-col gap-2 items-center"
+          className="flex flex-col items-center gap-2"
         >
-            <AnimatePresence>
-                {plainQueriedEvents.map((event) => (
+          <AnimatePresence>
+            {plainQueriedEvents.map((event) => (
               <motion.div
                 key={event.id}
                 variants={listItem}
@@ -41,15 +41,14 @@ const listItem = {
                 animate="visible"
                 exit="exit"
                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                className='w-[95%]'
+                className="w-[95%]"
               >
                 <EventCard event={event} />
               </motion.div>
             ))}
-            </AnimatePresence>
+          </AnimatePresence>
         </motion.div>
-        )
-       : (
+      ) : (
         <div className="flex h-full w-full flex-col items-center justify-center p-4 text-center text-[#b3b3b3]">
           <p className="mb-2 text-lg">No events found.</p>
           <p className="mb-2">
@@ -61,6 +60,7 @@ const listItem = {
             href="/flare-signin"
             text="Organization Signup"
           />
+         
         </div>
       )}
     </>

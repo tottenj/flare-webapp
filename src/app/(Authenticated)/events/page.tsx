@@ -8,7 +8,6 @@ import Event from '@/lib/classes/event/Event';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import getEventFiltersFromSearchParams from '@/lib/utils/other/getEventFilters';
 
-
 export default async function EventView({
   params,
   searchParams,
@@ -34,6 +33,7 @@ export default async function EventView({
 
   return (
     <>
+  
       <div className="relative m-auto flex h-auto max-w-[1440px] flex-col gap-2 p-2 md:h-[calc(100dvh-58px)] md:flex-row md:gap-4 md:p-4">
         <div className="h-auto w-full md:h-full md:w-3/5">
           <FullPageCalendar events={plainMonthsEvents || []} />
@@ -48,8 +48,7 @@ export default async function EventView({
           <div className="group h-[95%] w-full">
             {Object.keys(filterCopy).length > 0 && <ClearFiltersButton />}
             <FilterToggles />
-           
-            <EventListContainer filters={filterCopy}/>
+            <EventListContainer filters={filterCopy} />
           </div>
         </div>
       </div>
