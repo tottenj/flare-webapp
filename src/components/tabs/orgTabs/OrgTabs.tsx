@@ -17,7 +17,7 @@ export default function OrgTabs() {
     if (!wasSelected || wasSelected != selected) {
       const params = new URLSearchParams(searchParams);
       params.set('tab', selected);
-      setWasSelectd(selected)
+      setWasSelectd(selected);
       replace(`${pathname}?${params.toString()}`);
     }
   }, [selected]);
@@ -25,12 +25,13 @@ export default function OrgTabs() {
   return (
     <Tabs
       radius="full"
-      variant="solid"
-      className="absolute h-[40px] w-full self-start rounded-2xl rounded-b-none bg-white overflow-hidden"
-      fullWidth = {true}
+      variant="bordered"
+      className="absolute h-[40px] w-full self-start overflow-hidden rounded-2xl rounded-b-none bg-white"
+      fullWidth={true}
       color={'danger'}
       selectedKey={selected}
       onSelectionChange={(val) => setselected(val.toString())}
+      classNames={{ tabContent: 'text-primary' }}
     >
       <Tab key={'myEvents'} title="My Events" />
       <Tab key={'savedEvents'} title="Saved Events" />

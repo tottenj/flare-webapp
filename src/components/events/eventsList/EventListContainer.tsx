@@ -19,7 +19,7 @@ export default async function EventListContainer({ filters }: EventListContainer
   }
 
   return (
-    <div className="flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto bg-white group-has-[button]:h-[80%] md:overflow-y-scroll">
+    <div className="flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto bg-white group-has-[button]:h-[80%] md:overflow-y-scroll pt-4">
       <EventsList plainQueriedEvents={plainQueriedEvents} />
     </div>
   );

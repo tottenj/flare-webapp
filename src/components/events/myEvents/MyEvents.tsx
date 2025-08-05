@@ -27,7 +27,7 @@ export default async function MyEvents() {
 
 
   return (
-    <div className="mt-4 flex w-full flex-col gap-4">
+    <div className="mt-4 flex w-11/12 mr-auto ml-auto flex-col gap-4">
       {events.length > 0 ? (
         events.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
       ) : (

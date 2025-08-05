@@ -8,7 +8,6 @@ import AddEventModal from '@/components/modals/addEventModal/AddEventModal';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
 import EditProfileButton from '@/components/buttons/editProfile/EditProfileButton';
 import { Suspense } from 'react';
-import EventInfo from '@/components/events/eventInfo/EventInfo';
 import OrgTabs from '@/components/tabs/orgTabs/OrgTabs';
 import SavedEvents from '@/components/events/savedEvents/SavedEvents';
 import { QueryOptions } from '@/lib/firebase/firestore/firestoreOperations';
@@ -21,9 +20,7 @@ import EventsListSkeleton from '@/components/skeletons/eventCardSkeleton/EventCa
 import ProfilePictureSkeleton from '@/components/skeletons/ProfilePictureSkeleton/ProfilePictureSkeleton';
 import EventInfoContainer from '@/components/events/eventInfo/EventInfoContainer';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
-import Modal from '@/components/modals/mainModal/MainModal';
 import PassInModal from '@/components/modals/passInModal/PassInModal';
-import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import DeleteAccountForm from '@/components/forms/deleteAccountForm/DeleteAccountForm';
 
 export default async function OrgDashboardPage({

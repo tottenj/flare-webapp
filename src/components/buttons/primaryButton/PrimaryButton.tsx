@@ -61,7 +61,7 @@ export default function PrimaryButton({
         className="absolute inset-0 origin-left bg-gradient-to-r from-pink-500 via-red-500 to-orange-500"
         style={{ transformOrigin: 'left', zIndex: 20 }}
       />
-      <span className="relative z-30">{disabled ? <GeneralLoader color='white' size="40px" /> : text}</span>
+      <span className="relative z-30">{disabled ? <GeneralLoader color='white' size="30px" /> : text}</span>
     </motion.button>
   );
 }

@@ -1,0 +1,19 @@
+[debug] [2025-08-04T17:54:24.100Z] ----------------------------------------------------------------------
+[debug] [2025-08-04T17:54:24.101Z] Command:       /Users/joshtotten/.nvm/versions/node/v22.14.0/bin/node /Users/joshtotten/.nvm/versions/node/v22.14.0/bin/firebase functions:shell
+[debug] [2025-08-04T17:54:24.102Z] CLI Version:   14.4.0
+[debug] [2025-08-04T17:54:24.102Z] Platform:      darwin
+[debug] [2025-08-04T17:54:24.102Z] Node Version:  v22.14.0
+[debug] [2025-08-04T17:54:24.102Z] Time:          Mon Aug 04 2025 13:54:24 GMT-0400 (Eastern Daylight Time)
+[debug] [2025-08-04T17:54:24.102Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-08-04T17:54:24.201Z] Object "/storage" in "firebase.json" has unknown property: {"additionalProperty":"defaultBucket"}
+[debug] [2025-08-04T17:54:24.202Z] Field "/storage" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-08-04T17:54:24.202Z] Field "/storage" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[debug] [2025-08-04T17:54:24.204Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-08-04T17:54:24.204Z] > authorizing via signed-in user (josh.totten8@gmail.com)
+[debug] [2025-08-04T17:54:24.204Z] [iam] checking project flare-7091a for permissions ["firebase.projects.get"]
+[debug] [2025-08-04T17:54:24.204Z] Checked if tokens are valid: true, expires at: 1754331080205
+[debug] [2025-08-04T17:54:24.204Z] Checked if tokens are valid: true, expires at: 1754331080205
+[debug] [2025-08-04T17:54:24.205Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions [none]
+[debug] [2025-08-04T17:54:24.205Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions x-goog-quota-user=projects/flare-7091a
+[debug] [2025-08-04T17:54:24.205Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions {"permissions":["firebase.projects.get"]}

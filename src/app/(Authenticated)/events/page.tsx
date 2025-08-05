@@ -33,21 +33,20 @@ export default async function EventView({
 
   return (
     <>
-  
       <div className="relative m-auto flex h-auto max-w-[1440px] flex-col gap-2 p-2 md:h-[calc(100dvh-58px)] md:flex-row md:gap-4 md:p-4">
         <div className="h-auto w-full md:h-full md:w-3/5">
           <FullPageCalendar events={plainMonthsEvents || []} />
         </div>
-
         <div className="relative flex h-auto w-full flex-col items-center gap-4 rounded-2xl bg-white p-2 pt-4 md:h-full md:w-2/5 md:p-4">
           <div className="relative h-[5%] w-full">
             <FilterModal />
             <h2 className="text-center text-xl font-semibold">Upcoming Events</h2>
           </div>
-
           <div className="group h-[95%] w-full">
-            {Object.keys(filterCopy).length > 0 && <ClearFiltersButton />}
-            <FilterToggles />
+            <div className='w-full flex flex-col gap-4 items-end'>
+              {Object.keys(filterCopy).length > 0 && <ClearFiltersButton />}
+              <FilterToggles />
+            </div>
             <EventListContainer filters={filterCopy} />
           </div>
         </div>

@@ -1,30 +1,21 @@
 @import 'tailwindcss';
-
+@plugin './hero.ts';
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 
 
-:root {
-  --background: #ffffff;
-  --foreground: oklch(16.15% 0.0828 273.4);
-  --flareRed: #FF005C;
-  --textGradients: linear-gradient(135deg, #ffa301, #ff005c);
-}
-
 @theme inline {
-  --color-gradients: linear-gradient(135deg, oklch(85.35% 0.224 97.18), oklch(43.6% 0.202 345.2));
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--app-background);
+  --color-foreground: var(--app-foreground);
   --color-primary: oklch(16.15% 0.0828 273.4);
   --color-secondary: #5f4a4a;
   --color-tertiary: rgba(221, 218, 218, 0.5);
-  --color-danger: oklch(74.62% 0.1947 152.04);
   --color-red: oklch(64.73% 0.2385 27.3);
   --color-orange: oklch(76.97% 0.1627 74.52);
   --color-yellow: oklch(91.41% 0.1528 104.99);
   --color-green: oklch(74.62% 0.1947 152.04);
   --color-blue: oklch(48.68% 0.1387 270.64);
   --font-nunito: var(--font-nunito);
-   --font-pt_sans: var(--font-pt_sans);
+  --font-pt_sans: var(--font-pt_sans);
 }
 @layer utilities {
   .text-gradient {
@@ -139,9 +130,7 @@ button:hover {
   z-index: -1;
 }
 
-.bg-danger {
-  background-color: var(--flareRed);
-}
+
 
 
 /* event card */

@@ -2,7 +2,8 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import PrimaryButton from '../primaryButton/PrimaryButton';
+import { Chip } from '@heroui/react';
+import FilterToggles from '../filterToggles/FilterToggles';
 
 export default function ClearFiltersButton() {
   const router = useRouter();
@@ -22,6 +23,6 @@ export default function ClearFiltersButton() {
   };
 
   return (
-    <PrimaryButton styleOver={{marginBottom: "0.5rem", marginTop: "0"}} text='Clear All Filters' type='button' size='full' click={() => handleClear()} />
+    <Chip color='danger' onClose={() => handleClear()}>Clear All</Chip>
   );
 }

@@ -1,5 +1,5 @@
 import Logo from '@/components/flare/logo/Logo';
-import LinkInput from '@/components/inputs/link/LinkInput';
+import PrimaryLink from '@/components/Links/PrimaryLink/PrimaryLink';
 
 export default function Confirmation() {
   return (
@@ -13,7 +13,7 @@ export default function Confirmation() {
           <p>Please Check Your Email To Verify Your Account!</p>
         </div>
         <div className="flex w-3/4 justify-center">
-          <LinkInput style={{ padding: '0.5rem' }} text="Go To Login" href="/signin" />
+          <PrimaryLink link="/signin" linkText="Go To Login" />
         </div>
       </div>
     </div>

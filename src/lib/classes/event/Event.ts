@@ -1,6 +1,6 @@
 import AgeGroup from '@/lib/enums/AgeGroup';
 import Collections from '@/lib/enums/collections';
-import eventType from '@/lib/enums/eventType';
+import eventType, { getEventTypeKeyFromValue, getEventTypeValueFromKey } from '@/lib/enums/eventType';
 import { distanceBetween, Geohash, geohashForLocation, geohashQueryBounds } from 'geofire-common';
 import {
   addDocument,
@@ -315,12 +315,14 @@ export type PlainEvent = {
 
 export const eventConverter = {
   toFirestore(event: Event): DocumentData {
+    const evenType = getEventTypeKeyFromValue(event.type)
+
     return {
       id: event.id,
       flareId: event.flare_id,
       title: event.title,
       description: event.description,
-      type: event.type,
+      type: evenType,
       ageGroup: event.ageGroup,
       startDate: event.startdate,
       endDate: event.endDate,
@@ -334,6 +336,8 @@ export const eventConverter = {
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Event {
     const data = snapshot.data(options);
+   
+
     return new Event(
       data.flareId,
       data.title,
