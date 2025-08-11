@@ -1,6 +1,9 @@
 import AgeGroup from '@/lib/enums/AgeGroup';
 import Collections from '@/lib/enums/collections';
-import eventType, { getEventTypeKeyFromValue, getEventTypeValueFromKey } from '@/lib/enums/eventType';
+import eventType, {
+  getEventTypeKeyFromValue,
+  getEventTypeValueFromKey,
+} from '@/lib/enums/eventType';
 import { distanceBetween, Geohash, geohashForLocation, geohashQueryBounds } from 'geofire-common';
 import {
   addDocument,
@@ -114,8 +117,6 @@ export default class Event {
     return even.data();
   }
 
- 
-
   get imagePath(): string {
     return `Events/${this.id}`;
   }
@@ -165,100 +166,93 @@ export default class Event {
     options?: QueryOptions,
     unVerified: boolean = false
   ) {
-    if (filters.location) {
-      const { center, radius } = filters.location;
-      const bounds = geohashQueryBounds([center.lat, center.lng], radius * 1000);
+    const { location, flare_id, ageGroup, type, onDate, afterDate, beforeDate } = filters;
 
-      const promises = [];
-      for (const b of bounds) {
-        const q = query(
-          collection(dab, 'Events'),
-          where('verified', '==', true),
-          orderBy('hash'),
-          startAt(b[0]),
-          endAt(b[1])
-        );
-        promises.push(getDocs(q));
+    const passesFilters = (data: any, center?: { lat: number; lng: number }) => {
+      if (center) {
+        const lat = data.location?.coordinates?.latitude;
+        const lng = data.location?.coordinates?.longitude;
+        if (!lat || !lng) return false;
+        const distanceInKm = distanceBetween([lat, lng], [center.lat, center.lng]);
+        if (distanceInKm > location!.radius) return false;
       }
 
-      const snapshots = await Promise.all(promises);
+      if (!unVerified && !data.verified) return false;
+      if (flare_id && data.flare_id !== flare_id) return false;
+      if (ageGroup?.length && !ageGroup.includes(data.ageGroup)) return false;
+      if (type?.length && !type.includes(data.type)) return false;
 
+      const eventDateRaw = data.startdate;
+      const eventDate = eventDateRaw?.toDate ? eventDateRaw.toDate() : eventDateRaw;
+
+      if (onDate) {
+        const startOfDay = new Date(onDate);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(onDate);
+        endOfDay.setHours(23, 59, 59, 999);
+        if (eventDate < startOfDay || eventDate > endOfDay) return false;
+      }
+      if (afterDate && eventDate < afterDate) return false;
+      if (beforeDate && eventDate > beforeDate) return false;
+
+      return true;
+    };
+
+    if (location) {
+      const { center, radius } = location;
+      const bounds = geohashQueryBounds([center.lat, center.lng], radius * 1000);
+      const promises = bounds.map((b) =>
+        getDocs(
+          query(
+            collection(dab, 'Events'),
+            where('verified', '==', true),
+            orderBy('hash'),
+            startAt(b[0]),
+            endAt(b[1])
+          )
+        )
+      );
+
+      const snapshots = await Promise.all(promises);
       const filteredEvents: Event[] = [];
 
       for (const snap of snapshots) {
         for (const doc of snap.docs) {
           const data = doc.data();
-          const lat = doc.get('location.coordinates.latitude');
-          const lng = doc.get('location.coordinates.longitude');
-
-          if (!lat || !lng) continue;
-
-          const distanceInKm = distanceBetween([lat, lng], [center.lat, center.lng]);
-          if (distanceInKm > radius) continue;
-
-          if (!unVerified && !data.verified) continue;
-          if (filters.flare_id && data.flare_id !== filters.flare_id) continue;
-          if (
-            filters.ageGroup &&
-            filters.ageGroup.length > 0 &&
-            !filters.ageGroup.includes(data.ageGroup)
-          )
-            continue;
-          if (filters.type && filters.type.length > 0 && !filters.type.includes(data.type))
-            continue;
-
-          if (filters.onDate) {
-            const eventDate = data.startdate ? data.startdate : data.startdate;
-            const startOfDay = new Date(filters.onDate);
-            startOfDay.setHours(0, 0, 0, 0);
-            const endOfDay = new Date(filters.onDate);
-            endOfDay.setHours(23, 59, 59, 999);
-
-            if (eventDate < startOfDay || eventDate > endOfDay) continue;
-          }
-
-          if (filters.afterDate) {
-            const eventDate = data.startdate ? data.startdate : data.startdate;
-            if (eventDate < filters.afterDate) continue;
-          }
-          if (filters.beforeDate) {
-            const eventDate = data.startdate ? data.startdate : data.startdate;
-            if (eventDate > filters.beforeDate) continue;
-          }
-
+          if (!passesFilters(data, center)) continue;
           filteredEvents.push(eventConverter.fromFirestore(doc, {} as SnapshotOptions));
         }
       }
+
       return filteredEvents;
     }
 
     const whereClauses: WhereClause[] = [];
-    if (!unVerified) {
-      whereClauses.push(['verified', '==', true]);
-    }
+    if (!unVerified) whereClauses.push(['verified', '==', true]);
 
-    if (filters.onDate) {
-      const startOfDay = new Date(filters.onDate);
+    if (onDate) {
+      const startOfDay = new Date(onDate);
       startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date(filters.onDate);
+      const endOfDay = new Date(onDate);
       endOfDay.setHours(23, 59, 59, 999);
       whereClauses.push(['startDate', '>=', Timestamp.fromDate(startOfDay)]);
       whereClauses.push(['startDate', '<=', Timestamp.fromDate(endOfDay)]);
     }
 
-    if (filters.flare_id) whereClauses.push(['flareId', '==', filters.flare_id]);
-    if (filters.ageGroup && filters.ageGroup.length > 0)
-      whereClauses.push(['ageGroup', 'in', filters.ageGroup]);
-    if (filters.type && filters.type.length > 0) whereClauses.push(['type', 'in', filters.type]);
-    if (filters.afterDate) whereClauses.push(['startDate', '<', filters.afterDate]);
-    if (filters.beforeDate) whereClauses.push(['startDate', '>=', filters.beforeDate]);
-    return await getCollectionByFields(
-      dab,
-      `${Collections.Events}`,
-      whereClauses,
-      eventConverter,
-      options
-    );
+    let realType: any[] = [];
+    if (type?.length) {
+      realType = type.map((t) => {
+        return getEventTypeKeyFromValue(t);
+      });
+    }
+
+    if (flare_id) whereClauses.push(['flareId', '==', flare_id]);
+    if (ageGroup?.length) whereClauses.push(['ageGroup', 'in', ageGroup]);
+    if (realType.length) whereClauses.push(['type', 'in', realType]);
+    if (afterDate) whereClauses.push(['startDate', '>=', afterDate]);
+    if (beforeDate) whereClauses.push(['startDate', '<=', beforeDate]);
+
+    return getCollectionByFields(dab, Collections.Events, whereClauses, eventConverter, options);
   }
 
   toPlain(): PlainEvent {
@@ -315,7 +309,7 @@ export type PlainEvent = {
 
 export const eventConverter = {
   toFirestore(event: Event): DocumentData {
-    const evenType = getEventTypeKeyFromValue(event.type)
+    const evenType = getEventTypeKeyFromValue(event.type);
 
     return {
       id: event.id,
@@ -336,13 +330,12 @@ export const eventConverter = {
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Event {
     const data = snapshot.data(options);
-   
 
     return new Event(
       data.flareId,
       data.title,
       data.description,
-      data.type,
+      eventType[data.type as keyof typeof eventType],
       data.ageGroup,
       data.startDate.toDate(),
       data.endDate.toDate(),

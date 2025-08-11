@@ -50,7 +50,9 @@ export default async function OrgDashboardPage({
   try {
     const eventFilters: EventFilters = { flare_id: currentUser.uid };
     const options: QueryOptions = { orderByField: 'createdAt', orderDirection: 'desc', limit: 1 };
-    events = await Event.queryEvents(fire, eventFilters, options);
+    events = await Event.queryEvents(fire, eventFilters, options, true);
+
+
     saved = await org.getAllSavedEvents(fire);
   } catch (error) {
     console.log(error);

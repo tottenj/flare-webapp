@@ -1,5 +1,4 @@
 'use client';
-
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import BasicSelect from '@/components/inputs/basicSelect/BasicSelect';
 import ColourSelect from '@/components/inputs/colourSelect/ColourSelect';
@@ -10,21 +9,25 @@ import NumberInput from '@/components/inputs/numberInput/NumberInput';
 import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import TextArea from '@/components/inputs/textArea/TextArea';
 import TextInput from '@/components/inputs/textInput/TextInput';
-import Event from '@/lib/classes/event/Event';
+import Event, { PlainEvent } from '@/lib/classes/event/Event';
 import { ageGroupOptions } from '@/lib/enums/AgeGroup';
 import { colourOptions } from '@/lib/enums/eventType';
 import { storage } from '@/lib/firebase/auth/configs/clientApp';
 import addEvent from '@/lib/formActions/addEvent/addEvent';
 import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
 import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
+import useCustomUseForm from '@/lib/hooks/useForm/useCustomUseForm';
 import flareLocation from '@/lib/types/Location';
 import { useRouter } from 'next/navigation';
 import React, { SetStateAction, useActionState, useEffect, useState } from 'react';
 
 interface addEventFormProps {
-  setClose: React.Dispatch<SetStateAction<boolean>>;
+  setClose?: React.Dispatch<SetStateAction<boolean>>;
+  edit?: PlainEvent
 }
-export default function AddEventForm({ setClose }: addEventFormProps) {
+
+export default function AddEventForm({ setClose , edit }: addEventFormProps) {
+  const isEdit = edit ? true : false
   const initialState = { message: '', eventId: null };
   const [state, action, pending] = useActionState(addEvent, initialState);
   const { validFiles, handleFileChange } = useFileChange();
@@ -51,29 +54,30 @@ export default function AddEventForm({ setClose }: addEventFormProps) {
 
   useEffect(() => {
     if(state.message == 'success' && loadingImage == false )
-      setClose(false);
+      setClose && setClose(false);
       router.refresh()
   },[loadingImage, state.message])
 
   return (
     <>
-      <h1 className="text-center">Add Event</h1>
+      <h1 className="text-center">{!isEdit ? "Add Event": "Edit Event"}</h1>
       <form className="relative z-50 mt-4 flex flex-col overflow-visible" action={action.bind(loc)}>
-        <TextInput label="Event Title" name="title" />
-        <TextArea label="Event Description" name="description" />
+        <TextInput label="Event Title" name="title" defaultVal={edit?.title}/>
+        <TextArea label="Event Description" name="description" defaultVal={edit?.description}/>
         <PrimaryLabel label="Event Image" />
         <FileInput
           name="eventImage"
           onChange={(file) => handleFileChange('eventImage', file)}
           buttonText="Upload File"
           fileAdded={validFiles.length > 0}
+          
         />
         <br></br>
         <div className="mb-4 flex justify-between">
-          <DateTime label="Event Start" name="start" />
+          <DateTime label="Event Start" name="start"  />
           <DateTime label="Event End" name="end" />
         </div>
-        <PlaceSearch z="z-50" loc={setloc} lab="Event Location" />
+        <PlaceSearch z="z-50" loc={setloc} lab="Event Location" defVal={edit && edit.location && edit.location.name ? {label: edit?.location.name, value: edit?.location.id} : {label:"", value: ""}}/>
         {loc && <input type="hidden" name="location" required={true} value={JSON.stringify(loc)} />}
         <br></br>
         <ColourSelect z={'z-40'} label="Event Type" options={colourOptions} name="type" />

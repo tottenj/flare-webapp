@@ -33,7 +33,7 @@ export default function FilterToggles() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Helper: get all active filters including splitting 'type' values
+
   const activeFilters: { key: FilterKey; value: string; config: FilterToggleConfig }[] = [];
 
   for (const [key, config] of Object.entries(FILTER_CONFIG)) {

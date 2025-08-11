@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { signOutUser } from '@/lib/firebase/auth/signOutUser';
+import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
 
-export default function MainBannerMenu({ children }: { children: React.ReactNode }) {
+export default function MainBannerMenu({ children }: { children: React.ReactNode, isSignedIn?:boolean }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const {user} = useUnifiedUser()
 
   // Close on outside click
   useEffect(() => {
@@ -21,7 +23,12 @@ export default function MainBannerMenu({ children }: { children: React.ReactNode
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const menuItems = [{ title: 'View Profile', href: '/dashboard' }];
+  let menuItems = [{title: "Sign Up", href:"/signup"}, {title: "Sign In", href:"/signin"}]
+  if(user) menuItems = [{ title: 'View Profile', href: '/dashboard' }];
+
+
+
+
 
   return (
     <div ref={menuRef} className="relative flex flex-col items-end">
@@ -49,11 +56,13 @@ export default function MainBannerMenu({ children }: { children: React.ReactNode
                   <Link href={href}>{title}</Link>
                 </li>
               ))}
+              {user && (
               <li className="w-full px-4 py-2 hover:bg-gray-100">
                 <form action={signOutUser}>
                   <button type="submit">Sign Out</button>
                 </form>
               </li>
+              )}
             </ul>
           </motion.div>
         )}

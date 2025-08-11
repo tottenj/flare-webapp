@@ -91,8 +91,10 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
                     onClick={(e) => {
                       e.stopPropagation();
                       const params = new URLSearchParams(searchParams.toString());
+                   
                       const clickedType = getKeyByValue(eventType, color);
                       const currentType = params.get('type');
+
                       const newDate = toLocalDateKey(day.date);
                       params.set('date', newDate);
 

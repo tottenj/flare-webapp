@@ -4,21 +4,21 @@ import { heroui } from '@heroui/react';
 
 
 export default heroui({
-  prefix:"app",
+  prefix: 'app',
   themes: {
     light: {
       colors: {
         default: {
-          '50': '#fbfafa',
-          '100': '#f5f4f4',
-          '200': '#efeded',
-          '300': '#e9e7e7',
-          '400': '#e3e0e0',
-          '500': '#dddada',
-          '600': '#b6b4b4',
-          '700': '#908e8e',
-          '800': '#696868',
-          '900': '#424141',
+          '50': '#f4f3f3', // lightest — almost white
+          '100': '#dddada', // your reference
+          '200': '#d1cece', // slightly darker than 100
+          '300': '#c5c2c2',
+          '400': '#b9b6b6',
+          '500': '#adabab',
+          '600': '#908e8e',
+          '700': '#737171',
+          '800': '#565555',
+          '900': '#3a3939', // darkest
           foreground: '#000000',
           DEFAULT: '#dddada',
         },
@@ -99,7 +99,7 @@ export default heroui({
           foreground: '#000',
         },
         content2: {
-          DEFAULT: '#f4f4f5',
+          DEFAULT: 'rgba(221, 218, 218, 0.5)',
           foreground: '#000',
         },
         content3: {
@@ -225,5 +225,10 @@ export default heroui({
   },
   layout: {
     disabledOpacity: '0.8',
+    radius: {
+      small: '1rem',
+      medium: '1.5rem',
+      large: '9999px'
+    },
   },
 });

@@ -29,6 +29,15 @@
 }
 
 
+@layer components {
+  .heroui-input,
+  .heroui-button,
+  .heroui-card {
+    @apply rounded-md; /* or rounded-lg */
+  }
+}
+
+
 /*
 @media (prefers-color-scheme: dark) {
   :root {

@@ -12,8 +12,6 @@ export default async function MyEvents() {
   const { fire, currentUser } = await getFirestoreFromServer();
   let events: Event[] = [];
 
-
-  
   if(!currentUser) redirect("/events")
   try{
     const eventFilters: EventFilters = { flare_id: currentUser.uid };

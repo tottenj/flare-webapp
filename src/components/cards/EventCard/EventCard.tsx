@@ -1,5 +1,6 @@
 "use client"
 import SVGLogo from '@/components/flare/svglogo/SVGLogo';
+import EditModal from '@/components/modals/editModal/EditModal';
 import { PlainEvent } from '@/lib/classes/event/Event';
 import isSameDate from '@/lib/utils/other/isSameDate';
 import isSameTime from '@/lib/utils/other/isSameTime';
@@ -23,7 +24,8 @@ export default function EventCard({ event }: eventCardProps) {
         style={{ background: `${event.type}` }}
         className="flex justify-end rounded-[16px] p-1 transition-transform duration-200 hover:scale-105"
       >
-        <div className="flex w-[95%] items-center justify-start gap-4 rounded-[15px] bg-white p-2">
+        <div className="flex w-[95%] items-center justify-start gap-4 rounded-[15px] bg-white relative p-2">
+         
           <SVGLogo color={event.type} size={50} />
           <div className="flex flex-col justify-center">
             <h4>{event.title}</h4>

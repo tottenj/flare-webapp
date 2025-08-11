@@ -1,9 +1,9 @@
-"use server"
-import Event from "@/lib/classes/event/Event";
-import FlareOrg from "@/lib/classes/flareOrg/FlareOrg";
-import FlareUser from "@/lib/classes/flareUser/FlareUser";
-import { getServicesFromServer } from "@/lib/firebase/auth/configs/getFirestoreFromServer";
-import EventInfo from "./EventInfo";
+'use server';
+import Event from '@/lib/classes/event/Event';
+import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
+import FlareUser from '@/lib/classes/flareUser/FlareUser';
+import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import EventInfo from './EventInfo';
 
 export default async function EventInfoContainer({ slug }: { slug: string }) {
   const { firestore, storage, currentUser } = await getServicesFromServer();
@@ -29,5 +29,9 @@ export default async function EventInfoContainer({ slug }: { slug: string }) {
     }
   }
 
-  return event &&  <EventInfo org={org} img={img} event={event} seen={hasSeen} curUserId={currentUser?.uid}/>;
+  return (
+    event && (
+      <EventInfo org={org} img={img} event={event} seen={hasSeen} curUserId={currentUser?.uid} />
+    )
+  );
 }
