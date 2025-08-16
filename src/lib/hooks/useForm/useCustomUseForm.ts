@@ -8,7 +8,7 @@ export default function useCustomUseForm(
   loadingMes?: string,
   close: () => void = () => {}
 ) {
-  const initialState = { status: '' };
+  const initialState = { status: '', errors: {} };
   const [state, action, pending] = useActionState(actions, initialState);
 
   useFormAction(state.status, pending, {

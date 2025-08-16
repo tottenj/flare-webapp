@@ -5,12 +5,12 @@ import AgeGroup from '@/lib/enums/AgeGroup';
 import eventType from '@/lib/enums/eventType';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import flareLocation from '@/lib/types/Location';
+import { convertFormData } from '@/lib/zod/convertFormData';
 import { revalidatePath } from 'next/cache';
 
 export default async function addEvent(prevState: any, formData: FormData) {
   const { currentUser, fire } = await getFirestoreFromServer();
   if (!currentUser) return { message: 'Unable to find current user', eventId: null };
-
 
 
   try {
