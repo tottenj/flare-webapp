@@ -13,7 +13,15 @@ export default function HeroDateRangeInput(props: HeroDateRangeProps) {
   return (
     <>
       {/*@ts-ignore */}
-      <DateRangePicker labelPlacement="outside" defaultValue={props.defaultValue || defaultRange} />
+      <DateRangePicker labelPlacement={props.labelPlacement || "inside"} defaultValue={props.defaultValue || defaultRange}
+        classNames={{
+          inputWrapper:
+            'rounded-2xl focus-within:ring-2 focus-within:ring-secondary focus-within:ring-offset-0 focus-within:outline-none',
+          input: 'outline-none focus:outline-none',
+        }}
+        hideTimeZone={props.hideTimeZone ?? true}
+        {...props}
+      />
     </>
   );
 }

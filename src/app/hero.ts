@@ -1,25 +1,22 @@
 import { heroui } from '@heroui/react';
 
-
-
-
 export default heroui({
   prefix: 'app',
   themes: {
     light: {
       colors: {
         default: {
-          '50': '#f4f3f3', // lightest — almost white
-          '100': '#dddada', // your reference
-          '200': '#d1cece', // slightly darker than 100
+          '50': '#f4f3f3',
+          '100': '#dddada',
+          '200': '#d1cece',
           '300': '#c5c2c2',
           '400': '#b9b6b6',
           '500': '#adabab',
           '600': '#908e8e',
           '700': '#737171',
           '800': '#565555',
-          '900': '#3a3939', // darkest
-          foreground: '#000000',
+          '900': '#3a3939',
+          foreground: '#1d0b31',
           DEFAULT: '#dddada',
         },
         primary: {
@@ -92,134 +89,40 @@ export default heroui({
           foreground: '#000',
           DEFAULT: '#f88b79',
         },
+
         background: '#ffffff',
-        foreground: '#1d0b31',
+        foreground: {
+          '50': '#f2f2f5',
+          '100': '#e6e6eb',
+          '200': '#ccccd6',
+          '300': '#b3b3c2',
+          '400': '#9999ad',
+          '500': '#808099', // main shade
+          '600': '#666680',
+          '700': '#4d4d66',
+          '800': '#33334d',
+          '900': '#1d1d31', // matches your current DEFAULT
+          DEFAULT: '#1d0b31',
+          foreground: '#1d0b31',
+        },
         content1: {
           DEFAULT: '#ffffff',
-          foreground: '#000',
+          foreground: '#1d0b31',
         },
         content2: {
-          DEFAULT: 'rgba(221, 218, 218, 0.5)',
-          foreground: '#000',
+          DEFAULT: '#dddadada',
+          foreground: '#1d0b31',
         },
         content3: {
           DEFAULT: '#e4e4e7',
-          foreground: '#000',
+          foreground: '#1d0b31',
         },
         content4: {
           DEFAULT: '#d4d4d8',
-          foreground: '#000',
+          foreground: '#1d0b31',
         },
-        focus: '#006FEE',
+        focus: '#5f4a4a',
         overlay: '#000000',
-      },
-    },
-    dark: {
-      colors: {
-        default: {
-          '50': '#0d0d0e',
-          '100': '#19191c',
-          '200': '#26262a',
-          '300': '#323238',
-          '400': '#3f3f46',
-          '500': '#65656b',
-          '600': '#8c8c90',
-          '700': '#b2b2b5',
-          '800': '#d9d9da',
-          '900': '#ffffff',
-          foreground: '#fff',
-          DEFAULT: '#3f3f46',
-        },
-        primary: {
-          '50': '#09030f',
-          '100': '#0e0517',
-          '200': '#130720',
-          '300': '#180928',
-          '400': '#1d0b31',
-          '500': '#453655',
-          '600': '#6c6079',
-          '700': '#948b9d',
-          '800': '#bbb6c1',
-          '900': '#e3e1e5',
-          foreground: '#fff',
-          DEFAULT: '#1d0b31',
-        },
-        secondary: {
-          '50': '#2e444d',
-          '100': '#496c79',
-          '200': '#6394a6',
-          '300': '#7ebcd2',
-          '400': '#99e4ff',
-          '500': '#abe9ff',
-          '600': '#bdedff',
-          '700': '#cff2ff',
-          '800': '#e0f7ff',
-          '900': '#f2fcff',
-          foreground: '#000',
-          DEFAULT: '#99e4ff',
-        },
-        success: {
-          '50': '#334a35',
-          '100': '#507555',
-          '200': '#6ea174',
-          '300': '#8bcc93',
-          '400': '#a9f7b2',
-          '500': '#b8f8bf',
-          '600': '#c7facd',
-          '700': '#d6fbda',
-          '800': '#e5fde8',
-          '900': '#f4fef5',
-          foreground: '#000',
-          DEFAULT: '#a9f7b2',
-        },
-        warning: {
-          '50': '#4c3624',
-          '100': '#785639',
-          '200': '#a4754d',
-          '300': '#d19562',
-          '400': '#fdb477',
-          '500': '#fdc18f',
-          '600': '#fecea7',
-          '700': '#fedbbe',
-          '800': '#fee9d6',
-          '900': '#fff6ee',
-          foreground: '#000',
-          DEFAULT: '#fdb477',
-        },
-        danger: {
-          '50': '#4a2a24',
-          '100': '#764239',
-          '200': '#a15a4f',
-          '300': '#cd7364',
-          '400': '#f88b79',
-          '500': '#f99f90',
-          '600': '#fab4a8',
-          '700': '#fcc8bf',
-          '800': '#fddcd7',
-          '900': '#fef1ee',
-          foreground: '#000',
-          DEFAULT: '#f88b79',
-        },
-        background: '#ffffff',
-        foreground: '#ffffff',
-        content1: {
-          DEFAULT: '#18181b',
-          foreground: '#fff',
-        },
-        content2: {
-          DEFAULT: '#27272a',
-          foreground: '#fff',
-        },
-        content3: {
-          DEFAULT: '#3f3f46',
-          foreground: '#fff',
-        },
-        content4: {
-          DEFAULT: '#52525b',
-          foreground: '#fff',
-        },
-        focus: '#006FEE',
-        overlay: '#ffffff',
       },
     },
   },
@@ -228,7 +131,7 @@ export default heroui({
     radius: {
       small: '1rem',
       medium: '1.5rem',
-      large: '9999px'
+      large: '9999px',
     },
   },
 });

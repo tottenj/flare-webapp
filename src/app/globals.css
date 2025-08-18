@@ -5,7 +5,7 @@
 
 @theme inline {
   --color-background: var(--app-background);
-  --color-foreground: var(--app-foreground);
+  --color-foreground: #1d0b31;
   --color-primary: oklch(16.15% 0.0828 273.4);
   --color-secondary: #5f4a4a;
   --color-tertiary: rgba(221, 218, 218, 0.5);
@@ -17,35 +17,7 @@
   --font-nunito: var(--font-nunito);
   --font-pt_sans: var(--font-pt_sans);
 }
-@layer utilities {
-  .text-gradient {
-    --textGradient: linear-gradient(135deg, #ffa301, #ff005c);
-    background: var(--textGradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    color: transparent;
-  }
-}
 
-
-@layer components {
-  .heroui-input,
-  .heroui-button,
-  .heroui-card {
-    @apply rounded-md; /* or rounded-lg */
-  }
-}
-
-
-/*
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: var(--color-white);
-  }
-}
-  */
 
 h1 {
   font-family: var(--font-nunito);
@@ -82,6 +54,9 @@ button:hover {
   cursor: pointer;
 }
 
+label{
+  position: relative;
+}
 
 .secondaryHeader{
   font-size: 1rem;

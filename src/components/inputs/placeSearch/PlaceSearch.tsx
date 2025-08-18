@@ -80,6 +80,7 @@ export default function PlaceSearch({ loc, lab, required = true,z, defVal }: pla
             ...baseStyles,
             backgroundColor: 'rgba(221, 218, 218, 0.5)',
             color: '#5f4a4a',
+            borderRadius: "1.5rem"
           }),
           menuPortal: (base) => ({ ...base, zIndex: 9999 }),
         }}
