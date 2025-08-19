@@ -12,15 +12,14 @@ import flareLocation from '@/lib/types/Location';
 import { useState } from 'react';
 import HeroSelect from '@/components/inputs/hero/select/HeroSelect';
 import { SelectItem } from '@heroui/react';
-import eventType, { colourOptions } from '@/lib/enums/eventType';
-import SVGLogo from '@/components/flare/svglogo/SVGLogo';
 import AgeGroup from '@/lib/enums/AgeGroup';
 import PrimaryLabel from '@/components/inputs/labels/primaryLabel/PrimaryLabel';
+import TypeSelect from '@/components/inputs/hero/select/TypeSelect';
 
 export default function AddEventFormHero({ close }: { close?: () => void }) {
   const { action, state, pending } = useCustomUseForm(addEvent, 'Success', undefined, close);
-
   const [loc, setloc] = useState<flareLocation | null>(null);
+
   return (
     <>
       <h1 className="mb-6 text-center">Add Event</h1>
@@ -44,44 +43,22 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
 
         <div className="w-full">
           <PlaceSearch z="z-50" loc={setloc} lab="Event Location" />
+          {loc && (
+            <input type="hidden" name="location" required={true} value={JSON.stringify(loc)} />
+          )}
         </div>
 
         <PrimaryLabel label="Additional Information" />
         <div className="flex w-full items-center gap-4">
           <div className="w-1/2">
-            <HeroSelect
-              label="Event Type"
-              items={Object.entries(eventType)}
-              defaultSelectedKeys={[Object.keys(eventType)[0]]}
-              renderValue={(items) => {
-                return items.map((item) => (
-                  <div className="flex items-center gap-4" key={item.key}>
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
-                      <SVGLogo color={eventType[item.key as keyof typeof eventType]} size="80%" />
-                    </div>
-                    <p>{item.textValue}</p>
-                  </div>
-                ));
-              }}
-            >
-              {Object.entries(eventType).map(([key, value]) => (
-                <SelectItem key={key} textValue={key}>
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
-                      <SVGLogo color={value} size="80%" />
-                    </div>
-                    <p>{key}</p>
-                  </div>
-                </SelectItem>
-              ))}
-            </HeroSelect>
+            <TypeSelect />
           </div>
 
           <div className="w-1/2">
             <HeroSelect label="Age Range" defaultSelectedKeys={[Object.keys(AgeGroup)[0]]}>
               {Object.entries(AgeGroup).map(([key, value]) => (
-                <SelectItem key={key} textValue={key}>
-                  {key}
+                <SelectItem key={key} textValue={value}>
+                  {value}
                 </SelectItem>
               ))}
             </HeroSelect>

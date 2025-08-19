@@ -13,6 +13,7 @@ export default async function addEvent(prevState: any, formData: FormData) {
   if (!currentUser) return { message: 'Unable to find current user', eventId: null };
 
 
+  console.log(formData)
   try {
     const title = formData.get('title') as string;
     const description = formData.get('description') as string;
