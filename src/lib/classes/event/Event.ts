@@ -38,7 +38,7 @@ export default class Event {
   id: string;
   flare_id: string;
   title: string;
-  description: string;
+  description?: string;
   type: eventType;
   ageGroup: AgeGroup;
   startdate: Date;
@@ -52,7 +52,7 @@ export default class Event {
   constructor(
     flare_id: string,
     title: string,
-    desciption: string,
+    desciption: string | undefined,
     type: eventType,
     ageGroup: AgeGroup,
     startDate: Date,
@@ -287,7 +287,7 @@ export type PlainEvent = {
   id: string;
   flare_id: string;
   title: string;
-  description: string;
+  description?: string;
   type: string;
   ageGroup: string;
   startDate: Date;

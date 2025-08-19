@@ -55,7 +55,7 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
           </div>
 
           <div className="w-1/2">
-            <HeroSelect label="Age Range" defaultSelectedKeys={[Object.keys(AgeGroup)[0]]}>
+            <HeroSelect name='age' label="Age Range" defaultSelectedKeys={[Object.keys(AgeGroup)[0]]}>
               {Object.entries(AgeGroup).map(([key, value]) => (
                 <SelectItem key={key} textValue={value}>
                   {value}

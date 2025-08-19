@@ -7,6 +7,7 @@ export default function TypeSelect() {
   return (
     <HeroSelect
       label="Event Type"
+      name="type"
       items={Object.entries(eventType)}
       defaultSelectedKeys={[Object.keys(eventType)[0]]}
       renderValue={(items) => {
