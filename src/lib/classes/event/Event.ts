@@ -103,7 +103,6 @@ export default class Event {
   static async uploadImages(id: string, storage: FirebaseStorage, files: File[]) {
     for (const file of files) {
       await addFile(storage, `Events/${id}`, file);
-      console.log('File stored');
     }
   }
 

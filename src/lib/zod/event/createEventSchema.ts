@@ -38,7 +38,7 @@ export const CreateEventSchema = z.object({
     })
   ),
   price: z.coerce.number(),
-  tickets: z.url().optional(),
-  type: z.enum(eventType),
-  age: z.enum(AgeGroup),
+  tickets: z.string().optional(),
+  type: z.any(),
+  age: z.any(),
 });

@@ -3,11 +3,12 @@ import HeroSelect from "./HeroSelect";
 import eventType from "@/lib/enums/eventType";
 import SVGLogo from "@/components/flare/svglogo/SVGLogo";
 
-export default function TypeSelect() {
+export default function TypeSelect({required}:{required?:boolean}) {
   return (
     <HeroSelect
       label="Event Type"
       name="type"
+      required={required ?? false}
       items={Object.entries(eventType)}
       defaultSelectedKeys={[Object.keys(eventType)[0]]}
       renderValue={(items) => {

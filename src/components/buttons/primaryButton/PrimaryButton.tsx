@@ -10,7 +10,8 @@ export interface primaryButtonProps {
   styleOver?: React.CSSProperties;
   size?: 'small' | 'medium' | 'large' | 'full';
   action?: string | ((formData: FormData) => void | Promise<void>);
-  click?: () => void | Promise<void>;
+  click?: (e:any) => void | Promise<void>;
+  form?: string
 }
 
 export default function PrimaryButton({
@@ -21,6 +22,7 @@ export default function PrimaryButton({
   size = 'full',
   action,
   click,
+  form
 }: primaryButtonProps) {
   const sizeClass = {
     full: 'w-full',
@@ -54,6 +56,7 @@ export default function PrimaryButton({
       initial="initial"
       whileHover="hover"
       whileTap="tap"
+      form={form}
     >
       <motion.span
         variants={gradientVariants}
