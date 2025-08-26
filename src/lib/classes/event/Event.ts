@@ -7,6 +7,7 @@ import eventType, {
 import { distanceBetween, Geohash, geohashForLocation, geohashQueryBounds } from 'geofire-common';
 import {
   addDocument,
+  deleteDocument,
   getCollectionByFields,
   getDocument,
   QueryOptions,
@@ -98,6 +99,10 @@ export default class Event {
     await addDocument(dab, `${Collections.Events}/${this.id}`, updates, eventConverter, {
       merge: true,
     });
+  }
+
+  static async deleteEvent(dab: Firestore, id: string){
+    await deleteDocument(dab, `${Collections.Events}/${id}`, undefined)
   }
 
   static async uploadImages(id: string, storage: FirebaseStorage, files: File[]) {

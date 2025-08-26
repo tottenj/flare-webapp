@@ -33,7 +33,7 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const [formattedDate, setFormattedDate] = useState<string>('');
 
-  function handlePreviewClick(e: React.MouseEvent<HTMLButtonElement>) {
+  function handlePreviewClick(e: React.MouseEvent<HTMLButtonElement>): any {
     e.preventDefault();
     e.stopPropagation();
     const form = e.currentTarget.form;
@@ -78,6 +78,7 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
     if (img) {
       const objectUrl = URL.createObjectURL(img);
       setImgUrl(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
     }
   }
 
@@ -96,7 +97,7 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
 
         <div className="flex w-full gap-4">
           <div className="w-1/2">
-            <HeroFileInput setImg={setImg}  label="Event Image" />
+            <HeroFileInput setImg={setImg} label="Event Image" />
           </div>
           <div className="w-1/2">
             <HeroDateRangeInput startName="start" endName="end" label="Event Date" />
@@ -113,7 +114,7 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
         <PrimaryLabel label="Additional Information" />
         <div className="flex w-full items-center gap-4">
           <div className="w-1/2">
-            <TypeSelect required/>
+            <TypeSelect required />
           </div>
 
           <div className="w-1/2">
@@ -123,7 +124,7 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
               defaultSelectedKeys={[Object.keys(AgeGroup)[0]]}
             >
               {Object.entries(AgeGroup).map(([key, value]) => (
-                <SelectItem key={key} textValue={key}>
+                <SelectItem key={key} textValue={value}>
                   {value}
                 </SelectItem>
               ))}
@@ -145,16 +146,24 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
             <HeroInput label="Link to Tickets" name="tickets" required={false} type="url" />
           </div>
         </div>
-        <PrimaryButton disabled={pending} text="Preview Event" type="button" click={handlePreviewClick} />
+        <PrimaryButton
+          disabled={pending}
+          text="Preview Event"
+          type="button"
+          click={handlePreviewClick}
+        />
 
         <Modal isOpen={!!previewData} onClose={() => setPreviewData(null)}>
           {previewData && (
-            <EventInfoSplit
-              event={previewData}
-              img={imgUrl}
-              startDate={previewData.startDate ? previewData.startDate.toLocaleTimeString() : ''}
-              formattedDate={formattedDate}
-            />
+            <>
+              <EventInfoSplit
+                event={previewData}
+                img={imgUrl}
+                startDate={previewData.startDate ? previewData.startDate.toLocaleTimeString() : ''}
+                formattedDate={formattedDate}
+              />
+              <PrimaryButton type="submit" text="Create Event" form="addEvent" />
+            </>
           )}
         </Modal>
       </Form>

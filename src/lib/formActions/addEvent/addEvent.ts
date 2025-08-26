@@ -10,8 +10,9 @@ import z from 'zod';
 
 export default async function addEvent(prevState: any, formData: FormData) {
   const { currentUser, fire } = await getFirestoreFromServer();
-  if (!currentUser) return { message: 'Unable to find current user', eventId: null };
+  if (!currentUser) return { status: 'Unable to find current user', eventId: null };
   const res = convertFormData(CreateEventSchema, formData);
+
 
   if (!res.success) {
     return { status: 'Error', error: z.treeifyError(res.error).errors };

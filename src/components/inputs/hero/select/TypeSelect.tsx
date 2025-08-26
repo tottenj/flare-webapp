@@ -1,9 +1,9 @@
-import { SelectItem } from "@heroui/react";
-import HeroSelect from "./HeroSelect";
-import eventType from "@/lib/enums/eventType";
-import SVGLogo from "@/components/flare/svglogo/SVGLogo";
+import { SelectItem } from '@heroui/react';
+import HeroSelect from './HeroSelect';
+import eventType from '@/lib/enums/eventType';
+import SVGLogo from '@/components/flare/svglogo/SVGLogo';
 
-export default function TypeSelect({required}:{required?:boolean}) {
+export default function TypeSelect({ required }: { required?: boolean }) {
   return (
     <HeroSelect
       label="Event Type"
@@ -23,7 +23,7 @@ export default function TypeSelect({required}:{required?:boolean}) {
       }}
     >
       {Object.entries(eventType).map(([key, value]) => (
-        <SelectItem key={key} textValue={key}>
+        <SelectItem key={value} textValue={key}>
           <div className="flex items-center gap-4">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
               <SVGLogo color={value} size="80%" />
@@ -33,6 +33,5 @@ export default function TypeSelect({required}:{required?:boolean}) {
         </SelectItem>
       ))}
     </HeroSelect>
-  
   );
 }
