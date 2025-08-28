@@ -2,7 +2,7 @@
 import Event from '@/lib/classes/event/Event';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan, faPencil } from '@fortawesome/free-solid-svg-icons';
+import {  faPencil } from '@fortawesome/free-solid-svg-icons';
 import BookmarkButton from '@/components/buttons/bookmarkButton/BookmarkButton';
 import PassInModal from '@/components/modals/passInModal/PassInModal';
 import AddEventFormHero from '@/components/forms/addEventForm/AddEventFormHero';

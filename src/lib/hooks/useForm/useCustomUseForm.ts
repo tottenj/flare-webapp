@@ -1,17 +1,23 @@
 import { useActionState, useEffect } from 'react';
 import { useFormAction } from './useFormAction';
-
+import { ActionResponse } from '@/lib/types/ActionResponse';
 
 export default function useCustomUseForm(
-  actions: any,
+  actionFn: (prevState: ActionResponse, formData: FormData) => Promise<ActionResponse>,
   successMes?: string,
   loadingMes?: string,
   close: () => void = () => {}
 ) {
-  const initialState = { status: '', errors: {} };
-  const [state, action, pending] = useActionState(actions, initialState);
+  const initialState: ActionResponse = { status: undefined, message: '', errors: {} };
+  const wrappedAction = (state: ActionResponse, formData: FormData): Promise<ActionResponse> =>
+    actionFn(state, formData);
 
-  useFormAction(state.status, pending, {
+  const [state, action, pending] = useActionState<ActionResponse>(
+    wrappedAction as (state: ActionResponse, ...args: any[]) => Promise<ActionResponse>,
+    initialState
+  );
+
+  useFormAction(state, pending, {
     successMessage: successMes || 'Success',
     loadingMessage: loadingMes || 'Loading...',
   });
@@ -20,7 +26,7 @@ export default function useCustomUseForm(
     if (state.status === 'success' && !pending) {
       close();
     }
-  }, [pending, state]);
+  }, [pending, state, close]);
 
   return { action, pending, state };
 }

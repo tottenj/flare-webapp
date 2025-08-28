@@ -9,12 +9,13 @@ interface deleteButtonProps {
 }
 
 export default function DeleteButton({ formAction, id }: deleteButtonProps) {
-  const { action, pending, state } = useCustomUseForm(formAction, 'Deleted Event');
+  const { action, pending } = useCustomUseForm(formAction, 'Deleted Event');
 
   return (
     <form action={action}>
       <input type="hidden" name="id" value={id} />
       <button
+        disabled={pending}
         type="submit"
         className="pointer-cursor gradient group flex h-[30px] w-[30px] items-center justify-center rounded-full border-2 p-1 transition-transform duration-200 ease-in-out hover:scale-110"
       >

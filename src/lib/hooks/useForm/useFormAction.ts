@@ -1,6 +1,7 @@
 // hooks/useActionToast.ts
 'use client';
 
+import { ActionResponse } from '@/lib/types/ActionResponse';
 import { useEffect, useRef } from 'react';
 import { toast, Id } from 'react-toastify';
 
@@ -9,8 +10,8 @@ interface ActionToastOptions {
   loadingMessage?: string;
 }
 
-export function useFormAction<T extends string>(
-  state: T | null,
+export function useFormAction(
+  state: ActionResponse,
   pending: boolean,
   { successMessage = 'Success!', loadingMessage = 'Processing...' }: ActionToastOptions = {}
 ) {
@@ -23,15 +24,18 @@ export function useFormAction<T extends string>(
   }, [pending, loadingMessage]);
 
   useEffect(() => {
-    if (!pending && state) {
+    if (!pending && state.status) {
       if (toastId.current) {
         toast.dismiss(toastId.current);
         toastId.current = null;
       }
-      if (state === 'success') {
-        toast.success(successMessage);
-      } else {
-        toast.error(state);
+
+      if (state.status === 'success') {
+        toast.success(state.message || successMessage);
+      } else if (state.status === 'error') {
+        // errors object available here if needed
+        const errMsg = state.message || 'Something went wrong';
+        toast.error(errMsg);
       }
     }
   }, [pending, state, successMessage]);

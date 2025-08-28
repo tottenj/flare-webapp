@@ -7,7 +7,12 @@ import EventInfo from './EventInfo';
 
 export default async function EventInfoContainer({ slug }: { slug: string }) {
   const { firestore, storage, currentUser } = await getServicesFromServer();
-  const event = await Event.getEvent(firestore, slug);
+  let event
+  try{
+   event = await Event.getEvent(firestore, slug);
+  }catch(error){
+    console.log(error)
+  }
   if (!event) return <p>Event not found</p>;
   const org = await FlareOrg.getOrg(firestore, event.flare_id);
   const img = await event.getImage(storage);

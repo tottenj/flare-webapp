@@ -2,20 +2,23 @@
 import Event from '@/lib/classes/event/Event';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import { ActionResponse } from '@/lib/types/ActionResponse';
+import { zodFieldErrors } from '@/lib/utils/error/zodFeildErrors';
 import { convertFormData } from '@/lib/zod/convertFormData';
 import { CreateEventSchema } from '@/lib/zod/event/createEventSchema';
 import { GeoPoint } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
 import z from 'zod';
 
-export default async function addEvent(prevState: any, formData: FormData) {
+
+export default async function addEvent(prevState: any, formData: FormData): Promise<ActionResponse> {
   const { currentUser, fire } = await getFirestoreFromServer();
-  if (!currentUser) return { status: 'Unable to find current user', eventId: null };
+  if (!currentUser) return { status: 'error', message: "Unable to find current user",  eventId: null };
   const res = convertFormData(CreateEventSchema, formData);
 
 
   if (!res.success) {
-    return { status: 'Error', error: z.treeifyError(res.error).errors };
+    return { status: 'error', message: "",  errors: zodFieldErrors(res.error)};
   }
 
   try {
@@ -48,9 +51,9 @@ export default async function addEvent(prevState: any, formData: FormData) {
     revalidatePath('/dashboard');
     revalidatePath('/events');
     revalidatePath(`/events/${event.id}`);
-    return { status: 'success', eventId: event.id };
+    return { status: 'success', message: "Successfully Added Event",  eventId: event.id };
   } catch (error) {
     console.log(error);
-    return { status: 'Error creating event', eventId: null };
+    return { status: 'error', message: "", eventId: null };
   }
 }
