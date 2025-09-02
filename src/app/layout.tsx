@@ -27,7 +27,7 @@ const pt_sans = PT_Sans({
   subsets: ['latin'],
 });
 
-export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children, event }: Readonly<{ children: React.ReactNode, event: React.ReactNode }>) {
   const { currentUser } = await getAuthenticatedAppForUser();
 
   const userData = currentUser
@@ -49,6 +49,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
                 <Providers>
                   <MainBanner />
                   {children}
+                  {event}
                 </Providers>
               </AuthProvider>
               <Analytics />

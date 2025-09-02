@@ -6,7 +6,7 @@ import EventListContainer from '@/components/events/eventsList/EventListContaine
 import FilterModal from '@/components/modals/filterModal/FilterModal';
 import Event from '@/lib/classes/event/Event';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
-import getEventFiltersFromSearchParams from '@/lib/utils/other/getEventFilters';
+import getEventFiltersFromSearchParams from '@/lib/utils/filterFunctions/getEventFilters';
 
 export default async function EventView({
   params,
@@ -43,7 +43,7 @@ export default async function EventView({
             <h2 className="text-center text-xl font-semibold">Upcoming Events</h2>
           </div>
           <div className="group h-[95%] w-full">
-            <div className='w-full flex flex-col gap-4 items-end'>
+            <div className="flex w-full flex-col items-end gap-4">
               {Object.keys(filterCopy).length > 0 && <ClearFiltersButton />}
               <FilterToggles />
             </div>

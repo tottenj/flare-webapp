@@ -1,10 +1,7 @@
 import eventType from '@/lib/enums/eventType';
 import EventFilters from '@/lib/types/FilterType';
-import parseEventByKey from './parseEventByKey';
-import getKeyByValue from './getKeyByValue';
 import AgeGroup from '@/lib/enums/AgeGroup';
-import { getEnumValueByString } from './getEnumValueByString';
-import getEnumValuesFromString from './getEnumFromKeyOrValue';
+import getEnumValuesFromString from '../enumFunctions/getEnumFromKeyOrValue';
 
 export default function getEventFiltersFromSearchParams(
   searchParams: Record<string, string | string[] | undefined>
@@ -14,10 +11,9 @@ export default function getEventFiltersFromSearchParams(
   const ageParam = searchParams.age;
   const dateParam = Array.isArray(searchParams.date) ? searchParams.date[0] : searchParams.date;
 
-  const latParam = searchParams.lat
-  const lngParam = searchParams.lng
-  const radiusParam = searchParams.radius
-
+  const latParam = searchParams.lat;
+  const lngParam = searchParams.lng;
+  const radiusParam = searchParams.radius;
 
   if (latParam && lngParam && radiusParam) {
     const lat = parseFloat(latParam as string);
@@ -44,7 +40,7 @@ export default function getEventFiltersFromSearchParams(
       filters.ageGroup = group;
     }
   }
-  
+
   if (dateParam) {
     const [year, month, day] = dateParam.split('-').map(Number);
     filters.onDate = new Date(Date.UTC(year, month - 1, day + 1)); // avoids timezone bugs

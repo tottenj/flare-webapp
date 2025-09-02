@@ -21,8 +21,8 @@ import { CreateEventSchema } from '@/lib/zod/event/createEventSchema';
 import { toast } from 'react-toastify';
 import Modal from '@/components/modals/mainModal/MainModal';
 import Event from '@/lib/classes/event/Event';
-import { GeoPoint } from 'firebase/firestore';
 import EventInfoSplit from '@/components/events/eventInfo/EventInfoSplit';
+import getFormattedDateString from '@/lib/utils/dateTime/getFormattedDateString';
 
 export default function AddEventFormHero({ close }: { close?: () => void }) {
   const { action, state, pending } = useCustomUseForm(addEvent, 'Success', undefined, close);
@@ -39,40 +39,28 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
     const form = e.currentTarget.form;
     if (!form) return;
     const formData = new FormData(form);
+    console.log(formData.get("location"))
     const res = convertFormData(CreateEventSchema, formData);
+    
     if (!res.success) {
       toast.error('Please Fill In All Required Fields');
-    } else {
+      console.log(res.error)
+    } else if (!user?.uid){
+      toast.error("Authentication Error")
+    }
+    else {
       const { data } = res;
-      const fixedLocation = {
-        ...data.location,
-        coordinates: new GeoPoint(
-          data.location.coordinates.latitude,
-          data.location.coordinates.longitude
-        ),
-      };
-      const formattedDate = data.start.toLocaleDateString('en-US', {
-        weekday: 'short', // Tue
-        month: 'long', // June
-        day: 'numeric', // 19
-        year: 'numeric', // 2025
-      });
+      const formattedDate = getFormattedDateString(data.startDate);
+
       setFormattedDate(formattedDate);
       setPreviewData(
-        new Event(
-          user?.uid || '',
-          data.title,
-          data.description,
-          data.type,
-          data.age,
-          data.start,
-          data.end,
-          fixedLocation,
-          data.price,
-          false,
-          undefined,
-          data.tickets
-        )
+        new Event({
+          id: '123',
+          flare_id: user.uid,
+          verified: false,
+          createdAt: new Date(),
+          ...data,
+        })
       );
     }
     if (img) {

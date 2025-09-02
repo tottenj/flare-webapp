@@ -5,9 +5,9 @@ import 'react-day-picker/dist/style.css';
 import styles from './calendar.module.css';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PlainEvent } from '@/lib/classes/event/Event';
-import getKeyByValue from '@/lib/utils/other/getKeyByValue';
+import getKeyByValue from '@/lib/utils/enumFunctions/getKeyByValue';
 import eventType from '@/lib/enums/eventType';
-import { toLocalDateKey } from '@/lib/utils/other/toLocaleDateString';
+import { toLocalDateKey } from '@/lib/utils/dateTime/toLocaleDateString';
 
 //TO DO - Write TESTs
 
@@ -25,7 +25,6 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
-
 
   function parseLocalDate(dateStr: string): Date {
     const [year, month, day] = dateStr.split('-').map(Number);
@@ -91,7 +90,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
                     onClick={(e) => {
                       e.stopPropagation();
                       const params = new URLSearchParams(searchParams.toString());
-                   
+
                       const clickedType = getKeyByValue(eventType, color);
                       const currentType = params.get('type');
 

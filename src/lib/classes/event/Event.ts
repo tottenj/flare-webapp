@@ -34,6 +34,26 @@ import {
 } from 'firebase/firestore';
 import { FirebaseStorage } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
+import { eventOne } from './sampleEvents';
+import z from 'zod';
+import { getEventSchema } from '@/lib/zod/event/getEventShema';
+
+export type EventArgs = {
+  flare_id: string;
+  title: string;
+  description?: string;
+  type: eventType;
+  ageGroup: AgeGroup;
+  startDate: Date;
+  endDate: Date;
+  location: flareLocation;
+  price: number | string;
+  verified?: boolean;
+  createdAt?: Date;
+  ticketLink?: string;
+  id?: string;
+};
+
 
 export default class Event {
   id: string;
@@ -50,25 +70,25 @@ export default class Event {
   verified: boolean;
   createdAt: Date;
 
-  constructor(
-    flare_id: string,
-    title: string,
-    desciption: string | undefined,
-    type: eventType,
-    ageGroup: AgeGroup,
-    startDate: Date,
-    endDate: Date,
-    location: flareLocation,
-    price: number | string,
-    verified: boolean = false,
-    createdAt: Date = new Date(),
-    ticketLink?: string,
-    id?: string
-  ) {
+  constructor({
+    flare_id,
+    title,
+    description,
+    type,
+    ageGroup,
+    startDate,
+    endDate,
+    location,
+    price,
+    verified = false,
+    createdAt = new Date(),
+    ticketLink,
+    id,
+  }: EventArgs) {
     this.id = id ?? uuidv4();
     this.flare_id = flare_id;
     this.title = title;
-    this.description = desciption;
+    this.description = description;
     this.type = type;
     this.ageGroup = ageGroup;
     this.startdate = startDate;
@@ -101,8 +121,8 @@ export default class Event {
     });
   }
 
-  static async deleteEvent(dab: Firestore, id: string){
-    await deleteDocument(dab, `${Collections.Events}/${id}`, undefined)
+  static async deleteEvent(dab: Firestore, id: string) {
+    await deleteDocument(dab, `${Collections.Events}/${id}`, undefined);
   }
 
   static async uploadImages(id: string, storage: FirebaseStorage, files: File[]) {
@@ -125,44 +145,7 @@ export default class Event {
     return `Events/${this.id}`;
   }
 
-  static sampleEvents: Event[] = [
-    new Event(
-      'flare005',
-      'Open Mic Night',
-      'Share your poetry, music, or comedy in a safe space.',
-      eventType['Other'],
-      AgeGroup.AllAges,
-      new Date('2025-07-10T18:30:00'),
-      new Date('2025-07-10T18:30:00'),
-      {
-        id: 'loc005',
-        name: 'The Cozy Corner',
-        coordinates: new GeoPoint(41.8781, -87.6298), // Chicago
-      },
-      10,
-      false,
-      new Date(),
-      '1'
-    ),
-    new Event(
-      'flare005',
-      'Open Mic Night',
-      'Share your poetry, music, or comedy in a safe space.',
-      eventType['Drag Events'],
-      AgeGroup.AllAges,
-      new Date('2025-07-10T18:30:00'),
-      new Date('2025-07-10T18:30:00'),
-      {
-        id: 'loc005',
-        name: 'The Cozy Corner',
-        coordinates: new GeoPoint(41.8781, -87.6298), // Chicago
-      },
-      10,
-      false,
-      new Date(),
-      '1'
-    ),
-  ];
+  static sampleEvents: Event[] = [new Event(eventOne)];
 
   static async queryEvents(
     dab: Firestore,
@@ -317,7 +300,7 @@ export const eventConverter = {
 
     return {
       id: event.id,
-      flareId: event.flare_id,
+      flare_Id: event.flare_id,
       title: event.title,
       description: event.description,
       type: evenType,
@@ -333,22 +316,10 @@ export const eventConverter = {
     };
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Event {
+    if(!snapshot.exists) throw new Error("Event does not exist")
     const data = snapshot.data(options);
-
-    return new Event(
-      data.flareId,
-      data.title,
-      data.description,
-      eventType[data.type as keyof typeof eventType],
-      data.ageGroup,
-      data.startDate.toDate(),
-      data.endDate.toDate(),
-      data.location,
-      data.price,
-      data.verified,
-      data.createdAt.toDate(),
-      data.ticketLink,
-      data.id
-    );
+    const sanitizedData= z.safeParse(getEventSchema, data)
+    if(!sanitizedData.success) throw new Error(sanitizedData.error.message)
+    return new Event(sanitizedData.data);
   },
 };
