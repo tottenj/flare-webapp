@@ -10,7 +10,7 @@ export default async function EventDetails({ eventId }: { eventId?: string }) {
   
 
   return (
-    <div className="hidden h-4/5 rounded-2xl bg-white md:block">
+    <div className="hidden rounded-2xl bg-white md:block">
       {eventId ? (
         <EventInfoContainer slug={eventId} />
       ) : (

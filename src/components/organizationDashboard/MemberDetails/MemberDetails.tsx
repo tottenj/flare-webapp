@@ -13,7 +13,7 @@ import { Suspense } from "react";
 
 export default async function MemberDetails({org}: {org: FlareOrg}) {
   return (
-    <div className="flex h-full w-full flex-col rounded-2xl bg-white p-4 md:h-2/5">
+    <div className="flex h-full w-full flex-col rounded-2xl bg-white p-4">
       <div className="absolute right-4 flex gap-4">
         <EditModal>
           <EditOrgForm org={org.toPlain()} />

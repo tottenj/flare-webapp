@@ -25,7 +25,7 @@ export default function OrgTabs() {
   return (
     <Tabs
       radius="full"
-      variant="bordered"
+      variant="light"
       className="absolute h-[40px] w-full self-start overflow-hidden rounded-2xl rounded-b-none bg-white"
       fullWidth={true}
       color={'danger'}

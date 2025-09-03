@@ -37,12 +37,12 @@ export default async function OrgDashboardPage({
   }
 
   return (
-    <div className="flex h-full flex-col items-start justify-start gap-4 px-4 md:flex-row">
-      <div className="relative flex h-auto w-full flex-col justify-start gap-4 md:h-full md:w-1/2 lg:w-1/2">
-        <MemberDetails org={org} />
-        <EventDetails eventId={event[0] ? event[0].id : undefined} />
+    <div className="grid h-full grid-cols-1 grid-rows-[1fr_4fr] gap-4 md:grid-cols-2">
+      <MemberDetails org={org} />
+      <div className="md:col-start-2 md:row-span-2">
+        <EventsListings user={org} tab={tab} />
       </div>
-      <EventsListings user={org} tab={tab} />
+      <EventDetails eventId={event[0] ? event[0].id : undefined} />
     </div>
   );
 }
