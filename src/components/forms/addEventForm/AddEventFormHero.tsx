@@ -8,67 +8,25 @@ import HeroTextArea from '@/components/inputs/hero/textArea/HeroTextArea';
 import HeroDateRangeInput from '@/components/inputs/hero/dateRange/HeroDateRangeInput';
 import HeroFileInput from '@/components/inputs/hero/fileInput/HeroFileInput';
 import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
-import flareLocation from '@/lib/types/Location';
-import React, { useState } from 'react';
 import HeroSelect from '@/components/inputs/hero/select/HeroSelect';
 import { SelectItem } from '@heroui/react';
 import AgeGroup from '@/lib/enums/AgeGroup';
 import PrimaryLabel from '@/components/inputs/labels/primaryLabel/PrimaryLabel';
 import TypeSelect from '@/components/inputs/hero/select/TypeSelect';
-import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
-import { convertFormData } from '@/lib/zod/convertFormData';
-import { CreateEventSchema } from '@/lib/zod/event/createEventSchema';
-import { toast } from 'react-toastify';
 import Modal from '@/components/modals/mainModal/MainModal';
-import Event from '@/lib/classes/event/Event';
-import EventInfoSplit from '@/components/events/eventInfo/EventInfoSplit';
+import ImageCropper from '@/components/inputs/image/ImageCropper';
+import useImage from '@/lib/hooks/useImage';
+import usePreview from '@/lib/hooks/usePreview';
+import EventInfo from '@/components/events/eventInfo/EventInfo';
 import getFormattedDateString from '@/lib/utils/dateTime/getFormattedDateString';
 
 export default function AddEventFormHero({ close }: { close?: () => void }) {
   const { action, state, pending } = useCustomUseForm(addEvent, 'Success', undefined, close);
-  const [loc, setloc] = useState<flareLocation | null>(null);
-  const [previewData, setPreviewData] = useState<any | null>(null);
-  const { user } = useUnifiedUser();
-  const [img, setImg] = useState<File | null>(null);
-  const [imgUrl, setImgUrl] = useState<string | null>(null);
-  const [formattedDate, setFormattedDate] = useState<string>('');
+  const { img, setImg, imgUrl, setImgUrl } = useImage(state.status, pending);
+  const { previewData, handlePreviewClick, setPreviewData} = usePreview();
 
-  function handlePreviewClick(e: React.MouseEvent<HTMLButtonElement>): any {
-    e.preventDefault();
-    e.stopPropagation();
-    const form = e.currentTarget.form;
-    if (!form) return;
-    const formData = new FormData(form);
-    console.log(formData.get("location"))
-    const res = convertFormData(CreateEventSchema, formData);
-    
-    if (!res.success) {
-      toast.error('Please Fill In All Required Fields');
-      console.log(res.error)
-    } else if (!user?.uid){
-      toast.error("Authentication Error")
-    }
-    else {
-      const { data } = res;
-      const formattedDate = getFormattedDateString(data.startDate);
 
-      setFormattedDate(formattedDate);
-      setPreviewData(
-        new Event({
-          id: '123',
-          flare_id: user.uid,
-          verified: false,
-          createdAt: new Date(),
-          ...data,
-        })
-      );
-    }
-    if (img) {
-      const objectUrl = URL.createObjectURL(img);
-      setImgUrl(objectUrl);
-      return () => URL.revokeObjectURL(objectUrl);
-    }
-  }
+
 
   return (
     <>
@@ -85,18 +43,26 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
 
         <div className="flex w-full gap-4">
           <div className="w-1/2">
-            <HeroFileInput setImg={setImg} label="Event Image" />
+            <HeroFileInput setImgUrl={setImgUrl} setImg={setImg} label="Event Image" />
           </div>
           <div className="w-1/2">
             <HeroDateRangeInput startName="start" endName="end" label="Event Date" />
           </div>
         </div>
 
+        {imgUrl && (
+          <ImageCropper
+            imageUrl={imgUrl}
+            originalFileName={img?.name}
+            aspect={3 / 4}
+            outputWidth={600}
+            setImgURL={setImgUrl}
+            setImg={setImg}
+          />
+        )}
+
         <div className="w-full">
-          <PlaceSearch z="z-50" loc={setloc} lab="Event Location" />
-          {loc && (
-            <input type="hidden" name="location" required={true} value={JSON.stringify(loc)} />
-          )}
+          <PlaceSearch z="z-50" lab="Event Location" />
         </div>
 
         <PrimaryLabel label="Additional Information" />
@@ -144,11 +110,12 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
         <Modal isOpen={!!previewData} onClose={() => setPreviewData(null)}>
           {previewData && (
             <>
-              <EventInfoSplit
+              <EventInfo
                 event={previewData}
                 img={imgUrl}
-                startDate={previewData.startDate ? previewData.startDate.toLocaleTimeString() : ''}
-                formattedDate={formattedDate}
+                startDateString={previewData.startDate ? getFormattedDateString(previewData.startDate).formattedDateString : ''}
+                startTimeString={previewData.startDate ? getFormattedDateString(previewData.startDate).formattedTimeString : ""}
+                seen={false}
               />
               <PrimaryButton type="submit" text="Create Event" form="addEvent" />
             </>

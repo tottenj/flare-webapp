@@ -86,10 +86,8 @@ export default function OrgSignInForm() {
             <TextInput label="Organization Name" name="orgName" size="XLarge" />
             <TextInput label="Organization Email" name="orgEmail" size="XLarge" type="email" />
           <div className="mb-4">
-            <PlaceSearch loc={setloc} lab="Location" />
-            {loc && (
-              <input type="hidden" name="location" required={true} value={JSON.stringify(loc)} />
-            )}
+            <PlaceSearch  lab="Location" />
+            
           </div>
           <TextInput
             label="Choose Password"

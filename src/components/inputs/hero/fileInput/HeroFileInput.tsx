@@ -1,24 +1,30 @@
 'use client';
 import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
-import { InputProps } from '@heroui/react';
 import HeroInput, { HeroInputProps } from '../input/HeroInput';
 
 interface HeroFileInputProps extends HeroInputProps {
   setImg: Dispatch<SetStateAction<File | null>>;
+  setImgUrl?: Dispatch<SetStateAction<string | null>>;
 }
 
-export default function HeroFileInput({ setImg, ...props }: HeroFileInputProps) {
-  const [preview, setPreview] = useState<string | null>(null);
+export default function HeroFileInput({ setImg, setImgUrl, ...props }: HeroFileInputProps) {
+  const [success, setSuccess] = useState(false)
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0] ?? null;
     if (file) {
       const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl);
       setImg(file);
+      if (setImgUrl) {
+        setImgUrl(objectUrl);
+      }
+      setSuccess(true)
       return () => URL.revokeObjectURL(objectUrl);
     } else {
-      setPreview(null);
+      if (setImgUrl) {
+        setImgUrl(null);
+      }
+      setSuccess(false)
     }
   }
 
@@ -28,7 +34,7 @@ export default function HeroFileInput({ setImg, ...props }: HeroFileInputProps) 
         type="file"
         {...props}
         onChange={handleChange}
-        color={preview ? 'success' : 'default'}
+        color={success ? 'success' : 'default'}
       />
     </div>
   );

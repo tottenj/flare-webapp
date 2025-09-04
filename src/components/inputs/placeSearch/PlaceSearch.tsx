@@ -16,15 +16,15 @@ interface placeOption {
 }
 
 interface placeSearchProps {
-  loc: (loc: flareLocation | null) => void;
   lab?: string;
   required?: boolean;
   z?: string;
   defVal?: placeOption;
 }
 
-export default function PlaceSearch({ loc, lab, required = true, z, defVal }: placeSearchProps) {
+export default function PlaceSearch({ lab, required = true, z, defVal }: placeSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [location, setLocation] = useState<flareLocation | null>(null);
 
   // Get user location once
   useEffect(() => {
@@ -69,31 +69,36 @@ export default function PlaceSearch({ loc, lab, required = true, z, defVal }: pl
       name: place.place.displayName,
       coordinates: new GeoPoint(place.place.location.lat(), place.place.location.lng()),
     };
-    loc(location);
+    setLocation(location);
   }
 
   return (
-    <Autocomplete
-      label="Select Location"
-      placeholder="Type to search..."
-      inputValue={list.filterText}
-      isLoading={list.isLoading}
-      items={list.items}
-      variant="flat"
-      defaultSelectedKey={defVal?.value}
-      onInputChange={list.setFilterText}
-      onSelectionChange={handleSelection}
-      radius="sm"
-      classNames={{
-        popoverContent: 'rounded-none',
-        listbox: 'outline-none focus:outline-none',
-      }}
-    >
-      {(item) => (
-        <AutocompleteItem key={item.value} className="capitalize">
-          {item.label}
-        </AutocompleteItem>
+    <>
+      <Autocomplete
+        label={lab ? lab : "Select Location"}
+        placeholder="Type to search..."
+        inputValue={list.filterText}
+        isLoading={list.isLoading}
+        items={list.items}
+        variant="flat"
+        defaultSelectedKey={defVal?.value}
+        onInputChange={list.setFilterText}
+        onSelectionChange={handleSelection}
+        radius="sm"
+        classNames={{
+          popoverContent: 'rounded-none',
+          listbox: 'outline-none focus:outline-none',
+        }}
+      >
+        {(item) => (
+          <AutocompleteItem key={item.value} className="capitalize">
+            {item.label}
+          </AutocompleteItem>
+        )}
+      </Autocomplete>
+      {location && (
+        <input type="hidden" name="location" required={required} value={JSON.stringify(location)} />
       )}
-    </Autocomplete>
+    </>
   );
 }

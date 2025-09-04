@@ -7,6 +7,7 @@ import isSameTime from '@/lib/utils/dateTime/isSameTime';
 import { motion } from 'framer-motion';
 
 import Link from 'next/link';
+import EventCardLink from './EventCardLink';
 
 interface eventCardProps {
   event: PlainEvent;
@@ -15,9 +16,11 @@ interface eventCardProps {
 export default function EventCard({ event }: eventCardProps) {
   const sameDate = isSameDate(event.startDate, event.endDate);
   const sameTime = isSameTime(event.startDate, event.endDate);
+  
+
 
   return (
-    <Link href={`/events/${event.id}`} scroll={false}>
+    <EventCardLink href={`event/${event.id}`}>
       <div
         style={{ background: `${event.type}` }}
         className="flex justify-end rounded-[16px] p-1 transition-transform duration-200 hover:scale-105"
@@ -37,6 +40,6 @@ export default function EventCard({ event }: eventCardProps) {
           </div>
         </div>
       </div>
-    </Link>
+    </EventCardLink>
   );
 }

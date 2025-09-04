@@ -4,39 +4,35 @@ import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import EventInfo from './EventInfo';
+import getUser from '@/lib/firebase/auth/getUser';
+import getFormattedDateString from '@/lib/utils/dateTime/getFormattedDateString';
 
 export default async function EventInfoContainer({ slug }: { slug: string }) {
   const { firestore, storage, currentUser } = await getServicesFromServer();
-  let event
-  try{
-   event = await Event.getEvent(firestore, slug);
-  }catch(error){
-    console.log(error)
+  const anyUser = await getUser();
+  let hasSeen = false;
+  let event;
+  let org;
+
+  try {
+    event = await Event.getEvent(firestore, slug);
+    if (event){ 
+      if(anyUser) hasSeen = await anyUser.hasSavedEvent(firestore, event.id)
+      org = await FlareOrg.getOrg(firestore, event.flare_id);
+    }
+  } catch (error) {
+    console.log(error);
   }
   if (!event) return <p>Event not found</p>;
-  const org = await FlareOrg.getOrg(firestore, event.flare_id);
+
   const img = await event.getImage(storage);
+  const {formattedDateString, formattedTimeString} = getFormattedDateString(event.startdate)
+  
 
-  let hasSeen = false;
 
-  if (currentUser) {
-    const a = await currentUser?.getIdTokenResult();
-    if (a?.claims.organization) {
-      const o = await FlareOrg.getOrg(firestore, currentUser.uid);
-      if (o) {
-        hasSeen = await o.hasSavedEvent(firestore, event.id);
-      }
-    } else {
-      const u = await FlareUser.getUserById(currentUser.uid, firestore);
-      if (u) {
-        hasSeen = await u.hasSavedEvent(firestore, event.id);
-      }
-    }
-  }
+
 
   return (
-    event && (
-      <EventInfo org={org} img={img} event={event} seen={hasSeen} curUserId={currentUser?.uid} />
-    )
+    <EventInfo orgName={org?.name} img={img} event={event} seen={hasSeen} startDateString={formattedDateString} startTimeString={formattedTimeString}/>
   );
 }

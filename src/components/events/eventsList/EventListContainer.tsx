@@ -1,4 +1,4 @@
-"use server"
+'use server';
 import EventFilters from '@/lib/types/FilterType';
 import EventsList from './EventsList';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
@@ -19,7 +19,7 @@ export default async function EventListContainer({ filters }: EventListContainer
   }
 
   return (
-    <div className="flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto bg-white group-has-[button]:h-[80%] md:overflow-y-scroll pt-4">
+    <div className="flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto bg-white pt-4 group-has-[button]:h-[80%] md:overflow-y-scroll">
       <EventsList plainQueriedEvents={plainQueriedEvents} />
     </div>
   );

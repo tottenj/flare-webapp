@@ -62,7 +62,7 @@ export default class Event {
   description?: string;
   type: eventType;
   ageGroup: AgeGroup;
-  startdate: Date;
+  startDate: Date;
   endDate: Date;
   location: flareLocation;
   price: number | string;
@@ -91,7 +91,7 @@ export default class Event {
     this.description = description;
     this.type = type;
     this.ageGroup = ageGroup;
-    this.startdate = startDate;
+    this.startDate = startDate;
     this.endDate = endDate;
     this.location = location;
     this.price = price;
@@ -233,7 +233,7 @@ export default class Event {
       });
     }
 
-    if (flare_id) whereClauses.push(['flareId', '==', flare_id]);
+    if (flare_id) whereClauses.push(['flare_Id', '==', flare_id]);
     if (ageGroup?.length) whereClauses.push(['ageGroup', 'in', ageGroup]);
     if (realType.length) whereClauses.push(['type', 'in', realType]);
     if (afterDate) whereClauses.push(['startDate', '>=', afterDate]);
@@ -250,7 +250,7 @@ export default class Event {
       description: this.description,
       type: this.type,
       ageGroup: this.ageGroup,
-      startDate: this.startdate,
+      startDate: this.startDate,
       endDate: this.endDate,
       location: {
         id: this.location.id,
@@ -305,7 +305,7 @@ export const eventConverter = {
       description: event.description,
       type: evenType,
       ageGroup: event.ageGroup,
-      startDate: event.startdate,
+      startDate: event.startDate,
       endDate: event.endDate,
       location: event.location,
       price: event.price,

@@ -16,25 +16,8 @@ export default function Modal({
   isOpen,
   onClose = () => {},
   children,
-  returnTo,
-  back,
 }: ModalProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  let open = isOpen;
-  if (isOpen == undefined) {
-    open = pathname.includes('/task') || pathname.includes('client');
-  }
-
-  if (returnTo) {
-    onClose = async () => {
-      isOpen = false;
-      router.push(returnTo);
-    };
-  } else if (back) {
-    onClose = () => router.back();
-  }
-
+  
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50 w-full" onClose={onClose}>
