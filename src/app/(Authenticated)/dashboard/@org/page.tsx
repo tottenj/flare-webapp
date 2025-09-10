@@ -7,6 +7,7 @@ import MemberDetails from '@/components/organizationDashboard/MemberDetails/Memb
 import isOrganization from '@/lib/utils/authentication/isOrganization';
 import EventDetails from '@/components/organizationDashboard/EventDetails/EventDetails';
 import EventsListings from '@/components/organizationDashboard/EventsListings/EventsListings';
+import ErrorToast from '@/components/errors/ErrorToast';
 
 export default async function OrgDashboardPage({
   params,
@@ -23,7 +24,7 @@ export default async function OrgDashboardPage({
   const { currentUser } = orgCheck;
   const org = await FlareOrg.getOrg(fire, currentUser.uid);
   if (!org) redirect('/events');
-
+  let errors: string | null = null
   let event: Event[] = [];
   try {
     event = await Event.queryEvents(
@@ -33,6 +34,7 @@ export default async function OrgDashboardPage({
       true
     );
   } catch (error) {
+    errors = "Problem Fetching Events Please Try Again Later"
     console.log(error);
   }
 
@@ -43,6 +45,7 @@ export default async function OrgDashboardPage({
         <EventsListings user={org} tab={tab} />
       </div>
       <EventDetails eventId={event[0] ? event[0].id : undefined} />
+      {errors && <ErrorToast message={errors}/>}
     </div>
   );
 }

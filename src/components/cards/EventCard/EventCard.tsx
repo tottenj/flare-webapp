@@ -1,19 +1,15 @@
-'use client';
+"use server"
 import SVGLogo from '@/components/flare/svglogo/SVGLogo';
-import EditModal from '@/components/modals/editModal/EditModal';
-import { PlainEvent } from '@/lib/classes/event/Event';
+import Event, { PlainEvent } from '@/lib/classes/event/Event';
 import isSameDate from '@/lib/utils/dateTime/isSameDate';
 import isSameTime from '@/lib/utils/dateTime/isSameTime';
-import { motion } from 'framer-motion';
-
-import Link from 'next/link';
 import EventCardLink from './EventCardLink';
 
 interface eventCardProps {
-  event: PlainEvent;
+  event: Event
 }
 
-export default function EventCard({ event }: eventCardProps) {
+export default async function EventCard({ event }: eventCardProps) {
   const sameDate = isSameDate(event.startDate, event.endDate);
   const sameTime = isSameTime(event.startDate, event.endDate);
   

@@ -34,7 +34,6 @@ service cloud.firestore {
           && request.auth.token.organization == true
           && request.resource.data.flare_id == request.auth.uid;
 
-        // DELETE
         allow delete: if request.auth != null 
           && request.auth.token.organization == true
           && resource.data.flare_id == request.auth.uid;

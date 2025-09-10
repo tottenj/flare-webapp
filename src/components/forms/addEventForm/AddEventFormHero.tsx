@@ -18,7 +18,6 @@ import ImageCropper from '@/components/inputs/image/ImageCropper';
 import useImage from '@/lib/hooks/useImage';
 import usePreview from '@/lib/hooks/usePreview';
 import EventInfo from '@/components/events/eventInfo/EventInfo';
-import getFormattedDateString from '@/lib/utils/dateTime/getFormattedDateString';
 
 export default function AddEventFormHero({ close }: { close?: () => void }) {
   const { action, state, pending } = useCustomUseForm(addEvent, 'Success', undefined, close);
@@ -113,8 +112,6 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
               <EventInfo
                 event={previewData}
                 img={imgUrl}
-                startDateString={previewData.startDate ? getFormattedDateString(previewData.startDate).formattedDateString : ''}
-                startTimeString={previewData.startDate ? getFormattedDateString(previewData.startDate).formattedTimeString : ""}
                 seen={false}
               />
               <PrimaryButton type="submit" text="Create Event" form="addEvent" />

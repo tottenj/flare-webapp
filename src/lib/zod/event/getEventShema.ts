@@ -9,7 +9,7 @@ import { Timestamp } from "firebase/firestore";
 export const getEventSchema = z
   .object({
     id: z.string(),
-    flare_Id: z.string(),
+    flare_id: z.string(),
     title: z.string(),
     description: z.string(),
     type: z.enum(eventTypeKeys).transform((key): eventTypeValue => eventType[key]),
@@ -27,7 +27,7 @@ export const getEventSchema = z
   })
   .transform((data): EventArgs => {
     return {
-      flare_id: data.flare_Id,
+      flare_id: data.flare_id,
       title: data.title,
       description: data.description,
       type: data.type,

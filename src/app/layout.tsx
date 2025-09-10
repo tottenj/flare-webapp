@@ -1,4 +1,3 @@
-'use server';
 import { Nunito, PT_Sans } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/context/AuthContext';
@@ -27,7 +26,10 @@ const pt_sans = PT_Sans({
   subsets: ['latin'],
 });
 
-export default async function RootLayout({ children, event }: Readonly<{ children: React.ReactNode, event: React.ReactNode }>) {
+export default async function RootLayout({
+  children,
+  event,
+}: Readonly<{ children: React.ReactNode; event: React.ReactNode }>) {
   const { currentUser } = await getAuthenticatedAppForUser();
 
   const userData = currentUser
@@ -48,8 +50,10 @@ export default async function RootLayout({ children, event }: Readonly<{ childre
               <AuthProvider>
                 <Providers>
                   <MainBanner />
-                  {children}
-                  {event}
+                  <div className="pr-4 pl-4">
+                    {children}
+                    {event}
+                  </div>
                 </Providers>
               </AuthProvider>
               <Analytics />

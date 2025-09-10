@@ -54,7 +54,6 @@ export type EventArgs = {
   id?: string;
 };
 
-
 export default class Event {
   id: string;
   flare_id: string;
@@ -233,7 +232,7 @@ export default class Event {
       });
     }
 
-    if (flare_id) whereClauses.push(['flare_Id', '==', flare_id]);
+    if (flare_id) whereClauses.push(['flare_id', '==', flare_id]);
     if (ageGroup?.length) whereClauses.push(['ageGroup', 'in', ageGroup]);
     if (realType.length) whereClauses.push(['type', 'in', realType]);
     if (afterDate) whereClauses.push(['startDate', '>=', afterDate]);
@@ -242,7 +241,7 @@ export default class Event {
     return getCollectionByFields(dab, Collections.Events, whereClauses, eventConverter, options);
   }
 
-  toPlain(): PlainEvent {
+  toPlain() {
     return {
       id: this.id,
       flare_id: this.flare_id,
@@ -250,8 +249,8 @@ export default class Event {
       description: this.description,
       type: this.type,
       ageGroup: this.ageGroup,
-      startDate: this.startDate,
-      endDate: this.endDate,
+      startDate: this.startDate.toISOString(), // ✅ safe
+      endDate: this.endDate.toISOString(),
       location: {
         id: this.location.id,
         name: this.location.name,
@@ -261,38 +260,15 @@ export default class Event {
         },
       },
       verified: this.verified,
-      createdAt: this.createdAt,
+      createdAt: this.createdAt.toISOString(),
       price: this.price,
       ticketLink: this.ticketLink,
-
-      hash: this.hash,
+      hash: this.hash, // already a string
     };
   }
 }
 
-export type PlainEvent = {
-  id: string;
-  flare_id: string;
-  title: string;
-  description?: string;
-  type: string;
-  ageGroup: string;
-  startDate: Date;
-  endDate: Date;
-  location: {
-    id: string;
-    name?: string | null;
-    coordinates: {
-      latitude: number;
-      longitude: number;
-    };
-  };
-  verified: boolean;
-  createdAt: Date;
-  price?: number | string;
-  ticketLink?: string;
-  hash: string;
-};
+export type PlainEvent = ReturnType<Event['toPlain']>;
 
 export const eventConverter = {
   toFirestore(event: Event): DocumentData {
@@ -300,7 +276,7 @@ export const eventConverter = {
 
     return {
       id: event.id,
-      flare_Id: event.flare_id,
+      flare_id: event.flare_id,
       title: event.title,
       description: event.description,
       type: evenType,
@@ -316,10 +292,10 @@ export const eventConverter = {
     };
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Event {
-    if(!snapshot.exists) throw new Error("Event does not exist")
+    if (!snapshot.exists) throw new Error('Event does not exist');
     const data = snapshot.data(options);
-    const sanitizedData= z.safeParse(getEventSchema, data)
-    if(!sanitizedData.success) throw new Error(sanitizedData.error.message)
+    const sanitizedData = z.safeParse(getEventSchema, data);
+    if (!sanitizedData.success) throw new Error(sanitizedData.error.message);
     return new Event(sanitizedData.data);
   },
 };

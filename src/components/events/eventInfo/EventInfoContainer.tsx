@@ -26,13 +26,13 @@ export default async function EventInfoContainer({ slug }: { slug: string }) {
   if (!event) return <p>Event not found</p>;
 
   const img = await event.getImage(storage);
-  const {formattedDateString, formattedTimeString} = getFormattedDateString(event.startdate)
+  const {formattedDateString, formattedTimeString} = getFormattedDateString(event.startDate)
   
 
 
 
 
   return (
-    <EventInfo orgName={org?.name} img={img} event={event} seen={hasSeen} startDateString={formattedDateString} startTimeString={formattedTimeString}/>
+    <EventInfo orgName={org?.name} img={img} event={event.toPlain()} seen={hasSeen}/>
   );
 }

@@ -37,6 +37,8 @@ export default async function addEvent(
       ...data,
     });
 
+  
+
     await event.addEvent(fire);
     revalidatePath('/dashboard');
     revalidatePath('/events');

@@ -1,5 +1,5 @@
 'use client';
-import Event from '@/lib/classes/event/Event';
+import Event, { PlainEvent } from '@/lib/classes/event/Event';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendar,
@@ -18,27 +18,20 @@ import Image from 'next/image';
 import SecondaryHeader from '@/components/info/toolTip/secondaryHeader/SecondaryHeader';
 import PrimaryLink from '@/components/Links/PrimaryLink/PrimaryLink';
 import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
+import { toast } from 'react-toastify';
+import getFormattedDateString from '@/lib/utils/dateTime/getFormattedDateString';
 
 interface EventInfoProps {
   img?: string | null;
-  event: Partial<Event>;
+  event: PlainEvent;
   orgName?: string | null;
   seen: boolean;
-  startDateString: string;
-  startTimeString: string;
 }
 
-export default function EventInfo({
-  img,
-  event,
-  orgName,
-  seen,
-  startDateString,
-  startTimeString,
-}: EventInfoProps) {
+export default function EventInfo({ img, event, orgName, seen }: EventInfoProps) {
   const { user } = useUnifiedUser();
   const curUserId = user?.uid;
-
+  let startDate: Date = new Date();
   const editDelete =
     event.flare_id === curUserId && event.id ? (
       <div className="absolute top-1 left-1 flex gap-4">
@@ -55,9 +48,17 @@ export default function EventInfo({
       </div>
     ) : undefined;
 
-  const bookmark = event.flare_id !== curUserId && event.id && event.id !== "123" && (
+  const bookmark = event.flare_id !== curUserId && event.id && event.id !== '123' && (
     <BookmarkButton event={event.id} seen={seen} />
   );
+
+  try {
+    startDate = new Date(event.startDate);
+  } catch (error) {
+    toast.error('Error Getting Event Date');
+  }
+
+  const {formattedDateString, formattedTimeString} = getFormattedDateString(startDate)
 
   return (
     <div className="relative mx-auto flex max-w-5xl min-w-3/4 flex-col rounded-2xl bg-white p-4">
@@ -68,11 +69,11 @@ export default function EventInfo({
           {img && <Image src={img} alt="Event Image" fill className="object-cover object-top" />}
         </div>
         <div className="flex flex-col">
-          <h2 className="text-center text-4xl font-bold mb-4 font-black">{event.title}</h2>
+          <h2 className="mb-4 text-center text-4xl font-black font-bold">{event.title}</h2>
           {orgName && <p className="mb-4 text-center">{orgName}</p>}
 
-          <SecondaryHeader header={<FontAwesomeIcon icon={faCalendar} />} text={startDateString} />
-          <SecondaryHeader header={<FontAwesomeIcon icon={faClock} />} text={startTimeString} />
+          <SecondaryHeader header={<FontAwesomeIcon icon={faCalendar} />} text={formattedDateString} />
+          <SecondaryHeader header={<FontAwesomeIcon icon={faClock} />} text={formattedTimeString} />
           <SecondaryHeader
             header={<FontAwesomeIcon icon={faLocationDot} />}
             text={event.location?.name}

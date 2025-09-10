@@ -18,9 +18,8 @@
     "test-storybook": "vitest --project=storybook",
     "emulators:start": "firebase emulators:start --import testdata --export-on-exit testdata",
     "cypress:run": "cypress run",
-    "cypressFire": "concurrently -k -s first \"npm run emulators:start\" \"npm run dev\" \"npm run cypress:open\"",
-    "dev:emulators": "concurrently -k -s first \"npm run emulators:start\" \"cross-env FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 STORAGE_EMULATOR_HOST=127.0.0.1:9199 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 NEXT_PUBLIC_MODE=test MODE=test npm run dev\"",
-    "emulators:env": "FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 STORAGE_EMULATOR_HOST=127.0.0.1:9199 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 firebase emulators:start --import=testdata --export-on-exit=testdata"
+    "emulators:env": "FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 STORAGE_EMULATOR_HOST=127.0.0.1:9199 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 firebase emulators:start --import=localTest --export-on-exit=localTest",
+    "e2e:local": "concurrently -k -n 'emulators,app,wait-cypress' -c 'bgBlue.bold,bgGreen.bold,bgMagenta.bold' \"npm run emulators:start\" \"npm run dev\" \"wait-on http://localhost:3000 && npx cypress open\""
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
