@@ -93,7 +93,7 @@ export default async function UserDashboardPage() {
         <h2>Saved Events</h2>
         <div className="mt-4 flex w-full flex-col gap-4">
           {savedEvents.length > 0 ? (
-            savedEvents.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
+            savedEvents.map((event) => <EventCard key={event.id} event={event} />)
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4 text-center text-[#b3b3b3]">
               <SVGLogo color={'#b3b3b3'} size={45} />
