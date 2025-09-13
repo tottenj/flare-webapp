@@ -5,7 +5,7 @@ stages:
 variables:
   NODE_VERSION: '22.12.0'
   FIREBASE_PROJECT_ID: 'flare-7091a'
-  CACHE_KEY: "node-modules-${CI_COMMIT_REF_SLUG}"
+  CACHE_KEY: 'node-modules-${CI_COMMIT_REF_SLUG}'
 
 # ----------------------------
 # Jest job (fast, lightweight)
@@ -25,8 +25,10 @@ jest:
     - curl -s https://codecov.io/bash | bash -s -- -t $CODECOV_TOKEN -f coverage/lcov.info
   artifacts:
     paths:
-      - coverage/lcov.info
       - coverage/
+      - reports/jest/junit.xml
+    reports:
+      junit: reports/jest/junit.xml
     expire_in: 1 week
   only:
     - branches
@@ -36,15 +38,15 @@ cypress:
   stage: test
   image: cypress/browsers:22.15.0
   cache:
-    key: "${CI_COMMIT_REF_SLUG}"   # 👈 per-branch cache
+    key: '${CI_COMMIT_REF_SLUG}' # 👈 per-branch cache
     paths:
       - node_modules/
       - package-lock.json
-      - /root/.cache/firebase/emulators   # 👈 cache Firebase emulator binaries
+      - /root/.cache/firebase/emulators # 👈 cache Firebase emulator binaries
   variables:
     FIREBASE_API_KEY: $FIREBASE_API_KEY
-    NEXT_PUBLIC_MODE: "test"
-    MODE: "test"
+    NEXT_PUBLIC_MODE: 'test'
+    MODE: 'test'
     FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
     STORAGE_EMULATOR_HOST: 127.0.0.1:9199
     FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
@@ -72,6 +74,13 @@ cypress:
     # Run Cypress tests
     - npx cypress run --browser chrome --env FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID,FIREBASE_WEB_API_KEY=$CYPRESS_FIREBASE_WEB_API_KEY
 
+  artifacts:
+    when: always
+    paths:
+      - reports/cypress/
+    reports:
+      junit: reports/cypress/*.xml
+    expire_in: 1 week
   only:
     - branches
     - merge_requests
