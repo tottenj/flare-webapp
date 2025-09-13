@@ -79,7 +79,7 @@ export default function FilterForm({ close }: { close: () => void }) {
 
       <div className="mb-4 flex-col md:flex-row flex w-full justify-between gap-4">
         <div className="w-full md:w-1/2">
-          <PlaceSearch required={false} loc={setloc} lab="Search By Location" />
+          <PlaceSearch required={false} lab="Search By Location" />
         </div>
         <Slider
           className="max-w-md"

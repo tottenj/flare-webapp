@@ -30,7 +30,7 @@ export default function getEventFiltersFromSearchParams(
 
   if (typeParam) {
     const typeString = Array.isArray(typeParam) ? typeParam.join(',') : typeParam;
-    filters.type = parseEventByKey(typeString) as eventType[];
+    filters.type = getEnumValuesFromString(eventType,typeString) as eventType[];
   }
 
   if (ageParam) {

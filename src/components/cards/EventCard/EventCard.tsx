@@ -1,19 +1,24 @@
-"use server"
+'use server';
 import SVGLogo from '@/components/flare/svglogo/SVGLogo';
 import Event, { PlainEvent } from '@/lib/classes/event/Event';
 import isSameDate from '@/lib/utils/dateTime/isSameDate';
 import isSameTime from '@/lib/utils/dateTime/isSameTime';
 import EventCardLink from './EventCardLink';
+import { ensureEvent } from '@/lib/utils/other/ensureEvent';
 
 interface eventCardProps {
-  event: Event
+  event: Event | PlainEvent;
 }
 
+
+
+
 export default async function EventCard({ event }: eventCardProps) {
+  event = ensureEvent(event)
+
+
   const sameDate = isSameDate(event.startDate, event.endDate);
   const sameTime = isSameTime(event.startDate, event.endDate);
-  
-
 
   return (
     <EventCardLink href={`event/${event.id}`}>

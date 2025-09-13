@@ -24,10 +24,8 @@ export default function EditOrgForm({org}: {org: PlainOrg}) {
       <TextInput type="email" label="Email" name="email" defaultVal={org.email || ''} />
       <PlaceSearch
         lab="Location"
-        loc={setloc}
         defVal={{ label: org.locationName || '', value: org.locationId || '' }}
       />
-      {loc && <input type="hidden" name="location" required={true} value={JSON.stringify(loc)} />}
       <PrimaryButton text="Submit" type="submit" />
     </form>
   );

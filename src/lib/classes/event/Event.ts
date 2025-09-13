@@ -266,6 +266,30 @@ export default class Event {
       hash: this.hash, // already a string
     };
   }
+
+  static fromPlain(plainEvent: PlainEvent): Event {
+    return new Event({
+      ...plainEvent,
+      startDate: new Date(plainEvent.startDate),
+      endDate: new Date(plainEvent.endDate),
+      createdAt: new Date(plainEvent.createdAt),
+      location: {
+        coordinates: new GeoPoint(
+          plainEvent.location.coordinates.latitude,
+          plainEvent.location.coordinates.longitude
+        ),
+        id: plainEvent.location.id,
+        name: plainEvent.location.name,
+      },
+    });
+  }
+
+  static isPlainEvent(obj: Event | PlainEvent): obj is PlainEvent {
+    return !(obj instanceof Event);
+  }
+
+ 
+  
 }
 
 export type PlainEvent = ReturnType<Event['toPlain']>;

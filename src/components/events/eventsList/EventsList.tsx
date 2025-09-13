@@ -2,13 +2,15 @@
 import EventCard from '@/components/cards/EventCard/EventCard';
 import Logo from '@/components/flare/logo/Logo';
 import PrimaryLink from '@/components/Links/PrimaryLink/PrimaryLink';
-import { PlainEvent } from '@/lib/classes/event/Event';
+import Event, { PlainEvent } from '@/lib/classes/event/Event';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface eventsList {
   plainQueriedEvents?: PlainEvent[];
 }
 export default function EventsList({ plainQueriedEvents }: eventsList) {
+
+
   const listContainer = {
     hidden: {},
     visible: {
@@ -49,14 +51,14 @@ export default function EventsList({ plainQueriedEvents }: eventsList) {
           </AnimatePresence>
         </motion.div>
       ) : (
-        <div className="flex h-full w-full flex-col items-center justify-center p-4 gap-4 text-center text-[#b3b3b3]">
-          <Logo size={100}/>
-          <p className=" text-lg">No events found.</p>
+        <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4 text-center text-[#b3b3b3]">
+          <Logo size={100} />
+          <p className="text-lg">No events found.</p>
           <p>
             Part of a queer organization? Become a part of the FLARE community and help fill out our
             calendar!
           </p>
-          <div className='w-11/12'>
+          <div className="w-11/12">
             <PrimaryLink link="/flare-signup" linkText="Organization Sign Up" />
           </div>
         </div>

@@ -13,7 +13,7 @@ export default async function deleteEvent(
 ): Promise<ActionResponse> {
   const id = formData.get('id')?.toString();
   if (!id) {
-    return { status: 'error', message: 'Missing ID', errors: { id: 'Required' } };
+    return { status: 'error', message: 'Missing ID' };
   }
 
   const { fire } = await getFirestoreFromServer();
