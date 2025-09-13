@@ -14,4 +14,4 @@ VOLUME [ "/srv/firebase/localTest" ]
 
 EXPOSE 8080 9099 9199 4000
 
-CMD [ "sh", "-c", "firebase emulators:start --import=localTest" ]
+CMD [ "sh", "-c", "firebase emulators:start" ]

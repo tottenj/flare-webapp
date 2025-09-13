@@ -110,7 +110,7 @@ export default class FlareUser {
       }
     })
 
-    events.sort((a, b) => a.startdate.getTime() - b.startdate.getTime());
+    events.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
     return events
   }
 

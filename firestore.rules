@@ -14,8 +14,8 @@ service cloud.firestore {
 
       match /Users/{userId}{
         allow read: if request.auth != null && (request.auth.uid == userId || request.auth.token.admin == true)
-        allow create: if true;
-        allow update: if request.auth != null && request.auth.uid == userId;
+        allow write: if true;
+       
       }
 
       match /Users/{userId}/Saved/{eventId}{

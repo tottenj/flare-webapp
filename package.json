@@ -16,7 +16,7 @@
     "cypress:open": "wait-on http://localhost:3000 && cypress open",
     "format": "prettier --write .",
     "test-storybook": "vitest --project=storybook",
-    "emulators:start": "firebase emulators:start --import testdata --export-on-exit testdata",
+    "emulators:start": "firebase emulators:start",
     "cypress:run": "cypress run",
     "emulators:env": "FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 STORAGE_EMULATOR_HOST=127.0.0.1:9199 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 firebase emulators:start --import=localTest --export-on-exit=localTest",
     "e2e:local": "concurrently -k -n 'emulators,app,wait-cypress' -c 'bgBlue.bold,bgGreen.bold,bgMagenta.bold' \"npm run emulators:start\" \"npm run dev\" \"wait-on http://localhost:3000 && npx cypress open\""

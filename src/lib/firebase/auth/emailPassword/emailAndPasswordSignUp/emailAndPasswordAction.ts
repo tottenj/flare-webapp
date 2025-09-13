@@ -8,10 +8,14 @@ import getAuthError from '@/lib/utils/error/getAuthError';
 import { error } from 'console';
 
 export default async function emailAndPasswordAction(prevState: any, formData: FormData) {
+
+
   const rawFormData = {
     email: formData.get('email')?.toString(),
     password: formData.get('password')?.toString(),
   };
+
+
 
 
 
@@ -20,6 +24,11 @@ export default async function emailAndPasswordAction(prevState: any, formData: F
     try {
       const usr = await createUserWithEmailAndPassword(auth, email, password);
       const {fire} = await getFirestoreFromServer();
+
+      console.log(fire)
+
+      const flareUser = new FlareUser(usr.user)
+      await flareUser.addUser(fire)
       await new FlareUser(usr.user).addUser(fire);
       await sendEmailVerification(usr.user);
       return { message: 'success' };

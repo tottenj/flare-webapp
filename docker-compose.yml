@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile.firebase
     volumes:
-      - ./localTest:/srv/firebase/localTest
+      - ./localTest:/srv/firebase/testData
     ports:
       - "8080:8080"   # Firestore emulator
       - "9099:9099"   # Auth emulator
