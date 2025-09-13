@@ -56,7 +56,7 @@ export default class FlareUser {
   async getProfilePic(firestoredb: Firestore, storage: FirebaseStorage) {
     const pic = await getDocument(
       firestoredb,
-      `${Collections.Organizations}/${this.id}`,
+      `${Collections.Users}/${this.id}`,
       userConverter
     );
     if (pic.exists() && pic.data().profilePic) {
@@ -68,7 +68,7 @@ export default class FlareUser {
   }
 
   async updateUser(dab: Firestore, data: Partial<FlareUser>) {
-    if (!this.id) return false;
+    if (!this.id) throw new Error("Authentication Error");
     await updateDocument(dab, `${Collections.Users}/${this.id}`, data, userConverter, ['id']);
   }
 
@@ -99,10 +99,19 @@ export default class FlareUser {
   async getAllSavedEvents(firestoreDb: Firestore){
     const docs = await getAllDocuments(firestoreDb, `${Collections.Users}/${this.id}/${Collections.Saved}`)
     const ids = docs.map((doc) => doc.id)
-    const events = await Promise.all(ids.map((id) => Event.getEvent(firestoreDb, id)));
-    const existingEvents = events.filter((event): event is NonNullable<typeof event> =>Boolean(event));
-    existingEvents.sort((a, b) => a.startdate.getTime() - b.startdate.getTime());
-    return existingEvents
+  
+    const result = await Promise.allSettled(ids.map((id) => Event.getEvent(firestoreDb, id)));
+    const events: Event[] = []
+    result.forEach((res, idx) => {
+      if(res.status == "fulfilled" && res.value){
+        events.push(res.value)
+      }else if (res.status == "rejected"){
+        this.removeSavedEvent(firestoreDb, ids[idx])
+      }
+    })
+
+    events.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+    return events
   }
 
   async removeSavedEvent(firestoreDb: Firestore, eventId: string) {
@@ -111,8 +120,25 @@ export default class FlareUser {
       `${Collections.Users}/${this.id}/${Collections.Saved}/${eventId}`
     );
   }
+
+
+  toPlain(): PlainUser{
+    const {id, name, email, profilePic} = this
+    return {
+      id, name, email, profilePic
+    }
+  }
+
+
 }
 
+
+export type PlainUser = {
+  id: string
+  name?: string | null
+  email?: string | null
+  profilePic?: string | null
+}
 
 // Firestore data converter
 export const userConverter = {

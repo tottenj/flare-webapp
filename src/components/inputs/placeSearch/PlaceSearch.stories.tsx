@@ -14,7 +14,6 @@ type Story = StoryObj<typeof PlaceSearch>;
 export const Default: Story = {
   
   args: {
-    loc: undefined,
     lab: "Location"
   },
   play: async({canvasElement}) =>{

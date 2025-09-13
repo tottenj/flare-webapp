@@ -9,4 +9,10 @@ declare namespace Cypress {
     clearAuthEmulator(): Chainable<Cypress.Response<any>>
   }
 
+
+  interface cypressUser{
+    email: string,
+    password: string
+  }
+
 }

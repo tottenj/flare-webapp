@@ -5,6 +5,13 @@ enum AgeGroup {
   Mature = 'Mature (50+)',
 }
 
+
+
+export type ageGroupKey = keyof typeof AgeGroup
+export type ageGroupValue = (typeof AgeGroup)[ageGroupKey]
+export const ageGroupKeys = Object.keys(AgeGroup) as ageGroupKey[];
+
+
 type AgeGroupOptions = {
   label: string;
   value: string;

@@ -1,33 +1,38 @@
-"use server"
-import Event from "@/lib/classes/event/Event";
-import FlareOrg from "@/lib/classes/flareOrg/FlareOrg";
-import FlareUser from "@/lib/classes/flareUser/FlareUser";
-import { getServicesFromServer } from "@/lib/firebase/auth/configs/getFirestoreFromServer";
-import EventInfo from "./EventInfo";
+'use server';
+import Event from '@/lib/classes/event/Event';
+import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
+import FlareUser from '@/lib/classes/flareUser/FlareUser';
+import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import EventInfo from './EventInfo';
+import getUser from '@/lib/firebase/auth/getUser';
+import getFormattedDateString from '@/lib/utils/dateTime/getFormattedDateString';
 
 export default async function EventInfoContainer({ slug }: { slug: string }) {
   const { firestore, storage, currentUser } = await getServicesFromServer();
-  const event = await Event.getEvent(firestore, slug);
-  if (!event) return <p>Event not found</p>;
-  const org = await FlareOrg.getOrg(firestore, event.flare_id);
-  const img = await event.getImage(storage);
-
+  const anyUser = await getUser();
   let hasSeen = false;
+  let event;
+  let org;
 
-  if (currentUser) {
-    const a = await currentUser?.getIdTokenResult();
-    if (a?.claims.organization) {
-      const o = await FlareOrg.getOrg(firestore, currentUser.uid);
-      if (o) {
-        hasSeen = await o.hasSavedEvent(firestore, event.id);
-      }
-    } else {
-      const u = await FlareUser.getUserById(currentUser.uid, firestore);
-      if (u) {
-        hasSeen = await u.hasSavedEvent(firestore, event.id);
-      }
+  try {
+    event = await Event.getEvent(firestore, slug);
+    if (event){ 
+      if(anyUser) hasSeen = await anyUser.hasSavedEvent(firestore, event.id)
+      org = await FlareOrg.getOrg(firestore, event.flare_id);
     }
+  } catch (error) {
+    console.log(error);
   }
+  if (!event) return <p>Event not found</p>;
 
-  return event &&  <EventInfo org={org} img={img} event={event} seen={hasSeen} curUserId={currentUser?.uid}/>;
+  const img = await event.getImage(storage);
+  const {formattedDateString, formattedTimeString} = getFormattedDateString(event.startDate)
+  
+
+
+
+
+  return (
+    <EventInfo orgName={org?.name} img={img} event={event.toPlain()} seen={hasSeen}/>
+  );
 }

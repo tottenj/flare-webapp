@@ -1,30 +1,26 @@
 'use client';
 
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Fragment } from 'react';
 
 type ModalProps = {
-  isOpen: boolean;
+  isOpen?: boolean;
   onClose?: () => void;
   children: React.ReactNode;
-  route?: boolean;
+  returnTo?: string;
+  back?: boolean;
 };
 
-export default function Modal({ isOpen, onClose = () => {}, children, route = false }: ModalProps) {
-  const router = useRouter();
-
-  const handleClose = () => {
-    if (route) {
-      router.back();
-    } else {
-      onClose();
-    }
-  };
-
+export default function Modal({
+  isOpen,
+  onClose = () => {},
+  children,
+}: ModalProps) {
+  
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50 w-full" onClose={handleClose}>
+      <Dialog as="div" className="relative z-50 w-full" onClose={onClose}>
         {/* Background overlay */}
         <TransitionChild
           as={Fragment}
@@ -50,11 +46,11 @@ export default function Modal({ isOpen, onClose = () => {}, children, route = fa
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <DialogPanel className="relative w-11/12 md:w-full max-w-4xl transform overflow-hidden rounded-2xl bg-white md:p-6 shadow-xl transition-all">
+              <DialogPanel className="relative w-11/12 max-w-4xl transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all md:w-full md:p-6">
                 {/* X button */}
                 <button
-                  onClick={handleClose}
-                  className="absolute z-10 top-4 right-4 cursor-pointer rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 focus:ring-2 focus:ring-gray-300 focus:outline-none"
+                  onClick={onClose}
+                  className="absolute top-4 right-4 z-10 cursor-pointer rounded-full p-2 text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 focus:ring-2 focus:ring-gray-300 focus:outline-none"
                   aria-label="Close"
                 >
                   <svg

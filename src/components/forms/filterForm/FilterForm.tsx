@@ -59,7 +59,7 @@ export default function FilterForm({ close }: { close: () => void }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full flex-col items-center">
+    <form onSubmit={handleSubmit} className="flex w-full flex-col items-center p-4">
       <h1 className="mb-4 text-xl font-semibold">Filter Events</h1>
       <ColourSelect
         multi={true}
@@ -77,9 +77,9 @@ export default function FilterForm({ close }: { close: () => void }) {
         defaultValue={ageGroupOptions.filter((opt) => defaultAges.includes(opt.value))}
       />
 
-      <div className="mb-4 flex w-full justify-between gap-4">
-        <div className="w-1/2">
-          <PlaceSearch required={false} loc={setloc} lab="Search By Location" />
+      <div className="mb-4 flex-col md:flex-row flex w-full justify-between gap-4">
+        <div className="w-full md:w-1/2">
+          <PlaceSearch required={false} lab="Search By Location" />
         </div>
         <Slider
           className="max-w-md"

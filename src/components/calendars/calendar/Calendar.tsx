@@ -5,9 +5,9 @@ import 'react-day-picker/dist/style.css';
 import styles from './calendar.module.css';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PlainEvent } from '@/lib/classes/event/Event';
-import getKeyByValue from '@/lib/utils/other/getKeyByValue';
+import getKeyByValue from '@/lib/utils/enumFunctions/getKeyByValue';
 import eventType from '@/lib/enums/eventType';
-import { toLocalDateKey } from '@/lib/utils/other/toLocaleDateString';
+import { toLocalDateKey } from '@/lib/utils/dateTime/toLocaleDateString';
 
 //TO DO - Write TESTs
 
@@ -26,7 +26,6 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-
   function parseLocalDate(dateStr: string): Date {
     const [year, month, day] = dateStr.split('-').map(Number);
     return new Date(year, month - 1, day); // local midnight
@@ -38,7 +37,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
 
   const eventMap: Record<string, string[]> = events.reduce(
     (acc, event) => {
-      const dateKey = toLocalDateKey(event.startDate);
+      const dateKey = toLocalDateKey(new Date(event.startDate));
       const color = event.type; // This is already an OKLCH color string
       if (!acc[dateKey]) acc[dateKey] = [];
       acc[dateKey].push(color);
@@ -48,7 +47,6 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
   );
 
   function isEventDay(day: Date): string[] {
-    console.log(day);
     const key = toLocalDateKey(day);
     return eventMap[key] || [];
   }
@@ -84,7 +82,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
                     acc[color] = acc[color] || 0;
                     return acc;
                   }, {})
-                ).map(([color, count], index) => (
+                ).map(([color, count]:any, index) => (
                   <span
                     key={index}
                     className={styles.dot}
@@ -92,8 +90,10 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
                     onClick={(e) => {
                       e.stopPropagation();
                       const params = new URLSearchParams(searchParams.toString());
+
                       const clickedType = getKeyByValue(eventType, color);
                       const currentType = params.get('type');
+
                       const newDate = toLocalDateKey(day.date);
                       params.set('date', newDate);
 
