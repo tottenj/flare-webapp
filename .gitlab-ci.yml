@@ -59,6 +59,8 @@ cypress:
     STORAGE_EMULATOR_HOST: 127.0.0.1:9199
     FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
   before_script:
+    - npm install -g firebase-tools
+    - apt-get update && apt-get install -y netcat
     - npm ci
     - export NEXT_PUBLIC_FIREBASE_API_KEY=$FIREBASE_API_KEY
     - export NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=flare-7091a.firebaseapp.com

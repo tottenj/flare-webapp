@@ -37,7 +37,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
 
   const eventMap: Record<string, string[]> = events.reduce(
     (acc, event) => {
-      const dateKey = toLocalDateKey(event.startDate);
+      const dateKey = toLocalDateKey(new Date(event.startDate));
       const color = event.type; // This is already an OKLCH color string
       if (!acc[dateKey]) acc[dateKey] = [];
       acc[dateKey].push(color);
@@ -82,7 +82,7 @@ export default function FullPageCalendar({ events }: fullPageCalendarProps) {
                     acc[color] = acc[color] || 0;
                     return acc;
                   }, {})
-                ).map(([color, count], index) => (
+                ).map(([color, count]:any, index) => (
                   <span
                     key={index}
                     className={styles.dot}
