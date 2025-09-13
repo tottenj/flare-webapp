@@ -2,10 +2,11 @@ cypress:
   stage: test
   image: cypress/browsers:22.15.0
   cache:
-    key: ${CACHE_KEY}
+    key: "${CI_COMMIT_REF_SLUG}"   # 👈 per-branch cache
     paths:
       - node_modules/
       - package-lock.json
+      - /root/.cache/firebase/emulators   # 👈 cache Firebase emulator binaries
   variables:
     FIREBASE_API_KEY: $FIREBASE_API_KEY
     NEXT_PUBLIC_MODE: "test"

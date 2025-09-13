@@ -1,7 +1,6 @@
 'use client';
 import EventCard from '@/components/cards/EventCard/EventCard';
 import Logo from '@/components/flare/logo/Logo';
-import LinkInput from '@/components/inputs/link/LinkInput';
 import PrimaryLink from '@/components/Links/PrimaryLink/PrimaryLink';
 import { PlainEvent } from '@/lib/classes/event/Event';
 import { motion, AnimatePresence } from 'motion/react';

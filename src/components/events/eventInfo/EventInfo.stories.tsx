@@ -13,16 +13,13 @@ type Story = StoryObj<typeof EventInfo>;
 export const Default: Story = {
   args: {
     img: '/prideHeart.png',
-    event: Event.sampleEvents[0],
-    org: FlareOrg.sampleOrg,
+    event: Event.sampleEvents[0].toPlain(),
   },
 };
 
 export const noImage: Story = {
-    args:{
-        img: null,
-        event: Event.sampleEvents[0],
-        org: FlareOrg.sampleOrg
-    }
-}
-
+  args: {
+    img: null,
+    event: Event.sampleEvents[0].toPlain(),
+  },
+};
