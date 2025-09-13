@@ -20,7 +20,6 @@ jest:
     - npm ci --cache .npm --prefer-offline
   script:
     - npm test -- --coverage
-    - curl -s https://codecov.io/bash | bash -s -- -t $CODECOV_TOKEN -f coverage/lcov.info
   artifacts:
     when: always
     paths:
