@@ -5,3 +5,5 @@ export default interface flareLocation{
     name?: string | null
     coordinates: GeoPoint
 }
+
+

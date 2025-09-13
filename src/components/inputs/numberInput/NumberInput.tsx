@@ -27,12 +27,11 @@ export default function NumberInput({
   ref,
   showErrorText = false,
   testId = name,
-  type = 'text',
   reqired = true,
-  error = false,
   size = 'Auto',
   onChange,
   errorText,
+
 }: numberInputProps) {
   const sizeClass = {
     XLarge: 'w-full',
@@ -55,6 +54,7 @@ export default function NumberInput({
         type="number"
         placeholder={placeholder}
         name={name}
+        min={0}
         onChange={(e) => onChange && onChange(e.target.value)}
       />
       {showErrorText && errorText && <p className={`errorText`}>{errorText}</p>}

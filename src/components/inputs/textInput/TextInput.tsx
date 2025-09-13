@@ -47,7 +47,7 @@ export default function TextInput({ label, name, placeholder, styleOverDiv, ref,
         placeholder={placeholder}
         name={name}
         onChange={(e) => onChange && onChange(e.target.value)}
-       defaultValue={defaultVal}
+        defaultValue={defaultVal}
       />
       {showErrorText && errorText && <p className={`errorText`}>{errorText}</p>}
     </div>

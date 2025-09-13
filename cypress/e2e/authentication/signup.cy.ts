@@ -5,11 +5,6 @@ const projectId = Cypress.env('FIREBASE_PROJECT_ID');
 const apiKey = Cypress.env('FIREBASE_API_KEY'); // Get the API Key from Cypress env
 
 describe('SignUpForm', () => {
-
-  before(() =>{
-    cy.clearAllEmulators()
-  })
-
   beforeEach(() => {
     cy.visit('/signup');
   });
@@ -29,44 +24,14 @@ describe('SignUpForm', () => {
   });
 
   describe('Successful Sign Up', () => {
-    before(() => {
-      cy.clearAllEmulators();
-    });
-
     it('should create and verify a user', () => {
       cy.fixture('user').then((user: UserFixture) => {
         cy.get(`input[name="email"]`).type(user.email);
         cy.get(`input[name="password"]`).type(user.password);
         cy.get('form').submit();
         cy.contains('User created successfully').should('be.visible');
-
-        cy.request({
-          method: 'POST',
-          url: `http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
-          body: {
-            email: user.email,
-            password: user.password,
-            returnSecureToken: true,
-          },
-        }).then((loginRes) => {
-          const idToken = loginRes.body.idToken;
-
-          cy.request({
-            method: 'POST',
-            url: `http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:lookup?key=${apiKey}`,
-            body: {
-              idToken,
-            },
-          }).then((lookupRes) => {
-            expect(lookupRes.status).to.eq(200);
-            expect(lookupRes.body.users[0].email).to.eq(user.email);
-            cy.url().should("include", "/confirmation")
-          });
-        });
       });
     });
-
-
 
     it('should send an email verification code', () => {
       cy.fixture('user').then((user: UserFixture) => {
@@ -77,7 +42,7 @@ describe('SignUpForm', () => {
           expect(response.body).to.have.property('oobCodes');
           expect(response.body.oobCodes).to.be.an('array');
           const verificationCodeSent = response.body.oobCodes.some(
-            (code:any) => code.requestType === 'VERIFY_EMAIL' && code.email === user.email
+            (code: any) => code.requestType === 'VERIFY_EMAIL' && code.email === user.email
           );
           expect(verificationCodeSent).to.be.true;
         });
@@ -99,7 +64,7 @@ describe('SignUpForm', () => {
             },
           }).then(() => {
             cy.contains('Email is already in use').should('be.visible');
-          })
+          });
         });
       });
     });

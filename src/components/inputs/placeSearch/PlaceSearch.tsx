@@ -1,12 +1,14 @@
 'use client';
-import { getPlaceDetails } from '@/lib/utils/places/getPlaceDetails/getPlaceDetails';
-import getPlaces from '@/lib/utils/places/getPlaces/getPlaces';
-import { useEffect, useState } from 'react';
 
-import AsyncSelect from 'react-select/async';
+import { useEffect, useState } from 'react';
+import { GeoPoint } from 'firebase/firestore';
+import { Autocomplete, AutocompleteItem } from '@heroui/react';
+import { useAsyncList } from '@react-stately/data';
+
 import PrimaryLabel from '../labels/primaryLabel/PrimaryLabel';
 import flareLocation from '@/lib/types/Location';
-import { GeoPoint } from 'firebase/firestore';
+import getPlaces from '@/lib/utils/places/getPlaces/getPlaces';
+import { getPlaceDetails } from '@/lib/utils/places/getPlaceDetails/getPlaceDetails';
 
 interface placeOption {
   label: string;
@@ -14,81 +16,89 @@ interface placeOption {
 }
 
 interface placeSearchProps {
-  loc: (loc: flareLocation | null) => void;
   lab?: string;
   required?: boolean;
-  z?:string
-  defVal?: placeOption
+  z?: string;
+  defVal?: placeOption;
 }
 
-export default function PlaceSearch({ loc, lab, required = true,z, defVal }: placeSearchProps) {
+export default function PlaceSearch({ lab, required = true, z, defVal }: placeSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [location, setLocation] = useState<flareLocation | null>(null);
 
+  // Get user location once
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setUserLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      }),
-        (error: any) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
           console.warn('Geolocation failed or denied', error);
-        };
+        }
+      );
     }
   }, []);
 
-  let newestRequestId = 0;
-  const promiseOptions = (inputValue: string): Promise<placeOption[]> => {
-    return new Promise((resolve) => {
-      const requestId = ++newestRequestId;
-      getPlaces(inputValue, requestId, newestRequestId, userLocation?.lat, userLocation?.lng)
-        .then((suggestions) => {
-          if (requestId === newestRequestId) {
-            resolve(suggestions);
-          } else {
-            resolve([]);
-          }
-        })
-        .catch(() => {
-          resolve([]);
-        });
-    });
-  };
+  // Async list for autocomplete
+  let list = useAsyncList<placeOption>({
+    async load({ filterText }) {
+      if (!filterText) return { items: [] };
+      const suggestions = await getPlaces(
+        filterText,
+        Date.now(),
+        Date.now(),
+        userLocation?.lat,
+        userLocation?.lng
+      );
+      return { items: suggestions };
+    },
+  });
 
-  async function changed(newValue: placeOption | null) {
-    if (newValue) {
-      const place = await getPlaceDetails(newValue.value);
-      if (!place || !place.place.location) return null;
-      const location: flareLocation = {
-        id: place.place.id,
-        name: place.place.displayName,
-        coordinates: new GeoPoint(place.place.location.lat(), place.place.location.lng()),
-      };
-      loc(location);
-    }
+  async function handleSelection(key: React.Key | null) {
+    if (!key) return;
+    const selected = list.items.find((item) => item.value === key);
+    if (!selected) return;
+    const place = await getPlaceDetails(selected.value);
+    if (!place || !place.place.location) return;
+    const location: flareLocation = {
+      id: place.place.id,
+      name: place.place.displayName,
+      coordinates: new GeoPoint(place.place.location.lat(), place.place.location.lng()),
+    };
+    setLocation(location);
   }
 
   return (
     <>
-      <PrimaryLabel label={lab} />
-      <AsyncSelect<placeOption>
-        required={required}
-        menuPortalTarget={typeof window !== 'undefined' ? document.body : null}
-        styles={{
-          control: (baseStyles, state) => ({
-            ...baseStyles,
-            backgroundColor: 'rgba(221, 218, 218, 0.5)',
-            color: '#5f4a4a',
-          }),
-          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+      <Autocomplete
+        label={lab ? lab : "Select Location"}
+        placeholder="Type to search..."
+        inputValue={list.filterText}
+        isLoading={list.isLoading}
+        items={list.items}
+        variant="flat"
+        defaultSelectedKey={defVal?.value}
+        onInputChange={list.setFilterText}
+        onSelectionChange={handleSelection}
+        radius="sm"
+        classNames={{
+          popoverContent: 'rounded-none',
+          listbox: 'outline-none focus:outline-none',
         }}
-        className={`${z}`}
-        placeholder={'Select Location...'}
-        loadOptions={promiseOptions}
-        onChange={(newVal) => changed(newVal)}
-        defaultValue={defVal}
-      />
+      >
+        {(item) => (
+          <AutocompleteItem key={item.value} className="capitalize">
+            {item.label}
+          </AutocompleteItem>
+        )}
+      </Autocomplete>
+      {location && (
+        <input type="hidden" name="location" required={required} value={JSON.stringify(location)} />
+      )}
     </>
   );
 }

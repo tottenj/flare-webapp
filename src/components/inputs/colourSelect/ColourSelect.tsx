@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import Select, { StylesConfig, components } from 'react-select';
 import chroma from 'chroma-js';

@@ -6,6 +6,21 @@ enum eventType {
   "Other" = 'oklch(48.68% 0.1387 270.64)', //blue
 }
 
+export type eventTypeKey = keyof typeof eventType;
+export type eventTypeValue = (typeof eventType)[eventTypeKey]
+export const eventTypeKeys = Object.keys(eventType) as eventTypeKey[];
+
+export function getEventTypeKeyFromValue(value: string): keyof typeof eventType | undefined {
+  return Object.keys(eventType).find(
+    (key) => eventType[key as keyof typeof eventType] === value
+  ) as keyof typeof eventType | undefined;
+}
+
+
+export function getEventTypeValueFromKey(key: keyof typeof eventType): string | undefined {
+  return eventType[key];
+}
+
 type ColourOption = {
   label: string;
   value: string;

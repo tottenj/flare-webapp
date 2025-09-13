@@ -33,7 +33,7 @@ export default function FilterToggles() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Helper: get all active filters including splitting 'type' values
+
   const activeFilters: { key: FilterKey; value: string; config: FilterToggleConfig }[] = [];
 
   for (const [key, config] of Object.entries(FILTER_CONFIG)) {
@@ -77,7 +77,7 @@ export default function FilterToggles() {
   if (activeFilters.length === 0) return null;
 
   return (
-    <div className="mb-1 flex flex-wrap gap-2 self-start">
+    <div className="mb-1 flex flex-wrap gap-2 self-end">
       {activeFilters.map(({ key, value, config }) => (
         <button
           key={`${key}-${value}`}

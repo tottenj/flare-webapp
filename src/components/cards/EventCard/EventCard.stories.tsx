@@ -13,6 +13,6 @@ type Story = StoryObj<typeof EventCard>;
 
 export const Default: Story = {
   args: {
-    event: Event.sampleEvents[0].toPlain()
+    event: Event.sampleEvents[0]
   },
 };

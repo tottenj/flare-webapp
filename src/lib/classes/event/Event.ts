@@ -1,9 +1,13 @@
 import AgeGroup from '@/lib/enums/AgeGroup';
 import Collections from '@/lib/enums/collections';
-import eventType from '@/lib/enums/eventType';
+import eventType, {
+  getEventTypeKeyFromValue,
+  getEventTypeValueFromKey,
+} from '@/lib/enums/eventType';
 import { distanceBetween, Geohash, geohashForLocation, geohashQueryBounds } from 'geofire-common';
 import {
   addDocument,
+  deleteDocument,
   getCollectionByFields,
   getDocument,
   QueryOptions,
@@ -30,15 +34,34 @@ import {
 } from 'firebase/firestore';
 import { FirebaseStorage } from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
+import { eventOne } from './sampleEvents';
+import z from 'zod';
+import { getEventSchema } from '@/lib/zod/event/getEventShema';
+
+export type EventArgs = {
+  flare_id: string;
+  title: string;
+  description?: string;
+  type: eventType;
+  ageGroup: AgeGroup;
+  startDate: Date;
+  endDate: Date;
+  location: flareLocation;
+  price: number | string;
+  verified?: boolean;
+  createdAt?: Date;
+  ticketLink?: string;
+  id?: string;
+};
 
 export default class Event {
   id: string;
   flare_id: string;
   title: string;
-  description: string;
+  description?: string;
   type: eventType;
   ageGroup: AgeGroup;
-  startdate: Date;
+  startDate: Date;
   endDate: Date;
   location: flareLocation;
   price: number | string;
@@ -46,28 +69,28 @@ export default class Event {
   verified: boolean;
   createdAt: Date;
 
-  constructor(
-    flare_id: string,
-    title: string,
-    desciption: string,
-    type: eventType,
-    ageGroup: AgeGroup,
-    startDate: Date,
-    endDate: Date,
-    location: flareLocation,
-    price: number | string,
-    verified: boolean = false,
-    createdAt: Date = new Date(),
-    ticketLink?: string,
-    id?: string
-  ) {
+  constructor({
+    flare_id,
+    title,
+    description,
+    type,
+    ageGroup,
+    startDate,
+    endDate,
+    location,
+    price,
+    verified = false,
+    createdAt = new Date(),
+    ticketLink,
+    id,
+  }: EventArgs) {
     this.id = id ?? uuidv4();
     this.flare_id = flare_id;
     this.title = title;
-    this.description = desciption;
+    this.description = description;
     this.type = type;
     this.ageGroup = ageGroup;
-    this.startdate = startDate;
+    this.startDate = startDate;
     this.endDate = endDate;
     this.location = location;
     this.price = price;
@@ -97,10 +120,13 @@ export default class Event {
     });
   }
 
+  static async deleteEvent(dab: Firestore, id: string) {
+    await deleteDocument(dab, `${Collections.Events}/${id}`, undefined);
+  }
+
   static async uploadImages(id: string, storage: FirebaseStorage, files: File[]) {
     for (const file of files) {
       await addFile(storage, `Events/${id}`, file);
-      console.log('File stored');
     }
   }
 
@@ -118,44 +144,7 @@ export default class Event {
     return `Events/${this.id}`;
   }
 
-  static sampleEvents: Event[] = [
-    new Event(
-      'flare005',
-      'Open Mic Night',
-      'Share your poetry, music, or comedy in a safe space.',
-      eventType['Other'],
-      AgeGroup.AllAges,
-      new Date('2025-07-10T18:30:00'),
-      new Date('2025-07-10T18:30:00'),
-      {
-        id: 'loc005',
-        name: 'The Cozy Corner',
-        coordinates: new GeoPoint(41.8781, -87.6298), // Chicago
-      },
-      10,
-      false,
-      new Date(),
-      '1'
-    ),
-    new Event(
-      'flare005',
-      'Open Mic Night',
-      'Share your poetry, music, or comedy in a safe space.',
-      eventType['Drag Events'],
-      AgeGroup.AllAges,
-      new Date('2025-07-10T18:30:00'),
-      new Date('2025-07-10T18:30:00'),
-      {
-        id: 'loc005',
-        name: 'The Cozy Corner',
-        coordinates: new GeoPoint(41.8781, -87.6298), // Chicago
-      },
-      10,
-      false,
-      new Date(),
-      '1'
-    ),
-  ];
+  static sampleEvents: Event[] = [new Event(eventOne)];
 
   static async queryEvents(
     dab: Firestore,
@@ -163,103 +152,96 @@ export default class Event {
     options?: QueryOptions,
     unVerified: boolean = false
   ) {
-    if (filters.location) {
-      const { center, radius } = filters.location;
-      const bounds = geohashQueryBounds([center.lat, center.lng], radius * 1000);
+    const { location, flare_id, ageGroup, type, onDate, afterDate, beforeDate } = filters;
 
-      const promises = [];
-      for (const b of bounds) {
-        const q = query(
-          collection(dab, 'Events'),
-          where('verified', '==', true),
-          orderBy('hash'),
-          startAt(b[0]),
-          endAt(b[1])
-        );
-        promises.push(getDocs(q));
+    const passesFilters = (data: any, center?: { lat: number; lng: number }) => {
+      if (center) {
+        const lat = data.location?.coordinates?.latitude;
+        const lng = data.location?.coordinates?.longitude;
+        if (!lat || !lng) return false;
+        const distanceInKm = distanceBetween([lat, lng], [center.lat, center.lng]);
+        if (distanceInKm > location!.radius) return false;
       }
 
-      const snapshots = await Promise.all(promises);
+      if (!unVerified && !data.verified) return false;
+      if (flare_id && data.flare_id !== flare_id) return false;
+      if (ageGroup?.length && !ageGroup.includes(data.ageGroup)) return false;
+      if (type?.length && !type.includes(data.type)) return false;
 
+      const eventDateRaw = data.startdate;
+      const eventDate = eventDateRaw?.toDate ? eventDateRaw.toDate() : eventDateRaw;
+
+      if (onDate) {
+        const startOfDay = new Date(onDate);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(onDate);
+        endOfDay.setHours(23, 59, 59, 999);
+        if (eventDate < startOfDay || eventDate > endOfDay) return false;
+      }
+      if (afterDate && eventDate < afterDate) return false;
+      if (beforeDate && eventDate > beforeDate) return false;
+
+      return true;
+    };
+
+    if (location) {
+      const { center, radius } = location;
+      const bounds = geohashQueryBounds([center.lat, center.lng], radius * 1000);
+      const promises = bounds.map((b) =>
+        getDocs(
+          query(
+            collection(dab, 'Events'),
+            where('verified', '==', true),
+            orderBy('hash'),
+            startAt(b[0]),
+            endAt(b[1])
+          )
+        )
+      );
+
+      const snapshots = await Promise.all(promises);
       const filteredEvents: Event[] = [];
 
       for (const snap of snapshots) {
         for (const doc of snap.docs) {
           const data = doc.data();
-          const lat = doc.get('location.coordinates.latitude');
-          const lng = doc.get('location.coordinates.longitude');
-
-          if (!lat || !lng) continue;
-
-          const distanceInKm = distanceBetween([lat, lng], [center.lat, center.lng]);
-          if (distanceInKm > radius) continue;
-
-          if (!unVerified && !data.verified) continue;
-          if (filters.flare_id && data.flare_id !== filters.flare_id) continue;
-          if (
-            filters.ageGroup &&
-            filters.ageGroup.length > 0 &&
-            !filters.ageGroup.includes(data.ageGroup)
-          )
-            continue;
-          if (filters.type && filters.type.length > 0 && !filters.type.includes(data.type))
-            continue;
-
-          if (filters.onDate) {
-            const eventDate = data.startdate ? data.startdate : data.startdate;
-            const startOfDay = new Date(filters.onDate);
-            startOfDay.setHours(0, 0, 0, 0);
-            const endOfDay = new Date(filters.onDate);
-            endOfDay.setHours(23, 59, 59, 999);
-
-            if (eventDate < startOfDay || eventDate > endOfDay) continue;
-          }
-
-          if (filters.afterDate) {
-            const eventDate = data.startdate ? data.startdate : data.startdate;
-            if (eventDate < filters.afterDate) continue;
-          }
-          if (filters.beforeDate) {
-            const eventDate = data.startdate ? data.startdate : data.startdate;
-            if (eventDate > filters.beforeDate) continue;
-          }
-
+          if (!passesFilters(data, center)) continue;
           filteredEvents.push(eventConverter.fromFirestore(doc, {} as SnapshotOptions));
         }
       }
+
       return filteredEvents;
     }
 
     const whereClauses: WhereClause[] = [];
-    if (!unVerified) {
-      whereClauses.push(['verified', '==', true]);
-    }
+    if (!unVerified) whereClauses.push(['verified', '==', true]);
 
-    if (filters.onDate) {
-      const startOfDay = new Date(filters.onDate);
+    if (onDate) {
+      const startOfDay = new Date(onDate);
       startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date(filters.onDate);
+      const endOfDay = new Date(onDate);
       endOfDay.setHours(23, 59, 59, 999);
       whereClauses.push(['startDate', '>=', Timestamp.fromDate(startOfDay)]);
       whereClauses.push(['startDate', '<=', Timestamp.fromDate(endOfDay)]);
     }
 
-    if (filters.flare_id) whereClauses.push(['flareId', '==', filters.flare_id]);
-    if (filters.ageGroup && filters.ageGroup.length > 0)
-      whereClauses.push(['ageGroup', 'in', filters.ageGroup]);
-    if (filters.type && filters.type.length > 0) whereClauses.push(['type', 'in', filters.type]);
-    if (filters.afterDate) whereClauses.push(['startDate', '<', filters.afterDate]);
-    if (filters.beforeDate) whereClauses.push(['startDate', '>=', filters.beforeDate]);
-    return await getCollectionByFields(
-      dab,
-      `${Collections.Events}`,
-      whereClauses,
-      eventConverter,
-      options
-    );
+    let realType: any[] = [];
+    if (type?.length) {
+      realType = type.map((t) => {
+        return getEventTypeKeyFromValue(t);
+      });
+    }
+
+    if (flare_id) whereClauses.push(['flare_id', '==', flare_id]);
+    if (ageGroup?.length) whereClauses.push(['ageGroup', 'in', ageGroup]);
+    if (realType.length) whereClauses.push(['type', 'in', realType]);
+    if (afterDate) whereClauses.push(['startDate', '>=', afterDate]);
+    if (beforeDate) whereClauses.push(['startDate', '<=', beforeDate]);
+
+    return getCollectionByFields(dab, Collections.Events, whereClauses, eventConverter, options);
   }
 
-  toPlain(): PlainEvent {
+  toPlain() {
     return {
       id: this.id,
       flare_id: this.flare_id,
@@ -267,8 +249,8 @@ export default class Event {
       description: this.description,
       type: this.type,
       ageGroup: this.ageGroup,
-      startDate: this.startdate,
-      endDate: this.endDate,
+      startDate: this.startDate.toISOString(), // ✅ safe
+      endDate: this.endDate.toISOString(),
       location: {
         id: this.location.id,
         name: this.location.name,
@@ -278,49 +260,52 @@ export default class Event {
         },
       },
       verified: this.verified,
-      createdAt: this.createdAt,
+      createdAt: this.createdAt.toISOString(),
       price: this.price,
       ticketLink: this.ticketLink,
-
-      hash: this.hash,
+      hash: this.hash, // already a string
     };
   }
+
+  static fromPlain(plainEvent: PlainEvent): Event {
+    return new Event({
+      ...plainEvent,
+      startDate: new Date(plainEvent.startDate),
+      endDate: new Date(plainEvent.endDate),
+      createdAt: new Date(plainEvent.createdAt),
+      location: {
+        coordinates: new GeoPoint(
+          plainEvent.location.coordinates.latitude,
+          plainEvent.location.coordinates.longitude
+        ),
+        id: plainEvent.location.id,
+        name: plainEvent.location.name,
+      },
+    });
+  }
+
+  static isPlainEvent(obj: Event | PlainEvent): obj is PlainEvent {
+    return !(obj instanceof Event);
+  }
+
+ 
+  
 }
 
-export type PlainEvent = {
-  id: string;
-  flare_id: string;
-  title: string;
-  description: string;
-  type: string;
-  ageGroup: string;
-  startDate: Date;
-  endDate: Date;
-  location: {
-    id: string;
-    name?: string | null;
-    coordinates: {
-      latitude: number;
-      longitude: number;
-    };
-  };
-  verified: boolean;
-  createdAt: Date;
-  price?: number | string;
-  ticketLink?: string;
-  hash: string;
-};
+export type PlainEvent = ReturnType<Event['toPlain']>;
 
 export const eventConverter = {
   toFirestore(event: Event): DocumentData {
+    const evenType = getEventTypeKeyFromValue(event.type);
+
     return {
       id: event.id,
-      flareId: event.flare_id,
+      flare_id: event.flare_id,
       title: event.title,
       description: event.description,
-      type: event.type,
+      type: evenType,
       ageGroup: event.ageGroup,
-      startDate: event.startdate,
+      startDate: event.startDate,
       endDate: event.endDate,
       location: event.location,
       price: event.price,
@@ -331,21 +316,10 @@ export const eventConverter = {
     };
   },
   fromFirestore(snapshot: QueryDocumentSnapshot, options: SnapshotOptions): Event {
+    if (!snapshot.exists) throw new Error('Event does not exist');
     const data = snapshot.data(options);
-    return new Event(
-      data.flareId,
-      data.title,
-      data.description,
-      data.type,
-      data.ageGroup,
-      data.startDate.toDate(),
-      data.endDate.toDate(),
-      data.location,
-      data.price,
-      data.verified,
-      data.createdAt.toDate(),
-      data.ticketLink,
-      data.id
-    );
+    const sanitizedData = z.safeParse(getEventSchema, data);
+    if (!sanitizedData.success) throw new Error(sanitizedData.error.message);
+    return new Event(sanitizedData.data);
   },
 };

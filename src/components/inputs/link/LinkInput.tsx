@@ -10,7 +10,7 @@ interface linkInputProps{
 export default function LinkInput({href, style, text}:linkInputProps) {
   return (
     <Link
-      className="bg-primary font-nunito hover:text-primary border-primary rounded-2xl border-2 p-1 font-bold text-white ease-in-out hover:bg-white"
+      className="bg-primary block w-full font-nunito hover:text-primary border-primary rounded-2xl border-2 p-1 font-bold text-white ease-in-out hover:bg-white"
       href={href}
       style={style}
     >
