@@ -15,18 +15,13 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+/// <reference types="cypress" />
+
+
+
 
 
 before(() =>{
     cy.clearAllEmulators()
 })
 
-
-// Ignore React hydration errors
-// Prevent Cypress from failing tests on hydration errors
-Cypress.on('uncaught:exception', (err) => {
-  if (err.message.includes('Hydration failed')) {
-    return false;
-  }
-  return true;
-});

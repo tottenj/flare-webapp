@@ -6,8 +6,10 @@ import Link from 'next/link';
 interface PrimaryLinkProps {
   link: string;
   linkText: string;
-  center?:boolean
+  center?: boolean;
 }
+
+const MotionLink = motion.create(Link);
 
 export default function PrimaryLink({ link, linkText, center = false }: PrimaryLinkProps) {
   const buttonVariants = {
@@ -22,22 +24,23 @@ export default function PrimaryLink({ link, linkText, center = false }: PrimaryL
   };
 
   return (
-    <Link className='w-full block text-center' href={link}>
-      <motion.a
-        className="font-nunito w-full bg-primary  relative mt-4 inline-block cursor-pointer overflow-hidden rounded-full px-6 py-3 font-bold text-white"
-        variants={buttonVariants}
-        initial="initial"
-        whileHover="hover"
-        whileTap="tap"
-      >
-        <motion.span
-          variants={gradientVariants}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="absolute inset-0 origin-left bg-gradient-to-r from-pink-500 via-red-500 to-orange-500"
-          style={{ transformOrigin: 'left', zIndex: 20 }}
-        />
-        <span className="relative z-30">{linkText}</span>
-      </motion.a>
-    </Link>
+    <MotionLink
+      href={link}
+      className={`font-nunito bg-primary relative mt-4 inline-block w-full cursor-pointer overflow-hidden rounded-full px-6 py-3 font-bold text-white ${
+        center ? 'text-center' : ''
+      }`}
+      variants={buttonVariants}
+      initial="initial"
+      whileHover="hover"
+      whileTap="tap"
+    >
+      <motion.span
+        variants={gradientVariants}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
+        className="absolute inset-0 origin-left bg-gradient-to-r from-pink-500 via-red-500 to-orange-500"
+        style={{ transformOrigin: 'left', zIndex: 20 }}
+      />
+      <span className="relative z-30">{linkText}</span>
+    </MotionLink>
   );
 }

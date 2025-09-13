@@ -1,126 +1,87 @@
 /// <reference types="cypress" />
 
-
-// cypress/support/commands.ts
+// Constants
 const apiKey = Cypress.env('FIREBASE_API_KEY');
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
+const AUTH_EMULATOR = `http://localhost:9099/identitytoolkit.googleapis.com/v1`;
+const AUTH_ADMIN = `http://localhost:9099/emulator/v1/projects/${projectId}`;
+const FIRESTORE_ADMIN = `http://localhost:8080`;
 
+// Helper Functions
+function signUpUser(email: string, password: string) {
+  return cy
+    .request({
+      method: 'POST',
+      url: `${AUTH_EMULATOR}/accounts:signUp?key=${apiKey}`,
+      body: { email, password, returnSecureToken: true },
+    })
+    .then((response) => response.body);
+}
+
+function sendVerifyEmail(idToken: string) {
+  return cy
+    .request({
+      method: 'POST',
+      url: `${AUTH_EMULATOR}/accounts:sendOobCode?key=${apiKey}`,
+      body: { requestType: 'VERIFY_EMAIL', idToken },
+    })
+    .then((response) => response.body);
+}
+
+function getOobCode(email: string) {
+  return cy.request('GET', `${AUTH_ADMIN}/oobCodes`).then((response) => {
+    const code = response.body.oobCodes.find(
+      (c: any) => c.requestType === 'VERIFY_EMAIL' && c.email === email
+    );
+    expect(code, `Expected VERIFY_EMAIL code for ${email}`).to.exist;
+    return code.oobCode;
+  });
+}
+
+function applyOobCode(oobCode: string) {
+  return cy
+    .request({
+      method: 'POST',
+      url: `${AUTH_EMULATOR}/accounts:update?key=${apiKey}`,
+      body: { oobCode },
+    })
+    .then((response) => response.body);
+}
+
+// Cypress Commands
 Cypress.Commands.add(
   'createUser',
   (email: string, password: string, emailVerified: boolean = false) => {
-        return cy
-          .request({
-            method: 'POST',
-            url: `http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
-            body: {
-              email,
-              password,
-              returnSecureToken: true,
-            },
-          })
-          .then((signUpResponse) => {
-            const idToken = signUpResponse.body.idToken;
-            const createdEmail = signUpResponse.body.email;
-
-            if (!emailVerified) {
-              return signUpResponse.body;
-            }
-            return cy
-              .request({
-                // <-- RETURN THIS COMMAND!
-                method: 'POST',
-                url: `http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${apiKey}`,
-                body: {
-                  requestType: 'VERIFY_EMAIL',
-                  idToken: idToken, // Use the ID token obtained from the signup response
-                },
-              })
-              .then((sendOobCodeResponse) => {
-                expect(sendOobCodeResponse.status).to.eq(200);
-                expect(sendOobCodeResponse.body).to.have.property('email', createdEmail);
-
-                cy.log(
-                  `Email verification code successfully generated in emulator for ${createdEmail}. Proceeding to fetch and apply...`
-                );
-
-                return cy
-                  .request({
-                    method: 'GET',
-                    url: `http://localhost:9099/emulator/v1/projects/${projectId}/oobCodes`,
-                  })
-                  .then((oobCodesResponse) => {
-                    expect(oobCodesResponse.status).to.eq(200);
-                    expect(oobCodesResponse.body).to.have.property('oobCodes');
-                    expect(oobCodesResponse.body.oobCodes).to.be.an('array');
-
-                   
-
-                    const verificationCodeObject = oobCodesResponse.body.oobCodes.find(
-                      (code: any) =>
-                        code.requestType === 'VERIFY_EMAIL' && code.email === createdEmail // Use the email from the signup response
-                    );
-
-                    // Assert that the code was found
-                    expect(
-                      verificationCodeObject,
-                      `Expected VERIFY_EMAIL code for ${createdEmail} not found after generation.`
-                    ).to.exist;
-
-                    const verificationOobCode = verificationCodeObject.oobCode;
-                    cy.log(`Found VERIFY_EMAIL OOB code: ${verificationOobCode}. Applying code...`);
-
-                    return cy
-                      .request({
-                        method: 'POST',
-                        url: `http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:update?key=${apiKey}`, // Corrected endpoint!
-                        body: {
-                          oobCode: verificationOobCode,
-                        },
-                      })
-                      .then((applyOobCodeResponse) => {
-                     
-                        return applyOobCodeResponse.body;
-                      });
-                  });
-              });
-          });
-      });
- 
+    return signUpUser(email, password).then((signUpRes) => {
+      if (!emailVerified) {
+        return signUpRes;
+      }
+      return sendVerifyEmail(signUpRes.idToken).then(() =>
+        getOobCode(signUpRes.email).then((oobCode) =>
+          applyOobCode(oobCode).then((verifyRes) => verifyRes)
+        )
+      );
+    });
+  }
+);
 
 Cypress.Commands.add('loginUser', (email: string, password: string) => {
   return cy.request({
     method: 'POST',
-    url: `http://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
-    body: {
-      email,
-      password,
-      returnSecureToken: true,
-    },
+    url: `${AUTH_EMULATOR}/accounts:signInWithPassword?key=${apiKey}`,
+    body: { email, password, returnSecureToken: true },
   });
 });
 
 Cypress.Commands.add('clearAllEmulators', () => {
-  cy.request({
-    method: 'DELETE',
-    url: `http://localhost:9099/emulator/v1/projects/${projectId}/accounts`,
-  });
-
-  cy.request({
-    method: 'POST',
-    url: 'http://localhost:8080/reset',
-  });
+  cy.request('DELETE', `${AUTH_ADMIN}/accounts`);
+  cy.request('POST', `${FIRESTORE_ADMIN}/reset`);
 });
 
 Cypress.Commands.add('clearFirestoreEmulators', () => {
-  cy.request({
-    method: 'POST',
-    url: 'http://localhost:8080/reset',
-  });
+  cy.request('POST', `${FIRESTORE_ADMIN}/reset`);
 });
 
 Cypress.Commands.add('clearAuthEmulator', () => {
-  cy.request({
-    method: 'DELETE',
-    url: `http://localhost:9099/emulator/v1/projects/${projectId}/accounts`,
-  });
+  cy.request('DELETE', `${AUTH_ADMIN}/accounts`);
 });
