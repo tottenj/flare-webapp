@@ -11,9 +11,13 @@ export default defineConfig({
     },
     baseUrl: 'http://localhost:3000', // Adjust to your app's URL
   },
+  reporter: 'cypress-multi-reporters',
   reporterOptions: {
-    mochaFile: 'reports/cypress/test-results-[hash].xml',
-    toConsole: false,
+    reporterEnabled: 'mocha-junit-reporter',
+    mochaJunitReporterReporterOptions: {
+      mochaFile: 'reports/cypress/junit-[hash].xml',
+      toConsole: false,
+    },
   },
   component: {
     devServer: {
