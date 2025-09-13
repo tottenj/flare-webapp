@@ -15,6 +15,14 @@ const config: Config = {
     '^@/(.*)$': '<rootDir>/src/$1', // <- THIS IS CORRECT
   },
   clearMocks: true,
+  coverageThreshold: {
+    global: {
+      branches: 20,
+      functions: 20,
+      lines: 20,
+      statements: 20,
+    }
+  },
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   reporters: [
@@ -22,8 +30,6 @@ const config: Config = {
     ['jest-junit', { outputDirectory: 'reports/jest', outputName: 'junit.xml' }],
   ],
 };
-
-
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
 export default createJestConfig(config);
