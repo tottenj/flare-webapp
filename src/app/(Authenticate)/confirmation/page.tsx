@@ -12,6 +12,7 @@ export default function Confirmation() {
           <h1>Thank You For Signing Up!</h1>
           <p>Please Check Your Email To Verify Your Account!</p>
         </div>
+        
         <div className="flex w-3/4 justify-center">
           <PrimaryLink link="/signin" linkText="Go To Login" />
         </div>
