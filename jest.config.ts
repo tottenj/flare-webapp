@@ -17,8 +17,10 @@ const config: Config = {
   clearMocks: true,
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  
-  
+  reporters: [
+    'default',
+    ['jest-junit', { outputDirectory: 'reports/jest', outputName: 'junit.xml' }],
+  ],
 };
 
 
