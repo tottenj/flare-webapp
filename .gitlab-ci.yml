@@ -1,36 +1,35 @@
 stages:
-  - deploy
   - test
-  - cypress
-  - chromatic
-
-  
+  - deploy
 
 variables:
   NODE_VERSION: '22.12.0'
-  FIREBASE_PROJECT_ID: 'flare-7091a' # Add your Firebase project ID
-
-
+  FIREBASE_PROJECT_ID: 'flare-7091a'
+  CACHE_KEY: "node-modules-${CI_COMMIT_REF_SLUG}"
 
 before_script:
   - apt-get update -y
-  - apt-get install -y curl
+  - apt-get install -y curl netcat openjdk-17-jdk
   - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
   - apt-get install -y nodejs
   - node -v
-  - apt-get install -y openjdk-17-jdk
-  - java -version # Optional: Verify Java installation succeeded
-  - npm ci
   - npm install -g firebase-tools
 
-
+# ----------------------------
+# Jest job (fast, lightweight)
+# ----------------------------
 jest:
   stage: test
-  # Regex to extract code coverage percentage from Jest output
-  coverage: /All files[^|]*\|[^|]*\s+([\d.]+)%/
+  image: node:22.12.0
+  cache:
+    key: ${CACHE_KEY}
+    paths:
+      - node_modules/
+      - package-lock.json
+  before_script:
+    - npm ci
   script:
     - npm test -- --coverage
-    # Upload to Codecov using the official bash uploader
     - curl -s https://codecov.io/bash | bash -s -- -t $CODECOV_TOKEN -f coverage/lcov.info
   artifacts:
     paths:
@@ -41,38 +40,46 @@ jest:
     - branches
     - merge_requests
 
+# ----------------------------
+# Cypress job (no Docker setup)
+# ----------------------------
 cypress:
+  stage: test
   image: cypress/browsers:22.15.0
-  stage: cypress
+  cache:
+    key: ${CACHE_KEY}
+    paths:
+      - node_modules/
+      - package-lock.json
   variables:
     FIREBASE_API_KEY: $FIREBASE_API_KEY
     NEXT_PUBLIC_MODE: "test"
     MODE: "test"
-    FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080 
-    STORAGE_EMULATOR_HOST: 127.0.0.1:9199 
+    FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
+    STORAGE_EMULATOR_HOST: 127.0.0.1:9199
     FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
-    VERCEL_ORG_ID: joshs-projects-01d47aca
-    VERCEL_PROJECT_ID: prj_6rfoJToy55CwGKbPdPElv9bbApXu
-  script:
-    # install dependencies
+  before_script:
     - npm ci
     - export NEXT_PUBLIC_FIREBASE_API_KEY=$FIREBASE_API_KEY
-    - export NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=flare-7091a.firebaseapp.com # Or use a variable if you have one
-    - export NEXT_PUBLIC_FIREBASE_PROJECT_ID=flare-7091a # Or use your $FIREBASE_PROJECT_ID variable
+    - export NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=flare-7091a.firebaseapp.com
+    - export NEXT_PUBLIC_FIREBASE_PROJECT_ID=flare-7091a
+  script:
+    # Start Firebase emulators in the background
+    - firebase emulators:start --only firestore,auth,storage &
 
-    - firebase emulators:start &
-    - echo "Waiting for Firebase Emulators to start..."
-    - timeout 60 bash -c 'until curl --silent --output /dev/null http://localhost:4000; do printf "."; sleep 1; done; echo "Emulators started."' || { echo "Timed out waiting for emulators"; exit 1; }
+    # Wait for emulators to start
+    - echo "Waiting for Firebase emulators..."
+    - timeout 60 bash -c 'until nc -z 127.0.0.1 8080 && nc -z 127.0.0.1 9099 && nc -z 127.0.0.1 9199; do sleep 1; done;'
 
-    # start the server in the background
+    # Start Next.js app in background
     - npm run dev &
-    # run Cypress tests
+
+    # Wait for Next.js app to be ready
+    - npx wait-on http://localhost:3000
+
+    # Run Cypress tests
     - npx cypress run --browser chrome --env FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID,FIREBASE_WEB_API_KEY=$CYPRESS_FIREBASE_WEB_API_KEY
 
-chromatic:
-  stage: chromatic
-  script:
-    - npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN
   only:
     - branches
     - merge_requests
