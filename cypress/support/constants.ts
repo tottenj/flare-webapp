@@ -15,3 +15,10 @@ export const verifiedUser: basicUser = {
   password: 'password',
   name: "verified"
 };
+
+
+export const org: basicUser = {
+  email: 'org@gmail.com',
+  password: 'org@gmail.com',
+  name: 'organization'
+}

@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 
-import { UserFixture } from '../types/UserFixture';
-
+import { org, verifiedUser } from './constants';
 // Constants
 const apiKey = Cypress.env('FIREBASE_API_KEY');
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
@@ -58,12 +57,11 @@ function applyOobCode(oobCode: string) {
     .then((response) => response.body);
 }
 
-Cypress.Commands.add(
-  'createUser',
+Cypress.Commands.add('createUser',
   (
-    email?: string,
-    password?: string,
-    name?: string,
+    email: string,
+    password: string,
+    name: string,
     emailVerified: boolean = true,
     isOrg: boolean = false
   ) => {
@@ -87,17 +85,11 @@ Cypress.Commands.add(
           });
       });
     };
-
-    if (!email || !password || !name) {
-      return cy.fixture('user.json').then((user: UserFixture) => {
-        return doSignUp(user.email, user.password, user.name);
-      });
-    }
     return doSignUp(email, password, name);
   }
 );
 
-Cypress.Commands.add('loginUser', (email?: string, password?: string) => {
+Cypress.Commands.add('loginUser', (email: string, password: string) => {
   const doLoginUser = (finalEmail: string, finalPassword: string) => {
     return cy.session([finalEmail, finalPassword], () => {
       return cy
@@ -116,11 +108,6 @@ Cypress.Commands.add('loginUser', (email?: string, password?: string) => {
         });
     });
   };
-  if (!email || !password) {
-    return cy.fixture<UserFixture>('user.json').then((fixtureUser) => {
-      return doLoginUser(fixtureUser.email, fixtureUser.password);
-    });
-  }
   return doLoginUser(email, password);
 });
 
@@ -130,6 +117,48 @@ Cypress.Commands.add('logoutUser', (): Cypress.Chainable => {
     url: '/api/test/testLogout',
   });
 });
+
+Cypress.Commands.add('createAndLoginUser', (email?: string, password?: string, name?: string) => {
+  let trueName: string;
+  let truePass: string;
+  let trueEmail: string;
+
+  if (!email || !password || !name) {
+    trueName = verifiedUser.name;
+    truePass = verifiedUser.password;
+    trueEmail = verifiedUser.email;
+  } else {
+    trueName = name;
+    truePass = password;
+    trueEmail = email;
+  }
+
+  cy.createUser(trueEmail, truePass, trueName, true, false).then(() => {
+    cy.loginUser(trueEmail, truePass);
+  });
+});
+
+Cypress.Commands.add('createAndLoginOrganization',
+  (email?: string, password?: string, name?: string) => {
+    let trueName: string;
+    let truePass: string;
+    let trueEmail: string;
+
+    if (!email || !password || !name) {
+      trueName = org.name;
+      truePass = org.password;
+      trueEmail = org.email;
+    } else {
+      trueName = name;
+      truePass = password;
+      trueEmail = email;
+    }
+
+    cy.createUser(trueEmail, truePass, trueName, true, true).then(() => {
+      cy.loginUser(trueEmail, truePass);
+    });
+  }
+);
 
 Cypress.Commands.add('clearAllEmulators', () => {
   cy.request('DELETE', `${AUTH_ADMIN}/accounts`);
