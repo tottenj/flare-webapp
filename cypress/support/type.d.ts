@@ -11,6 +11,10 @@ declare namespace Cypress {
     clearAllEmulators(): Chainable<Cypress.Response<any>>;
     logoutUser(): Chainable<Cypress.Response<any>>;
     createAndLoginUser(email?:string, password?:string, name?:string): Chainable<Cypress.Response<any>>
+    seedDb():Chainable<Cypress.Response<any>>
+    loginTestUser(): Chainable<void>
+    loginTestOrg(): Chainable<void>
+    checkToast(message:string): Chainable<Cypress.Response<any>>
   }
 
 

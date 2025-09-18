@@ -23,5 +23,6 @@ import './commands'
 
 before(() =>{
     cy.clearAllEmulators()
+    cy.seedDb()
 })
 

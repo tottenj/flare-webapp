@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
 import { org, verifiedUser } from './constants';
+import { functions, httpsCallable } from './firebaseClient';
 // Constants
 const apiKey = Cypress.env('FIREBASE_API_KEY');
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
@@ -57,7 +58,8 @@ function applyOobCode(oobCode: string) {
     .then((response) => response.body);
 }
 
-Cypress.Commands.add('createUser',
+Cypress.Commands.add(
+  'createUser',
   (
     email: string,
     password: string,
@@ -138,7 +140,8 @@ Cypress.Commands.add('createAndLoginUser', (email?: string, password?: string, n
   });
 });
 
-Cypress.Commands.add('createAndLoginOrganization',
+Cypress.Commands.add(
+  'createAndLoginOrganization',
   (email?: string, password?: string, name?: string) => {
     let trueName: string;
     let truePass: string;
@@ -159,6 +162,28 @@ Cypress.Commands.add('createAndLoginOrganization',
     });
   }
 );
+
+Cypress.Commands.add('seedDb', (): Cypress.Chainable<any> => {
+  const seed = httpsCallable(functions, 'seedDb');
+
+  return cy.wrap(seed({})).then((res) => {
+    cy.log('DB seeded:', JSON.stringify(res)).then(() => {
+      return res;
+    });
+  });
+});
+
+Cypress.Commands.add('loginTestUser', () => {
+  cy.loginUser('userOne@gmail.com', 'password');
+});
+
+Cypress.Commands.add('loginTestOrg', () => {
+  cy.loginUser('orgOne@gmail.com', 'password');
+});
+
+Cypress.Commands.add('checkToast', (message: string) => {
+  cy.contains('.Toastify__toast', message).should('be.visible');
+});
 
 Cypress.Commands.add('clearAllEmulators', () => {
   cy.request('DELETE', `${AUTH_ADMIN}/accounts`);
