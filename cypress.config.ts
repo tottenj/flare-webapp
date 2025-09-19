@@ -11,6 +11,9 @@ export default defineConfig({
     },
     baseUrl: 'http://localhost:3000', // Adjust to your app's URL
   },
+  video: true,
+  videosFolder: 'reports/cypress/videos',
+  screenshotsFolder: 'reports/cypress/screenshots',
   reporter: 'cypress-multi-reporters',
   reporterOptions: {
     reporterEnabled: 'mocha-junit-reporter',
