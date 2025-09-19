@@ -56,7 +56,7 @@ cypress:
     - export NEXT_PUBLIC_FIREBASE_PROJECT_ID=flare-7091a
   script:
     # Start Firebase emulators in the background
-    - firebase emulators:start --only firestore,auth,storage &
+    - firebase emulators:start --only firestore,auth,storage,functions &
 
     # Wait for emulators to start
     - echo "Waiting for Firebase emulators..."
