@@ -5,12 +5,15 @@ import { getAuth } from 'firebase-admin/auth';
 import { CallableRequest, onCall } from 'firebase-functions/v2/https';
 import { getFirestore } from 'firebase-admin/firestore';
 import { initializeApp } from 'firebase-admin/app';
-import FlareOrg, { orgConverter } from '../../src/lib/classes/flareOrg/FlareOrg';
-import FlareUser, { userConverter } from '../../src/lib/classes/flareUser/FlareUser';
+import FlareOrg, { orgConverter } from '../classes/FlareOrg';
+import FlareUser, { userConverter } from '../classes/FlareUser';
+import flareLocation from '../classes/flareLocation';
 
 initializeApp();
 const auth = getAuth();
 const firestore = getFirestore();
+firestore.settings({ ignoreUndefinedProperties: true });
+
 
 exports.createOrganization = onDocumentCreatedWithAuthContext(
   `${Collections.Organizations}/{orgId}`,
@@ -29,7 +32,8 @@ exports.createOrganization = onDocumentCreatedWithAuthContext(
 );
 
 exports.seedDb = onCall(async (request: CallableRequest) => {
-  if (process.env.MODE !== 'test') return;
+  logger.log("HERE")
+  if (process.env.FUNCTIONS_EMULATOR !== 'true') return { success: false };
   let orgs: FlareOrg[] = [];
   const userCreds = [
     { email: 'userOne@gmail.com', password: 'password' },
@@ -99,7 +103,7 @@ exports.seedDb = onCall(async (request: CallableRequest) => {
         credential.email,
         user.photoURL,
         undefined,
-        credential.location,
+        credential.location as flareLocation,
         true
       );
     } else {
@@ -109,7 +113,7 @@ exports.seedDb = onCall(async (request: CallableRequest) => {
         credential.email,
         user.photoURL,
         undefined,
-        credential.location,
+        credential.location as flareLocation,
         false
       );
     }
@@ -117,6 +121,7 @@ exports.seedDb = onCall(async (request: CallableRequest) => {
     await firestore.collection(Collections.Organizations).doc(user.uid).set(ready);
     orgs.push(flareUser);
   }
+  return {success: true}
 });
 
 exports.verify = onCall(async (request: CallableRequest) => {

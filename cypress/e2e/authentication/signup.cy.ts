@@ -37,10 +37,13 @@ describe('SignUpForm', () => {
           method: 'GET',
           url: `http://localhost:9099/emulator/v1/projects/${projectId}/oobCodes`,
         }).then((response) => {
+          cy.log(response.body)
           expect(response.body).to.have.property('oobCodes');
           expect(response.body.oobCodes).to.be.an('array');
           const verificationCodeSent = response.body.oobCodes.some(
-            (code: any) => code.requestType === 'VERIFY_EMAIL' && code.email === unverifiedUser.email
+            (code: any) => {
+              return code.requestType === 'VERIFY_EMAIL' && code.email === unverifiedUser.email.toLowerCase()
+            }
           );
           expect(verificationCodeSent).to.be.true;
         });
@@ -53,7 +56,7 @@ describe('SignUpForm', () => {
        cy.get(`input[name="email"]`).type(verifiedOrg.email);
        cy.get(`input[name="password"]`).type(verifiedOrg.password);
        cy.get('form').submit();
-       cy.checkToast("SD")
+       cy.checkToast("Email is already in use")
     })
 
   });

@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import { org, verifiedUser } from './constants';
-import { functions, httpsCallable } from './firebaseClient';
+import { functions, httpsCallable } from './firebaseClient'
 // Constants
 const apiKey = Cypress.env('FIREBASE_API_KEY');
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
@@ -168,6 +168,8 @@ Cypress.Commands.add('seedDb', (): Cypress.Chainable<any> => {
 
   return cy.wrap(seed({})).then((res) => {
     cy.log('DB seeded:', JSON.stringify(res)).then(() => {
+      //@ts-ignore
+      expect(res.data.success).to.eq(true)
       return res;
     });
   });
