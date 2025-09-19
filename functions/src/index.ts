@@ -32,8 +32,8 @@ exports.createOrganization = onDocumentCreatedWithAuthContext(
 );
 
 exports.seedDb = onCall(async (request: CallableRequest) => {
-  logger.log("HERE")
-  if (process.env.FUNCTIONS_EMULATOR !== 'true') return { success: false };
+  const isEmulator = process.env.FUNCTIONS_EMULATOR === 'true' || process.env.FIREBASE_AUTH_EMULATOR_HOST;
+  if (!isEmulator) return { success: false };
   let orgs: FlareOrg[] = [];
   const userCreds = [
     { email: 'userOne@gmail.com', password: 'password' },
