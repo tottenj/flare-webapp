@@ -69,10 +69,12 @@ cypress:
     - npx wait-on http://localhost:3000
 
     # Run Cypress tests
-    - npx cypress run --browser chrome --env FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID,FIREBASE_WEB_API_KEY=$CYPRESS_FIREBASE_WEB_API_KEY
+    - npx cypress run --browser chrome --env FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID,FIREBASE_WEB_API_KEY=$CYPRESS_FIREBASE_WEB_API_KEY --config video=true,screenshotsFolder=reports/cypress/screenshots,videoFolder=reports/cypress/videos
   artifacts:
     when: always
     paths:
+      - reports/cypress/screenshots
+      - reports/cypress/videos
       - reports/cypress/
     reports:
       junit: reports/cypress/*.xml
