@@ -15,7 +15,4 @@ describe("Org Sign Up Form", () =>{
             cy.get('form').submit();
         });
     })
-    
-
-    
 })
