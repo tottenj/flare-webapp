@@ -75,12 +75,13 @@ export default function PlaceSearch({ lab, required = true, z, defVal }: placeSe
   return (
     <>
       <Autocomplete
-        label={lab ? lab : "Select Location"}
+        label={lab ? lab : 'Select Location'}
         placeholder="Type to search..."
         inputValue={list.filterText}
         isLoading={list.isLoading}
         items={list.items}
         variant="flat"
+        data-cy={'location-input'}
         defaultSelectedKey={defVal?.value}
         onInputChange={list.setFilterText}
         onSelectionChange={handleSelection}

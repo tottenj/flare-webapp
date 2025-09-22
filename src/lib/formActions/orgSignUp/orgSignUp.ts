@@ -2,42 +2,42 @@
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
-import flareLocation from '@/lib/types/Location';
+import { ActionResponse } from '@/lib/types/ActionResponse';
 import getAuthError from '@/lib/utils/error/getAuthError';
+import { zodFieldErrors } from '@/lib/utils/error/zodFeildErrors';
 import { formErrors } from '@/lib/utils/text/text';
+import { convertFormData } from '@/lib/zod/convertFormData';
+import { CreateOrgSchema } from '@/lib/zod/org/createOrgSchema';
 import {
   createUserWithEmailAndPassword,
   deleteUser,
   sendEmailVerification,
-  signOut,
 } from 'firebase/auth';
 
-export default async function orgSignUp(prevState: any, formData: FormData) {
-  const req = {
-    name: formData.get('orgName')?.toString(),
-    email: formData.get('orgEmail')?.toString(),
-    locationString: formData.get('location')?.toString(),
-    pass: formData.get('orgPassword')?.toString(),
-    confPass: formData.get('confirmOrgPassword')?.toString(),
-  };
-  const location: flareLocation | null = req.locationString ? JSON.parse(req.locationString) : null;
+export default async function orgSignUp(prevState: any, formData: FormData): Promise<ActionResponse>{
+  
 
-  if (req.pass != req.confPass) return { message: formErrors.passwordMisMatch };
-  if (Object.values(req).some((value) => value === null || value === undefined) || !location)
-    return { message: formErrors.requiredError };
+  const res = convertFormData(CreateOrgSchema, formData)
+  
+  if(!res.success) {
+    console.log(res.error)
+    return {status: 'error', message: formErrors.requiredError, errors: zodFieldErrors(res.error)}
+  }
+  const {data} = res
+  if (data.password != data.confirmPassword) return {status: "error", message: formErrors.passwordMisMatch };
 
   let cred;
   try {
-    cred = await createUserWithEmailAndPassword(auth, req.email!, req.pass!);
-    const { fire, currentUser } = await getFirestoreFromServer();
-    const org = new FlareOrg(cred.user, req.name!, location);
+    cred = await createUserWithEmailAndPassword(auth, data.email, data.password);
+    const { fire } = await getFirestoreFromServer();
+    const org = new FlareOrg(cred.user, data.orgName, data.location);
     await org.addOrg(fire);
     await sendEmailVerification(cred.user);
-    return { message: 'success', orgId: org.id };
+    return { message: 'Successfully Submitted Application', resp: {orgId: org.id}, status: "success" };
   } catch (error) {
     if (cred) {
       await deleteUser(cred.user);
     }
-    return { message: getAuthError(error) };
+    return { message: getAuthError(error), status: "error" };
   }
 }

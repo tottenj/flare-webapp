@@ -1,6 +1,3 @@
-import { EventArgs } from '@/lib/classes/event/Event';
-import AgeGroup from '@/lib/enums/AgeGroup';
-import eventType from '@/lib/enums/eventType';
 import { z } from 'zod';
 import { getLocationSchema } from '../location/getLocationSchema';
 

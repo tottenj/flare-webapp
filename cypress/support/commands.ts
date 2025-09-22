@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
-import { org, verifiedUser } from './constants';
-import { functions, httpsCallable } from './firebaseClient'
+import { org, verifiedOrg, verifiedUser } from './constants';
+import { functions, httpsCallable } from './firebaseClient';
 // Constants
 const apiKey = Cypress.env('FIREBASE_API_KEY');
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
@@ -169,7 +169,7 @@ Cypress.Commands.add('seedDb', (): Cypress.Chainable<any> => {
   return cy.wrap(seed({})).then((res) => {
     cy.log('DB seeded:', JSON.stringify(res)).then(() => {
       //@ts-ignore
-      expect(res.data.success).to.eq(true)
+      expect(res.data.success).to.eq(true);
       return res;
     });
   });
@@ -188,8 +188,8 @@ Cypress.Commands.add('checkToast', (message: string) => {
 });
 
 Cypress.Commands.add('clearAllEmulators', () => {
-  cy.request('DELETE', `${AUTH_ADMIN}/accounts`);
-  cy.request('POST', `${FIRESTORE_ADMIN}/reset`);
+  cy.clearFirestoreEmulators();
+  cy.clearAuthEmulator();
 });
 
 Cypress.Commands.add('clearFirestoreEmulators', () => {
@@ -198,4 +198,47 @@ Cypress.Commands.add('clearFirestoreEmulators', () => {
 
 Cypress.Commands.add('clearAuthEmulator', () => {
   cy.request('DELETE', `${AUTH_ADMIN}/accounts`);
+});
+
+Cypress.Commands.add('checkExistance', (funcs: Record<string, () => Cypress.Chainable>) => {
+  Object.values(funcs).forEach((fn) => {
+    fn().should('exist');
+  });
+});
+
+Cypress.Commands.add('clearForm', () => {
+  cy.get('form input:visible').each(($input) => {
+    cy.wrap($input).clear({ force: true });
+  });
+});
+
+Cypress.Commands.add(
+  'usePlacesInput',
+  (
+    selector: string,
+    loc: string = verifiedOrg.location.name,
+    contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
+  ) => {
+    const location = cy.get(selector);
+    cy.intercept('POST', '**/places.googleapis.com/**').as('places');
+    location.type(loc, { delay: 200 });
+    cy.contains(contains).should('exist');
+    cy.wait('@places');
+    cy.get('ul[role="listbox"] li[role="option"]')
+      .contains(contains)
+      .should('be.visible')
+      .click({ force: true });
+  }
+);
+
+Cypress.Commands.add('userExists', (email: string) => {
+  return cy
+    .request({
+      method: 'POST',
+      url: `http://localhost:9099/emulator/v1/projects/${projectId}/accounts`,
+    })
+    .then((resp) => {
+      const users = resp.body?.users || [];
+      return users.some((u: any) => u.email === email);
+    });
 });

@@ -33,4 +33,7 @@ export const verifiedOrg = {
     id: 'ChIJK4J5p5RzK4gRL6c1pFiP7Tw',
     name: 'Toronto Pearson International Airport',
   },
+  instagram: "orgInsta",
+  twitter: "orgTwitter",
+  facebook: "orgFacebook"
 };
