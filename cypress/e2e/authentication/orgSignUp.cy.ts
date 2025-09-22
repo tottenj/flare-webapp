@@ -85,7 +85,10 @@ describe('Success Flow', () => {
   it('Successfully Submits Form', () => {
     orgSignUpFillForm();
     cy.contains('Successfully Submitted Application');
+    cy.location('pathname').should('eq', '/confirmation');
   });
+
+ 
 });
 
 describe('Unsuccessful Flow', () => {
@@ -94,6 +97,8 @@ describe('Unsuccessful Flow', () => {
     cy.clearAllEmulators();
     cy.clearForm();
   });
+
+ 
 
   it('Tests confirm password with different passwords', () => {
     const { password, confirmPassword } = getOrgSignUpInputs();

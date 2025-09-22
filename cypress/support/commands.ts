@@ -235,10 +235,10 @@ Cypress.Commands.add('userExists', (email: string) => {
   return cy
     .request({
       method: 'POST',
-      url: `http://localhost:9099/emulator/v1/projects/${projectId}/accounts`,
+      url: `https://identitytoolkit.googleapis.com/v1/accounts:createAuthUri?key=${apiKey}`,
+      body: { identifier: email, continueUri: 'http://localhost:8080/app' },
     })
     .then((resp) => {
-      const users = resp.body?.users || [];
-      return users.some((u: any) => u.email === email);
+      return resp.body && resp.body?.registered === true
     });
 });
