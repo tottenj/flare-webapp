@@ -163,13 +163,6 @@ Cypress.Commands.add(
   }
 );
 
-Cypress.Commands.add('seedDb', () => {
-  const seed = httpsCallable(functions, 'seedDb');
-  cy.wrap(null).then(() => {
-    seed();
-  });
-});
-
 Cypress.Commands.add('loginTestUser', () => {
   cy.loginUser('userOne@gmail.com', 'password');
 });
@@ -182,18 +175,63 @@ Cypress.Commands.add('checkToast', (message: string) => {
   cy.contains('.Toastify__toast', message).should('be.visible');
 });
 
+
 Cypress.Commands.add('clearAllEmulators', () => {
-  cy.clearFirestoreEmulators();
-  cy.clearAuthEmulator();
+  cy.clearFirestore();
+  cy.clearAuth();
 });
 
-Cypress.Commands.add('clearFirestoreEmulators', () => {
-  cy.request('POST', `${FIRESTORE_ADMIN}/reset`);
+Cypress.Commands.add('clearFirestore', () => {
+  cy.request('POST', `${FIRESTORE_ADMIN}/reset`).then((response) => {
+    expect(response.status).to.eq(200);
+  });
 });
 
-Cypress.Commands.add('clearAuthEmulator', () => {
-  cy.request('DELETE', `${AUTH_ADMIN}/accounts`);
+Cypress.Commands.add('clearAuth', () => {
+  cy.request('DELETE', `${AUTH_ADMIN}/accounts`).then(
+    (response) => {
+      expect(response.status).to.eq(200);
+    }
+  );
 });
+
+Cypress.Commands.add('seedDb', (maxRetries = 5) => {
+  const attemptSeed = (retryCount = 0): Cypress.Chainable<any> => {
+    return cy
+      .request({
+        method: 'POST',
+        url: 'http://127.0.0.1:5001/flare-7091a/us-central1/seedDb',
+        failOnStatusCode: false,
+        timeout: 10000,
+        body: {
+          data: {},
+        },
+      })
+      .then((response) => {
+        if (
+          response.status === 200 &&
+          response.body.result &&
+          response.body.result.success === true
+        ) {
+          cy.log('✅ Database seeded successfully');
+          return cy.wrap(response.body.result);
+        } else if (retryCount < maxRetries) {
+          cy.log(`⏳ Seed failed (attempt ${retryCount + 1}/${maxRetries}), retrying...`);
+          // It's good practice to chain cy.wait and then call the next attempt
+          return cy.wait(2000).then(() => attemptSeed(retryCount + 1));
+        } else {
+          throw new Error(
+            `Failed to seed database after ${maxRetries} attempts. Status: ${response.status}. Response: ${JSON.stringify(response.body)}`
+          );
+        }
+      });
+  };
+
+  return attemptSeed();
+});
+
+
+
 
 Cypress.Commands.add('checkExistance', (funcs: Record<string, () => Cypress.Chainable>) => {
   Object.values(funcs).forEach((fn) => {
@@ -274,10 +312,9 @@ Cypress.Commands.add('waitForEmulators', () => {
   cy.waitForFirestoreEmulator();
 });
 
-
-Cypress.Commands.add("getDocument", (path: string) => {
+Cypress.Commands.add('getDocument', (path: string) => {
   return cy.request({
-    method: "POST",
-    url: `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${path}`
-  })
-})
+    method: 'POST',
+    url: `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${path}`,
+  });
+});

@@ -26,8 +26,8 @@ declare namespace Cypress {
       password?: string,
       name?: string
     ): Chainable<Cypress.Response<any>>;
-    clearFirestoreEmulators(): Chainable<Cypress.Response<any>>;
-    clearAuthEmulator(): Chainable<Cypress.Response<any>>;
+    clearFirestore(): Chainable<Cypress.Response<any>>;
+    clearAuth(): Chainable<Cypress.Response<any>>;
     clearAllEmulators(): Chainable<Cypress.Response<any>>;
     logoutUser(): Chainable<Cypress.Response<any>>;
     createAndLoginUser(
@@ -35,7 +35,7 @@ declare namespace Cypress {
       password?: string,
       name?: string
     ): Chainable<Cypress.Response<any>>;
-    seedDb(): Chainable<Cypress.Response<any>>;
+    seedDb(maxRetries: number = 1): Chainable<Cypress.Response<any>>;
     loginTestUser(): Chainable<void>;
     loginTestOrg(): Chainable<void>;
     checkToast(message: string): Chainable<Cypress.Response<any>>;

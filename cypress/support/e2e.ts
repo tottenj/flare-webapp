@@ -22,6 +22,7 @@ import './commands'
 
 
 before(() =>{
+    cy.request('http://127.0.0.1:4400/emulators').its('status').should('eq', 200);
     cy.clearAllEmulators()
     cy.seedDb()
     
