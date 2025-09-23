@@ -273,3 +273,11 @@ Cypress.Commands.add('waitForEmulators', () => {
   cy.waitForAuthEmulator();
   cy.waitForFirestoreEmulator();
 });
+
+
+Cypress.Commands.add("getDocument", (path: string) => {
+  return cy.request({
+    method: "POST",
+    url: `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${path}`
+  })
+})

@@ -50,6 +50,7 @@ declare namespace Cypress {
     waitForFirestoreEmulator(): Chainable<void>
     waitForAuthEmulator(): Chainable<void>
     waitForEmulators(): Chainable<void>
+    getDocument(path:string): Chainable<Response<any>>
   }
 
 

@@ -88,7 +88,6 @@ describe('Success Flow', () => {
     cy.location('pathname').should('eq', '/confirmation');
   });
 
- 
 });
 
 describe('Unsuccessful Flow', () => {
