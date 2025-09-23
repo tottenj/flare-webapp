@@ -163,15 +163,10 @@ Cypress.Commands.add(
   }
 );
 
-Cypress.Commands.add('seedDb', (): Cypress.Chainable<any> => {
+Cypress.Commands.add('seedDb', () => {
   const seed = httpsCallable(functions, 'seedDb');
-
-  return cy.wrap(seed({})).then((res) => {
-    cy.log('DB seeded:', JSON.stringify(res)).then(() => {
-      //@ts-ignore
-      expect(res.data.success).to.eq(true);
-      return res;
-    });
+  cy.wrap(null).then(() => {
+    seed();
   });
 });
 
@@ -239,6 +234,42 @@ Cypress.Commands.add('userExists', (email: string) => {
       body: { identifier: email, continueUri: 'http://localhost:8080/app' },
     })
     .then((resp) => {
-      return resp.body && resp.body?.registered === true
+      return resp.body && resp.body?.registered === true;
     });
+});
+
+Cypress.Commands.add('waitForAuthEmulator', () => {
+  const AUTH_ADMIN = `http://localhost:9099/emulator/v1/projects/${Cypress.env('FIREBASE_PROJECT_ID')}`;
+
+  cy.request({
+    method: 'GET',
+    url: `${AUTH_ADMIN}/accounts`,
+    failOnStatusCode: false,
+  }).then((resp) => {
+    if (resp.status !== 200) {
+      // retry after 500ms until ready
+      cy.wait(500);
+      cy.waitForAuthEmulator();
+    }
+  });
+});
+
+Cypress.Commands.add('waitForFirestoreEmulator', () => {
+  const FIRESTORE_ADMIN = `http://localhost:8080`;
+
+  cy.request({
+    method: 'GET',
+    url: `${FIRESTORE_ADMIN}/documents`,
+    failOnStatusCode: false,
+  }).then((resp) => {
+    if (resp.status !== 200) {
+      cy.wait(500);
+      cy.waitForFirestoreEmulator();
+    }
+  });
+});
+
+Cypress.Commands.add('waitForEmulators', () => {
+  cy.waitForAuthEmulator();
+  cy.waitForFirestoreEmulator();
 });

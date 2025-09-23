@@ -47,6 +47,9 @@ declare namespace Cypress {
       contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
     ): Chainable<void>;
     userExists(email:string): Chainable<boolean>
+    waitForFirestoreEmulator(): Chainable<void>
+    waitForAuthEmulator(): Chainable<void>
+    waitForEmulators(): Chainable<void>
   }
 
 
