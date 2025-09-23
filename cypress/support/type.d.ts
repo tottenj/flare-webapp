@@ -15,7 +15,7 @@ declare namespace Cypress {
       name: string;
       [key: string]: any;
     }>;
-    loginUser(email: string, password: string): Chainable<null>;
+    loginUser(email: string, password: string): Chainable<Response<any>>;
     createAndLoginUser(
       email?: string,
       password?: string,

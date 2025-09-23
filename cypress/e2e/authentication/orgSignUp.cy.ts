@@ -88,6 +88,13 @@ describe('Success Flow', () => {
     cy.location('pathname').should('eq', '/confirmation');
   });
 
+
+  it("Ensures account exists", () => {
+    cy.loginUser(verifiedOrg.email, verifiedOrg.password).then((resp) =>{
+      cy.log(resp.body)
+    })
+  })
+
 });
 
 describe('Unsuccessful Flow', () => {

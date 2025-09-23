@@ -93,7 +93,7 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('loginUser', (email: string, password: string) => {
   const doLoginUser = (finalEmail: string, finalPassword: string) => {
-    return cy.session([finalEmail, finalPassword], () => {
+    cy.session([finalEmail, finalPassword], () => {
       return cy
         .request({
           method: 'POST',
