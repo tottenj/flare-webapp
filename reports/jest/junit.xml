@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="22" failures="4" errors="0" time="1.946">
+  <testsuite name="getPlaces" errors="0" failures="0" skipped="0" timestamp="2025-09-22T01:31:07" time="0.621" tests="2">
+    <testcase classname="getPlaces returns place suggestions if requestId matches" name="getPlaces returns place suggestions if requestId matches" time="0.005">
+    </testcase>
+    <testcase classname="getPlaces returns empty array if requestId does not match" name="getPlaces returns empty array if requestId does not match" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="getPlaceDetails" errors="0" failures="0" skipped="0" timestamp="2025-09-22T01:31:07" time="0.682" tests="2">
+    <testcase classname="getPlaceDetails returns place details when valid placeId is provided" name="getPlaceDetails returns place details when valid placeId is provided" time="0.004">
+    </testcase>
+    <testcase classname="getPlaceDetails reurns null and logs error when fetchFields fails" name="getPlaceDetails reurns null and logs error when fetchFields fails" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="emailAndPasswordSignIn" errors="0" failures="0" skipped="0" timestamp="2025-09-22T01:31:07" time="0.721" tests="1">
+    <testcase classname="emailAndPasswordSignIn should return an error message when email or password is missing" name="emailAndPasswordSignIn should return an error message when email or password is missing" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="emailAndPasswordAction" errors="0" failures="0" skipped="0" timestamp="2025-09-22T01:31:07" time="0.761" tests="4">
+    <testcase classname="emailAndPasswordAction should create a user when valid email and password are provided" name="emailAndPasswordAction should create a user when valid email and password are provided" time="0.004">
+    </testcase>
+    <testcase classname="emailAndPasswordAction should return an error when email is already in use" name="emailAndPasswordAction should return an error when email is already in use" time="0">
+    </testcase>
+    <testcase classname="emailAndPasswordAction should return an error message when email or password is missing" name="emailAndPasswordAction should return an error message when email or password is missing" time="0.001">
+    </testcase>
+    <testcase classname="emailAndPasswordAction should return a generic error message for unknown errors" name="emailAndPasswordAction should return a generic error message for unknown errors" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="flareOrg Class" errors="0" failures="0" skipped="0" timestamp="2025-09-22T01:31:07" time="0.827" tests="2">
+    <testcase classname="flareOrg Class shoould constructfrom User object" name="flareOrg Class shoould constructfrom User object" time="0.003">
+    </testcase>
+    <testcase classname="flareOrg Class should call getDocument with correct path and converter" name="flareOrg Class should call getDocument with correct path and converter" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="getUserById" errors="0" failures="0" skipped="0" timestamp="2025-09-22T01:31:07" time="0.836" tests="3">
+    <testcase classname="getUserById should return user data when document exists" name="getUserById should return user data when document exists" time="0.004">
+    </testcase>
+    <testcase classname="addUser should return false when user has no id" name="addUser should return false when user has no id" time="0.001">
+    </testcase>
+    <testcase classname="addUser should use custom db instance when provided" name="addUser should use custom db instance when provided" time="0.007">
+    </testcase>
+  </testsuite>
+  <testsuite name="useActionToast" errors="0" failures="0" skipped="0" timestamp="2025-09-22T01:31:07" time="0.89" tests="4">
+    <testcase classname="useActionToast shows loading toast when pending" name="useActionToast shows loading toast when pending" time="0.009">
+    </testcase>
+    <testcase classname="useActionToast dismisses toast and shows success when operation succeeds" name="useActionToast dismisses toast and shows success when operation succeeds" time="0.002">
+    </testcase>
+    <testcase classname="useActionToast dismisses toast and shows error when operation fails" name="useActionToast dismisses toast and shows error when operation fails" time="0.002">
+    </testcase>
+    <testcase classname="useActionToast does nothing if no message and not pending" name="useActionToast does nothing if no message and not pending" time="0.004">
+    </testcase>
+  </testsuite>
+  <testsuite name="orgSignUp" errors="0" failures="4" skipped="0" timestamp="2025-09-22T01:31:07" time="0.912" tests="4">
+    <testcase classname="orgSignUp returns error if passwords do not match" name="orgSignUp returns error if passwords do not match" time="0.013">
+      <failure>Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  -  1
++ Received  + 13
+
+  Object {
+-   &quot;message&quot;: &quot;Passwords must match&quot;,
++   &quot;errors&quot;: Object {
++     &quot;confirmPassword&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++     &quot;email&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++     &quot;password&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++   },
++   &quot;message&quot;: &quot;Please fill out all required fields&quot;,
++   &quot;status&quot;: &quot;error&quot;,
+  }
+    at Object.toEqual (/Users/joshtotten/Desktop/flare-webapp/src/lib/formActions/orgSignUp/orgSignUp.test.ts:37:20)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="orgSignUp returns error if required fields are missing" name="orgSignUp returns error if required fields are missing" time="0.002">
+      <failure>Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  -  0
++ Received  + 18
+
+  Object {
++   &quot;errors&quot;: Object {
++     &quot;confirmPassword&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++     &quot;email&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++     &quot;location&quot;: Array [
++       &quot;Invalid input: expected object, received undefined&quot;,
++     ],
++     &quot;orgName&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++     &quot;password&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++   },
+    &quot;message&quot;: &quot;Please fill out all required fields&quot;,
++   &quot;status&quot;: &quot;error&quot;,
+  }
+    at Object.toEqual (/Users/joshtotten/Desktop/flare-webapp/src/lib/formActions/orgSignUp/orgSignUp.test.ts:47:20)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="orgSignUp creates user and returns success" name="orgSignUp creates user and returns success" time="0.002">
+      <failure>Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  -  1
++ Received  + 13
+
+  Object {
+-   &quot;message&quot;: &quot;success&quot;,
++   &quot;errors&quot;: Object {
++     &quot;confirmPassword&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++     &quot;email&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++     &quot;password&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++   },
++   &quot;message&quot;: &quot;Please fill out all required fields&quot;,
++   &quot;status&quot;: &quot;error&quot;,
+  }
+    at Object.toEqual (/Users/joshtotten/Desktop/flare-webapp/src/lib/formActions/orgSignUp/orgSignUp.test.ts:75:20)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+    <testcase classname="orgSignUp logs error and returns fallback message on failure" name="orgSignUp logs error and returns fallback message on failure" time="0.001">
+      <failure>Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  -  1
++ Received  + 13
+
+  Object {
+-   &quot;message&quot;: &quot;An unexpected error occurred. Please try again.&quot;,
++   &quot;errors&quot;: Object {
++     &quot;confirmPassword&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++     &quot;email&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++     &quot;password&quot;: Array [
++       &quot;Invalid input: expected string, received undefined&quot;,
++     ],
++   },
++   &quot;message&quot;: &quot;Please fill out all required fields&quot;,
++   &quot;status&quot;: &quot;error&quot;,
+  }
+    at Object.toEqual (/Users/joshtotten/Desktop/flare-webapp/src/lib/formActions/orgSignUp/orgSignUp.test.ts:92:20)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
