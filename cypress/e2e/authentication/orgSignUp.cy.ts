@@ -1,4 +1,8 @@
-import { verifiedOrg } from '../../support/constants';
+import { createOrg, createOrgResponse } from "../../support/constants/Organization";
+import pick from 'lodash/pick';
+import isEqual from 'lodash/isEqual';
+
+
 
 function getOrgSignUpInputs() {
   return {
@@ -39,14 +43,14 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
     shouldSubmit = true;
   }
 
-  orgName().type(verifiedOrg.name);
-  email().type(em ?? verifiedOrg.email);
+  orgName().type(createOrg.name);
+  email().type(em ?? createOrg.email);
   cy.usePlacesInput("[data-cy='location-input']");
-  password().type(pass ?? verifiedOrg.password);
-  confirmPassword().type(confPass ?? verifiedOrg.password);
-  instagram().type(verifiedOrg.instagram);
-  twitter().type(verifiedOrg.twitter);
-  facebook().type(verifiedOrg.facebook);
+  password().type(pass ?? createOrg.password);
+  confirmPassword().type(confPass ?? createOrg.password);
+  instagram().type(createOrg.instagram);
+  twitter().type(createOrg.twitter);
+  facebook().type(createOrg.facebook);
   otherProof().type('other');
   shouldSubmit && submit().click({ force: true });
 }
@@ -90,11 +94,8 @@ describe('Success Flow', () => {
 
 
   it("Ensures account exists", () => {
-    cy.loginUser(verifiedOrg.email, verifiedOrg.password).then((resp) =>{
-      cy.log(resp.body)
-    })
+    cy.userExists(createOrg.email, createOrg.password).shouldMatch(createOrgResponse)
   })
-
 });
 
 describe('Unsuccessful Flow', () => {

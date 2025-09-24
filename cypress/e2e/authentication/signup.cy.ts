@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
-import { unverifiedUser, verifiedOrg } from '../../support/constants';
-import { UserFixture } from '../../types/UserFixture';
+import { unverifiedUser } from '../../support/constants';
+import { createUser, createUserResponse } from '../../support/constants/User';
+
 
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
 const apiKey = Cypress.env('FIREBASE_API_KEY'); // Get the API Key from Cypress env
@@ -26,8 +27,8 @@ describe('SignUpForm', () => {
 
   describe('Successful Sign Up', () => {
     it('should create and verify a user', () => {
-        cy.get(`input[name="email"]`).type(unverifiedUser.email);
-        cy.get(`input[name="password"]`).type(unverifiedUser.password);
+        cy.get(`input[name="email"]`).type(createUser.email);
+        cy.get(`input[name="password"]`).type(createUser.password);
         cy.get('form').submit();
         cy.contains('User created successfully').should('be.visible');
     });
@@ -42,19 +43,24 @@ describe('SignUpForm', () => {
           expect(response.body.oobCodes).to.be.an('array');
           const verificationCodeSent = response.body.oobCodes.some(
             (code: any) => {
-              return code.requestType === 'VERIFY_EMAIL' && code.email === unverifiedUser.email.toLowerCase()
+              return code.requestType === 'VERIFY_EMAIL' && code.email === createUser.email.toLowerCase()
             }
           );
           expect(verificationCodeSent).to.be.true;
         });
     });
+
+   // it("Checks if user exists", () => {
+   //   cy.userExists(createUser.email, createUser.password, false).shouldMatch(createUserResponse)
+   // })
+
   });
 
   describe('Error Cases', () => {
 
     it("should error if email already taken", () => {
-       cy.get(`input[name="email"]`).type(verifiedOrg.email);
-       cy.get(`input[name="password"]`).type(verifiedOrg.password);
+       cy.get(`input[name="email"]`).type(createUser.email);
+       cy.get(`input[name="password"]`).type(createUser.password);
        cy.get('form').submit();
        cy.checkToast("Email is already in use")
     })

@@ -1,7 +1,9 @@
 /// <reference types="cypress" />
 
-import { org, verifiedOrg, verifiedUser } from './constants';
-import { functions, httpsCallable } from './firebaseClient';
+import { org, verifiedUser } from './constants';
+import { createOrg } from './constants/Organization';
+import { compareWithTolerance, pickShared } from './helpers';
+
 // Constants
 const apiKey = Cypress.env('FIREBASE_API_KEY');
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
@@ -26,6 +28,27 @@ function signUpUser(email: string, password: string, name: string, isOrg: boolea
         })
         .then(() => response.body);
     });
+}
+
+function decodeFirestoreDocument(doc: any) {
+  const parseValue = (val: any): any => {
+    if ('stringValue' in val) return val.stringValue;
+    if ('booleanValue' in val) return val.booleanValue;
+    if ('nullValue' in val) return null;
+    if ('integerValue' in val) return parseInt(val.integerValue, 10);
+    if ('doubleValue' in val) return val.doubleValue;
+    if ('geoPointValue' in val) return val.geoPointValue;
+    if ('mapValue' in val) {
+      return decodeFirestoreDocument({ fields: val.mapValue.fields });
+    }
+    if ('arrayValue' in val) {
+      return (val.arrayValue.values || []).map(parseValue);
+    }
+    return val;
+  };
+
+  const fields = doc.fields || {};
+  return Object.fromEntries(Object.entries(fields).map(([k, v]) => [k, parseValue(v)]));
 }
 
 function sendVerifyEmail(idToken: string) {
@@ -93,9 +116,10 @@ Cypress.Commands.add(
 
 Cypress.Commands.add('loginUser', (email: string, password: string) => {
   const doLoginUser = (finalEmail: string, finalPassword: string) => {
-    cy.session([finalEmail, finalPassword], () => {
-      return cy
-        .request({
+    return cy
+      .session([finalEmail, finalPassword], () => {
+        // setup runs once per session
+        cy.request({
           method: 'POST',
           url: `${AUTH_EMULATOR}/accounts:signInWithPassword?key=${apiKey}`,
           body: {
@@ -103,13 +127,26 @@ Cypress.Commands.add('loginUser', (email: string, password: string) => {
             password: finalPassword,
             returnSecureToken: true,
           },
-        })
-        .then((response) => {
+        }).then((response) => {
           const idToken = response.body.idToken;
-          return cy.request('POST', '/api/test/testLogin', { idToken }).then((resp) => resp.body);
+          return cy.request('POST', '/api/test/testLogin', { idToken });
         });
-    });
+      })
+      .then((sessionResp) => {
+        return cy
+          .request({
+            method: 'POST',
+            url: `${AUTH_EMULATOR}/accounts:signInWithPassword?key=${apiKey}`,
+            body: {
+              email: finalEmail,
+              password: finalPassword,
+              returnSecureToken: true,
+            },
+          })
+          .then((response) => response);
+      });
   };
+
   return doLoginUser(email, password);
 });
 
@@ -175,7 +212,6 @@ Cypress.Commands.add('checkToast', (message: string) => {
   cy.contains('.Toastify__toast', message).should('be.visible');
 });
 
-
 Cypress.Commands.add('clearAllEmulators', () => {
   cy.clearFirestore();
   cy.clearAuth();
@@ -188,11 +224,9 @@ Cypress.Commands.add('clearFirestore', () => {
 });
 
 Cypress.Commands.add('clearAuth', () => {
-  cy.request('DELETE', `${AUTH_ADMIN}/accounts`).then(
-    (response) => {
-      expect(response.status).to.eq(200);
-    }
-  );
+  cy.request('DELETE', `${AUTH_ADMIN}/accounts`).then((response) => {
+    expect(response.status).to.eq(200);
+  });
 });
 
 Cypress.Commands.add('seedDb', (maxRetries = 5) => {
@@ -230,9 +264,6 @@ Cypress.Commands.add('seedDb', (maxRetries = 5) => {
   return attemptSeed();
 });
 
-
-
-
 Cypress.Commands.add('checkExistance', (funcs: Record<string, () => Cypress.Chainable>) => {
   Object.values(funcs).forEach((fn) => {
     fn().should('exist');
@@ -249,7 +280,7 @@ Cypress.Commands.add(
   'usePlacesInput',
   (
     selector: string,
-    loc: string = verifiedOrg.location.name,
+    loc: string = createOrg.location.name,
     contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
   ) => {
     const location = cy.get(selector);
@@ -264,16 +295,18 @@ Cypress.Commands.add(
   }
 );
 
-Cypress.Commands.add('userExists', (email: string) => {
-  return cy
-    .request({
-      method: 'POST',
-      url: `https://identitytoolkit.googleapis.com/v1/accounts:createAuthUri?key=${apiKey}`,
-      body: { identifier: email, continueUri: 'http://localhost:8080/app' },
-    })
-    .then((resp) => {
-      return resp.body && resp.body?.registered === true;
+Cypress.Commands.add('userExists', (email: string, password: string, org: boolean = true) => {
+  return cy.loginUser(email, password).then((resp) => {
+    expect(resp.body.localId).to.not.be.null;
+    expect(resp.body.localId).to.not.be.undefined;
+    const col = org ? 'Organizations' : 'Users';
+
+    return cy.getDocument(`${col}/${resp.body.localId}`, resp.body.idToken).then((response) => {
+      //expect(response.body.id).not.to.be.null
+      //expect(response.body.id).not.to.be.undefined
+      return response.body;
     });
+  });
 });
 
 Cypress.Commands.add('waitForAuthEmulator', () => {
@@ -312,9 +345,40 @@ Cypress.Commands.add('waitForEmulators', () => {
   cy.waitForFirestoreEmulator();
 });
 
-Cypress.Commands.add('getDocument', (path: string) => {
-  return cy.request({
-    method: 'POST',
-    url: `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${path}`,
-  });
+Cypress.Commands.add('getDocument', (path: string, idToken: string) => {
+  const firestoreEmulatorFullUrl = `http://localhost:8080/v1/projects/${projectId}/databases/(default)/documents/${path}`;
+  const headers = { Authorization: `Bearer ${idToken}` };
+
+  const MAX_RETRIES = 10; // always retry 10 times
+  const DELAY_MS = 500; // wait 500ms between retries
+
+  const attempt = (retryCount: number): Cypress.Chainable<any> => {
+    return cy
+      .request({
+        method: 'GET',
+        url: firestoreEmulatorFullUrl,
+        headers,
+        failOnStatusCode: false, // allow 404
+      })
+      .then((resp) => {
+        if (resp.status === 200) {
+          return decodeFirestoreDocument(resp.body); // document exists
+        } else if (retryCount > 0) {
+          cy.wait(DELAY_MS);
+          return attempt(retryCount - 1); // retry
+        } else {
+          throw new Error(`Document at path "${path}" not found after ${MAX_RETRIES} retries`);
+        }
+      });
+  };
+
+  return attempt(MAX_RETRIES);
 });
+
+Cypress.Commands.add(
+  'shouldMatch',
+  { prevSubject: true },
+  (subject: any, reference: any, numberTolerance = 0.01) => {
+    compareWithTolerance(subject, reference, numberTolerance);
+  }
+);

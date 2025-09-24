@@ -46,11 +46,12 @@ declare namespace Cypress {
       loc: string = verifiedOrg.location.name,
       contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
     ): Chainable<void>;
-    userExists(email:string): Chainable<boolean>
-    waitForFirestoreEmulator(): Chainable<void>
-    waitForAuthEmulator(): Chainable<void>
-    waitForEmulators(): Chainable<void>
-    getDocument(path:string): Chainable<Response<any>>
+    userExists(email: string, password: string, org: boolean = true): Chainable<Response<any>>;
+    waitForFirestoreEmulator(): Chainable<void>;
+    waitForAuthEmulator(): Chainable<void>;
+    waitForEmulators(): Chainable<void>;
+    getDocument(path: string, idToken: string): Chainable<{ [k: string]: any }>;
+    shouldMatch(reference: any, numberTolerance: number = 0.0001): Chainable<Subject>;
   }
 
 
