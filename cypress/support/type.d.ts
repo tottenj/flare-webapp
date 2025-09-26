@@ -38,6 +38,7 @@ declare namespace Cypress {
     seedDb(maxRetries: number = 1): Chainable<Cypress.Response<any>>;
     loginTestUser(): Chainable<void>;
     loginTestOrg(): Chainable<void>;
+    loginVerifiedOrg(): Chainable<void>
     checkToast(message: string): Chainable<Cypress.Response<any>>;
     checkExistance(ffuncs: Record<string, () => Cypress.Chainable>): Chainable<void>;
     clearForm(): Chainable<void>;

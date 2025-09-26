@@ -208,6 +208,10 @@ Cypress.Commands.add('loginTestOrg', () => {
   cy.loginUser('orgOne@gmail.com', 'password');
 });
 
+Cypress.Commands.add('loginVerifiedOrg', () => {
+  cy.loginUser('verifiedOrg@gmail.com', 'password');
+});
+
 Cypress.Commands.add('checkToast', (message: string) => {
   cy.contains('.Toastify__toast', message).should('be.visible');
 });

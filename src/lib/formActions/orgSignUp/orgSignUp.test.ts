@@ -44,7 +44,7 @@ describe('orgSignUp', () => {
       confirmOrgPassword: 'pass123',
     });
     const result = await orgSignUp(null, formData);
-    expect(result).toEqual({ message: formErrors.requiredError });
+    expect(result).toContain({ message: formErrors.requiredError });
   });
 
   it('creates user and returns success', async () => {

@@ -23,7 +23,7 @@ export default async function EventsListings({
   const isOrg = await isOrganization();
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center">
+    <div data-cy="eventListing" className="relative flex h-full w-full flex-col items-center">
       <OrgTabs />
       <div className="z-10 mt-[40px] h-full w-full rounded-2xl rounded-t-none bg-white p-4">
         {isOrg && (!tab || tab === 'myEvents') && (

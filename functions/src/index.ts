@@ -3,17 +3,19 @@ import Collections from '../../enums/Collections';
 const { logger } = require('firebase-functions');
 import { getAuth } from 'firebase-admin/auth';
 import { CallableRequest, onCall } from 'firebase-functions/v2/https';
-import { getFirestore } from 'firebase-admin/firestore';
+import { GeoPoint, getFirestore } from 'firebase-admin/firestore';
 import { initializeApp } from 'firebase-admin/app';
 import FlareOrg, { orgConverter } from '../classes/FlareOrg';
 import FlareUser, { userConverter } from '../classes/FlareUser';
 import flareLocation from '../classes/flareLocation';
+import Event, { eventConverter } from '../classes/Event';
+import eventType from '../../enums/EventType';
+
 
 initializeApp();
 const auth = getAuth();
 const firestore = getFirestore();
 firestore.settings({ ignoreUndefinedProperties: true });
-
 
 exports.createOrganization = onDocumentCreatedWithAuthContext(
   `${Collections.Organizations}/{orgId}`,
@@ -32,7 +34,8 @@ exports.createOrganization = onDocumentCreatedWithAuthContext(
 );
 
 exports.seedDb = onCall(async (request: CallableRequest) => {
-  const isEmulator = process.env.FUNCTIONS_EMULATOR === 'true' || process.env.FIREBASE_AUTH_EMULATOR_HOST;
+  const isEmulator =
+    process.env.FUNCTIONS_EMULATOR === 'true' || process.env.FIREBASE_AUTH_EMULATOR_HOST;
   if (!isEmulator) return { success: false };
   let orgs: FlareOrg[] = [];
   const userCreds = [
@@ -89,11 +92,13 @@ exports.seedDb = onCall(async (request: CallableRequest) => {
     await firestore.collection(Collections.Users).doc(user.uid).set(ready);
   }
 
+  let orgIds: string[] = [];
   for (const credential of orgCreds) {
     const user = await auth.createUser({
       email: credential.email,
       password: credential.password,
     });
+    orgIds.push(user.uid);
     await auth.setCustomUserClaims(user.uid, { organization: true });
     let flareUser;
     if (credential.email == 'verifiedOrg@gmail.com') {
@@ -121,7 +126,29 @@ exports.seedDb = onCall(async (request: CallableRequest) => {
     await firestore.collection(Collections.Organizations).doc(user.uid).set(ready);
     orgs.push(flareUser);
   }
-  return {success: true}
+
+  if (orgIds.length >= 1) {
+    const event = new Event({
+      flare_id: orgIds[0],
+      title: 'Event One',
+      description: 'Event One Description',
+      type: eventType['Special Events'],
+      startDate: new Date(2025, 3, 4),
+      endDate: new Date(2025, 3, 4),
+      ageGroup: "Adults",
+      location: {
+        coordinates: new GeoPoint(43.5448, -80.24819),
+        id: 'ChIJ0eWnj8ffK4gR7UFkQtgDPVU',
+        name: 'Two Faces',
+      },
+      price: 0,
+      createdAt: new Date(),
+    });
+    const ready = eventConverter.toFirestore(event);
+    await firestore.collection(Collections.Events).doc(event.id).set(ready);
+  }
+
+  return { success: true };
 });
 
 exports.verify = onCall(async (request: CallableRequest) => {
