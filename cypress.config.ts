@@ -5,6 +5,7 @@ dotenv.config({ path: '.env' });
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
+  projectId: 'f7wjfu',
   e2e: {
     setupNodeEvents(on, config) {
       // Implement node event listeners here

@@ -69,8 +69,9 @@ cypress:
     # Wait for Next.js app to be ready
     - npx wait-on http://localhost:3000
 
+
     # Run Cypress tests
-    - npx cypress run --browser chrome --env FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID,FIREBASE_WEB_API_KEY=$CYPRESS_FIREBASE_WEB_API_KEY --config video=true,screenshotsFolder=reports/cypress/screenshots,videoFolder=reports/cypress/videos
+    - npx cypress run --record --key $CYPRESS_RECORD_KEY --browser chrome --env FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID,FIREBASE_WEB_API_KEY=$CYPRESS_FIREBASE_WEB_API_KEY --config video=true,screenshotsFolder=reports/cypress/screenshots,videoFolder=reports/cypress/videos
   artifacts:
     when: always
     paths:

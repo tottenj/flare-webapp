@@ -1,9 +1,9 @@
 import type { Preview } from '@storybook/nextjs';
-import '../src/app/globals.css';
+//@ts-ignore
+import '../src/app/globals.css'
 import MockAuthProvider from './__mocks__/MockAuthProvider';
-import React from 'react';
-import { initialize, mswLoader } from 'msw-storybook-addon';
-
+import { initialize } from 'msw-storybook-addon';
+import {sb} from "storybook/test"
 
 initialize();
 
