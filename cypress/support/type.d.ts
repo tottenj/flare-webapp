@@ -53,6 +53,8 @@ declare namespace Cypress {
     waitForEmulators(): Chainable<void>;
     getDocument(path: string, idToken: string): Chainable<{ [k: string]: any }>;
     shouldMatch(reference: any, numberTolerance: number = 0.0001): Chainable<Subject>;
+    fillSelect(label:string, option: string): Chainable<void>
+    fillTypedSelect(label:string, option:string):Chainable<void>
   }
 
 

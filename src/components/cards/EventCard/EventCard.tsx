@@ -8,12 +8,13 @@ import { ensureEvent } from '@/lib/utils/other/ensureEvent';
 
 interface eventCardProps {
   event: Event | PlainEvent;
+  returnTo?:string
 }
 
 
 
 
-export default async function EventCard({ event }: eventCardProps) {
+export default async function EventCard({ event, returnTo }: eventCardProps) {
   event = ensureEvent(event)
 
 
@@ -21,7 +22,7 @@ export default async function EventCard({ event }: eventCardProps) {
   const sameTime = isSameTime(event.startDate, event.endDate);
 
   return (
-    <EventCardLink href={`event/${event.id}`}>
+    <EventCardLink href={{pathname: `event/${event.id}`, query: {"returnTo": returnTo, "modal": true}}} >
       <div
         style={{ background: `${event.type}` }}
         className="flex justify-end rounded-[16px] p-1 transition-transform duration-200 hover:scale-105"

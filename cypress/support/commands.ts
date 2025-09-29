@@ -128,7 +128,7 @@ Cypress.Commands.add('loginUser', (email: string, password: string) => {
             returnSecureToken: true,
           },
         }).then((response) => {
-          const idToken = response.body.idToken;
+           const { idToken, refreshToken, localId } = response.body;
           return cy.request('POST', '/api/test/testLogin', { idToken });
         });
       })
@@ -386,3 +386,40 @@ Cypress.Commands.add(
     compareWithTolerance(subject, reference, numberTolerance);
   }
 );
+
+
+Cypress.Commands.add('fillSelect', (label: string, option: string) => {
+  // Find button by label
+  cy.contains('label', label)
+    .invoke('attr', 'id')
+    .then((labelId) => {
+      cy.get(`button[aria-labelledby*="${labelId}"]`).click();
+    });
+
+  // Select option from listbox
+  cy.get('[role="listbox"]')
+    .contains('[role="option"]', option, { matchCase: false })
+    .should('be.visible')
+    .click();
+});
+
+Cypress.Commands.add('fillTypedSelect', (label: string, option: string) => {
+  // Open dropdown
+  cy.contains('label', label)
+    .invoke('attr', 'id')
+    .then((labelId) => {
+      cy.get(`button[aria-labelledby*="${labelId}"]`).click();
+    });
+
+  // Type into searchbox if it exists
+  cy.get('[role="listbox"]').within(() => {
+    cy.get('input[type="text"]').type(option, { delay: 150 });
+  });
+
+  // Pick matching option
+  cy.get('[role="listbox"]')
+    .contains('[role="option"]', option, { matchCase: false })
+    .should('be.visible')
+    .click();
+});
+

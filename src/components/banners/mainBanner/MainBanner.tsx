@@ -22,7 +22,7 @@ export default async function MainBanner() {
       </Link>
 
       <div className="flex items-center justify-center gap-4">
-        {!currentUser && <GradientLink link="" linkText="Become a Flare" />}
+        {!currentUser && <GradientLink link="flare-signup" linkText="Become a Flare" />}
         <MainBannerMenu>
           <Suspense fallback={<ProfilePictureSkeleton size={45} />}>
             <ProfilePicture src={src} size={45} />

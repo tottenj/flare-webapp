@@ -1,13 +1,11 @@
 'use server';
 import EditProfileButton from '@/components/buttons/editProfile/EditProfileButton';
 import EventCard from '@/components/cards/EventCard/EventCard';
-import EventInfo from '@/components/events/eventInfo/EventInfo';
 import EventInfoContainer from '@/components/events/eventInfo/EventInfoContainer';
 import SVGLogo from '@/components/flare/svglogo/SVGLogo';
 import EditUserForm from '@/components/forms/editUserForm/EditUserForm';
 import LinkInput from '@/components/inputs/link/LinkInput';
 import GeneralLoader from '@/components/loading/GeneralLoader';
-import EditModal from '@/components/modals/editModal/EditModal';
 import InjectedModal from '@/components/modals/injectedModal/InjectedModal';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
 import Event from '@/lib/classes/event/Event';

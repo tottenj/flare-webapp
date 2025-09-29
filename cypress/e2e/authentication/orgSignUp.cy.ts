@@ -57,7 +57,7 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
 
 describe('Page Components', () => {
   beforeEach(() => {
-    cy.visit('/flare-signin');
+    cy.visit('/flare-signup');
     cy.clearForm();
   });
 
@@ -81,7 +81,7 @@ describe('Page Components', () => {
 
 describe('Success Flow', () => {
   before(() => {
-    cy.visit('/flare-signin');
+    cy.visit('/flare-signup');
     cy.clearAllEmulators();
     cy.clearForm();
   });
@@ -100,7 +100,7 @@ describe('Success Flow', () => {
 
 describe('Unsuccessful Flow', () => {
   beforeEach(() => {
-    cy.visit('/flare-signin');
+    cy.visit('/flare-signup');
     cy.clearAllEmulators();
     cy.clearForm();
   });

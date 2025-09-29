@@ -31,6 +31,7 @@ export default function HeroFileInput({ setImg, setImgUrl, ...props }: HeroFileI
   return (
     <div className="flex flex-col gap-2">
       <HeroInput
+        data-cy="img-input"
         type="file"
         {...props}
         onChange={handleChange}

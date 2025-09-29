@@ -5,6 +5,7 @@ export interface HeroSelectProps extends SelectProps {}
 export default function HeroSelect(props: HeroSelectProps) {
   return (
     <Select
+      isRequired={props.required}
       classNames={{
         innerWrapper: 'py-2 pb-4',
         listbox: 'rounded-lg bg-tertiary', // removes rounded corners from options container

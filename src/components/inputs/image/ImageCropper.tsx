@@ -83,7 +83,7 @@ export default function ImageCropper({
           onCropComplete={(_, croppedAreaPixels) => setCroppedAreaPixels(croppedAreaPixels)}
         />
       </div>
-        <PrimaryButton text="Save" type="button" click={handleSave} />
+        <PrimaryButton datacy="imageCropperButton" text="Save" type="button" click={handleSave} />
     </Modal>
   );
 }

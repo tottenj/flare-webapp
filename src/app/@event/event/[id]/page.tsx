@@ -1,7 +1,6 @@
+"use server"
 import EventModalClient from '@/components/cards/EventCard/EventModalClient';
 import EventInfoContainer from '@/components/events/eventInfo/EventInfoContainer';
-import Modal from '@/components/modals/mainModal/MainModal';
-
 export default async function page({
   params,
   searchParams,
@@ -10,8 +9,11 @@ export default async function page({
   searchParams: Promise<{ returnTo?: string; back?: string }>;
 }) {
   const { id } = await params;
+  const {returnTo} = await searchParams
  
   
 
-  return <EventModalClient eventId={id} />;
+  return <EventModalClient returnTo={returnTo}>
+    <EventInfoContainer slug={id}/>
+  </EventModalClient>;
 }
