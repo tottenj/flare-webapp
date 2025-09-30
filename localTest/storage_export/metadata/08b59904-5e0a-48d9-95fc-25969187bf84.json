@@ -1,0 +1,19 @@
+{
+  "name": "Events/7734f292-4e29-459c-a4fb-871b31b89c08",
+  "bucket": "flare-7091a.firebasestorage.app",
+  "metageneration": 1,
+  "generation": 1759108179695,
+  "contentType": "image/jpeg",
+  "storageClass": "STANDARD",
+  "contentDisposition": "inline",
+  "downloadTokens": [
+    "10eb5bf2-730c-467f-a610-262422749864"
+  ],
+  "etag": "J9O4nMSGKhfnh3LhUtjnxZPU0TA",
+  "customMetadata": {},
+  "timeCreated": "2025-09-29T01:09:39.696Z",
+  "updated": "2025-09-29T01:09:39.696Z",
+  "size": 131889,
+  "md5Hash": "aA5V3lQD3BkL1modBAgtEw==",
+  "crc32c": "3623906795"
+}
