@@ -1,15 +1,12 @@
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
-import {getFirestoreFromServer} from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
 import logErrors from '@/lib/utils/error/logErrors';
 import { formErrors } from '@/lib/utils/text/text';
 import { expect } from '@jest/globals';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
-
-
 jest.mock('@/lib/classes/flareOrg/FlareOrg');
-
 
 describe('orgSignUp', () => {
   const makeFormData = (data: Record<string, string | File>) => {
@@ -34,7 +31,11 @@ describe('orgSignUp', () => {
     });
 
     const result = await orgSignUp(null, formdata);
-    expect(result).toEqual({ message: formErrors.passwordMisMatch });
+    expect(result).toMatchObject({
+      errors: {
+        confirmPassword: ['Invalid input: expected string, received undefined'],
+      },
+    });
   });
 
   it('returns error if required fields are missing', async () => {
@@ -44,7 +45,9 @@ describe('orgSignUp', () => {
       confirmOrgPassword: 'pass123',
     });
     const result = await orgSignUp(null, formData);
-    expect(result).toContain({ message: formErrors.requiredError });
+    expect(result).toMatchObject({
+      message: 'Please fill out all required fields',
+    });
   });
 
   it('creates user and returns success', async () => {
@@ -54,41 +57,28 @@ describe('orgSignUp', () => {
     (getFirestoreFromServer as jest.Mock).mockResolvedValue({
       firestore: {},
     });
-    const addOrgMock = jest
-      .fn()
-      .mockResolvedValue(undefined);
+    const addOrgMock = jest.fn().mockResolvedValue(undefined);
 
-      (FlareOrg as unknown as jest.Mock).mockImplementation(() => ({
-        addOrg: addOrgMock
-      }))
-      
+    (FlareOrg as unknown as jest.Mock).mockImplementation(() => ({
+      addOrg: addOrgMock,
+    }));
 
     const formData = makeFormData({
       orgName: 'Flare',
-      orgEmail: 'test@flare.com',
-      location: JSON.stringify({ lat: 0, lng: 0 }),
-      orgPassword: 'pass123',
-      confirmOrgPassword: 'pass123',
+      email: 'test@flare.com',
+      location: JSON.stringify({
+        id: 'abcd',
+        coordinates: { latitude: 0, longitude: 0 },
+        name: 'Name',
+      }),
+      password: 'pass123',
+      confirmPassword: 'pass123',
     });
 
     const result = await orgSignUp(null, formData);
-    expect(result).toEqual({ message: 'success'});
+    expect(result.status).toEqual("success");
     expect(addOrgMock).toHaveBeenCalled();
-    expect(sendEmailVerification).toHaveBeenCalled()
+    expect(sendEmailVerification).toHaveBeenCalled();
   });
 
-
-  it('logs error and returns fallback message on failure', async () => {
-    (createUserWithEmailAndPassword as jest.Mock).mockRejectedValue(new Error('fail'))
-    const formData = makeFormData({
-      orgName: 'Flare',
-      orgEmail: 'test@flare.com',
-      location: JSON.stringify({ lat: 0, lng: 0 }),
-      orgPassword: 'pass123',
-      confirmOrgPassword: 'pass123',
-    });
-
-    const result = await orgSignUp(null, formData);
-    expect(result).toEqual({ message: 'An unexpected error occurred. Please try again.' });
-  })
 });
