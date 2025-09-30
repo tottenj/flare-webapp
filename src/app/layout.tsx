@@ -10,6 +10,8 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css'; // Import the CSS
 import { Providers } from './appProvider';
 import MainBanner from '@/components/banners/mainBanner/MainBanner';
+import { forceAuth } from '@/lib/firebase/auth/forceAuth';
+import ForceAuthProvider from '@/components/context/ForceAuthProvider';
 
 config.autoAddCss = false;
 
@@ -49,11 +51,13 @@ export default async function RootLayout({
             <ServerUserProvider user={userData}>
               <AuthProvider>
                 <Providers>
-                  <MainBanner />
-                  <div className="pr-4 pl-4">
-                    {children}
-                    {event}
-                  </div>
+                  <ForceAuthProvider>
+                    <MainBanner />
+                    <div className="pr-4 pl-4">
+                      {children}
+                      {event}
+                    </div>
+                  </ForceAuthProvider>
                 </Providers>
               </AuthProvider>
               <Analytics />

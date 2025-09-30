@@ -22,5 +22,6 @@ export async function POST(req: NextRequest) {
   }
   const user = new FlareUser(uid, email, name);
   await user.addUser(fire);
+  
   return NextResponse.json({ uid, email, name }, { status: 200 });
 }

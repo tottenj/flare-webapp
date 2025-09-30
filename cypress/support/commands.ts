@@ -128,7 +128,7 @@ Cypress.Commands.add('loginUser', (email: string, password: string) => {
             returnSecureToken: true,
           },
         }).then((response) => {
-           const { idToken, refreshToken, localId } = response.body;
+           const { idToken } = response.body;
           return cy.request('POST', '/api/test/testLogin', { idToken });
         });
       })
