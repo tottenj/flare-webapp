@@ -5,22 +5,22 @@ service firebase.storage {
     // ORG FILES
     match /Organizations/{orgId}/instagram {
       allow write: if true;
-      allow read: if request.auth != null && request.auth.token.admin == true
+      allow read: if request.auth != null && request.auth.token.admin == true;
     }
 
-     match /Organizations/{orgId}/facebook {
+    match /Organizations/{orgId}/facebook {
       allow write: if true;
-      allow read: if request.auth != null && request.auth.token.admin == true
+      allow read: if request.auth != null && request.auth.token.admin == true;
     }
 
-     match /Organizations/{orgId}/twitter {
+    match /Organizations/{orgId}/twitter {
       allow write: if true;
-      allow read: if request.auth != null && request.auth.token.admin == true
+      allow read: if request.auth != null && request.auth.token.admin == true;
     }
 
-     match /Organizations/{orgId}/other {
+    match /Organizations/{orgId}/other {
       allow write: if true;
-      allow read: if request.auth != null && request.auth.token.admin == true
+      allow read: if request.auth != null && request.auth.token.admin == true;
     }
     
     match /Organizations/{orgId}/profile {
@@ -28,7 +28,7 @@ service firebase.storage {
     }
 
     // USER FILES
-    match /Users/{userId}/profile{
+    match /Users/{userId}/profile {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
@@ -36,7 +36,7 @@ service firebase.storage {
     match /Events/{eventId} {
       allow read: if true; // All event images are public
       allow write: if request.auth != null 
-        && request.auth.token.organization == true
+        && request.auth.token.organization == true;
     }
   }
-
+}

@@ -1,6 +1,7 @@
 "use server"
 import EventModalClient from '@/components/cards/EventCard/EventModalClient';
 import EventInfoContainer from '@/components/events/eventInfo/EventInfoContainer';
+import { getFirestoreFromStatic } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 export default async function page({
   params,
   searchParams,
@@ -11,6 +12,8 @@ export default async function page({
   const { id } = await params;
   const {returnTo} = await searchParams
  
+
+  getFirestoreFromStatic()
   
 
   return <EventModalClient returnTo={returnTo}>

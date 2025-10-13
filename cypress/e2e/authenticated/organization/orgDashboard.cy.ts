@@ -86,4 +86,47 @@ describe.only('Create', () => {
       cy.contains(createEvent.title).should("be.visible")
     })
   });
+  
+
+  it("Ensures the new event is not on the events page as it is unverified", () => {
+    cy.visit("/events")
+    cy.contains(createEvent.title).should("not.exist")
+  })
+
 });
+
+
+describe.only("Verified", () => {
+  beforeEach(() => {
+    cy.loginVerifiedOrg()
+    cy.visit("/dashboard")
+  })
+
+  it("Ensures that verified is present", () => {
+    cy.contains("Verified").should("exist")
+  })
+
+  it('Successfully Fills in form', () => {
+    cy.get('svg[data-icon="square-plus"]').parent('button').first().click();
+    fillEventForm();
+    cy.wait(200);
+    cy.contains('Preview Event').click();
+    cy.contains('Create Event').should('be.visible').click();
+    cy.contains('Successfully Added Event').should('exist');
+  });
+
+
+  it("Ensures Event is in the event details", () => {
+    cy.get('[data-cy="eventDetails"]').should('be.visible').within(() => {
+      cy.contains(createEvent.title).should("be.visible")
+      cy.contains(createEvent.description).should("be.visible")
+    })
+  })
+
+
+  it("Ensure event appears on events page", () => {
+    cy.visit("/events")
+    cy.contains(createEvent.title).should("be.visible")
+  })
+
+})

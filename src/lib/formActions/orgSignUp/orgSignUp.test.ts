@@ -76,9 +76,8 @@ describe('orgSignUp', () => {
     });
 
     const result = await orgSignUp(null, formData);
-    expect(result.status).toEqual("success");
+    expect(result.status).toEqual('success');
     expect(addOrgMock).toHaveBeenCalled();
     expect(sendEmailVerification).toHaveBeenCalled();
   });
-
 });

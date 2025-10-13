@@ -24,13 +24,12 @@ export const getFirestoreFromServer = cache(async () => {
   return { firebaseServerApp, currentUser, fire };
 });
 
-
 export const getFirestoreFromStatic = cache(async () => {
   const fire = getFirestore();
   if (process.env.MODE === 'test') {
     connectFirestoreEmulator(fire, '127.0.0.1', 8080);
   }
-  return fire
+  return fire;
 });
 
 export const getStorageFromServer = cache(async () => {
@@ -45,13 +44,14 @@ export const getStorageFromServer = cache(async () => {
 });
 
 export const getServicesFromServer = cache(async () => {
-  const { firebaseServerApp, currentUser } = await getAuthenticatedAppForUser();
-  const firestore = initializeFirestore(firebaseServerApp, firestoreSettings);
-  const storage = getStorage(firebaseServerApp);
+  const { fire } = await getFirestoreFromServer();
+  const { storage } = await getStorageFromServer();
+  const { currentUser } = await getAuthenticatedAppForUser();
+
   if (process.env.MODE === 'test') {
     console.log('Connecting both emulators');
-    connectFirestoreEmulator(firestore, '127.0.0.1', 8080);
+    connectFirestoreEmulator(fire, '127.0.0.1', 8080);
     connectStorageEmulator(storage, '127.0.0.1', 9199);
   }
-  return { storage, firestore, currentUser };
+  return { storage, firestore: fire, currentUser };
 });

@@ -11,7 +11,6 @@ import flareLocation from '../classes/flareLocation';
 import Event, { eventConverter } from '../classes/Event';
 import eventType from '../../enums/EventType';
 
-
 initializeApp();
 const auth = getAuth();
 const firestore = getFirestore();
@@ -93,6 +92,7 @@ exports.seedDb = onCall(async (request: CallableRequest) => {
   }
 
   let orgIds: string[] = [];
+  let verifiedId: string = '';
   for (const credential of orgCreds) {
     const user = await auth.createUser({
       email: credential.email,
@@ -102,6 +102,7 @@ exports.seedDb = onCall(async (request: CallableRequest) => {
     await auth.setCustomUserClaims(user.uid, { organization: true });
     let flareUser;
     if (credential.email == 'verifiedOrg@gmail.com') {
+      verifiedId = user.uid;
       flareUser = new FlareOrg(
         user.uid,
         credential.name,
@@ -127,6 +128,68 @@ exports.seedDb = onCall(async (request: CallableRequest) => {
     orgs.push(flareUser);
   }
 
+  if (verifiedId) {
+    const events = [
+      new Event({
+        flare_id: verifiedId,
+        title: 'Community Gathering',
+        description:
+          'A celebration bringing the community together with music, food, and activities.',
+        type: eventType["Casual Events"],
+        startDate: new Date(2025, 4, 12, 18, 0), // May 12, 2025, 6PM
+        endDate: new Date(2025, 4, 12, 22, 0),
+        ageGroup: 'All Ages',
+        location: {
+          coordinates: new GeoPoint(43.5448, -80.24819),
+          id: 'ChIJ0eWnj8ffK4gR7UFkQtgDPVU',
+          name: 'Two Faces',
+        },
+        price: 10,
+        createdAt: new Date(),
+      }),
+
+      new Event({
+        flare_id: verifiedId,
+        title: 'Art & Expression Night',
+        description: 'An evening showcasing queer artists with live performances and open mic.',
+        type: eventType['Special Events'],
+        startDate: new Date(2025, 5, 3, 19, 0), // June 3, 2025, 7PM
+        endDate: new Date(2025, 5, 3, 23, 0),
+        ageGroup: 'Adults',
+        location: {
+          coordinates: new GeoPoint(43.5421, -80.2472),
+          id: 'ChIJ3x8Pv8ffK4gRZPQFCtgDPVU',
+          name: 'Guelph Arts Centre',
+        },
+        price: 0,
+        createdAt: new Date(),
+      }),
+
+      new Event({
+        flare_id: verifiedId,
+        title: 'Pride Picnic',
+        description:
+          'Join us for a fun outdoor picnic celebrating Pride with games, music, and community.',
+        type: eventType['Special Events'],
+        startDate: new Date(2025, 6, 15, 12, 0), // July 15, 2025, noon
+        endDate: new Date(2025, 6, 15, 16, 0),
+        ageGroup: 'All Ages',
+        location: {
+          coordinates: new GeoPoint(43.5455, -80.255),
+          id: 'ChIJ8y4zj8ffK4gRPtQzQtgDPVU',
+          name: 'Riverside Park',
+        },
+        price: 5,
+        createdAt: new Date(),
+      }),
+    ];
+
+    for(const event of events){
+      const ready = eventConverter.toFirestore(event)
+      await firestore.collection(Collections.Events).doc(event.id).set(ready)
+    }
+  }
+
   if (orgIds.length >= 1) {
     const event = new Event({
       flare_id: orgIds[0],
@@ -135,7 +198,7 @@ exports.seedDb = onCall(async (request: CallableRequest) => {
       type: eventType['Special Events'],
       startDate: new Date(2025, 3, 4),
       endDate: new Date(2025, 3, 4),
-      ageGroup: "Adults",
+      ageGroup: 'Adults',
       location: {
         coordinates: new GeoPoint(43.5448, -80.24819),
         id: 'ChIJ0eWnj8ffK4gR7UFkQtgDPVU',
