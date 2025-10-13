@@ -1,7 +1,6 @@
 'use client';
 
 import { Dialog, DialogPanel, Transition, TransitionChild } from '@headlessui/react';
-import { usePathname, useRouter } from 'next/navigation';
 import { Fragment } from 'react';
 
 type ModalProps = {

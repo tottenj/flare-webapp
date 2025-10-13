@@ -2,12 +2,10 @@
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
 import ProfilePictureSkeleton from '@/components/skeletons/ProfilePictureSkeleton/ProfilePictureSkeleton';
-import { signOutUser } from '@/lib/firebase/auth/signOutUser';
 import { getClaims } from '@/lib/firebase/utils/getClaims';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import MainBannerMenu from './MainBannerMenu';
-import PrimaryLink from '@/components/Links/PrimaryLink/PrimaryLink';
 import GradientLink from '@/components/Links/GradientLink/GradientLink';
 
 export default async function MainBanner() {

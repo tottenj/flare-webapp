@@ -27,7 +27,7 @@ service cloud.firestore {
       }
 			
       match /Events/{eventId} {
-       allow read: if true
+       allow read: if resource.data.verified == true || (request.auth != null && request.auth.uid == resource.data.flare_id)
 
 
         allow create, update: if request.auth != null 

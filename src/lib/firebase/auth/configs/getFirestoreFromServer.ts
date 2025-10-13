@@ -8,6 +8,7 @@ import {
 import { getAuthenticatedAppForUser } from './serverApp';
 import { connectStorageEmulator, getStorage } from 'firebase/storage';
 import { cache } from 'react';
+import { connectFunctionsEmulator, getFunctions } from 'firebase/functions';
 
 const firestoreSettings: FirestoreSettings = {
   ignoreUndefinedProperties: true,
@@ -23,6 +24,16 @@ export const getFirestoreFromServer = cache(async () => {
   }
   return { firebaseServerApp, currentUser, fire };
 });
+
+
+export const getFunctionsFromServer = cache(async () => {
+  const {firebaseServerApp} = await getAuthenticatedAppForUser()
+  const functions = getFunctions(firebaseServerApp)
+  if(process.env.MODE === 'test'){
+    connectFunctionsEmulator(functions, '127.0.0.1', 5001);
+  }
+  return functions
+})
 
 export const getFirestoreFromStatic = cache(async () => {
   const fire = getFirestore();

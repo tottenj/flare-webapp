@@ -1,7 +1,17 @@
-"use server"
 import EventModalClient from '@/components/cards/EventCard/EventModalClient';
 import EventInfoContainer from '@/components/events/eventInfo/EventInfoContainer';
+import Event from '@/lib/classes/event/Event';
 import { getFirestoreFromStatic } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+
+export const revalidate = 60;
+
+export async function generateStaticParams(){
+  const fire = await getFirestoreFromStatic()
+  const events = await Event.queryEvents(fire, {})
+  return events.map((even) => ({id: even.id}))
+}
+
+
 export default async function page({
   params,
   searchParams,
@@ -12,9 +22,6 @@ export default async function page({
   const { id } = await params;
   const {returnTo} = await searchParams
  
-
-  getFirestoreFromStatic()
-  
 
   return <EventModalClient returnTo={returnTo}>
     <EventInfoContainer slug={id}/>

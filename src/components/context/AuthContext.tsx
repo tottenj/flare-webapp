@@ -1,14 +1,12 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, onIdTokenChanged, getAuth, signOut, sendEmailVerification } from 'firebase/auth';
-import { setCookie, deleteCookie } from 'cookies-next'; // this works in the browser
+import { User, onIdTokenChanged, signOut, sendEmailVerification } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase/auth/configs/clientApp';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import Collections from '@/lib/enums/collections';
 import FlareUserStart from '@/lib/types/FlareUserStart';
 import { toast } from 'react-toastify';
-
 
 interface AuthContextType {
   user: User | null;
@@ -25,25 +23,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const unsubscribe = onIdTokenChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         const token = await firebaseUser.getIdToken(true);
-       
 
-        if(firebaseUser.emailVerified == false){
-          toast.error("Please Verify Email")
-          toast.error(`Verification email sent to: ${firebaseUser.email}`)
-          await sendEmailVerification(firebaseUser)
-          await signOut(auth)
-          return
+        if (firebaseUser.emailVerified == false) {
+          toast.error('Please Verify Email');
+          toast.error(`Verification email sent to: ${firebaseUser.email}`);
+          await sendEmailVerification(firebaseUser);
+          await signOut(auth);
+          return;
         }
 
-        const isLocal = process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_MODE === 'test';
-
-
-        setCookie('__session', token, {
-          secure: !isLocal,
-          sameSite: true,
-          path: '/',
-          maxAge: 60 * 60, // 1 hour
+      
+        await fetch('/api/loginToken', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idToken: token,
+          }),
         });
+
+       
 
         setUser(firebaseUser);
 
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           window.location.reload();
         }
       } else {
-        deleteCookie('__session');
+        await fetch('/api/loginToken', {method: "DELETE"})
         setUser(null);
         if (localStorage.getItem('reloadedAfterLogin')) {
           window.location.reload();

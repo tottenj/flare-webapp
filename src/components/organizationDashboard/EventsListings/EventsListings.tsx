@@ -5,6 +5,7 @@ import AddEventFormHero from '@/components/forms/addEventForm/AddEventFormHero';
 import InjectedModal from '@/components/modals/injectedModal/InjectedModal';
 import EventsListSkeleton from '@/components/skeletons/eventCardSkeleton/EventCardSkeleton';
 import OrgTabs from '@/components/tabs/orgTabs/OrgTabs';
+import Event from '@/lib/classes/event/Event';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
@@ -18,14 +19,18 @@ export default async function EventsListings({
   tab?: string | string[];
   user: FlareOrg | FlareUser;
 }) {
+  let saved: Event[] = [];
+
   const { fire } = await getFirestoreFromServer();
-  const saved = await user.getAllSavedEvents(fire);
+  try {
+    saved = await user.getAllSavedEvents(fire);
+  } catch (error) {}
   const isOrg = await isOrganization();
 
   return (
     <div data-cy="eventListing" className="relative flex h-full w-full flex-col items-center">
-      <OrgTabs />
-      <div className="z-10 mt-[40px] h-full w-full rounded-2xl rounded-t-none bg-white p-4">
+      {isOrg && <OrgTabs /> }
+      <div className={`z-10 ${isOrg && "mt-[40px] rounded-t-none"}  h-full w-full rounded-2xl  bg-white p-4`}>
         {isOrg && (!tab || tab === 'myEvents') && (
           <>
             <div className="flex justify-between">

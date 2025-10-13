@@ -1,8 +1,12 @@
-import { onDocumentCreatedWithAuthContext } from 'firebase-functions/v2/firestore';
+import {
+  onDocumentCreatedWithAuthContext,
+  onDocumentDeletedWithAuthContext,
+} from 'firebase-functions/v2/firestore';
 import Collections from '../../enums/Collections';
 const { logger } = require('firebase-functions');
 import { getAuth } from 'firebase-admin/auth';
-import { CallableRequest, onCall } from 'firebase-functions/v2/https';
+import { getStorage } from 'firebase-admin/storage';
+import { CallableRequest, HttpsError, onCall } from 'firebase-functions/v2/https';
 import { GeoPoint, getFirestore } from 'firebase-admin/firestore';
 import { initializeApp } from 'firebase-admin/app';
 import FlareOrg, { orgConverter } from '../classes/FlareOrg';
@@ -14,6 +18,7 @@ import eventType from '../../enums/EventType';
 initializeApp();
 const auth = getAuth();
 const firestore = getFirestore();
+const storage = getStorage();
 firestore.settings({ ignoreUndefinedProperties: true });
 
 exports.createOrganization = onDocumentCreatedWithAuthContext(
@@ -31,6 +36,102 @@ exports.createOrganization = onDocumentCreatedWithAuthContext(
     }
   }
 );
+
+exports.deleteOrganization = onDocumentDeletedWithAuthContext(
+  `${Collections.Organizations}/{orgId}`,
+  async (event) => {
+    const orgId = event.params.orgId;
+    if (!orgId) return 'Error: Missing orgId';
+
+    const writer = firestore.bulkWriter();
+    const bucket = storage.bucket();
+
+    try {
+      const eventsSnap = await firestore.collection('Events').where('flareId', '==', orgId).get();
+
+      for (const doc of eventsSnap.docs) {
+        writer.delete(doc.ref);
+      }
+
+      // Delete all savedEvents under the organization
+      const savedSnap = await firestore
+        .collection(`${Collections.Organizations}/${orgId}/savedEvents`)
+        .get();
+
+      for (const doc of savedSnap.docs) {
+        writer.delete(doc.ref);
+      }
+
+      // Delete all files under Organizations/orgId/
+      const [orgFiles] = await bucket.getFiles({
+        prefix: `Organizations/${orgId}/`,
+      });
+
+      if (orgFiles.length > 0) {
+        await Promise.all(orgFiles.map((f) => f.delete()));
+        console.log(`Deleted ${orgFiles.length} files under Organizations/${orgId}/`);
+      }
+
+      await writer.close();
+
+      console.log(
+        `Deleted org ${orgId} with ${eventsSnap.size} events and ${savedSnap.size} savedEvents`
+      );
+
+      return `Deleted org ${orgId}, ${eventsSnap.size} events, ${savedSnap.size} savedEvents.`;
+    } catch (error) {
+      console.error('Error deleting org data:', error);
+      throw new Error('Failed to delete organization data');
+    }
+  }
+);
+
+exports.deleteEvent = onDocumentDeletedWithAuthContext(
+  `${Collections.Events}/{eventId}`,
+  async (event) => {
+    const eventId = event.params.eventId;
+    if (!eventId) return 'Error: Missing eventId';
+
+    const bucket = storage.bucket();
+
+    try {
+      const [eventFiles] = await bucket.getFiles({
+        prefix: `Events/${eventId}/`,
+      });
+
+      if (eventFiles.length > 0) {
+        await Promise.all(eventFiles.map((f) => f.delete()));
+        console.log(`Deleted ${eventFiles.length} files under Events/${eventId}/`);
+      } else {
+        console.log(`No files found for event ${eventId}`);
+      }
+
+      return `Deleted storage for event ${eventId}`;
+    } catch (error) {
+      console.error('Error deleting event storage:', error);
+      throw new Error('Failed to delete event storage files');
+    }
+  }
+);
+
+exports.signToken = onCall(async (request: CallableRequest) => {
+  const token = request.data.idToken;
+  if (!token) {
+    throw new HttpsError('invalid-argument', 'Missing ID token.');
+  }
+
+  try {
+    const decoded = auth.verifyIdToken(token);
+    if (!decoded) {
+      throw new HttpsError('unauthenticated', 'Invalid ID token.');
+    }
+    const expiresIn = 60 * 60 * 24 * 5 * 1000;
+    const sessionCookie = await auth.createSessionCookie(token, { expiresIn });
+    return { sessionCookie, expiresIn };
+  } catch (error) {
+    throw new HttpsError('internal', 'Unable to create session cookie');
+  }
+});
 
 exports.seedDb = onCall(async (request: CallableRequest) => {
   const isEmulator =
@@ -135,7 +236,7 @@ exports.seedDb = onCall(async (request: CallableRequest) => {
         title: 'Community Gathering',
         description:
           'A celebration bringing the community together with music, food, and activities.',
-        type: eventType["Casual Events"],
+        type: eventType['Casual Events'],
         startDate: new Date(2025, 4, 12, 18, 0), // May 12, 2025, 6PM
         endDate: new Date(2025, 4, 12, 22, 0),
         ageGroup: 'All Ages',
@@ -184,9 +285,9 @@ exports.seedDb = onCall(async (request: CallableRequest) => {
       }),
     ];
 
-    for(const event of events){
-      const ready = eventConverter.toFirestore(event)
-      await firestore.collection(Collections.Events).doc(event.id).set(ready)
+    for (const event of events) {
+      const ready = eventConverter.toFirestore(event);
+      await firestore.collection(Collections.Events).doc(event.id).set(ready);
     }
   }
 
@@ -223,7 +324,6 @@ exports.verify = onCall(async (request: CallableRequest) => {
   try {
     const usr = await auth.getUser(orgId);
     const claims = usr.customClaims || {};
-
     await auth.setCustomUserClaims(orgId, { ...claims, verified: true });
     const orgDoc = await firestore.collection('Organizations').doc(orgId).get();
     writer.update(orgDoc.ref, { verified: true });

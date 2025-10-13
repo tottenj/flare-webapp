@@ -1,6 +1,4 @@
 import { createOrg, createOrgResponse } from "../../support/constants/Organization";
-import pick from 'lodash/pick';
-import isEqual from 'lodash/isEqual';
 
 
 
@@ -19,10 +17,9 @@ function getOrgSignUpInputs() {
   };
 }
 function getProofOfOwnershipInputs() {
-  return cy
-    .get('label')
-    .filter((_, el) => el.textContent?.includes('Proof of Ownership'))
-    .find('input');
+  return cy.get('label')
+      .filter((_, el) => el.textContent?.includes('Proof of Ownership') === true)
+      .find('input');
 }
 
 function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, shouldSubmit?: boolean) {
