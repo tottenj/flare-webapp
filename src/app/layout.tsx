@@ -10,7 +10,7 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css'; // Import the CSS
 import { Providers } from './appProvider';
 import MainBanner from '@/components/banners/mainBanner/MainBanner';
-import ForceAuthProvider from '@/components/context/ForceAuthProvider';
+
 
 config.autoAddCss = false;
 
