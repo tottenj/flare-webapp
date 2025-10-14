@@ -12,6 +12,7 @@ export interface primaryButtonProps {
   action?: string | ((formData: FormData) => void | Promise<void>);
   click?: (e:any) => void | Promise<void>;
   form?: string
+  datacy?:string
 }
 
 export default function PrimaryButton({
@@ -22,7 +23,8 @@ export default function PrimaryButton({
   size = 'full',
   action,
   click,
-  form
+  form,
+  datacy
 }: primaryButtonProps) {
   const sizeClass = {
     full: 'w-full',
@@ -57,11 +59,12 @@ export default function PrimaryButton({
       whileHover="hover"
       whileTap="tap"
       form={form}
+      data-cy={datacy}
     >
       <motion.span
         variants={gradientVariants}
         transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="absolute inset-0 origin-left bg-gradient-to-r from-pink-500 via-red-500 to-orange-500"
+        className="absolute inset-0 origin-left bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 pointer-events-none"
         style={{ transformOrigin: 'left', zIndex: 20 }}
       />
       <span className="relative z-30">{disabled ? <GeneralLoader color='white' size="30px" /> : text}</span>

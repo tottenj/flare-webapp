@@ -22,14 +22,14 @@ const SuspenseWrapper = ({ children }: { children: React.ReactNode }) => (
 
 export const Default: Story = {
   args: {
-    plainQueriedEvents: Event.sampleEvents.map((even) => even.toPlain()),
+   
   },
   render: (args) => <EventsList {...args} />,
 };
 
 export const withSkeleton: Story = {
   args: {
-    plainQueriedEvents: Event.sampleEvents.map((even) => even.toPlain()),
+
   },
   render: (args) => (
     <SuspenseWrapper>

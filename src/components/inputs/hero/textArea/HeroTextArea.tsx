@@ -5,6 +5,7 @@ interface HeroAreaProps extends TextAreaProps {}
 export default function HeroTextArea(props: HeroAreaProps) {
   return (
     <Textarea
+      data-cy={props.name + "-input"}
       isClearable={props.isClearable || true}
       variant={props.variant || 'flat'}
       classNames={{

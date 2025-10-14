@@ -1,4 +1,5 @@
 {
   "email": "hello@cypress.io",
-  "password": "password"
+  "password": "password",
+  "name": "test name"
 }

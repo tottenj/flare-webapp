@@ -5,15 +5,17 @@ import isSameDate from '@/lib/utils/dateTime/isSameDate';
 import isSameTime from '@/lib/utils/dateTime/isSameTime';
 import EventCardLink from './EventCardLink';
 import { ensureEvent } from '@/lib/utils/other/ensureEvent';
+import ModalLink from '@/components/modals/Hero/ModalLink/ModalLink';
 
 interface eventCardProps {
   event: Event | PlainEvent;
+  returnTo?:string
 }
 
 
 
 
-export default async function EventCard({ event }: eventCardProps) {
+export default async function EventCard({ event, returnTo }: eventCardProps) {
   event = ensureEvent(event)
 
 
@@ -21,7 +23,7 @@ export default async function EventCard({ event }: eventCardProps) {
   const sameTime = isSameTime(event.startDate, event.endDate);
 
   return (
-    <EventCardLink href={`event/${event.id}`}>
+    <ModalLink id={event.id}>
       <div
         style={{ background: `${event.type}` }}
         className="flex justify-end rounded-[16px] p-1 transition-transform duration-200 hover:scale-105"
@@ -41,6 +43,6 @@ export default async function EventCard({ event }: eventCardProps) {
           </div>
         </div>
       </div>
-    </EventCardLink>
+    </ModalLink>
   );
 }

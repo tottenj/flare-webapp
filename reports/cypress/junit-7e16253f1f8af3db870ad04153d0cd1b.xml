@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="12.637" tests="3" failures="0">
+  <testsuite name="Root Suite" timestamp="2025-09-30T02:19:21" tests="0" file="cypress/e2e/authentication/signin.cy.ts" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Sign In Form" timestamp="2025-09-30T02:19:22" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="error signing in" timestamp="2025-09-30T02:19:23" tests="2" time="4.009" failures="0">
+    <testcase name="Sign In Form error signing in should log user out if not email verified" time="4.201" classname="should log user out if not email verified">
+    </testcase>
+    <testcase name="Sign In Form error signing in should error on Incorrect password" time="1.161" classname="should error on Incorrect password">
+    </testcase>
+  </testsuite>
+  <testsuite name="Successful sign in" timestamp="2025-09-30T02:19:27" tests="1" time="7.220" failures="0">
+    <testcase name="Sign In Form Successful sign in should log user in if email verified" time="7.133" classname="should log user in if email verified">
+    </testcase>
+  </testsuite>
+</testsuites>

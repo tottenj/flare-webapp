@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
-import { UserFixture } from '../../types/UserFixture';
+import { unverifiedUser } from '../../support/constants';
+import { createUser, createUserResponse } from '../../support/constants/User';
+
 
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
 const apiKey = Cypress.env('FIREBASE_API_KEY'); // Get the API Key from Cypress env
@@ -25,49 +27,44 @@ describe('SignUpForm', () => {
 
   describe('Successful Sign Up', () => {
     it('should create and verify a user', () => {
-      cy.fixture('user').then((user: UserFixture) => {
-        cy.get(`input[name="email"]`).type(user.email);
-        cy.get(`input[name="password"]`).type(user.password);
+        cy.get(`input[name="email"]`).type(createUser.email);
+        cy.get(`input[name="password"]`).type(createUser.password);
         cy.get('form').submit();
         cy.contains('User created successfully').should('be.visible');
-      });
     });
 
     it('should send an email verification code', () => {
-      cy.fixture('user').then((user: UserFixture) => {
         cy.request({
           method: 'GET',
           url: `http://localhost:9099/emulator/v1/projects/${projectId}/oobCodes`,
         }).then((response) => {
+          cy.log(response.body)
           expect(response.body).to.have.property('oobCodes');
           expect(response.body.oobCodes).to.be.an('array');
           const verificationCodeSent = response.body.oobCodes.some(
-            (code: any) => code.requestType === 'VERIFY_EMAIL' && code.email === user.email
+            (code: any) => {
+              return code.requestType === 'VERIFY_EMAIL' && code.email === createUser.email.toLowerCase()
+            }
           );
           expect(verificationCodeSent).to.be.true;
         });
-      });
     });
+
+   // it("Checks if user exists", () => {
+   //   cy.userExists(createUser.email, createUser.password, false).shouldMatch(createUserResponse)
+   // })
+
   });
 
   describe('Error Cases', () => {
-    it('should error on email already taken', () => {
-      cy.fixture('user').then((user: UserFixture) => {
-        it('should show error for existing email', () => {
-          cy.request({
-            method: 'POST',
-            url: `https://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
-            body: {
-              email: user.email,
-              password: user.password,
-              returnSecureToken: true,
-            },
-          }).then(() => {
-            cy.contains('Email is already in use').should('be.visible');
-          });
-        });
-      });
-    });
+
+    it("should error if email already taken", () => {
+       cy.get(`input[name="email"]`).type(createUser.email);
+       cy.get(`input[name="password"]`).type(createUser.password);
+       cy.get('form').submit();
+       cy.checkToast("Email is already in use")
+    })
+
   });
 
   describe('Google Sign-In Button', () => {

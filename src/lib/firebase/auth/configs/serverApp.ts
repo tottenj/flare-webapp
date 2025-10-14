@@ -19,6 +19,7 @@ export const getAuthenticatedAppForUser = cache(async () => {
    connectAuthEmulator(auth, `http://127.0.0.1:9099`, { disableWarnings: true });
   }
   await auth.authStateReady();
+
   return { firebaseServerApp, currentUser: auth.currentUser };
 })
 

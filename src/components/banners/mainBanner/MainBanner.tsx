@@ -2,12 +2,10 @@
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
 import ProfilePictureSkeleton from '@/components/skeletons/ProfilePictureSkeleton/ProfilePictureSkeleton';
-import { signOutUser } from '@/lib/firebase/auth/signOutUser';
 import { getClaims } from '@/lib/firebase/utils/getClaims';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import MainBannerMenu from './MainBannerMenu';
-import PrimaryLink from '@/components/Links/PrimaryLink/PrimaryLink';
 import GradientLink from '@/components/Links/GradientLink/GradientLink';
 
 export default async function MainBanner() {
@@ -22,7 +20,7 @@ export default async function MainBanner() {
       </Link>
 
       <div className="flex items-center justify-center gap-4">
-        {!currentUser && <GradientLink link="" linkText="Become a Flare" />}
+        {!currentUser && <GradientLink link="flare-signup" linkText="Become a Flare" />}
         <MainBannerMenu>
           <Suspense fallback={<ProfilePictureSkeleton size={45} />}>
             <ProfilePicture src={src} size={45} />

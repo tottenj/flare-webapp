@@ -1,11 +1,9 @@
 'use server';
 import Event from '@/lib/classes/event/Event';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
-import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import EventInfo from './EventInfo';
 import getUser from '@/lib/firebase/auth/getUser';
-import getFormattedDateString from '@/lib/utils/dateTime/getFormattedDateString';
 
 export default async function EventInfoContainer({ slug }: { slug: string }) {
   const { firestore, storage, currentUser } = await getServicesFromServer();
@@ -26,9 +24,6 @@ export default async function EventInfoContainer({ slug }: { slug: string }) {
   if (!event) return <p>Event not found</p>;
 
   const img = await event.getImage(storage);
-  const {formattedDateString, formattedTimeString} = getFormattedDateString(event.startDate)
-  
-
 
 
 

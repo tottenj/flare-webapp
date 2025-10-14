@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="8.009" tests="6" failures="0">
+  <testsuite name="Root Suite" timestamp="2025-09-29T02:42:50" tests="0" file="cypress/e2e/authentication/signup.cy.ts" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="SignUpForm" timestamp="2025-09-29T02:42:50" tests="0" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Form Validation" timestamp="2025-09-29T02:42:50" tests="2" time="3.828" failures="0">
+    <testcase name="SignUpForm Form Validation should show validation errors for empty form submission" time="2.824" classname="should show validation errors for empty form submission">
+    </testcase>
+    <testcase name="SignUpForm Form Validation should validate email format" time="1.236" classname="should validate email format">
+    </testcase>
+  </testsuite>
+  <testsuite name="Successful Sign Up" timestamp="2025-09-29T02:42:54" tests="2" time="2.088" failures="0">
+    <testcase name="SignUpForm Successful Sign Up should create and verify a user" time="1.324" classname="should create and verify a user">
+    </testcase>
+    <testcase name="SignUpForm Successful Sign Up should send an email verification code" time="0.718" classname="should send an email verification code">
+    </testcase>
+  </testsuite>
+  <testsuite name="Error Cases" timestamp="2025-09-29T02:42:56" tests="1" time="1.380" failures="0">
+    <testcase name="SignUpForm Error Cases should error if email already taken" time="1.352" classname="should error if email already taken">
+    </testcase>
+  </testsuite>
+  <testsuite name="Google Sign-In Button" timestamp="2025-09-29T02:42:57" tests="1" time="0.430" failures="0">
+    <testcase name="SignUpForm Google Sign-In Button should render Google sign-in button" time="0.367" classname="should render Google sign-in button">
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -11,6 +11,7 @@ import '@fortawesome/fontawesome-svg-core/styles.css'; // Import the CSS
 import { Providers } from './appProvider';
 import MainBanner from '@/components/banners/mainBanner/MainBanner';
 
+
 config.autoAddCss = false;
 
 const nunito = Nunito({

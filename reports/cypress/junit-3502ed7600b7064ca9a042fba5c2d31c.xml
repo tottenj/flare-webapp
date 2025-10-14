@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="54.328" tests="7" failures="0">
+  <testsuite name="Root Suite" timestamp="2025-09-30T02:18:25" tests="0" file="cypress/e2e/authentication/orgSignUp.cy.ts" time="0.000" failures="0">
+  </testsuite>
+  <testsuite name="Page Components" timestamp="2025-09-30T02:18:31" tests="2" time="9.947" failures="0">
+    <testcase name="Page Components Loads Form" time="12.584" classname="Loads Form">
+    </testcase>
+    <testcase name="Page Components Tests google maps location input" time="2.912" classname="Tests google maps location input">
+    </testcase>
+  </testsuite>
+  <testsuite name="Success Flow" timestamp="2025-09-30T02:18:41" tests="2" time="13.765" failures="0">
+    <testcase name="Success Flow Successfully Submits Form" time="13.278" classname="Successfully Submits Form">
+    </testcase>
+    <testcase name="Success Flow Ensures account exists" time="0.457" classname="Ensures account exists">
+    </testcase>
+  </testsuite>
+  <testsuite name="Unsuccessful Flow" timestamp="2025-09-30T02:18:54" tests="3" time="24.995" failures="0">
+    <testcase name="Unsuccessful Flow Tests confirm password with different passwords" time="1.609" classname="Tests confirm password with different passwords">
+    </testcase>
+    <testcase name="Unsuccessful Flow tests that with different passwords form will be unsuccessful" time="11.411" classname="tests that with different passwords form will be unsuccessful">
+    </testcase>
+    <testcase name="Unsuccessful Flow tests to ensure toast on not all form fields filled" time="11.901" classname="tests to ensure toast on not all form fields filled">
+    </testcase>
+  </testsuite>
+</testsuites>
