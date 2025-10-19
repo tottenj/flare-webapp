@@ -7,18 +7,21 @@ import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import getAuthError from '@/lib/utils/error/getAuthError';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import { toast } from 'react-toastify';
 
 export default function SignInForm() {
   const email = useRef<HTMLInputElement>(null);
   const pass = useRef<HTMLInputElement>(null);
+  const router = useRouter()
   
   async function handleFormSubmit(e: any) {
     e.preventDefault();
     if (email.current?.value && pass.current?.value) {
       try {
         await signInWithEmailAndPassword(auth, email.current.value, pass.current.value);
+        router.push("/dashboard")
       } catch (error) {
         toast.error(getAuthError(error));
       }

@@ -2,6 +2,7 @@ import { AuthError } from "firebase/auth";
 import logErrors from "./logErrors";
 
 export default function getAuthError(error: unknown) {
+  console.log(error)
     if ((error as AuthError).code) {
       const errorCode = (error as AuthError).code;
 

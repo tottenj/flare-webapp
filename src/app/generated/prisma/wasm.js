@@ -92,14 +92,6 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.Spatial_ref_sysScalarFieldEnum = {
-  srid: 'srid',
-  auth_name: 'auth_name',
-  auth_srid: 'auth_srid',
-  srtext: 'srtext',
-  proj4text: 'proj4text'
-};
-
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -133,20 +125,19 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 
 exports.Prisma.ModelName = {
-  spatial_ref_sys: 'spatial_ref_sys',
   User: 'User',
   FlareUser: 'FlareUser',
   FlareOrg: 'FlareOrg'
@@ -198,13 +189,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.\nmodel spatial_ref_sys {\n  srid      Int     @id\n  auth_name String? @db.VarChar(256)\n  auth_srid Int?\n  srtext    String? @db.VarChar(2048)\n  proj4text String? @db.VarChar(2048)\n}\n\n// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\nmodel User {\n  id           String     @id\n  email        String     @unique\n  account_type String\n  flareUser    FlareUser?\n  flareOrg     FlareOrg?\n}\n\nmodel FlareUser {\n  id      String @id @default(cuid())\n  user_id String @unique\n  user    User   @relation(fields: [user_id], references: [id])\n}\n\nmodel FlareOrg {\n  id           String                                 @id @default(cuid())\n  user_id      String                                 @unique\n  user         User                                   @relation(fields: [user_id], references: [id])\n  description  String?\n  verified     Boolean                                @default(false)\n  locationData Json\n  location     Unsupported(\"geography(Point, 4326)\")?\n}\n",
-  "inlineSchemaHash": "92e50b8a7c277edbbca105b80b793828cf122ac2295a57eab2c30596f50295d5",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id           String     @id\n  email        String     @unique\n  account_type String\n  flareUser    FlareUser?\n  flareOrg     FlareOrg?\n}\n\nmodel FlareUser {\n  id      String @id @default(cuid())\n  user_id String @unique\n  user    User   @relation(fields: [user_id], references: [id])\n}\n\nmodel FlareOrg {\n  id           String                                @id @default(cuid())\n  user_id      String                                @unique\n  user         User                                  @relation(fields: [user_id], references: [id])\n  description  String?\n  verified     Boolean                               @default(false)\n  locationData Json\n  location     Unsupported(\"geography(Point, 4326)\")\n}\n",
+  "inlineSchemaHash": "a4d2f48db1a3a6cd972be98a6250a46a1e28b2712f64dbc007180f326a6f58ec",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"spatial_ref_sys\":{\"fields\":[{\"name\":\"srid\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"auth_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"auth_srid\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"srtext\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"proj4text\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"account_type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"flareUser\",\"kind\":\"object\",\"type\":\"FlareUser\",\"relationName\":\"FlareUserToUser\"},{\"name\":\"flareOrg\",\"kind\":\"object\",\"type\":\"FlareOrg\",\"relationName\":\"FlareOrgToUser\"}],\"dbName\":null},\"FlareUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FlareUserToUser\"}],\"dbName\":null},\"FlareOrg\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FlareOrgToUser\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"locationData\",\"kind\":\"scalar\",\"type\":\"Json\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"account_type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"flareUser\",\"kind\":\"object\",\"type\":\"FlareUser\",\"relationName\":\"FlareUserToUser\"},{\"name\":\"flareOrg\",\"kind\":\"object\",\"type\":\"FlareOrg\",\"relationName\":\"FlareOrgToUser\"}],\"dbName\":null},\"FlareUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FlareUserToUser\"}],\"dbName\":null},\"FlareOrg\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FlareOrgToUser\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"locationData\",\"kind\":\"scalar\",\"type\":\"Json\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

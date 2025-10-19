@@ -120,14 +120,6 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.Spatial_ref_sysScalarFieldEnum = {
-  srid: 'srid',
-  auth_name: 'auth_name',
-  auth_srid: 'auth_srid',
-  srtext: 'srtext',
-  proj4text: 'proj4text'
-};
-
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -161,20 +153,19 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 
 exports.Prisma.ModelName = {
-  spatial_ref_sys: 'spatial_ref_sys',
   User: 'User',
   FlareUser: 'FlareUser',
   FlareOrg: 'FlareOrg'

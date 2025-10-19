@@ -55,6 +55,7 @@ declare namespace Cypress {
     shouldMatch(reference: any, numberTolerance: number = 0.0001): Chainable<Subject>;
     fillSelect(label:string, option: string): Chainable<void>
     fillTypedSelect(label:string, option:string):Chainable<void>
+    resetAndSeed():Chainable<void>
   }
 
 

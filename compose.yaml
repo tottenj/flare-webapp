@@ -14,14 +14,19 @@ services:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      # KEEP THIS LINE for PostGIS initialization
-      - ./db-init:/docker-entrypoint-initdb.d
-    # ❌ REMOVE THIS LINE:
-    # command: -c 'local_preload_libraries=postgis-3.so' -c 'shared_preload_libraries=postgis-3.so' 
-    healthcheck: # Healthcheck is fine, keep it.
-      test: ["CMD-SHELL", "pg_isready -U josh -d flare_dev"]
-      interval: 5s
+
+    networks:
+      - app-network
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test -d flare_test"]
+      interval: 1s
       timeout: 5s
-      retries: 5
+      retries: 10
+
+networks:
+  app-network:
+    driver: bridge
+
 volumes:
   pgdata:

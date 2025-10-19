@@ -1,16 +1,15 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createUserWithEmailAndPassword, deleteUser, signOut } from 'firebase/auth';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import GoogleSignInButton from '../../buttons/googleButton/SignInWithGoogleButton';
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
 import Link from 'next/link';
-import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import { toast } from 'react-toastify';
 import HeroInput from '@/components/inputs/hero/input/HeroInput';
 import newSignUp from '@/lib/firebase/auth/emailPassword/newSignUp';
 import signUpUser from '@/lib/formActions/auth/signUpUser';
+import getAuthError from '@/lib/utils/error/getAuthError';
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -20,6 +19,11 @@ export default function SignUpForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+   
+    if(!email || !password){
+      toast.error("Must have both email and password")
+      return
+    }
     setPending(true);
     const formData = new FormData(e.currentTarget);
     try {
@@ -27,7 +31,7 @@ export default function SignUpForm() {
       router.push('/confirmation');
     } catch (err: any) {
       sessionStorage.removeItem('manualLoginInProgress');
-      toast.error(err.message || 'Something went wrong');
+      toast.error(getAuthError(err) || 'Something went wrong');
     } finally {
       setPending(false);
     }
@@ -38,7 +42,7 @@ export default function SignUpForm() {
       <ServerLogo size="medium" />
       <h1 className="mt-4 mb-4 text-4xl">Sign Up</h1>
 
-      <form onSubmit={handleSubmit} className="mb-8 flex w-full flex-col sm:w-5/6 @lg:w-2/3">
+      <form onSubmit={(e) => handleSubmit(e)} className="mb-8 flex w-full flex-col sm:w-5/6 @lg:w-2/3">
         <HeroInput
           label="Email"
           name="email"

@@ -14,11 +14,6 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
- * Model spatial_ref_sys
- * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
- */
-export type spatial_ref_sys = $Result.DefaultSelection<Prisma.$spatial_ref_sysPayload>
-/**
  * Model User
  * 
  */
@@ -41,8 +36,8 @@ export type FlareOrg = $Result.DefaultSelection<Prisma.$FlareOrgPayload>
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Spatial_ref_sys
- * const spatial_ref_sys = await prisma.spatial_ref_sys.findMany()
+ * // Fetch zero or more Users
+ * const users = await prisma.user.findMany()
  * ```
  *
  *
@@ -62,8 +57,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Spatial_ref_sys
-   * const spatial_ref_sys = await prisma.spatial_ref_sys.findMany()
+   * // Fetch zero or more Users
+   * const users = await prisma.user.findMany()
    * ```
    *
    *
@@ -153,16 +148,6 @@ export class PrismaClient<
   }>>
 
       /**
-   * `prisma.spatial_ref_sys`: Exposes CRUD operations for the **spatial_ref_sys** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Spatial_ref_sys
-    * const spatial_ref_sys = await prisma.spatial_ref_sys.findMany()
-    * ```
-    */
-  get spatial_ref_sys(): Prisma.spatial_ref_sysDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
@@ -631,7 +616,6 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    spatial_ref_sys: 'spatial_ref_sys',
     User: 'User',
     FlareUser: 'FlareUser',
     FlareOrg: 'FlareOrg'
@@ -653,84 +637,10 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "spatial_ref_sys" | "user" | "flareUser" | "flareOrg"
+      modelProps: "user" | "flareUser" | "flareOrg"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
-      spatial_ref_sys: {
-        payload: Prisma.$spatial_ref_sysPayload<ExtArgs>
-        fields: Prisma.spatial_ref_sysFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.spatial_ref_sysFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.spatial_ref_sysFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          findFirst: {
-            args: Prisma.spatial_ref_sysFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.spatial_ref_sysFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          findMany: {
-            args: Prisma.spatial_ref_sysFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>[]
-          }
-          create: {
-            args: Prisma.spatial_ref_sysCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          createMany: {
-            args: Prisma.spatial_ref_sysCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.spatial_ref_sysCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>[]
-          }
-          delete: {
-            args: Prisma.spatial_ref_sysDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          update: {
-            args: Prisma.spatial_ref_sysUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          deleteMany: {
-            args: Prisma.spatial_ref_sysDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.spatial_ref_sysUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.spatial_ref_sysUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>[]
-          }
-          upsert: {
-            args: Prisma.spatial_ref_sysUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$spatial_ref_sysPayload>
-          }
-          aggregate: {
-            args: Prisma.Spatial_ref_sysAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateSpatial_ref_sys>
-          }
-          groupBy: {
-            args: Prisma.spatial_ref_sysGroupByArgs<ExtArgs>
-            result: $Utils.Optional<Spatial_ref_sysGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.spatial_ref_sysCountArgs<ExtArgs>
-            result: $Utils.Optional<Spatial_ref_sysCountAggregateOutputType> | number
-          }
-        }
-      }
       User: {
         payload: Prisma.$UserPayload<ExtArgs>
         fields: Prisma.UserFieldRefs
@@ -903,18 +813,6 @@ export namespace Prisma {
             args: Prisma.FlareOrgFindManyArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>[]
           }
-          create: {
-            args: Prisma.FlareOrgCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>
-          }
-          createMany: {
-            args: Prisma.FlareOrgCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.FlareOrgCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>[]
-          }
           delete: {
             args: Prisma.FlareOrgDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>
@@ -934,10 +832,6 @@ export namespace Prisma {
           updateManyAndReturn: {
             args: Prisma.FlareOrgUpdateManyAndReturnArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>[]
-          }
-          upsert: {
-            args: Prisma.FlareOrgUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>
           }
           aggregate: {
             args: Prisma.FlareOrgAggregateArgs<ExtArgs>
@@ -1049,7 +943,6 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
-    spatial_ref_sys?: spatial_ref_sysOmit
     user?: UserOmit
     flareUser?: FlareUserOmit
     flareOrg?: FlareOrgOmit
@@ -1132,1039 +1025,6 @@ export namespace Prisma {
   /**
    * Models
    */
-
-  /**
-   * Model spatial_ref_sys
-   */
-
-  export type AggregateSpatial_ref_sys = {
-    _count: Spatial_ref_sysCountAggregateOutputType | null
-    _avg: Spatial_ref_sysAvgAggregateOutputType | null
-    _sum: Spatial_ref_sysSumAggregateOutputType | null
-    _min: Spatial_ref_sysMinAggregateOutputType | null
-    _max: Spatial_ref_sysMaxAggregateOutputType | null
-  }
-
-  export type Spatial_ref_sysAvgAggregateOutputType = {
-    srid: number | null
-    auth_srid: number | null
-  }
-
-  export type Spatial_ref_sysSumAggregateOutputType = {
-    srid: number | null
-    auth_srid: number | null
-  }
-
-  export type Spatial_ref_sysMinAggregateOutputType = {
-    srid: number | null
-    auth_name: string | null
-    auth_srid: number | null
-    srtext: string | null
-    proj4text: string | null
-  }
-
-  export type Spatial_ref_sysMaxAggregateOutputType = {
-    srid: number | null
-    auth_name: string | null
-    auth_srid: number | null
-    srtext: string | null
-    proj4text: string | null
-  }
-
-  export type Spatial_ref_sysCountAggregateOutputType = {
-    srid: number
-    auth_name: number
-    auth_srid: number
-    srtext: number
-    proj4text: number
-    _all: number
-  }
-
-
-  export type Spatial_ref_sysAvgAggregateInputType = {
-    srid?: true
-    auth_srid?: true
-  }
-
-  export type Spatial_ref_sysSumAggregateInputType = {
-    srid?: true
-    auth_srid?: true
-  }
-
-  export type Spatial_ref_sysMinAggregateInputType = {
-    srid?: true
-    auth_name?: true
-    auth_srid?: true
-    srtext?: true
-    proj4text?: true
-  }
-
-  export type Spatial_ref_sysMaxAggregateInputType = {
-    srid?: true
-    auth_name?: true
-    auth_srid?: true
-    srtext?: true
-    proj4text?: true
-  }
-
-  export type Spatial_ref_sysCountAggregateInputType = {
-    srid?: true
-    auth_name?: true
-    auth_srid?: true
-    srtext?: true
-    proj4text?: true
-    _all?: true
-  }
-
-  export type Spatial_ref_sysAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which spatial_ref_sys to aggregate.
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of spatial_ref_sys to fetch.
-     */
-    orderBy?: spatial_ref_sysOrderByWithRelationInput | spatial_ref_sysOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: spatial_ref_sysWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` spatial_ref_sys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` spatial_ref_sys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned spatial_ref_sys
-    **/
-    _count?: true | Spatial_ref_sysCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: Spatial_ref_sysAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: Spatial_ref_sysSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: Spatial_ref_sysMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: Spatial_ref_sysMaxAggregateInputType
-  }
-
-  export type GetSpatial_ref_sysAggregateType<T extends Spatial_ref_sysAggregateArgs> = {
-        [P in keyof T & keyof AggregateSpatial_ref_sys]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateSpatial_ref_sys[P]>
-      : GetScalarType<T[P], AggregateSpatial_ref_sys[P]>
-  }
-
-
-
-
-  export type spatial_ref_sysGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: spatial_ref_sysWhereInput
-    orderBy?: spatial_ref_sysOrderByWithAggregationInput | spatial_ref_sysOrderByWithAggregationInput[]
-    by: Spatial_ref_sysScalarFieldEnum[] | Spatial_ref_sysScalarFieldEnum
-    having?: spatial_ref_sysScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: Spatial_ref_sysCountAggregateInputType | true
-    _avg?: Spatial_ref_sysAvgAggregateInputType
-    _sum?: Spatial_ref_sysSumAggregateInputType
-    _min?: Spatial_ref_sysMinAggregateInputType
-    _max?: Spatial_ref_sysMaxAggregateInputType
-  }
-
-  export type Spatial_ref_sysGroupByOutputType = {
-    srid: number
-    auth_name: string | null
-    auth_srid: number | null
-    srtext: string | null
-    proj4text: string | null
-    _count: Spatial_ref_sysCountAggregateOutputType | null
-    _avg: Spatial_ref_sysAvgAggregateOutputType | null
-    _sum: Spatial_ref_sysSumAggregateOutputType | null
-    _min: Spatial_ref_sysMinAggregateOutputType | null
-    _max: Spatial_ref_sysMaxAggregateOutputType | null
-  }
-
-  type GetSpatial_ref_sysGroupByPayload<T extends spatial_ref_sysGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<Spatial_ref_sysGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof Spatial_ref_sysGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], Spatial_ref_sysGroupByOutputType[P]>
-            : GetScalarType<T[P], Spatial_ref_sysGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type spatial_ref_sysSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    srid?: boolean
-    auth_name?: boolean
-    auth_srid?: boolean
-    srtext?: boolean
-    proj4text?: boolean
-  }, ExtArgs["result"]["spatial_ref_sys"]>
-
-  export type spatial_ref_sysSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    srid?: boolean
-    auth_name?: boolean
-    auth_srid?: boolean
-    srtext?: boolean
-    proj4text?: boolean
-  }, ExtArgs["result"]["spatial_ref_sys"]>
-
-  export type spatial_ref_sysSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    srid?: boolean
-    auth_name?: boolean
-    auth_srid?: boolean
-    srtext?: boolean
-    proj4text?: boolean
-  }, ExtArgs["result"]["spatial_ref_sys"]>
-
-  export type spatial_ref_sysSelectScalar = {
-    srid?: boolean
-    auth_name?: boolean
-    auth_srid?: boolean
-    srtext?: boolean
-    proj4text?: boolean
-  }
-
-  export type spatial_ref_sysOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"srid" | "auth_name" | "auth_srid" | "srtext" | "proj4text", ExtArgs["result"]["spatial_ref_sys"]>
-
-  export type $spatial_ref_sysPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "spatial_ref_sys"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      srid: number
-      auth_name: string | null
-      auth_srid: number | null
-      srtext: string | null
-      proj4text: string | null
-    }, ExtArgs["result"]["spatial_ref_sys"]>
-    composites: {}
-  }
-
-  type spatial_ref_sysGetPayload<S extends boolean | null | undefined | spatial_ref_sysDefaultArgs> = $Result.GetResult<Prisma.$spatial_ref_sysPayload, S>
-
-  type spatial_ref_sysCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<spatial_ref_sysFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: Spatial_ref_sysCountAggregateInputType | true
-    }
-
-  export interface spatial_ref_sysDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['spatial_ref_sys'], meta: { name: 'spatial_ref_sys' } }
-    /**
-     * Find zero or one Spatial_ref_sys that matches the filter.
-     * @param {spatial_ref_sysFindUniqueArgs} args - Arguments to find a Spatial_ref_sys
-     * @example
-     * // Get one Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends spatial_ref_sysFindUniqueArgs>(args: SelectSubset<T, spatial_ref_sysFindUniqueArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Spatial_ref_sys that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {spatial_ref_sysFindUniqueOrThrowArgs} args - Arguments to find a Spatial_ref_sys
-     * @example
-     * // Get one Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends spatial_ref_sysFindUniqueOrThrowArgs>(args: SelectSubset<T, spatial_ref_sysFindUniqueOrThrowArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Spatial_ref_sys that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysFindFirstArgs} args - Arguments to find a Spatial_ref_sys
-     * @example
-     * // Get one Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends spatial_ref_sysFindFirstArgs>(args?: SelectSubset<T, spatial_ref_sysFindFirstArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Spatial_ref_sys that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysFindFirstOrThrowArgs} args - Arguments to find a Spatial_ref_sys
-     * @example
-     * // Get one Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends spatial_ref_sysFindFirstOrThrowArgs>(args?: SelectSubset<T, spatial_ref_sysFindFirstOrThrowArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Spatial_ref_sys that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findMany()
-     * 
-     * // Get first 10 Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.findMany({ take: 10 })
-     * 
-     * // Only select the `srid`
-     * const spatial_ref_sysWithSridOnly = await prisma.spatial_ref_sys.findMany({ select: { srid: true } })
-     * 
-     */
-    findMany<T extends spatial_ref_sysFindManyArgs>(args?: SelectSubset<T, spatial_ref_sysFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Spatial_ref_sys.
-     * @param {spatial_ref_sysCreateArgs} args - Arguments to create a Spatial_ref_sys.
-     * @example
-     * // Create one Spatial_ref_sys
-     * const Spatial_ref_sys = await prisma.spatial_ref_sys.create({
-     *   data: {
-     *     // ... data to create a Spatial_ref_sys
-     *   }
-     * })
-     * 
-     */
-    create<T extends spatial_ref_sysCreateArgs>(args: SelectSubset<T, spatial_ref_sysCreateArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Spatial_ref_sys.
-     * @param {spatial_ref_sysCreateManyArgs} args - Arguments to create many Spatial_ref_sys.
-     * @example
-     * // Create many Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends spatial_ref_sysCreateManyArgs>(args?: SelectSubset<T, spatial_ref_sysCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Spatial_ref_sys and returns the data saved in the database.
-     * @param {spatial_ref_sysCreateManyAndReturnArgs} args - Arguments to create many Spatial_ref_sys.
-     * @example
-     * // Create many Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Spatial_ref_sys and only return the `srid`
-     * const spatial_ref_sysWithSridOnly = await prisma.spatial_ref_sys.createManyAndReturn({
-     *   select: { srid: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends spatial_ref_sysCreateManyAndReturnArgs>(args?: SelectSubset<T, spatial_ref_sysCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Spatial_ref_sys.
-     * @param {spatial_ref_sysDeleteArgs} args - Arguments to delete one Spatial_ref_sys.
-     * @example
-     * // Delete one Spatial_ref_sys
-     * const Spatial_ref_sys = await prisma.spatial_ref_sys.delete({
-     *   where: {
-     *     // ... filter to delete one Spatial_ref_sys
-     *   }
-     * })
-     * 
-     */
-    delete<T extends spatial_ref_sysDeleteArgs>(args: SelectSubset<T, spatial_ref_sysDeleteArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Spatial_ref_sys.
-     * @param {spatial_ref_sysUpdateArgs} args - Arguments to update one Spatial_ref_sys.
-     * @example
-     * // Update one Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends spatial_ref_sysUpdateArgs>(args: SelectSubset<T, spatial_ref_sysUpdateArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Spatial_ref_sys.
-     * @param {spatial_ref_sysDeleteManyArgs} args - Arguments to filter Spatial_ref_sys to delete.
-     * @example
-     * // Delete a few Spatial_ref_sys
-     * const { count } = await prisma.spatial_ref_sys.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends spatial_ref_sysDeleteManyArgs>(args?: SelectSubset<T, spatial_ref_sysDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Spatial_ref_sys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends spatial_ref_sysUpdateManyArgs>(args: SelectSubset<T, spatial_ref_sysUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Spatial_ref_sys and returns the data updated in the database.
-     * @param {spatial_ref_sysUpdateManyAndReturnArgs} args - Arguments to update many Spatial_ref_sys.
-     * @example
-     * // Update many Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Spatial_ref_sys and only return the `srid`
-     * const spatial_ref_sysWithSridOnly = await prisma.spatial_ref_sys.updateManyAndReturn({
-     *   select: { srid: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends spatial_ref_sysUpdateManyAndReturnArgs>(args: SelectSubset<T, spatial_ref_sysUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Spatial_ref_sys.
-     * @param {spatial_ref_sysUpsertArgs} args - Arguments to update or create a Spatial_ref_sys.
-     * @example
-     * // Update or create a Spatial_ref_sys
-     * const spatial_ref_sys = await prisma.spatial_ref_sys.upsert({
-     *   create: {
-     *     // ... data to create a Spatial_ref_sys
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Spatial_ref_sys we want to update
-     *   }
-     * })
-     */
-    upsert<T extends spatial_ref_sysUpsertArgs>(args: SelectSubset<T, spatial_ref_sysUpsertArgs<ExtArgs>>): Prisma__spatial_ref_sysClient<$Result.GetResult<Prisma.$spatial_ref_sysPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Spatial_ref_sys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysCountArgs} args - Arguments to filter Spatial_ref_sys to count.
-     * @example
-     * // Count the number of Spatial_ref_sys
-     * const count = await prisma.spatial_ref_sys.count({
-     *   where: {
-     *     // ... the filter for the Spatial_ref_sys we want to count
-     *   }
-     * })
-    **/
-    count<T extends spatial_ref_sysCountArgs>(
-      args?: Subset<T, spatial_ref_sysCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], Spatial_ref_sysCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Spatial_ref_sys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {Spatial_ref_sysAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends Spatial_ref_sysAggregateArgs>(args: Subset<T, Spatial_ref_sysAggregateArgs>): Prisma.PrismaPromise<GetSpatial_ref_sysAggregateType<T>>
-
-    /**
-     * Group by Spatial_ref_sys.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {spatial_ref_sysGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends spatial_ref_sysGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: spatial_ref_sysGroupByArgs['orderBy'] }
-        : { orderBy?: spatial_ref_sysGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, spatial_ref_sysGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSpatial_ref_sysGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the spatial_ref_sys model
-   */
-  readonly fields: spatial_ref_sysFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for spatial_ref_sys.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__spatial_ref_sysClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the spatial_ref_sys model
-   */
-  interface spatial_ref_sysFieldRefs {
-    readonly srid: FieldRef<"spatial_ref_sys", 'Int'>
-    readonly auth_name: FieldRef<"spatial_ref_sys", 'String'>
-    readonly auth_srid: FieldRef<"spatial_ref_sys", 'Int'>
-    readonly srtext: FieldRef<"spatial_ref_sys", 'String'>
-    readonly proj4text: FieldRef<"spatial_ref_sys", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * spatial_ref_sys findUnique
-   */
-  export type spatial_ref_sysFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter, which spatial_ref_sys to fetch.
-     */
-    where: spatial_ref_sysWhereUniqueInput
-  }
-
-  /**
-   * spatial_ref_sys findUniqueOrThrow
-   */
-  export type spatial_ref_sysFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter, which spatial_ref_sys to fetch.
-     */
-    where: spatial_ref_sysWhereUniqueInput
-  }
-
-  /**
-   * spatial_ref_sys findFirst
-   */
-  export type spatial_ref_sysFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter, which spatial_ref_sys to fetch.
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of spatial_ref_sys to fetch.
-     */
-    orderBy?: spatial_ref_sysOrderByWithRelationInput | spatial_ref_sysOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for spatial_ref_sys.
-     */
-    cursor?: spatial_ref_sysWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` spatial_ref_sys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` spatial_ref_sys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of spatial_ref_sys.
-     */
-    distinct?: Spatial_ref_sysScalarFieldEnum | Spatial_ref_sysScalarFieldEnum[]
-  }
-
-  /**
-   * spatial_ref_sys findFirstOrThrow
-   */
-  export type spatial_ref_sysFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter, which spatial_ref_sys to fetch.
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of spatial_ref_sys to fetch.
-     */
-    orderBy?: spatial_ref_sysOrderByWithRelationInput | spatial_ref_sysOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for spatial_ref_sys.
-     */
-    cursor?: spatial_ref_sysWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` spatial_ref_sys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` spatial_ref_sys.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of spatial_ref_sys.
-     */
-    distinct?: Spatial_ref_sysScalarFieldEnum | Spatial_ref_sysScalarFieldEnum[]
-  }
-
-  /**
-   * spatial_ref_sys findMany
-   */
-  export type spatial_ref_sysFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter, which spatial_ref_sys to fetch.
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of spatial_ref_sys to fetch.
-     */
-    orderBy?: spatial_ref_sysOrderByWithRelationInput | spatial_ref_sysOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing spatial_ref_sys.
-     */
-    cursor?: spatial_ref_sysWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` spatial_ref_sys from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` spatial_ref_sys.
-     */
-    skip?: number
-    distinct?: Spatial_ref_sysScalarFieldEnum | Spatial_ref_sysScalarFieldEnum[]
-  }
-
-  /**
-   * spatial_ref_sys create
-   */
-  export type spatial_ref_sysCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * The data needed to create a spatial_ref_sys.
-     */
-    data: XOR<spatial_ref_sysCreateInput, spatial_ref_sysUncheckedCreateInput>
-  }
-
-  /**
-   * spatial_ref_sys createMany
-   */
-  export type spatial_ref_sysCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many spatial_ref_sys.
-     */
-    data: spatial_ref_sysCreateManyInput | spatial_ref_sysCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * spatial_ref_sys createManyAndReturn
-   */
-  export type spatial_ref_sysCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * The data used to create many spatial_ref_sys.
-     */
-    data: spatial_ref_sysCreateManyInput | spatial_ref_sysCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * spatial_ref_sys update
-   */
-  export type spatial_ref_sysUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * The data needed to update a spatial_ref_sys.
-     */
-    data: XOR<spatial_ref_sysUpdateInput, spatial_ref_sysUncheckedUpdateInput>
-    /**
-     * Choose, which spatial_ref_sys to update.
-     */
-    where: spatial_ref_sysWhereUniqueInput
-  }
-
-  /**
-   * spatial_ref_sys updateMany
-   */
-  export type spatial_ref_sysUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update spatial_ref_sys.
-     */
-    data: XOR<spatial_ref_sysUpdateManyMutationInput, spatial_ref_sysUncheckedUpdateManyInput>
-    /**
-     * Filter which spatial_ref_sys to update
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * Limit how many spatial_ref_sys to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * spatial_ref_sys updateManyAndReturn
-   */
-  export type spatial_ref_sysUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * The data used to update spatial_ref_sys.
-     */
-    data: XOR<spatial_ref_sysUpdateManyMutationInput, spatial_ref_sysUncheckedUpdateManyInput>
-    /**
-     * Filter which spatial_ref_sys to update
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * Limit how many spatial_ref_sys to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * spatial_ref_sys upsert
-   */
-  export type spatial_ref_sysUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * The filter to search for the spatial_ref_sys to update in case it exists.
-     */
-    where: spatial_ref_sysWhereUniqueInput
-    /**
-     * In case the spatial_ref_sys found by the `where` argument doesn't exist, create a new spatial_ref_sys with this data.
-     */
-    create: XOR<spatial_ref_sysCreateInput, spatial_ref_sysUncheckedCreateInput>
-    /**
-     * In case the spatial_ref_sys was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<spatial_ref_sysUpdateInput, spatial_ref_sysUncheckedUpdateInput>
-  }
-
-  /**
-   * spatial_ref_sys delete
-   */
-  export type spatial_ref_sysDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-    /**
-     * Filter which spatial_ref_sys to delete.
-     */
-    where: spatial_ref_sysWhereUniqueInput
-  }
-
-  /**
-   * spatial_ref_sys deleteMany
-   */
-  export type spatial_ref_sysDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which spatial_ref_sys to delete
-     */
-    where?: spatial_ref_sysWhereInput
-    /**
-     * Limit how many spatial_ref_sys to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * spatial_ref_sys without action
-   */
-  export type spatial_ref_sysDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the spatial_ref_sys
-     */
-    select?: spatial_ref_sysSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the spatial_ref_sys
-     */
-    omit?: spatial_ref_sysOmit<ExtArgs> | null
-  }
-
 
   /**
    * Model User
@@ -4408,14 +3268,6 @@ export namespace Prisma {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flareOrg"]>
 
-  export type FlareOrgSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    user_id?: boolean
-    description?: boolean
-    verified?: boolean
-    locationData?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["flareOrg"]>
 
   export type FlareOrgSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
@@ -4436,9 +3288,6 @@ export namespace Prisma {
 
   export type FlareOrgOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "description" | "verified" | "locationData", ExtArgs["result"]["flareOrg"]>
   export type FlareOrgInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-  }
-  export type FlareOrgIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type FlareOrgIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4546,58 +3395,6 @@ export namespace Prisma {
     findMany<T extends FlareOrgFindManyArgs>(args?: SelectSubset<T, FlareOrgFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a FlareOrg.
-     * @param {FlareOrgCreateArgs} args - Arguments to create a FlareOrg.
-     * @example
-     * // Create one FlareOrg
-     * const FlareOrg = await prisma.flareOrg.create({
-     *   data: {
-     *     // ... data to create a FlareOrg
-     *   }
-     * })
-     * 
-     */
-    create<T extends FlareOrgCreateArgs>(args: SelectSubset<T, FlareOrgCreateArgs<ExtArgs>>): Prisma__FlareOrgClient<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many FlareOrgs.
-     * @param {FlareOrgCreateManyArgs} args - Arguments to create many FlareOrgs.
-     * @example
-     * // Create many FlareOrgs
-     * const flareOrg = await prisma.flareOrg.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends FlareOrgCreateManyArgs>(args?: SelectSubset<T, FlareOrgCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many FlareOrgs and returns the data saved in the database.
-     * @param {FlareOrgCreateManyAndReturnArgs} args - Arguments to create many FlareOrgs.
-     * @example
-     * // Create many FlareOrgs
-     * const flareOrg = await prisma.flareOrg.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many FlareOrgs and only return the `id`
-     * const flareOrgWithIdOnly = await prisma.flareOrg.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends FlareOrgCreateManyAndReturnArgs>(args?: SelectSubset<T, FlareOrgCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
      * Delete a FlareOrg.
      * @param {FlareOrgDeleteArgs} args - Arguments to delete one FlareOrg.
      * @example
@@ -4690,25 +3487,6 @@ export namespace Prisma {
      * 
      */
     updateManyAndReturn<T extends FlareOrgUpdateManyAndReturnArgs>(args: SelectSubset<T, FlareOrgUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one FlareOrg.
-     * @param {FlareOrgUpsertArgs} args - Arguments to update or create a FlareOrg.
-     * @example
-     * // Update or create a FlareOrg
-     * const flareOrg = await prisma.flareOrg.upsert({
-     *   create: {
-     *     // ... data to create a FlareOrg
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the FlareOrg we want to update
-     *   }
-     * })
-     */
-    upsert<T extends FlareOrgUpsertArgs>(args: SelectSubset<T, FlareOrgUpsertArgs<ExtArgs>>): Prisma__FlareOrgClient<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -5085,62 +3863,6 @@ export namespace Prisma {
   }
 
   /**
-   * FlareOrg create
-   */
-  export type FlareOrgCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FlareOrg
-     */
-    select?: FlareOrgSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FlareOrg
-     */
-    omit?: FlareOrgOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FlareOrgInclude<ExtArgs> | null
-    /**
-     * The data needed to create a FlareOrg.
-     */
-    data: XOR<FlareOrgCreateInput, FlareOrgUncheckedCreateInput>
-  }
-
-  /**
-   * FlareOrg createMany
-   */
-  export type FlareOrgCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many FlareOrgs.
-     */
-    data: FlareOrgCreateManyInput | FlareOrgCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * FlareOrg createManyAndReturn
-   */
-  export type FlareOrgCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FlareOrg
-     */
-    select?: FlareOrgSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the FlareOrg
-     */
-    omit?: FlareOrgOmit<ExtArgs> | null
-    /**
-     * The data used to create many FlareOrgs.
-     */
-    data: FlareOrgCreateManyInput | FlareOrgCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FlareOrgIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
    * FlareOrg update
    */
   export type FlareOrgUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5215,36 +3937,6 @@ export namespace Prisma {
   }
 
   /**
-   * FlareOrg upsert
-   */
-  export type FlareOrgUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FlareOrg
-     */
-    select?: FlareOrgSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FlareOrg
-     */
-    omit?: FlareOrgOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FlareOrgInclude<ExtArgs> | null
-    /**
-     * The filter to search for the FlareOrg to update in case it exists.
-     */
-    where: FlareOrgWhereUniqueInput
-    /**
-     * In case the FlareOrg found by the `where` argument doesn't exist, create a new FlareOrg with this data.
-     */
-    create: XOR<FlareOrgCreateInput, FlareOrgUncheckedCreateInput>
-    /**
-     * In case the FlareOrg was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<FlareOrgUpdateInput, FlareOrgUncheckedUpdateInput>
-  }
-
-  /**
    * FlareOrg delete
    */
   export type FlareOrgDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5313,17 +4005,6 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-  export const Spatial_ref_sysScalarFieldEnum: {
-    srid: 'srid',
-    auth_name: 'auth_name',
-    auth_srid: 'auth_srid',
-    srtext: 'srtext',
-    proj4text: 'proj4text'
-  };
-
-  export type Spatial_ref_sysScalarFieldEnum = (typeof Spatial_ref_sysScalarFieldEnum)[keyof typeof Spatial_ref_sysScalarFieldEnum]
-
-
   export const UserScalarFieldEnum: {
     id: 'id',
     email: 'email',
@@ -5375,14 +4056,6 @@ export namespace Prisma {
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
-  export const NullsOrder: {
-    first: 'first',
-    last: 'last'
-  };
-
-  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
   export const JsonNullValueFilter: {
     DbNull: typeof DbNull,
     JsonNull: typeof JsonNull,
@@ -5392,23 +4065,17 @@ export namespace Prisma {
   export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
   /**
    * Field references
    */
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
 
 
   /**
@@ -5447,75 +4114,21 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Float'
+   * Reference to a field of type 'Int'
    */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
   /**
-   * Reference to a field of type 'Float[]'
+   * Reference to a field of type 'Int[]'
    */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
   /**
    * Deep Input Types
    */
 
-
-  export type spatial_ref_sysWhereInput = {
-    AND?: spatial_ref_sysWhereInput | spatial_ref_sysWhereInput[]
-    OR?: spatial_ref_sysWhereInput[]
-    NOT?: spatial_ref_sysWhereInput | spatial_ref_sysWhereInput[]
-    srid?: IntFilter<"spatial_ref_sys"> | number
-    auth_name?: StringNullableFilter<"spatial_ref_sys"> | string | null
-    auth_srid?: IntNullableFilter<"spatial_ref_sys"> | number | null
-    srtext?: StringNullableFilter<"spatial_ref_sys"> | string | null
-    proj4text?: StringNullableFilter<"spatial_ref_sys"> | string | null
-  }
-
-  export type spatial_ref_sysOrderByWithRelationInput = {
-    srid?: SortOrder
-    auth_name?: SortOrderInput | SortOrder
-    auth_srid?: SortOrderInput | SortOrder
-    srtext?: SortOrderInput | SortOrder
-    proj4text?: SortOrderInput | SortOrder
-  }
-
-  export type spatial_ref_sysWhereUniqueInput = Prisma.AtLeast<{
-    srid?: number
-    AND?: spatial_ref_sysWhereInput | spatial_ref_sysWhereInput[]
-    OR?: spatial_ref_sysWhereInput[]
-    NOT?: spatial_ref_sysWhereInput | spatial_ref_sysWhereInput[]
-    auth_name?: StringNullableFilter<"spatial_ref_sys"> | string | null
-    auth_srid?: IntNullableFilter<"spatial_ref_sys"> | number | null
-    srtext?: StringNullableFilter<"spatial_ref_sys"> | string | null
-    proj4text?: StringNullableFilter<"spatial_ref_sys"> | string | null
-  }, "srid">
-
-  export type spatial_ref_sysOrderByWithAggregationInput = {
-    srid?: SortOrder
-    auth_name?: SortOrderInput | SortOrder
-    auth_srid?: SortOrderInput | SortOrder
-    srtext?: SortOrderInput | SortOrder
-    proj4text?: SortOrderInput | SortOrder
-    _count?: spatial_ref_sysCountOrderByAggregateInput
-    _avg?: spatial_ref_sysAvgOrderByAggregateInput
-    _max?: spatial_ref_sysMaxOrderByAggregateInput
-    _min?: spatial_ref_sysMinOrderByAggregateInput
-    _sum?: spatial_ref_sysSumOrderByAggregateInput
-  }
-
-  export type spatial_ref_sysScalarWhereWithAggregatesInput = {
-    AND?: spatial_ref_sysScalarWhereWithAggregatesInput | spatial_ref_sysScalarWhereWithAggregatesInput[]
-    OR?: spatial_ref_sysScalarWhereWithAggregatesInput[]
-    NOT?: spatial_ref_sysScalarWhereWithAggregatesInput | spatial_ref_sysScalarWhereWithAggregatesInput[]
-    srid?: IntWithAggregatesFilter<"spatial_ref_sys"> | number
-    auth_name?: StringNullableWithAggregatesFilter<"spatial_ref_sys"> | string | null
-    auth_srid?: IntNullableWithAggregatesFilter<"spatial_ref_sys"> | number | null
-    srtext?: StringNullableWithAggregatesFilter<"spatial_ref_sys"> | string | null
-    proj4text?: StringNullableWithAggregatesFilter<"spatial_ref_sys"> | string | null
-  }
 
   export type UserWhereInput = {
     AND?: UserWhereInput | UserWhereInput[]
@@ -5660,62 +4273,6 @@ export namespace Prisma {
     locationData?: JsonWithAggregatesFilter<"FlareOrg">
   }
 
-  export type spatial_ref_sysCreateInput = {
-    srid: number
-    auth_name?: string | null
-    auth_srid?: number | null
-    srtext?: string | null
-    proj4text?: string | null
-  }
-
-  export type spatial_ref_sysUncheckedCreateInput = {
-    srid: number
-    auth_name?: string | null
-    auth_srid?: number | null
-    srtext?: string | null
-    proj4text?: string | null
-  }
-
-  export type spatial_ref_sysUpdateInput = {
-    srid?: IntFieldUpdateOperationsInput | number
-    auth_name?: NullableStringFieldUpdateOperationsInput | string | null
-    auth_srid?: NullableIntFieldUpdateOperationsInput | number | null
-    srtext?: NullableStringFieldUpdateOperationsInput | string | null
-    proj4text?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type spatial_ref_sysUncheckedUpdateInput = {
-    srid?: IntFieldUpdateOperationsInput | number
-    auth_name?: NullableStringFieldUpdateOperationsInput | string | null
-    auth_srid?: NullableIntFieldUpdateOperationsInput | number | null
-    srtext?: NullableStringFieldUpdateOperationsInput | string | null
-    proj4text?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type spatial_ref_sysCreateManyInput = {
-    srid: number
-    auth_name?: string | null
-    auth_srid?: number | null
-    srtext?: string | null
-    proj4text?: string | null
-  }
-
-  export type spatial_ref_sysUpdateManyMutationInput = {
-    srid?: IntFieldUpdateOperationsInput | number
-    auth_name?: NullableStringFieldUpdateOperationsInput | string | null
-    auth_srid?: NullableIntFieldUpdateOperationsInput | number | null
-    srtext?: NullableStringFieldUpdateOperationsInput | string | null
-    proj4text?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type spatial_ref_sysUncheckedUpdateManyInput = {
-    srid?: IntFieldUpdateOperationsInput | number
-    auth_name?: NullableStringFieldUpdateOperationsInput | string | null
-    auth_srid?: NullableIntFieldUpdateOperationsInput | number | null
-    srtext?: NullableStringFieldUpdateOperationsInput | string | null
-    proj4text?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type UserCreateInput = {
     id: string
     email: string
@@ -5800,22 +4357,6 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
   }
 
-  export type FlareOrgCreateInput = {
-    id?: string
-    description?: string | null
-    verified?: boolean
-    locationData: JsonNullValueInput | InputJsonValue
-    user: UserCreateNestedOneWithoutFlareOrgInput
-  }
-
-  export type FlareOrgUncheckedCreateInput = {
-    id?: string
-    user_id: string
-    description?: string | null
-    verified?: boolean
-    locationData: JsonNullValueInput | InputJsonValue
-  }
-
   export type FlareOrgUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5832,14 +4373,6 @@ export namespace Prisma {
     locationData?: JsonNullValueInput | InputJsonValue
   }
 
-  export type FlareOrgCreateManyInput = {
-    id?: string
-    user_id: string
-    description?: string | null
-    verified?: boolean
-    locationData: JsonNullValueInput | InputJsonValue
-  }
-
   export type FlareOrgUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -5853,132 +4386,6 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
     locationData?: JsonNullValueInput | InputJsonValue
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
-  }
-
-  export type spatial_ref_sysCountOrderByAggregateInput = {
-    srid?: SortOrder
-    auth_name?: SortOrder
-    auth_srid?: SortOrder
-    srtext?: SortOrder
-    proj4text?: SortOrder
-  }
-
-  export type spatial_ref_sysAvgOrderByAggregateInput = {
-    srid?: SortOrder
-    auth_srid?: SortOrder
-  }
-
-  export type spatial_ref_sysMaxOrderByAggregateInput = {
-    srid?: SortOrder
-    auth_name?: SortOrder
-    auth_srid?: SortOrder
-    srtext?: SortOrder
-    proj4text?: SortOrder
-  }
-
-  export type spatial_ref_sysMinOrderByAggregateInput = {
-    srid?: SortOrder
-    auth_name?: SortOrder
-    auth_srid?: SortOrder
-    srtext?: SortOrder
-    proj4text?: SortOrder
-  }
-
-  export type spatial_ref_sysSumOrderByAggregateInput = {
-    srid?: SortOrder
-    auth_srid?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -6062,6 +4469,21 @@ export namespace Prisma {
     user_id?: SortOrder
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -6090,6 +4512,11 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type FlareOrgCountOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
@@ -6110,6 +4537,24 @@ export namespace Prisma {
     user_id?: SortOrder
     description?: SortOrder
     verified?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -6146,26 +4591,6 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type FlareUserCreateNestedOneWithoutUserInput = {
     create?: XOR<FlareUserCreateWithoutUserInput, FlareUserUncheckedCreateWithoutUserInput>
     connectOrCreate?: FlareUserCreateOrConnectWithoutUserInput
@@ -6173,8 +4598,6 @@ export namespace Prisma {
   }
 
   export type FlareOrgCreateNestedOneWithoutUserInput = {
-    create?: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
-    connectOrCreate?: FlareOrgCreateOrConnectWithoutUserInput
     connect?: FlareOrgWhereUniqueInput
   }
 
@@ -6185,8 +4608,6 @@ export namespace Prisma {
   }
 
   export type FlareOrgUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
-    connectOrCreate?: FlareOrgCreateOrConnectWithoutUserInput
     connect?: FlareOrgWhereUniqueInput
   }
 
@@ -6205,9 +4626,6 @@ export namespace Prisma {
   }
 
   export type FlareOrgUpdateOneWithoutUserNestedInput = {
-    create?: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
-    connectOrCreate?: FlareOrgCreateOrConnectWithoutUserInput
-    upsert?: FlareOrgUpsertWithoutUserInput
     disconnect?: FlareOrgWhereInput | boolean
     delete?: FlareOrgWhereInput | boolean
     connect?: FlareOrgWhereUniqueInput
@@ -6225,9 +4643,6 @@ export namespace Prisma {
   }
 
   export type FlareOrgUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
-    connectOrCreate?: FlareOrgCreateOrConnectWithoutUserInput
-    upsert?: FlareOrgUpsertWithoutUserInput
     disconnect?: FlareOrgWhereInput | boolean
     delete?: FlareOrgWhereInput | boolean
     connect?: FlareOrgWhereUniqueInput
@@ -6248,10 +4663,8 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFlareUserInput, UserUpdateWithoutFlareUserInput>, UserUncheckedUpdateWithoutFlareUserInput>
   }
 
-  export type UserCreateNestedOneWithoutFlareOrgInput = {
-    create?: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
-    connectOrCreate?: UserCreateOrConnectWithoutFlareOrgInput
-    connect?: UserWhereUniqueInput
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -6264,113 +4677,6 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutFlareOrgInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFlareOrgInput, UserUpdateWithoutFlareOrgInput>, UserUncheckedUpdateWithoutFlareOrgInput>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -6404,9 +4710,62 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -6453,25 +4812,6 @@ export namespace Prisma {
     create: XOR<FlareUserCreateWithoutUserInput, FlareUserUncheckedCreateWithoutUserInput>
   }
 
-  export type FlareOrgCreateWithoutUserInput = {
-    id?: string
-    description?: string | null
-    verified?: boolean
-    locationData: JsonNullValueInput | InputJsonValue
-  }
-
-  export type FlareOrgUncheckedCreateWithoutUserInput = {
-    id?: string
-    description?: string | null
-    verified?: boolean
-    locationData: JsonNullValueInput | InputJsonValue
-  }
-
-  export type FlareOrgCreateOrConnectWithoutUserInput = {
-    where: FlareOrgWhereUniqueInput
-    create: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
-  }
-
   export type FlareUserUpsertWithoutUserInput = {
     update: XOR<FlareUserUpdateWithoutUserInput, FlareUserUncheckedUpdateWithoutUserInput>
     create: XOR<FlareUserCreateWithoutUserInput, FlareUserUncheckedCreateWithoutUserInput>
@@ -6489,12 +4829,6 @@ export namespace Prisma {
 
   export type FlareUserUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type FlareOrgUpsertWithoutUserInput = {
-    update: XOR<FlareOrgUpdateWithoutUserInput, FlareOrgUncheckedUpdateWithoutUserInput>
-    create: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
-    where?: FlareOrgWhereInput
   }
 
   export type FlareOrgUpdateToOneWithWhereWithoutUserInput = {

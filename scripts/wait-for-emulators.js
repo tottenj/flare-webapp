@@ -17,7 +17,6 @@ const checkEmulatorHub = async () => {
 // Check individual emulators
 const checkIndividualEmulators = async () => {
   const checks = [
-    { name: 'Firestore', url: 'http://127.0.0.1:8080' },
     { name: 'Auth', url: 'http://127.0.0.1:9099' },
     { name: 'Functions', url: 'http://127.0.0.1:5001/flare-7091a/us-central1' },
   ];

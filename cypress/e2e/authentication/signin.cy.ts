@@ -32,9 +32,11 @@ describe('Sign In Form', () => {
 
   describe('Successful sign in', () => {
     it('should log user in if email verified', () => {
+      cy.intercept('/api/loginToken').as('token');
       cy.get('[data-testid="email"]').type(verifiedUser.email);
       cy.get('[data-testid="password"]').type(verifiedUser.password);
       cy.get('form').submit();
+      cy.wait("@token")
       cy.url().should('include', '/dashboard');
     });
   });

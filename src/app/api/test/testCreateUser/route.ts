@@ -2,6 +2,7 @@
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
+import prisma from '@/lib/prisma/prisma';
 import flareLocation from '@/lib/types/Location';
 import { GeoPoint } from 'firebase/firestore';
 import { NextRequest, NextResponse } from 'next/server';
@@ -20,6 +21,11 @@ export async function POST(req: NextRequest) {
     const org = new FlareOrg(uid, name, email, undefined, undefined, loc, false);
     await org.addOrg(fire);
   }
+
+
+
+
+
   const user = new FlareUser(uid, email, name);
   await user.addUser(fire);
   

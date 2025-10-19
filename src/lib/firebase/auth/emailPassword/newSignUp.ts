@@ -1,6 +1,6 @@
 'use client';
 
-import { createUserWithEmailAndPassword, deleteUser, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, deleteUser, sendEmailVerification, signOut } from 'firebase/auth';
 import { auth } from '../configs/clientApp';
 
 export default async function newSignUp(
@@ -23,6 +23,7 @@ export default async function newSignUp(
     });
     if (!cookieRes.ok) throw new Error('Failed to set session cookie');
     await serverAction(formData);
+    await sendEmailVerification(userCred.user)
     await signOut(auth);
     await fetch('/api/loginToken', { method: 'DELETE' });
     sessionStorage.removeItem('manualLoginInProgress');

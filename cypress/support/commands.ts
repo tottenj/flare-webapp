@@ -19,15 +19,7 @@ function signUpUser(email: string, password: string, name: string, isOrg: boolea
       url: `${AUTH_EMULATOR}/accounts:signUp?key=${apiKey}`,
       body: { email, password, returnSecureToken: true },
     })
-    .then((response) => {
-      return cy
-        .request({
-          method: 'POST',
-          url: '/api/test/testCreateUser',
-          body: { email, uid: response.body.localId, name, isOrg },
-        })
-        .then(() => response.body);
-    });
+    .then((response) => response.body)
 }
 
 function decodeFirestoreDocument(doc: any) {
@@ -217,7 +209,7 @@ Cypress.Commands.add('checkToast', (message: string) => {
 });
 
 Cypress.Commands.add('clearAllEmulators', () => {
-  cy.clearFirestore();
+ // cy.clearFirestore();
   cy.clearAuth();
 });
 
@@ -423,3 +415,8 @@ Cypress.Commands.add('fillTypedSelect', (label: string, option: string) => {
     .click();
 });
 
+
+
+Cypress.Commands.add('resetAndSeed', () => {
+  cy.task('db:resetAndSeed');
+});
