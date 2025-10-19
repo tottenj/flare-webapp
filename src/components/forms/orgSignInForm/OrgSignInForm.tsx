@@ -1,42 +1,30 @@
 'use client';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+import { useServerUser } from '@/components/context/ServerUserContext';
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
 import FileInput from '@/components/inputs/file/FileInput';
 import FormSection from '@/components/inputs/formSection/FormSection';
 import HeroInput from '@/components/inputs/hero/input/HeroInput';
 import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
-import { auth, storage } from '@/lib/firebase/auth/configs/clientApp';
+import { storage } from '@/lib/firebase/auth/configs/clientApp';
+import newSignUp from '@/lib/firebase/auth/emailPassword/newSignUp';
 import { addFile } from '@/lib/firebase/storage/storageOperations';
-import orgSignUp from '@/lib/formActions/orgSignUp/orgSignUp';
+import signUpOrg from '@/lib/formActions/auth/signUpOrg';
 import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
-import useCustomUseForm from '@/lib/hooks/useForm/useCustomUseForm';
+import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
 import { orgSocials } from '@/lib/utils/text/text';
-import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function OrgSignInForm() {
-  const { state, action, pending } = useCustomUseForm(orgSignUp);
-
+  const [pending, setPending] = useState(false);
   const [pass, setPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [passStatus, setPassStatus] = useState(false);
   const router = useRouter();
   const { validFiles, handleFileChange } = useFileChange();
-
-  useEffect(() => {
-    if (state.message === 'success' && state.resp?.orgId && !pending) {
-      uploadFilesToFirebase(state.resp.orgId);
-    }
-
-    (async () => {
-      if (state.status === 'success' && pending == false) {
-        await signOut(auth);
-        router.push('/confirmation');
-      }
-    })();
-  }, [state]);
+  const unifiedUser = useUnifiedUser();
 
   async function uploadFilesToFirebase(orgId: string) {
     for (const { key, file } of validFiles) {
@@ -53,12 +41,27 @@ export default function OrgSignInForm() {
     }
   }, [pass, confirmPass]);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setPending(true);
     if (passStatus) {
-      e.preventDefault();
       toast.error('Passwords must match');
+      return;
+    }
+    const formData = new FormData(e.currentTarget);
+    try {
+      await newSignUp(formData, signUpOrg);
+      if (unifiedUser.user?.uid) await uploadFilesToFirebase(unifiedUser.user.uid);
+      router.push('/confirmation');
+    } catch (err: any) {
+      sessionStorage.removeItem('manualLoginInProgress');
+      toast.error(err.message || 'Something went wrong');
+    } finally {
+      setPending(false);
     }
   }
+
+
 
   return (
     <div className="@container mt-16 mb-8 flex h-auto w-11/12 flex-col items-center justify-center rounded-xl bg-white p-4 pt-8 pb-8 sm:w-5/6 sm:p-10 lg:w-1/2">
@@ -71,7 +74,7 @@ export default function OrgSignInForm() {
         won’t be visible to the public until you're verified. Thanks for helping us keep Flare
         inclusive and trustworthy!
       </p>
-      <form className="w-full" action={action} onSubmit={handleSubmit}>
+      <form className="w-full" onSubmit={handleSubmit}>
         <FormSection text="General Information">
           <div className="flex flex-col gap-4">
             <HeroInput label="Organization Name" name="orgName" />

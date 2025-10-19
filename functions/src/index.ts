@@ -6,7 +6,7 @@ import Collections from '../../enums/Collections';
 const { logger } = require('firebase-functions');
 import { getAuth } from 'firebase-admin/auth';
 import { getStorage } from 'firebase-admin/storage';
-import { CallableRequest, HttpsError, onCall } from 'firebase-functions/v2/https';
+import { CallableRequest, onCall } from 'firebase-functions/v2/https';
 import { GeoPoint, getFirestore } from 'firebase-admin/firestore';
 import { initializeApp } from 'firebase-admin/app';
 import FlareOrg, { orgConverter } from '../classes/FlareOrg';
@@ -14,6 +14,9 @@ import FlareUser, { userConverter } from '../classes/FlareUser';
 import flareLocation from '../classes/flareLocation';
 import Event, { eventConverter } from '../classes/Event';
 import eventType from '../../enums/EventType';
+import { onRequest } from 'firebase-functions/v2/https';
+import cors from 'cors';
+
 
 initializeApp();
 const auth = getAuth();
@@ -114,23 +117,56 @@ exports.deleteEvent = onDocumentDeletedWithAuthContext(
   }
 );
 
-exports.signToken = onCall(async (request: CallableRequest) => {
-  const token = request.data.idToken;
-  if (!token) {
-    throw new HttpsError('invalid-argument', 'Missing ID token.');
-  }
+exports.signToken = onRequest(async (req:any, res:any) => {
+  const token = req.body?.idToken;
+  if (!token) return res.status(400).json({ error: 'Missing ID token.' });
 
   try {
-    const decoded = auth.verifyIdToken(token);
-    if (!decoded) {
-      throw new HttpsError('unauthenticated', 'Invalid ID token.');
-    }
+    await auth.verifyIdToken(token);
     const expiresIn = 60 * 60 * 24 * 5 * 1000;
     const sessionCookie = await auth.createSessionCookie(token, { expiresIn });
-    return { sessionCookie, expiresIn };
+    return res.status(200).json({ sessionCookie, expiresIn });
   } catch (error) {
-    throw new HttpsError('internal', 'Unable to create session cookie');
+    console.error(error);
+    return res.status(500).json({ error: 'Unable to create session cookie.' });
   }
+});
+
+
+const corsHandler = cors({ origin: true }); // Allow all origins or specify your domain
+
+export const verifySessionCookie = onRequest((req, res) => {
+  corsHandler(req, res, async () => {
+    try {
+      // 1️⃣ Check method
+      if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+      }
+
+
+      // 3️⃣ Validate body
+      const sessionCookie = req.body?.data?.sessionCookie;
+      if (!sessionCookie) {
+        return res.status(400).json({ error: 'Missing session cookie' });
+      }
+
+      // 4️⃣ Verify the cookie
+      const decoded = await auth.verifySessionCookie(sessionCookie, true);
+
+      return res.status(200).json({
+        uid: decoded.uid,
+        claims: {
+          admin: decoded.admin ?? null,
+          org: decoded.organization ?? null,
+          verified: decoded.verified ?? null,
+          emailVerified: decoded.email_verified ?? false,
+        },
+      });
+    } catch (error) {
+      console.error('Verification failed:', error);
+      return res.status(401).json({ error: 'Invalid or expired session cookie.' });
+    }
+  });
 });
 
 exports.seedDb = onCall(async (request: CallableRequest) => {

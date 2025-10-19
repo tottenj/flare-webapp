@@ -1,11 +1,15 @@
 
 import { getAuthenticatedAppForUser } from "../auth/configs/serverApp";
-import { cache } from "react";
 
-export const getClaims = cache(async () =>  {
-    let claims = null
-    const {currentUser} = await getAuthenticatedAppForUser()
-    const claimsObj = await currentUser?.getIdTokenResult()
-    claims = claimsObj?.claims
-    return {currentUser, claims}
-})
+export const getClaims = async () => {
+  try {
+    const { currentUser } = await getAuthenticatedAppForUser();
+    if (!currentUser) return null;
+    const uid = "dljs"
+
+    
+  } catch (err) {
+
+    return null;
+  }
+};

@@ -1,14 +1,10 @@
 'use client';
 import GoogleSignInButton from '@/components/buttons/googleButton/SignInWithGoogleButton';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
-import LogoWithText from '@/components/flare/logoWithText/LogoWithText';
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
-import SVGLogo from '@/components/flare/svglogo/SVGLogo';
-import LinkInput from '@/components/inputs/link/LinkInput';
 import TextInput from '@/components/inputs/textInput/TextInput';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import getAuthError from '@/lib/utils/error/getAuthError';
-import { useWindowSize } from '@uidotdev/usehooks';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import Link from 'next/link';
 import { useRef } from 'react';
@@ -17,8 +13,7 @@ import { toast } from 'react-toastify';
 export default function SignInForm() {
   const email = useRef<HTMLInputElement>(null);
   const pass = useRef<HTMLInputElement>(null);
-  const {width} = useWindowSize()
-
+  
   async function handleFormSubmit(e: any) {
     e.preventDefault();
     if (email.current?.value && pass.current?.value) {

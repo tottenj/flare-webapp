@@ -48,3 +48,6 @@ certificates
 /reports
 
 /localTest
+/app/generated/prisma
+
+/src/generated/prisma

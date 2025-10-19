@@ -12,8 +12,8 @@ import Image from 'next/image';
 
 export default async function page() {
   const { firestore, storage, currentUser } = await getServicesFromServer();
-  const {claims} = await getClaims()
-  if(!claims || !claims.admin == true) redirect("/events")
+  //const {claims} = await getClaims()
+ // if(!claims || !claims.admin == true) redirect("/events")
   const orgs = await Admin.getUnverifiedOrgs(firestore);
 
   const orgsWithImages = await Promise.all(

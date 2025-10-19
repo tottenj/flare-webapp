@@ -17,13 +17,14 @@ interface textInputProps {
   styleOverDiv?: CSSProperties;
   ref?: Ref<HTMLInputElement>;
   defaultVal?: string
+  value?:string
 
 }
 
 
 
 
-export default function TextInput({ label, name, placeholder, styleOverDiv, ref, showErrorText = false, testId = name, type = "text", reqired=true, error = false, size = "Auto", onChange, errorText, defaultVal }: textInputProps) {
+export default function TextInput({ label, name, placeholder, styleOverDiv, value, ref, showErrorText = false, testId = name, type = "text", reqired=true, error = false, size = "Auto", onChange, errorText, defaultVal }: textInputProps) {
   const sizeClass = {
     XLarge: 'w-full',
     Large: 'w-3/4',
@@ -48,6 +49,7 @@ export default function TextInput({ label, name, placeholder, styleOverDiv, ref,
         name={name}
         onChange={(e) => onChange && onChange(e.target.value)}
         defaultValue={defaultVal}
+        value={value}
       />
       {showErrorText && errorText && <p className={`errorText`}>{errorText}</p>}
     </div>

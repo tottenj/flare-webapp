@@ -3,10 +3,9 @@ import { cookies, headers } from 'next/headers';
 import { initializeServerApp, FirebaseServerAppSettings } from 'firebase/app';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import firebaseConfig from '../../../../../firebaseconfig';
-import { cache } from 'react';
 
 
-export const getAuthenticatedAppForUser = cache(async () => {
+export const getAuthenticatedAppForUser = async () => {
   const headersObj = await headers();
   const token = (await cookies()).get('__session')?.value;
 
@@ -19,8 +18,9 @@ export const getAuthenticatedAppForUser = cache(async () => {
    connectAuthEmulator(auth, `http://127.0.0.1:9099`, { disableWarnings: true });
   }
   await auth.authStateReady();
+  
 
   return { firebaseServerApp, currentUser: auth.currentUser };
-})
+}
 
 

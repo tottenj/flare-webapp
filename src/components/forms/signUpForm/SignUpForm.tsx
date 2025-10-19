@@ -1,52 +1,71 @@
 'use client';
-import { useActionState, useEffect } from 'react';
-import GoogleSignInButton from '../../buttons/googleButton/SignInWithGoogleButton';
-import TextInput from '../../inputs/textInput/TextInput';
-import { useActionToast } from '@/lib/hooks/useActionToast/useActionToast';
-import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
-import emailAndPasswordAction from '@/lib/firebase/auth/emailPassword/emailAndPasswordSignUp/emailAndPasswordAction';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import LinkInput from '@/components/inputs/link/LinkInput';
+import { createUserWithEmailAndPassword, deleteUser, signOut } from 'firebase/auth';
+import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+import GoogleSignInButton from '../../buttons/googleButton/SignInWithGoogleButton';
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
+import Link from 'next/link';
+import { auth } from '@/lib/firebase/auth/configs/clientApp';
+import { toast } from 'react-toastify';
+import HeroInput from '@/components/inputs/hero/input/HeroInput';
+import newSignUp from '@/lib/firebase/auth/emailPassword/newSignUp';
+import signUpUser from '@/lib/formActions/auth/signUpUser';
 
-type SignInFormProps = {
-  overrideAction?: typeof emailAndPasswordAction;
-  signUp?: boolean;
-};
-export default function SignUpForm({ overrideAction, signUp = true }: SignInFormProps) {
-  const initialState = { message: '' };
-  const [state, formAction, pending] = useActionState(
-    overrideAction ?? emailAndPasswordAction,
-    initialState
-  );
-  const router = useRouter()
- 
-  useActionToast(state, pending, {
-    successMessage: 'User created successfully',
-    loadingMessage: 'Creating your account',
-  });
+export default function SignUpForm() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [pending, setPending] = useState(false);
 
-
-  useEffect(() => {
-    if(state.message === "success"){
-      router.push("/confirmation")
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setPending(true);
+    const formData = new FormData(e.currentTarget);
+    try {
+      await newSignUp(formData, signUpUser);
+      router.push('/confirmation');
+    } catch (err: any) {
+      sessionStorage.removeItem('manualLoginInProgress');
+      toast.error(err.message || 'Something went wrong');
+    } finally {
+      setPending(false);
     }
-  },[state])
+  };
 
   return (
-    <div className="@container flex w-11/12 sm:w-5/6 h-auto mt-16 mb-8 flex-col justify-center items-center rounded-xl bg-white p-4 pt-8 pb-8 sm:p-10 lg:w-1/2">
-      <ServerLogo size='medium'/>
-      <h1 className="mb-4 mt-4 text-4xl">Sign Up</h1>
-      <form action={formAction} className="mb-8 flex w-full sm:w-5/6 flex-col @lg:w-2/3">
-        <TextInput label="Email" name="email" placeholder="example@gmail.com" />
-        <TextInput label="Password" name="password" placeholder="**********" type="password" />
-        <div className="flex justify-center">
+    <div className="@container mt-16 mb-8 flex h-auto w-11/12 flex-col items-center justify-center rounded-xl bg-white p-4 pt-8 pb-8 sm:w-5/6 sm:p-10 lg:w-1/2">
+      <ServerLogo size="medium" />
+      <h1 className="mt-4 mb-4 text-4xl">Sign Up</h1>
+
+      <form onSubmit={handleSubmit} className="mb-8 flex w-full flex-col sm:w-5/6 @lg:w-2/3">
+        <HeroInput
+          label="Email"
+          name="email"
+          placeholder="example@gmail.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <HeroInput
+          label="Password"
+          name="password"
+          placeholder="*******"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <div className="mt-4 flex justify-center">
           <PrimaryButton text="Submit" type="submit" disabled={pending} size="full" />
         </div>
       </form>
-      <GoogleSignInButton signIn={!signUp} />
-      <Link className="font-nunito mt-4 text-center text-balance font-bold underline" href={'/signin'}>
+
+      <GoogleSignInButton signIn={false} />
+
+      <Link
+        className="font-nunito mt-4 text-center font-bold text-balance underline"
+        href={'/signin'}
+      >
         Already Have An Account? Login
       </Link>
     </div>

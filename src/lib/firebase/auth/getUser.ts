@@ -5,7 +5,7 @@ import { getFirestoreFromServer } from './configs/getFirestoreFromServer';
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
 
 export default async function getUser() {
-  const { currentUser, claims } = await getClaims();
+ // const { currentUser, claims } = await getClaims();
   const { fire } = await getFirestoreFromServer();
 
   if (currentUser) {

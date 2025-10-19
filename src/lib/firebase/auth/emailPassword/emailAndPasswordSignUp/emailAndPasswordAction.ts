@@ -1,42 +1,50 @@
 'use server';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-
-import FlareUser from '@/lib/classes/flareUser/FlareUser';
-import { auth } from '../../configs/clientApp';
-import {getFirestoreFromServer} from '../../configs/getFirestoreFromServer';
 import getAuthError from '@/lib/utils/error/getAuthError';
-import { error } from 'console';
-
-export default async function emailAndPasswordAction(prevState: any, formData: FormData) {
-
-
-  const rawFormData = {
-    email: formData.get('email')?.toString(),
-    password: formData.get('password')?.toString(),
-  };
+import { convertFormData } from '@/lib/zod/convertFormData';
+import { createUserSchema } from '@/lib/zod/auth/createUserSchema';
+import { ActionResponse } from '@/lib/types/ActionResponse';
+import { zodFieldErrors } from '@/lib/utils/error/zodFeildErrors';
+import { CreateDbUserSchema } from '@/lib/prisma/dtos/UserDto';
+import { auth } from '../../configs/clientApp';
 
 
 
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+
+export default async function emailAndPasswordAction(
+  prevState: any,
+  formData: FormData
+): Promise<ActionResponse> {
+  const result = convertFormData(createUserSchema, formData);
+  if (!result.success)
+    return {
+      status: 'error',
+      message: 'invalid email or password',
+      errors: zodFieldErrors(result.error),
+    };
+  const { email, password } = result.data;
+
+  try {
+    const usr = await createUserWithEmailAndPassword(auth, email, password);
+    const res = CreateDbUserSchema.safeParse({ email: usr.user.email, account_type: 'user' });
+    if (!res.success){ return { status: 'error', message: 'Something went wrong' }}
 
 
-  if (rawFormData.email && rawFormData.password) {
-    const { email, password } = rawFormData;
-    try {
-      const usr = await createUserWithEmailAndPassword(auth, email, password);
-      const {fire} = await getFirestoreFromServer();
 
-      console.log(fire)
+    const response = await fetch(`${baseUrl}/api/users/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(res.data),
+    });
+    const json = await response.json();
 
-      const flareUser = new FlareUser(usr.user)
-      await flareUser.addUser(fire)
-      await new FlareUser(usr.user).addUser(fire);
-      await sendEmailVerification(usr.user);
-      return { message: 'success' };
-    } catch (error) {
-      return {message: getAuthError(error)}
-    }
-  } else {
+
+    if (response.status !== 200) return { status: 'error', message: json.message || 'Something went wrong' };
+    await sendEmailVerification(usr.user);
+    return { message: 'success' };
+  } catch (error) {
     console.log(error)
-    return { message: 'Error with email or password' };
+    return { status: 'error', message: getAuthError(error) };
   }
 }

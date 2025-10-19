@@ -17,7 +17,7 @@ export default async function ProfilePicture({ size, src }: profilePictureProps)
   if (!src) {
     let claimsobj = false;
     const { currentUser, firestore, storage } = await getServicesFromServer();
-    const { claims } = await getClaims();
+    const claims = {organization: false}
     if (claims) {
       claimsobj = claims.organization === true;
     }
