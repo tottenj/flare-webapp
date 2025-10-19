@@ -51,3 +51,6 @@ certificates
 /app/generated/prisma
 
 /src/generated/prisma
+
+
+prisma/migrations/*
