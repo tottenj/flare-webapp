@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import { GeoPoint } from 'firebase/firestore';
 import { Autocomplete, AutocompleteItem } from '@heroui/react';
 import { useAsyncList } from '@react-stately/data';
-
-import PrimaryLabel from '../labels/primaryLabel/PrimaryLabel';
 import flareLocation from '@/lib/types/Location';
 import getPlaces from '@/lib/utils/places/getPlaces/getPlaces';
 import { getPlaceDetails } from '@/lib/utils/places/getPlaceDetails/getPlaceDetails';
@@ -25,6 +23,8 @@ interface placeSearchProps {
 export default function PlaceSearch({ lab, required = true, z, defVal }: placeSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [location, setLocation] = useState<flareLocation | null>(null);
+  const [getPlaces, setGetPlaces] = useState<null | Function>(null);
+  const [getPlaceDetails, setGetPlaceDetails] = useState<null | Function>(null);
 
   // Get user location once
   useEffect(() => {
@@ -43,10 +43,26 @@ export default function PlaceSearch({ lab, required = true, z, defVal }: placeSe
     }
   }, []);
 
+  useEffect(() => {
+    const loadModules = async () => {
+      if (process.env.NEXT_PUBLIC_USE_PLACES_MOCK === 'true') {
+        const mock = await import('@/lib/utils/places/getPlaceDetails/mock/getPlaceDetailsMock');
+        setGetPlaces(() => mock.getPlaces);
+        setGetPlaceDetails(() => mock.getPlaceDetails);
+      } else {
+        const real = await import('@/lib/utils/places/getPlaces/getPlaces');
+        const details = await import('@/lib/utils/places/getPlaceDetails/getPlaceDetails');
+        setGetPlaces(() => real.default);
+        setGetPlaceDetails(() => details.getPlaceDetails);
+      }
+    };
+    loadModules();
+  }, []);
+
   // Async list for autocomplete
   let list = useAsyncList<placeOption>({
     async load({ filterText }) {
-      if (!filterText) return { items: [] };
+      if (!getPlaces || !filterText) return { items: [] };
       const suggestions = await getPlaces(
         filterText,
         Date.now(),
@@ -59,7 +75,7 @@ export default function PlaceSearch({ lab, required = true, z, defVal }: placeSe
   });
 
   async function handleSelection(key: React.Key | null) {
-    if (!key) return;
+   if (!key || !getPlaceDetails) return;
     const selected = list.items.find((item) => item.value === key);
     if (!selected) return;
     const place = await getPlaceDetails(selected.value);

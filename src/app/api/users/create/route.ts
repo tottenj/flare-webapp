@@ -1,4 +1,4 @@
-import { CreateDbUserSchema } from '@/lib/prisma/dtos/UserDto';
+import { CreateUserDto } from '@/lib/prisma/dtos/UserDto';
 import userService from '@/lib/prisma/services/userService';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -7,16 +7,8 @@ export async function POST(req: NextRequest) {
 
   try {
     const data = await req.json();
-    const {account_type, email} = data
-    const dto = CreateDbUserSchema.safeParse({account_type, email});
-    if (!dto.success)
-      return NextResponse.json('Invalid data', {
-        status: 400,
-        headers: {
-          'Cache-Control': 'no-store',
-        },
-      });
-    await service.createUser(dto.data);
+    const userData:CreateUserDto = {account_type: data.account_type, email: data.email}
+    await service.createUser(userData);
     return NextResponse.json(
       { success: true },
       {

@@ -2,10 +2,11 @@
 
 import { createUserWithEmailAndPassword, deleteUser, sendEmailVerification, signOut } from 'firebase/auth';
 import { auth } from '../configs/clientApp';
+import { ActionResponse } from '@/lib/types/ActionResponse';
 
 export default async function newSignUp(
   formData: FormData,
-  serverAction: (formData: FormData) => Promise<any>
+  serverAction: (formData: FormData) => Promise<ActionResponse>
 ) {
   sessionStorage.setItem('manualLoginInProgress', 'true');
   const email = formData.get('email') as string;
@@ -22,7 +23,8 @@ export default async function newSignUp(
       cache: "no-store"
     });
     if (!cookieRes.ok) throw new Error('Failed to set session cookie');
-    await serverAction(formData);
+    const result = await serverAction(formData);
+    if(result.status != "success") throw new Error(result.message)
     await sendEmailVerification(userCred.user)
     await signOut(auth);
     await fetch('/api/loginToken', { method: 'DELETE' });

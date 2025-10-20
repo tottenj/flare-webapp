@@ -147,6 +147,19 @@ exports.Prisma.Spatial_ref_sysScalarFieldEnum = {
   proj4text: 'proj4text'
 };
 
+exports.Prisma.EventScalarFieldEnum = {
+  id: 'id',
+  flare_id: 'flare_id',
+  title: 'title',
+  description: 'description',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  price: 'price',
+  ticketLink: 'ticketLink',
+  verified: 'verified',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -177,7 +190,8 @@ exports.Prisma.ModelName = {
   User: 'User',
   FlareUser: 'FlareUser',
   FlareOrg: 'FlareOrg',
-  spatial_ref_sys: 'spatial_ref_sys'
+  spatial_ref_sys: 'spatial_ref_sys',
+  Event: 'Event'
 };
 
 /**

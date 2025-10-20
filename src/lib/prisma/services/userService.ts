@@ -2,7 +2,7 @@ import UserDal from '../dals/userDal';
 import requireAuth from '@/lib/firebase/auth/requireAuth';
 import BaseService from './baseService';
 import FlareUserService from './flareUserService';
-import { CreateUserDto } from '../dtos/UserDto';
+import { CreateDbUserSchema, CreateUserDto } from '../dtos/UserDto';
 import { Prisma } from '@/app/generated/prisma';
 type UserKeys = keyof Prisma.UserGetPayload<{}>; 
 
@@ -16,7 +16,12 @@ export default class userService extends BaseService<UserDal, UserKeys> {
     account_type: true,
   };
 
-  async createUser(data: CreateUserDto) {
+  
+
+  async createUser(incoming: CreateUserDto) {
+    const parse = CreateDbUserSchema.safeParse(incoming)
+    if(!parse.success) throw new Error("Invalid Data")
+    const {data} = parse
     const {uid} = await requireAuth();
     const result = await this.dal.createUser({ id: uid, ...data });
     const { account_type, id } = result;

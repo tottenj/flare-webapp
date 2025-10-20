@@ -14,12 +14,16 @@ model User {
   account_type String
   flareOrg     FlareOrg?
   flareUser    FlareUser?
+
+  @@map("user")
 }
 
 model FlareUser {
   id      String @id @default(cuid())
   user_id String @unique
   user    User   @relation(fields: [user_id], references: [id])
+
+  @@map("flare_user")
 }
 
 model FlareOrg {
@@ -30,6 +34,9 @@ model FlareOrg {
   locationData Json
   location     Unsupported("geography(Point, 4326)")
   user         User                                  @relation(fields: [user_id], references: [id])
+  events       Event[]
+
+  @@map("flare_org")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -39,4 +46,21 @@ model spatial_ref_sys {
   auth_srid Int?
   srtext    String? @db.VarChar(2048)
   proj4text String? @db.VarChar(2048)
+}
+
+model Event {
+  id           String                                @id @default(cuid())
+  organization FlareOrg                              @relation(fields: [flare_id], references: [user_id])
+  flare_id     String
+  title        String
+  description  String?
+  startDate    DateTime
+  endDate      DateTime
+  location     Unsupported("geography(Point, 4326)")
+  price        Float?                                @default(0)
+  ticketLink   String?
+  verified     Boolean                               @default(false)
+  createdAt    DateTime                              @default(now())
+
+  @@map("event")
 }

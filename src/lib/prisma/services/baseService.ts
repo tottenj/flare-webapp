@@ -1,5 +1,5 @@
 import requireAuth from '@/lib/firebase/auth/requireAuth';
-import type { FlareClaims } from '@/lib/types/FlareClaims';
+import type { FlareClaimKeys, FlareClaims } from '@/lib/types/FlareClaims';
 
 export default abstract class BaseService<TDal, Ttype extends string> {
   protected uid!: string;
@@ -13,7 +13,7 @@ export default abstract class BaseService<TDal, Ttype extends string> {
   }
 
   protected async authenticate(requiredClaims?: (keyof FlareClaims)[]) {
-    const user = await requireAuth(requiredClaims as string[]);
+    const user = await requireAuth(requiredClaims as FlareClaimKeys[]);
     if (!user) throw new Error('Unauthorized');
     this.uid = user.uid;
     this.claims = user.claims as FlareClaims;

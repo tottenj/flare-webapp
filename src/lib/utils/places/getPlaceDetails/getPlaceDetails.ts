@@ -15,6 +15,7 @@ export async function getPlaceDetails(placeId: string) {
     const result = await place.fetchFields({
       fields: ['location', 'displayName'],
     });
+    
     return result;
   } catch (error) {
     console.error('Error fetching place details:', error);

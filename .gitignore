@@ -54,3 +54,5 @@ certificates
 
 
 prisma/migrations/*
+
+reports/*
