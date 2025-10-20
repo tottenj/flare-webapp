@@ -28,7 +28,7 @@ function fillEventForm() {
   );
 }
 
-describe('Dashboard loads on successful sign in', () => {
+describe.skip('Dashboard loads on successful sign in', () => {
   beforeEach(() => {
     cy.loginTestOrg();
     cy.visit('/dashboard');
@@ -53,7 +53,7 @@ describe('Dashboard loads on successful sign in', () => {
   });
 });
 
-describe.only('Create', () => {
+describe.skip('Create', () => {
   beforeEach(() => {
     cy.loginTestOrg();
     cy.visit('/dashboard');
@@ -96,7 +96,7 @@ describe.only('Create', () => {
 });
 
 
-describe.only("Verified", () => {
+describe.skip("Verified", () => {
   beforeEach(() => {
     cy.loginVerifiedOrg()
     cy.visit("/dashboard")

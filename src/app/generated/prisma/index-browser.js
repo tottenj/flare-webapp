@@ -139,6 +139,14 @@ exports.Prisma.FlareOrgScalarFieldEnum = {
   locationData: 'locationData'
 };
 
+exports.Prisma.Spatial_ref_sysScalarFieldEnum = {
+  srid: 'srid',
+  auth_name: 'auth_name',
+  auth_srid: 'auth_srid',
+  srtext: 'srtext',
+  proj4text: 'proj4text'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -168,7 +176,8 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   User: 'User',
   FlareUser: 'FlareUser',
-  FlareOrg: 'FlareOrg'
+  FlareOrg: 'FlareOrg',
+  spatial_ref_sys: 'spatial_ref_sys'
 };
 
 /**

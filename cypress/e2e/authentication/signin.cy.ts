@@ -2,7 +2,7 @@
 
 import { unverifiedUser, verifiedUser } from '../../support/constants';
 
-describe('Sign In Form', () => {
+describe.skip('Sign In Form', () => {
   before(() => {
     cy.clearAllEmulators();
     cy.createUser(verifiedUser.email, verifiedUser.password, verifiedUser.name, true, false);

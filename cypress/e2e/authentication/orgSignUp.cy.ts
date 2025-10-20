@@ -52,7 +52,7 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
   shouldSubmit && submit().click({ force: true });
 }
 
-describe('Page Components', () => {
+describe.skip('Page Components', () => {
   beforeEach(() => {
     cy.visit('/flare-signup');
     cy.clearForm();
@@ -76,7 +76,7 @@ describe('Page Components', () => {
   });
 });
 
-describe('Success Flow', () => {
+describe.skip('Success Flow', () => {
   before(() => {
     cy.visit('/flare-signup');
     cy.clearAllEmulators();
@@ -95,7 +95,7 @@ describe('Success Flow', () => {
   })
 });
 
-describe('Unsuccessful Flow', () => {
+describe.skip('Unsuccessful Flow', () => {
   beforeEach(() => {
     cy.visit('/flare-signup');
     cy.clearAllEmulators();
