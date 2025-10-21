@@ -136,7 +136,7 @@ exports.Prisma.FlareOrgScalarFieldEnum = {
   user_id: 'user_id',
   description: 'description',
   verified: 'verified',
-  locationData: 'locationData'
+  location_id: 'location_id'
 };
 
 exports.Prisma.Spatial_ref_sysScalarFieldEnum = {
@@ -157,7 +157,24 @@ exports.Prisma.EventScalarFieldEnum = {
   price: 'price',
   ticketLink: 'ticketLink',
   verified: 'verified',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  location_id: 'location_id'
+};
+
+exports.Prisma.LocationScalarFieldEnum = {
+  id: 'id',
+  place_id: 'place_id',
+  name: 'name',
+  flare_id: 'flare_id'
+};
+
+exports.Prisma.SocialsScalarFieldEnum = {
+  id: 'id',
+  flare_id: 'flare_id',
+  twitter: 'twitter',
+  facebook: 'facebook',
+  instagram: 'instagram',
+  other: 'other'
 };
 
 exports.Prisma.SortOrder = {
@@ -165,19 +182,9 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.JsonNullValueInput = {
-  JsonNull: Prisma.JsonNull
-};
-
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
-};
-
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
 };
 
 exports.Prisma.NullsOrder = {
@@ -191,7 +198,9 @@ exports.Prisma.ModelName = {
   FlareUser: 'FlareUser',
   FlareOrg: 'FlareOrg',
   spatial_ref_sys: 'spatial_ref_sys',
-  Event: 'Event'
+  Event: 'Event',
+  Location: 'Location',
+  Socials: 'Socials'
 };
 
 /**

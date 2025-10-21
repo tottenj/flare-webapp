@@ -1,11 +1,11 @@
+import { Prisma } from '@/app/generated/prisma';
 import prisma from '../prisma';
 
 export default class flareUserDal {
-  async createFlareUser(id: string) {
-    await prisma.flareUser.create({
-      data: {
-        user_id: id,
-      },
+  async createFlareUser(data: Prisma.FlareUserCreateInput, tx?: Prisma.TransactionClient) {
+    const db = tx ?? prisma;
+    await db.flareUser.create({
+      data
     });
   }
 }

@@ -38,6 +38,16 @@ export type spatial_ref_sys = $Result.DefaultSelection<Prisma.$spatial_ref_sysPa
  * 
  */
 export type Event = $Result.DefaultSelection<Prisma.$EventPayload>
+/**
+ * Model Location
+ * 
+ */
+export type Location = $Result.DefaultSelection<Prisma.$LocationPayload>
+/**
+ * Model Socials
+ * 
+ */
+export type Socials = $Result.DefaultSelection<Prisma.$SocialsPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -206,6 +216,26 @@ export class PrismaClient<
     * ```
     */
   get event(): Prisma.EventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.location`: Exposes CRUD operations for the **Location** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Locations
+    * const locations = await prisma.location.findMany()
+    * ```
+    */
+  get location(): Prisma.LocationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.socials`: Exposes CRUD operations for the **Socials** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Socials
+    * const socials = await prisma.socials.findMany()
+    * ```
+    */
+  get socials(): Prisma.SocialsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -650,7 +680,9 @@ export namespace Prisma {
     FlareUser: 'FlareUser',
     FlareOrg: 'FlareOrg',
     spatial_ref_sys: 'spatial_ref_sys',
-    Event: 'Event'
+    Event: 'Event',
+    Location: 'Location',
+    Socials: 'Socials'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -669,7 +701,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "flareUser" | "flareOrg" | "spatial_ref_sys" | "event"
+      modelProps: "user" | "flareUser" | "flareOrg" | "spatial_ref_sys" | "event" | "location" | "socials"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -845,6 +877,18 @@ export namespace Prisma {
             args: Prisma.FlareOrgFindManyArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>[]
           }
+          create: {
+            args: Prisma.FlareOrgCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>
+          }
+          createMany: {
+            args: Prisma.FlareOrgCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FlareOrgCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>[]
+          }
           delete: {
             args: Prisma.FlareOrgDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>
@@ -864,6 +908,10 @@ export namespace Prisma {
           updateManyAndReturn: {
             args: Prisma.FlareOrgUpdateManyAndReturnArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>[]
+          }
+          upsert: {
+            args: Prisma.FlareOrgUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FlareOrgPayload>
           }
           aggregate: {
             args: Prisma.FlareOrgAggregateArgs<ExtArgs>
@@ -977,6 +1025,18 @@ export namespace Prisma {
             args: Prisma.EventFindManyArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$EventPayload>[]
           }
+          create: {
+            args: Prisma.EventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>
+          }
+          createMany: {
+            args: Prisma.EventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>[]
+          }
           delete: {
             args: Prisma.EventDeleteArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$EventPayload>
@@ -997,6 +1057,10 @@ export namespace Prisma {
             args: Prisma.EventUpdateManyAndReturnArgs<ExtArgs>
             result: $Utils.PayloadToResult<Prisma.$EventPayload>[]
           }
+          upsert: {
+            args: Prisma.EventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventPayload>
+          }
           aggregate: {
             args: Prisma.EventAggregateArgs<ExtArgs>
             result: $Utils.Optional<AggregateEvent>
@@ -1008,6 +1072,138 @@ export namespace Prisma {
           count: {
             args: Prisma.EventCountArgs<ExtArgs>
             result: $Utils.Optional<EventCountAggregateOutputType> | number
+          }
+        }
+      }
+      Location: {
+        payload: Prisma.$LocationPayload<ExtArgs>
+        fields: Prisma.LocationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LocationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LocationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+          }
+          findFirst: {
+            args: Prisma.LocationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LocationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+          }
+          findMany: {
+            args: Prisma.LocationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>[]
+          }
+          delete: {
+            args: Prisma.LocationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+          }
+          update: {
+            args: Prisma.LocationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+          }
+          deleteMany: {
+            args: Prisma.LocationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LocationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LocationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>[]
+          }
+          aggregate: {
+            args: Prisma.LocationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLocation>
+          }
+          groupBy: {
+            args: Prisma.LocationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LocationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LocationCountArgs<ExtArgs>
+            result: $Utils.Optional<LocationCountAggregateOutputType> | number
+          }
+        }
+      }
+      Socials: {
+        payload: Prisma.$SocialsPayload<ExtArgs>
+        fields: Prisma.SocialsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SocialsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SocialsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialsPayload>
+          }
+          findFirst: {
+            args: Prisma.SocialsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SocialsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialsPayload>
+          }
+          findMany: {
+            args: Prisma.SocialsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialsPayload>[]
+          }
+          create: {
+            args: Prisma.SocialsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialsPayload>
+          }
+          createMany: {
+            args: Prisma.SocialsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SocialsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialsPayload>[]
+          }
+          delete: {
+            args: Prisma.SocialsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialsPayload>
+          }
+          update: {
+            args: Prisma.SocialsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialsPayload>
+          }
+          deleteMany: {
+            args: Prisma.SocialsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SocialsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SocialsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialsPayload>[]
+          }
+          upsert: {
+            args: Prisma.SocialsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SocialsPayload>
+          }
+          aggregate: {
+            args: Prisma.SocialsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSocials>
+          }
+          groupBy: {
+            args: Prisma.SocialsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SocialsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SocialsCountArgs<ExtArgs>
+            result: $Utils.Optional<SocialsCountAggregateOutputType> | number
           }
         }
       }
@@ -1112,6 +1308,8 @@ export namespace Prisma {
     flareOrg?: FlareOrgOmit
     spatial_ref_sys?: spatial_ref_sysOmit
     event?: EventOmit
+    location?: LocationOmit
+    socials?: SocialsOmit
   }
 
   /* Types for Logging */
@@ -1214,6 +1412,46 @@ export namespace Prisma {
    * FlareOrgCountOutputType without action
    */
   export type FlareOrgCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventWhereInput
+  }
+
+
+  /**
+   * Count Type LocationCountOutputType
+   */
+
+  export type LocationCountOutputType = {
+    organizations: number
+    events: number
+  }
+
+  export type LocationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organizations?: boolean | LocationCountOutputTypeCountOrganizationsArgs
+    events?: boolean | LocationCountOutputTypeCountEventsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationCountOutputType
+     */
+    select?: LocationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeCountOrganizationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlareOrgWhereInput
+  }
+
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EventWhereInput
   }
 
@@ -3316,6 +3554,7 @@ export namespace Prisma {
     user_id: string | null
     description: string | null
     verified: boolean | null
+    location_id: string | null
   }
 
   export type FlareOrgMaxAggregateOutputType = {
@@ -3323,6 +3562,7 @@ export namespace Prisma {
     user_id: string | null
     description: string | null
     verified: boolean | null
+    location_id: string | null
   }
 
   export type FlareOrgCountAggregateOutputType = {
@@ -3330,7 +3570,7 @@ export namespace Prisma {
     user_id: number
     description: number
     verified: number
-    locationData: number
+    location_id: number
     _all: number
   }
 
@@ -3340,6 +3580,7 @@ export namespace Prisma {
     user_id?: true
     description?: true
     verified?: true
+    location_id?: true
   }
 
   export type FlareOrgMaxAggregateInputType = {
@@ -3347,6 +3588,7 @@ export namespace Prisma {
     user_id?: true
     description?: true
     verified?: true
+    location_id?: true
   }
 
   export type FlareOrgCountAggregateInputType = {
@@ -3354,7 +3596,7 @@ export namespace Prisma {
     user_id?: true
     description?: true
     verified?: true
-    locationData?: true
+    location_id?: true
     _all?: true
   }
 
@@ -3435,7 +3677,7 @@ export namespace Prisma {
     user_id: string
     description: string | null
     verified: boolean
-    locationData: JsonValue
+    location_id: string
     _count: FlareOrgCountAggregateOutputType | null
     _min: FlareOrgMinAggregateOutputType | null
     _max: FlareOrgMaxAggregateOutputType | null
@@ -3460,20 +3702,32 @@ export namespace Prisma {
     user_id?: boolean
     description?: boolean
     verified?: boolean
-    locationData?: boolean
+    location_id?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     events?: boolean | FlareOrg$eventsArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
+    socials?: boolean | FlareOrg$socialsArgs<ExtArgs>
     _count?: boolean | FlareOrgCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flareOrg"]>
 
+  export type FlareOrgSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    description?: boolean
+    verified?: boolean
+    location_id?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["flareOrg"]>
 
   export type FlareOrgSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     user_id?: boolean
     description?: boolean
     verified?: boolean
-    locationData?: boolean
+    location_id?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flareOrg"]>
 
   export type FlareOrgSelectScalar = {
@@ -3481,17 +3735,24 @@ export namespace Prisma {
     user_id?: boolean
     description?: boolean
     verified?: boolean
-    locationData?: boolean
+    location_id?: boolean
   }
 
-  export type FlareOrgOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "description" | "verified" | "locationData", ExtArgs["result"]["flareOrg"]>
+  export type FlareOrgOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "description" | "verified" | "location_id", ExtArgs["result"]["flareOrg"]>
   export type FlareOrgInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     events?: boolean | FlareOrg$eventsArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
+    socials?: boolean | FlareOrg$socialsArgs<ExtArgs>
     _count?: boolean | FlareOrgCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FlareOrgIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }
   export type FlareOrgIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }
 
   export type $FlareOrgPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3499,13 +3760,15 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       events: Prisma.$EventPayload<ExtArgs>[]
+      location: Prisma.$LocationPayload<ExtArgs>
+      socials: Prisma.$SocialsPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       user_id: string
       description: string | null
       verified: boolean
-      locationData: Prisma.JsonValue
+      location_id: string
     }, ExtArgs["result"]["flareOrg"]>
     composites: {}
   }
@@ -3594,6 +3857,58 @@ export namespace Prisma {
      * 
      */
     findMany<T extends FlareOrgFindManyArgs>(args?: SelectSubset<T, FlareOrgFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FlareOrg.
+     * @param {FlareOrgCreateArgs} args - Arguments to create a FlareOrg.
+     * @example
+     * // Create one FlareOrg
+     * const FlareOrg = await prisma.flareOrg.create({
+     *   data: {
+     *     // ... data to create a FlareOrg
+     *   }
+     * })
+     * 
+     */
+    create<T extends FlareOrgCreateArgs>(args: SelectSubset<T, FlareOrgCreateArgs<ExtArgs>>): Prisma__FlareOrgClient<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FlareOrgs.
+     * @param {FlareOrgCreateManyArgs} args - Arguments to create many FlareOrgs.
+     * @example
+     * // Create many FlareOrgs
+     * const flareOrg = await prisma.flareOrg.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FlareOrgCreateManyArgs>(args?: SelectSubset<T, FlareOrgCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FlareOrgs and returns the data saved in the database.
+     * @param {FlareOrgCreateManyAndReturnArgs} args - Arguments to create many FlareOrgs.
+     * @example
+     * // Create many FlareOrgs
+     * const flareOrg = await prisma.flareOrg.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FlareOrgs and only return the `id`
+     * const flareOrgWithIdOnly = await prisma.flareOrg.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FlareOrgCreateManyAndReturnArgs>(args?: SelectSubset<T, FlareOrgCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a FlareOrg.
@@ -3688,6 +4003,25 @@ export namespace Prisma {
      * 
      */
     updateManyAndReturn<T extends FlareOrgUpdateManyAndReturnArgs>(args: SelectSubset<T, FlareOrgUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FlareOrg.
+     * @param {FlareOrgUpsertArgs} args - Arguments to update or create a FlareOrg.
+     * @example
+     * // Update or create a FlareOrg
+     * const flareOrg = await prisma.flareOrg.upsert({
+     *   create: {
+     *     // ... data to create a FlareOrg
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FlareOrg we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FlareOrgUpsertArgs>(args: SelectSubset<T, FlareOrgUpsertArgs<ExtArgs>>): Prisma__FlareOrgClient<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -3831,6 +4165,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     events<T extends FlareOrg$eventsArgs<ExtArgs> = {}>(args?: Subset<T, FlareOrg$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    location<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    socials<T extends FlareOrg$socialsArgs<ExtArgs> = {}>(args?: Subset<T, FlareOrg$socialsArgs<ExtArgs>>): Prisma__SocialsClient<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3864,7 +4200,7 @@ export namespace Prisma {
     readonly user_id: FieldRef<"FlareOrg", 'String'>
     readonly description: FieldRef<"FlareOrg", 'String'>
     readonly verified: FieldRef<"FlareOrg", 'Boolean'>
-    readonly locationData: FieldRef<"FlareOrg", 'Json'>
+    readonly location_id: FieldRef<"FlareOrg", 'String'>
   }
     
 
@@ -4065,6 +4401,62 @@ export namespace Prisma {
   }
 
   /**
+   * FlareOrg create
+   */
+  export type FlareOrgCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlareOrg
+     */
+    select?: FlareOrgSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlareOrg
+     */
+    omit?: FlareOrgOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlareOrgInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FlareOrg.
+     */
+    data: XOR<FlareOrgCreateInput, FlareOrgUncheckedCreateInput>
+  }
+
+  /**
+   * FlareOrg createMany
+   */
+  export type FlareOrgCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FlareOrgs.
+     */
+    data: FlareOrgCreateManyInput | FlareOrgCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FlareOrg createManyAndReturn
+   */
+  export type FlareOrgCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlareOrg
+     */
+    select?: FlareOrgSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlareOrg
+     */
+    omit?: FlareOrgOmit<ExtArgs> | null
+    /**
+     * The data used to create many FlareOrgs.
+     */
+    data: FlareOrgCreateManyInput | FlareOrgCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlareOrgIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * FlareOrg update
    */
   export type FlareOrgUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4139,6 +4531,36 @@ export namespace Prisma {
   }
 
   /**
+   * FlareOrg upsert
+   */
+  export type FlareOrgUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlareOrg
+     */
+    select?: FlareOrgSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlareOrg
+     */
+    omit?: FlareOrgOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlareOrgInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FlareOrg to update in case it exists.
+     */
+    where: FlareOrgWhereUniqueInput
+    /**
+     * In case the FlareOrg found by the `where` argument doesn't exist, create a new FlareOrg with this data.
+     */
+    create: XOR<FlareOrgCreateInput, FlareOrgUncheckedCreateInput>
+    /**
+     * In case the FlareOrg was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FlareOrgUpdateInput, FlareOrgUncheckedUpdateInput>
+  }
+
+  /**
    * FlareOrg delete
    */
   export type FlareOrgDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4196,6 +4618,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * FlareOrg.socials
+   */
+  export type FlareOrg$socialsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsInclude<ExtArgs> | null
+    where?: SocialsWhereInput
   }
 
   /**
@@ -5281,6 +5722,7 @@ export namespace Prisma {
     ticketLink: string | null
     verified: boolean | null
     createdAt: Date | null
+    location_id: string | null
   }
 
   export type EventMaxAggregateOutputType = {
@@ -5294,6 +5736,7 @@ export namespace Prisma {
     ticketLink: string | null
     verified: boolean | null
     createdAt: Date | null
+    location_id: string | null
   }
 
   export type EventCountAggregateOutputType = {
@@ -5307,6 +5750,7 @@ export namespace Prisma {
     ticketLink: number
     verified: number
     createdAt: number
+    location_id: number
     _all: number
   }
 
@@ -5330,6 +5774,7 @@ export namespace Prisma {
     ticketLink?: true
     verified?: true
     createdAt?: true
+    location_id?: true
   }
 
   export type EventMaxAggregateInputType = {
@@ -5343,6 +5788,7 @@ export namespace Prisma {
     ticketLink?: true
     verified?: true
     createdAt?: true
+    location_id?: true
   }
 
   export type EventCountAggregateInputType = {
@@ -5356,6 +5802,7 @@ export namespace Prisma {
     ticketLink?: true
     verified?: true
     createdAt?: true
+    location_id?: true
     _all?: true
   }
 
@@ -5456,6 +5903,7 @@ export namespace Prisma {
     ticketLink: string | null
     verified: boolean
     createdAt: Date
+    location_id: string
     _count: EventCountAggregateOutputType | null
     _avg: EventAvgAggregateOutputType | null
     _sum: EventSumAggregateOutputType | null
@@ -5488,9 +5936,26 @@ export namespace Prisma {
     ticketLink?: boolean
     verified?: boolean
     createdAt?: boolean
+    location_id?: boolean
     organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
+  export type EventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flare_id?: boolean
+    title?: boolean
+    description?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    price?: boolean
+    ticketLink?: boolean
+    verified?: boolean
+    createdAt?: boolean
+    location_id?: boolean
+    organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["event"]>
 
   export type EventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
@@ -5503,7 +5968,9 @@ export namespace Prisma {
     ticketLink?: boolean
     verified?: boolean
     createdAt?: boolean
+    location_id?: boolean
     organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
   export type EventSelectScalar = {
@@ -5517,20 +5984,28 @@ export namespace Prisma {
     ticketLink?: boolean
     verified?: boolean
     createdAt?: boolean
+    location_id?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flare_id" | "title" | "description" | "startDate" | "endDate" | "price" | "ticketLink" | "verified" | "createdAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flare_id" | "title" | "description" | "startDate" | "endDate" | "price" | "ticketLink" | "verified" | "createdAt" | "location_id", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
+  }
+  export type EventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }
   export type EventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+    location?: boolean | LocationDefaultArgs<ExtArgs>
   }
 
   export type $EventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Event"
     objects: {
       organization: Prisma.$FlareOrgPayload<ExtArgs>
+      location: Prisma.$LocationPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5543,6 +6018,7 @@ export namespace Prisma {
       ticketLink: string | null
       verified: boolean
       createdAt: Date
+      location_id: string
     }, ExtArgs["result"]["event"]>
     composites: {}
   }
@@ -5631,6 +6107,58 @@ export namespace Prisma {
      * 
      */
     findMany<T extends EventFindManyArgs>(args?: SelectSubset<T, EventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Event.
+     * @param {EventCreateArgs} args - Arguments to create a Event.
+     * @example
+     * // Create one Event
+     * const Event = await prisma.event.create({
+     *   data: {
+     *     // ... data to create a Event
+     *   }
+     * })
+     * 
+     */
+    create<T extends EventCreateArgs>(args: SelectSubset<T, EventCreateArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Events.
+     * @param {EventCreateManyArgs} args - Arguments to create many Events.
+     * @example
+     * // Create many Events
+     * const event = await prisma.event.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EventCreateManyArgs>(args?: SelectSubset<T, EventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Events and returns the data saved in the database.
+     * @param {EventCreateManyAndReturnArgs} args - Arguments to create many Events.
+     * @example
+     * // Create many Events
+     * const event = await prisma.event.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Events and only return the `id`
+     * const eventWithIdOnly = await prisma.event.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EventCreateManyAndReturnArgs>(args?: SelectSubset<T, EventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
      * Delete a Event.
@@ -5725,6 +6253,25 @@ export namespace Prisma {
      * 
      */
     updateManyAndReturn<T extends EventUpdateManyAndReturnArgs>(args: SelectSubset<T, EventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Event.
+     * @param {EventUpsertArgs} args - Arguments to update or create a Event.
+     * @example
+     * // Update or create a Event
+     * const event = await prisma.event.upsert({
+     *   create: {
+     *     // ... data to create a Event
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Event we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EventUpsertArgs>(args: SelectSubset<T, EventUpsertArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
@@ -5867,6 +6414,7 @@ export namespace Prisma {
   export interface Prisma__EventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organization<T extends FlareOrgDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FlareOrgDefaultArgs<ExtArgs>>): Prisma__FlareOrgClient<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    location<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5906,6 +6454,7 @@ export namespace Prisma {
     readonly ticketLink: FieldRef<"Event", 'String'>
     readonly verified: FieldRef<"Event", 'Boolean'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
+    readonly location_id: FieldRef<"Event", 'String'>
   }
     
 
@@ -6106,6 +6655,62 @@ export namespace Prisma {
   }
 
   /**
+   * Event create
+   */
+  export type EventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Event.
+     */
+    data: XOR<EventCreateInput, EventUncheckedCreateInput>
+  }
+
+  /**
+   * Event createMany
+   */
+  export type EventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Events.
+     */
+    data: EventCreateManyInput | EventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Event createManyAndReturn
+   */
+  export type EventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * The data used to create many Events.
+     */
+    data: EventCreateManyInput | EventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
    * Event update
    */
   export type EventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6180,6 +6785,36 @@ export namespace Prisma {
   }
 
   /**
+   * Event upsert
+   */
+  export type EventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Event to update in case it exists.
+     */
+    where: EventWhereUniqueInput
+    /**
+     * In case the Event found by the `where` argument doesn't exist, create a new Event with this data.
+     */
+    create: XOR<EventCreateInput, EventUncheckedCreateInput>
+    /**
+     * In case the Event was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EventUpdateInput, EventUncheckedUpdateInput>
+  }
+
+  /**
    * Event delete
    */
   export type EventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6235,6 +6870,2002 @@ export namespace Prisma {
 
 
   /**
+   * Model Location
+   */
+
+  export type AggregateLocation = {
+    _count: LocationCountAggregateOutputType | null
+    _min: LocationMinAggregateOutputType | null
+    _max: LocationMaxAggregateOutputType | null
+  }
+
+  export type LocationMinAggregateOutputType = {
+    id: string | null
+    place_id: string | null
+    name: string | null
+    flare_id: string | null
+  }
+
+  export type LocationMaxAggregateOutputType = {
+    id: string | null
+    place_id: string | null
+    name: string | null
+    flare_id: string | null
+  }
+
+  export type LocationCountAggregateOutputType = {
+    id: number
+    place_id: number
+    name: number
+    flare_id: number
+    _all: number
+  }
+
+
+  export type LocationMinAggregateInputType = {
+    id?: true
+    place_id?: true
+    name?: true
+    flare_id?: true
+  }
+
+  export type LocationMaxAggregateInputType = {
+    id?: true
+    place_id?: true
+    name?: true
+    flare_id?: true
+  }
+
+  export type LocationCountAggregateInputType = {
+    id?: true
+    place_id?: true
+    name?: true
+    flare_id?: true
+    _all?: true
+  }
+
+  export type LocationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Location to aggregate.
+     */
+    where?: LocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Locations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Locations
+    **/
+    _count?: true | LocationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LocationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LocationMaxAggregateInputType
+  }
+
+  export type GetLocationAggregateType<T extends LocationAggregateArgs> = {
+        [P in keyof T & keyof AggregateLocation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLocation[P]>
+      : GetScalarType<T[P], AggregateLocation[P]>
+  }
+
+
+
+
+  export type LocationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LocationWhereInput
+    orderBy?: LocationOrderByWithAggregationInput | LocationOrderByWithAggregationInput[]
+    by: LocationScalarFieldEnum[] | LocationScalarFieldEnum
+    having?: LocationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LocationCountAggregateInputType | true
+    _min?: LocationMinAggregateInputType
+    _max?: LocationMaxAggregateInputType
+  }
+
+  export type LocationGroupByOutputType = {
+    id: string
+    place_id: string
+    name: string | null
+    flare_id: string | null
+    _count: LocationCountAggregateOutputType | null
+    _min: LocationMinAggregateOutputType | null
+    _max: LocationMaxAggregateOutputType | null
+  }
+
+  type GetLocationGroupByPayload<T extends LocationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LocationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LocationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LocationGroupByOutputType[P]>
+            : GetScalarType<T[P], LocationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LocationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    place_id?: boolean
+    name?: boolean
+    flare_id?: boolean
+    organizations?: boolean | Location$organizationsArgs<ExtArgs>
+    events?: boolean | Location$eventsArgs<ExtArgs>
+    _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["location"]>
+
+
+  export type LocationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    place_id?: boolean
+    name?: boolean
+    flare_id?: boolean
+  }, ExtArgs["result"]["location"]>
+
+  export type LocationSelectScalar = {
+    id?: boolean
+    place_id?: boolean
+    name?: boolean
+    flare_id?: boolean
+  }
+
+  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "place_id" | "name" | "flare_id", ExtArgs["result"]["location"]>
+  export type LocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organizations?: boolean | Location$organizationsArgs<ExtArgs>
+    events?: boolean | Location$eventsArgs<ExtArgs>
+    _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type LocationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $LocationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Location"
+    objects: {
+      organizations: Prisma.$FlareOrgPayload<ExtArgs>[]
+      events: Prisma.$EventPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      place_id: string
+      name: string | null
+      flare_id: string | null
+    }, ExtArgs["result"]["location"]>
+    composites: {}
+  }
+
+  type LocationGetPayload<S extends boolean | null | undefined | LocationDefaultArgs> = $Result.GetResult<Prisma.$LocationPayload, S>
+
+  type LocationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LocationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LocationCountAggregateInputType | true
+    }
+
+  export interface LocationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Location'], meta: { name: 'Location' } }
+    /**
+     * Find zero or one Location that matches the filter.
+     * @param {LocationFindUniqueArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LocationFindUniqueArgs>(args: SelectSubset<T, LocationFindUniqueArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Location that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LocationFindUniqueOrThrowArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LocationFindUniqueOrThrowArgs>(args: SelectSubset<T, LocationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Location that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationFindFirstArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LocationFindFirstArgs>(args?: SelectSubset<T, LocationFindFirstArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Location that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationFindFirstOrThrowArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LocationFindFirstOrThrowArgs>(args?: SelectSubset<T, LocationFindFirstOrThrowArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Locations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Locations
+     * const locations = await prisma.location.findMany()
+     * 
+     * // Get first 10 Locations
+     * const locations = await prisma.location.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const locationWithIdOnly = await prisma.location.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LocationFindManyArgs>(args?: SelectSubset<T, LocationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Delete a Location.
+     * @param {LocationDeleteArgs} args - Arguments to delete one Location.
+     * @example
+     * // Delete one Location
+     * const Location = await prisma.location.delete({
+     *   where: {
+     *     // ... filter to delete one Location
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LocationDeleteArgs>(args: SelectSubset<T, LocationDeleteArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Location.
+     * @param {LocationUpdateArgs} args - Arguments to update one Location.
+     * @example
+     * // Update one Location
+     * const location = await prisma.location.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LocationUpdateArgs>(args: SelectSubset<T, LocationUpdateArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Locations.
+     * @param {LocationDeleteManyArgs} args - Arguments to filter Locations to delete.
+     * @example
+     * // Delete a few Locations
+     * const { count } = await prisma.location.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LocationDeleteManyArgs>(args?: SelectSubset<T, LocationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Locations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Locations
+     * const location = await prisma.location.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LocationUpdateManyArgs>(args: SelectSubset<T, LocationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Locations and returns the data updated in the database.
+     * @param {LocationUpdateManyAndReturnArgs} args - Arguments to update many Locations.
+     * @example
+     * // Update many Locations
+     * const location = await prisma.location.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Locations and only return the `id`
+     * const locationWithIdOnly = await prisma.location.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LocationUpdateManyAndReturnArgs>(args: SelectSubset<T, LocationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+
+    /**
+     * Count the number of Locations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationCountArgs} args - Arguments to filter Locations to count.
+     * @example
+     * // Count the number of Locations
+     * const count = await prisma.location.count({
+     *   where: {
+     *     // ... the filter for the Locations we want to count
+     *   }
+     * })
+    **/
+    count<T extends LocationCountArgs>(
+      args?: Subset<T, LocationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LocationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Location.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LocationAggregateArgs>(args: Subset<T, LocationAggregateArgs>): Prisma.PrismaPromise<GetLocationAggregateType<T>>
+
+    /**
+     * Group by Location.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LocationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LocationGroupByArgs['orderBy'] }
+        : { orderBy?: LocationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LocationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLocationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Location model
+   */
+  readonly fields: LocationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Location.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LocationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organizations<T extends Location$organizationsArgs<ExtArgs> = {}>(args?: Subset<T, Location$organizationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    events<T extends Location$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Location$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Location model
+   */
+  interface LocationFieldRefs {
+    readonly id: FieldRef<"Location", 'String'>
+    readonly place_id: FieldRef<"Location", 'String'>
+    readonly name: FieldRef<"Location", 'String'>
+    readonly flare_id: FieldRef<"Location", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Location findUnique
+   */
+  export type LocationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter, which Location to fetch.
+     */
+    where: LocationWhereUniqueInput
+  }
+
+  /**
+   * Location findUniqueOrThrow
+   */
+  export type LocationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter, which Location to fetch.
+     */
+    where: LocationWhereUniqueInput
+  }
+
+  /**
+   * Location findFirst
+   */
+  export type LocationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter, which Location to fetch.
+     */
+    where?: LocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Locations.
+     */
+    cursor?: LocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Locations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Locations.
+     */
+    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
+  }
+
+  /**
+   * Location findFirstOrThrow
+   */
+  export type LocationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter, which Location to fetch.
+     */
+    where?: LocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Locations.
+     */
+    cursor?: LocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Locations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Locations.
+     */
+    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
+  }
+
+  /**
+   * Location findMany
+   */
+  export type LocationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter, which Locations to fetch.
+     */
+    where?: LocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Locations.
+     */
+    cursor?: LocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Locations.
+     */
+    skip?: number
+    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
+  }
+
+  /**
+   * Location update
+   */
+  export type LocationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Location.
+     */
+    data: XOR<LocationUpdateInput, LocationUncheckedUpdateInput>
+    /**
+     * Choose, which Location to update.
+     */
+    where: LocationWhereUniqueInput
+  }
+
+  /**
+   * Location updateMany
+   */
+  export type LocationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Locations.
+     */
+    data: XOR<LocationUpdateManyMutationInput, LocationUncheckedUpdateManyInput>
+    /**
+     * Filter which Locations to update
+     */
+    where?: LocationWhereInput
+    /**
+     * Limit how many Locations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Location updateManyAndReturn
+   */
+  export type LocationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * The data used to update Locations.
+     */
+    data: XOR<LocationUpdateManyMutationInput, LocationUncheckedUpdateManyInput>
+    /**
+     * Filter which Locations to update
+     */
+    where?: LocationWhereInput
+    /**
+     * Limit how many Locations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Location delete
+   */
+  export type LocationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter which Location to delete.
+     */
+    where: LocationWhereUniqueInput
+  }
+
+  /**
+   * Location deleteMany
+   */
+  export type LocationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Locations to delete
+     */
+    where?: LocationWhereInput
+    /**
+     * Limit how many Locations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Location.organizations
+   */
+  export type Location$organizationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlareOrg
+     */
+    select?: FlareOrgSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlareOrg
+     */
+    omit?: FlareOrgOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlareOrgInclude<ExtArgs> | null
+    where?: FlareOrgWhereInput
+    orderBy?: FlareOrgOrderByWithRelationInput | FlareOrgOrderByWithRelationInput[]
+    cursor?: FlareOrgWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlareOrgScalarFieldEnum | FlareOrgScalarFieldEnum[]
+  }
+
+  /**
+   * Location.events
+   */
+  export type Location$eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Event
+     */
+    select?: EventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Event
+     */
+    omit?: EventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventInclude<ExtArgs> | null
+    where?: EventWhereInput
+    orderBy?: EventOrderByWithRelationInput | EventOrderByWithRelationInput[]
+    cursor?: EventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * Location without action
+   */
+  export type LocationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Socials
+   */
+
+  export type AggregateSocials = {
+    _count: SocialsCountAggregateOutputType | null
+    _min: SocialsMinAggregateOutputType | null
+    _max: SocialsMaxAggregateOutputType | null
+  }
+
+  export type SocialsMinAggregateOutputType = {
+    id: string | null
+    flare_id: string | null
+    twitter: string | null
+    facebook: string | null
+    instagram: string | null
+    other: string | null
+  }
+
+  export type SocialsMaxAggregateOutputType = {
+    id: string | null
+    flare_id: string | null
+    twitter: string | null
+    facebook: string | null
+    instagram: string | null
+    other: string | null
+  }
+
+  export type SocialsCountAggregateOutputType = {
+    id: number
+    flare_id: number
+    twitter: number
+    facebook: number
+    instagram: number
+    other: number
+    _all: number
+  }
+
+
+  export type SocialsMinAggregateInputType = {
+    id?: true
+    flare_id?: true
+    twitter?: true
+    facebook?: true
+    instagram?: true
+    other?: true
+  }
+
+  export type SocialsMaxAggregateInputType = {
+    id?: true
+    flare_id?: true
+    twitter?: true
+    facebook?: true
+    instagram?: true
+    other?: true
+  }
+
+  export type SocialsCountAggregateInputType = {
+    id?: true
+    flare_id?: true
+    twitter?: true
+    facebook?: true
+    instagram?: true
+    other?: true
+    _all?: true
+  }
+
+  export type SocialsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Socials to aggregate.
+     */
+    where?: SocialsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Socials to fetch.
+     */
+    orderBy?: SocialsOrderByWithRelationInput | SocialsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SocialsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Socials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Socials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Socials
+    **/
+    _count?: true | SocialsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SocialsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SocialsMaxAggregateInputType
+  }
+
+  export type GetSocialsAggregateType<T extends SocialsAggregateArgs> = {
+        [P in keyof T & keyof AggregateSocials]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSocials[P]>
+      : GetScalarType<T[P], AggregateSocials[P]>
+  }
+
+
+
+
+  export type SocialsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SocialsWhereInput
+    orderBy?: SocialsOrderByWithAggregationInput | SocialsOrderByWithAggregationInput[]
+    by: SocialsScalarFieldEnum[] | SocialsScalarFieldEnum
+    having?: SocialsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SocialsCountAggregateInputType | true
+    _min?: SocialsMinAggregateInputType
+    _max?: SocialsMaxAggregateInputType
+  }
+
+  export type SocialsGroupByOutputType = {
+    id: string
+    flare_id: string
+    twitter: string | null
+    facebook: string | null
+    instagram: string | null
+    other: string | null
+    _count: SocialsCountAggregateOutputType | null
+    _min: SocialsMinAggregateOutputType | null
+    _max: SocialsMaxAggregateOutputType | null
+  }
+
+  type GetSocialsGroupByPayload<T extends SocialsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SocialsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SocialsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SocialsGroupByOutputType[P]>
+            : GetScalarType<T[P], SocialsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SocialsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flare_id?: boolean
+    twitter?: boolean
+    facebook?: boolean
+    instagram?: boolean
+    other?: boolean
+    organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["socials"]>
+
+  export type SocialsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flare_id?: boolean
+    twitter?: boolean
+    facebook?: boolean
+    instagram?: boolean
+    other?: boolean
+    organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["socials"]>
+
+  export type SocialsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flare_id?: boolean
+    twitter?: boolean
+    facebook?: boolean
+    instagram?: boolean
+    other?: boolean
+    organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["socials"]>
+
+  export type SocialsSelectScalar = {
+    id?: boolean
+    flare_id?: boolean
+    twitter?: boolean
+    facebook?: boolean
+    instagram?: boolean
+    other?: boolean
+  }
+
+  export type SocialsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flare_id" | "twitter" | "facebook" | "instagram" | "other", ExtArgs["result"]["socials"]>
+  export type SocialsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+  }
+  export type SocialsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+  }
+  export type SocialsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | FlareOrgDefaultArgs<ExtArgs>
+  }
+
+  export type $SocialsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Socials"
+    objects: {
+      organization: Prisma.$FlareOrgPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      flare_id: string
+      twitter: string | null
+      facebook: string | null
+      instagram: string | null
+      other: string | null
+    }, ExtArgs["result"]["socials"]>
+    composites: {}
+  }
+
+  type SocialsGetPayload<S extends boolean | null | undefined | SocialsDefaultArgs> = $Result.GetResult<Prisma.$SocialsPayload, S>
+
+  type SocialsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SocialsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SocialsCountAggregateInputType | true
+    }
+
+  export interface SocialsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Socials'], meta: { name: 'Socials' } }
+    /**
+     * Find zero or one Socials that matches the filter.
+     * @param {SocialsFindUniqueArgs} args - Arguments to find a Socials
+     * @example
+     * // Get one Socials
+     * const socials = await prisma.socials.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SocialsFindUniqueArgs>(args: SelectSubset<T, SocialsFindUniqueArgs<ExtArgs>>): Prisma__SocialsClient<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Socials that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SocialsFindUniqueOrThrowArgs} args - Arguments to find a Socials
+     * @example
+     * // Get one Socials
+     * const socials = await prisma.socials.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SocialsFindUniqueOrThrowArgs>(args: SelectSubset<T, SocialsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SocialsClient<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Socials that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialsFindFirstArgs} args - Arguments to find a Socials
+     * @example
+     * // Get one Socials
+     * const socials = await prisma.socials.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SocialsFindFirstArgs>(args?: SelectSubset<T, SocialsFindFirstArgs<ExtArgs>>): Prisma__SocialsClient<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Socials that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialsFindFirstOrThrowArgs} args - Arguments to find a Socials
+     * @example
+     * // Get one Socials
+     * const socials = await prisma.socials.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SocialsFindFirstOrThrowArgs>(args?: SelectSubset<T, SocialsFindFirstOrThrowArgs<ExtArgs>>): Prisma__SocialsClient<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Socials that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Socials
+     * const socials = await prisma.socials.findMany()
+     * 
+     * // Get first 10 Socials
+     * const socials = await prisma.socials.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const socialsWithIdOnly = await prisma.socials.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SocialsFindManyArgs>(args?: SelectSubset<T, SocialsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Socials.
+     * @param {SocialsCreateArgs} args - Arguments to create a Socials.
+     * @example
+     * // Create one Socials
+     * const Socials = await prisma.socials.create({
+     *   data: {
+     *     // ... data to create a Socials
+     *   }
+     * })
+     * 
+     */
+    create<T extends SocialsCreateArgs>(args: SelectSubset<T, SocialsCreateArgs<ExtArgs>>): Prisma__SocialsClient<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Socials.
+     * @param {SocialsCreateManyArgs} args - Arguments to create many Socials.
+     * @example
+     * // Create many Socials
+     * const socials = await prisma.socials.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SocialsCreateManyArgs>(args?: SelectSubset<T, SocialsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Socials and returns the data saved in the database.
+     * @param {SocialsCreateManyAndReturnArgs} args - Arguments to create many Socials.
+     * @example
+     * // Create many Socials
+     * const socials = await prisma.socials.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Socials and only return the `id`
+     * const socialsWithIdOnly = await prisma.socials.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SocialsCreateManyAndReturnArgs>(args?: SelectSubset<T, SocialsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Socials.
+     * @param {SocialsDeleteArgs} args - Arguments to delete one Socials.
+     * @example
+     * // Delete one Socials
+     * const Socials = await prisma.socials.delete({
+     *   where: {
+     *     // ... filter to delete one Socials
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SocialsDeleteArgs>(args: SelectSubset<T, SocialsDeleteArgs<ExtArgs>>): Prisma__SocialsClient<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Socials.
+     * @param {SocialsUpdateArgs} args - Arguments to update one Socials.
+     * @example
+     * // Update one Socials
+     * const socials = await prisma.socials.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SocialsUpdateArgs>(args: SelectSubset<T, SocialsUpdateArgs<ExtArgs>>): Prisma__SocialsClient<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Socials.
+     * @param {SocialsDeleteManyArgs} args - Arguments to filter Socials to delete.
+     * @example
+     * // Delete a few Socials
+     * const { count } = await prisma.socials.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SocialsDeleteManyArgs>(args?: SelectSubset<T, SocialsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Socials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Socials
+     * const socials = await prisma.socials.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SocialsUpdateManyArgs>(args: SelectSubset<T, SocialsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Socials and returns the data updated in the database.
+     * @param {SocialsUpdateManyAndReturnArgs} args - Arguments to update many Socials.
+     * @example
+     * // Update many Socials
+     * const socials = await prisma.socials.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Socials and only return the `id`
+     * const socialsWithIdOnly = await prisma.socials.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SocialsUpdateManyAndReturnArgs>(args: SelectSubset<T, SocialsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Socials.
+     * @param {SocialsUpsertArgs} args - Arguments to update or create a Socials.
+     * @example
+     * // Update or create a Socials
+     * const socials = await prisma.socials.upsert({
+     *   create: {
+     *     // ... data to create a Socials
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Socials we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SocialsUpsertArgs>(args: SelectSubset<T, SocialsUpsertArgs<ExtArgs>>): Prisma__SocialsClient<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Socials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialsCountArgs} args - Arguments to filter Socials to count.
+     * @example
+     * // Count the number of Socials
+     * const count = await prisma.socials.count({
+     *   where: {
+     *     // ... the filter for the Socials we want to count
+     *   }
+     * })
+    **/
+    count<T extends SocialsCountArgs>(
+      args?: Subset<T, SocialsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SocialsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Socials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SocialsAggregateArgs>(args: Subset<T, SocialsAggregateArgs>): Prisma.PrismaPromise<GetSocialsAggregateType<T>>
+
+    /**
+     * Group by Socials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SocialsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SocialsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SocialsGroupByArgs['orderBy'] }
+        : { orderBy?: SocialsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SocialsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSocialsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Socials model
+   */
+  readonly fields: SocialsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Socials.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SocialsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends FlareOrgDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FlareOrgDefaultArgs<ExtArgs>>): Prisma__FlareOrgClient<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Socials model
+   */
+  interface SocialsFieldRefs {
+    readonly id: FieldRef<"Socials", 'String'>
+    readonly flare_id: FieldRef<"Socials", 'String'>
+    readonly twitter: FieldRef<"Socials", 'String'>
+    readonly facebook: FieldRef<"Socials", 'String'>
+    readonly instagram: FieldRef<"Socials", 'String'>
+    readonly other: FieldRef<"Socials", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Socials findUnique
+   */
+  export type SocialsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsInclude<ExtArgs> | null
+    /**
+     * Filter, which Socials to fetch.
+     */
+    where: SocialsWhereUniqueInput
+  }
+
+  /**
+   * Socials findUniqueOrThrow
+   */
+  export type SocialsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsInclude<ExtArgs> | null
+    /**
+     * Filter, which Socials to fetch.
+     */
+    where: SocialsWhereUniqueInput
+  }
+
+  /**
+   * Socials findFirst
+   */
+  export type SocialsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsInclude<ExtArgs> | null
+    /**
+     * Filter, which Socials to fetch.
+     */
+    where?: SocialsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Socials to fetch.
+     */
+    orderBy?: SocialsOrderByWithRelationInput | SocialsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Socials.
+     */
+    cursor?: SocialsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Socials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Socials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Socials.
+     */
+    distinct?: SocialsScalarFieldEnum | SocialsScalarFieldEnum[]
+  }
+
+  /**
+   * Socials findFirstOrThrow
+   */
+  export type SocialsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsInclude<ExtArgs> | null
+    /**
+     * Filter, which Socials to fetch.
+     */
+    where?: SocialsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Socials to fetch.
+     */
+    orderBy?: SocialsOrderByWithRelationInput | SocialsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Socials.
+     */
+    cursor?: SocialsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Socials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Socials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Socials.
+     */
+    distinct?: SocialsScalarFieldEnum | SocialsScalarFieldEnum[]
+  }
+
+  /**
+   * Socials findMany
+   */
+  export type SocialsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsInclude<ExtArgs> | null
+    /**
+     * Filter, which Socials to fetch.
+     */
+    where?: SocialsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Socials to fetch.
+     */
+    orderBy?: SocialsOrderByWithRelationInput | SocialsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Socials.
+     */
+    cursor?: SocialsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Socials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Socials.
+     */
+    skip?: number
+    distinct?: SocialsScalarFieldEnum | SocialsScalarFieldEnum[]
+  }
+
+  /**
+   * Socials create
+   */
+  export type SocialsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Socials.
+     */
+    data: XOR<SocialsCreateInput, SocialsUncheckedCreateInput>
+  }
+
+  /**
+   * Socials createMany
+   */
+  export type SocialsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Socials.
+     */
+    data: SocialsCreateManyInput | SocialsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Socials createManyAndReturn
+   */
+  export type SocialsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * The data used to create many Socials.
+     */
+    data: SocialsCreateManyInput | SocialsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Socials update
+   */
+  export type SocialsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Socials.
+     */
+    data: XOR<SocialsUpdateInput, SocialsUncheckedUpdateInput>
+    /**
+     * Choose, which Socials to update.
+     */
+    where: SocialsWhereUniqueInput
+  }
+
+  /**
+   * Socials updateMany
+   */
+  export type SocialsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Socials.
+     */
+    data: XOR<SocialsUpdateManyMutationInput, SocialsUncheckedUpdateManyInput>
+    /**
+     * Filter which Socials to update
+     */
+    where?: SocialsWhereInput
+    /**
+     * Limit how many Socials to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Socials updateManyAndReturn
+   */
+  export type SocialsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * The data used to update Socials.
+     */
+    data: XOR<SocialsUpdateManyMutationInput, SocialsUncheckedUpdateManyInput>
+    /**
+     * Filter which Socials to update
+     */
+    where?: SocialsWhereInput
+    /**
+     * Limit how many Socials to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Socials upsert
+   */
+  export type SocialsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Socials to update in case it exists.
+     */
+    where: SocialsWhereUniqueInput
+    /**
+     * In case the Socials found by the `where` argument doesn't exist, create a new Socials with this data.
+     */
+    create: XOR<SocialsCreateInput, SocialsUncheckedCreateInput>
+    /**
+     * In case the Socials was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SocialsUpdateInput, SocialsUncheckedUpdateInput>
+  }
+
+  /**
+   * Socials delete
+   */
+  export type SocialsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsInclude<ExtArgs> | null
+    /**
+     * Filter which Socials to delete.
+     */
+    where: SocialsWhereUniqueInput
+  }
+
+  /**
+   * Socials deleteMany
+   */
+  export type SocialsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Socials to delete
+     */
+    where?: SocialsWhereInput
+    /**
+     * Limit how many Socials to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Socials without action
+   */
+  export type SocialsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Socials
+     */
+    select?: SocialsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Socials
+     */
+    omit?: SocialsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SocialsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -6270,7 +8901,7 @@ export namespace Prisma {
     user_id: 'user_id',
     description: 'description',
     verified: 'verified',
-    locationData: 'locationData'
+    location_id: 'location_id'
   };
 
   export type FlareOrgScalarFieldEnum = (typeof FlareOrgScalarFieldEnum)[keyof typeof FlareOrgScalarFieldEnum]
@@ -6297,10 +8928,33 @@ export namespace Prisma {
     price: 'price',
     ticketLink: 'ticketLink',
     verified: 'verified',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    location_id: 'location_id'
   };
 
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
+
+
+  export const LocationScalarFieldEnum: {
+    id: 'id',
+    place_id: 'place_id',
+    name: 'name',
+    flare_id: 'flare_id'
+  };
+
+  export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
+
+
+  export const SocialsScalarFieldEnum: {
+    id: 'id',
+    flare_id: 'flare_id',
+    twitter: 'twitter',
+    facebook: 'facebook',
+    instagram: 'instagram',
+    other: 'other'
+  };
+
+  export type SocialsScalarFieldEnum = (typeof SocialsScalarFieldEnum)[keyof typeof SocialsScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -6311,28 +8965,12 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-  export const JsonNullValueInput: {
-    JsonNull: typeof JsonNull
-  };
-
-  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
-  export const JsonNullValueFilter: {
-    DbNull: typeof DbNull,
-    JsonNull: typeof JsonNull,
-    AnyNull: typeof AnyNull
-  };
-
-  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   export const NullsOrder: {
@@ -6366,20 +9004,6 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -6524,9 +9148,11 @@ export namespace Prisma {
     user_id?: StringFilter<"FlareOrg"> | string
     description?: StringNullableFilter<"FlareOrg"> | string | null
     verified?: BoolFilter<"FlareOrg"> | boolean
-    locationData?: JsonFilter<"FlareOrg">
+    location_id?: StringFilter<"FlareOrg"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     events?: EventListRelationFilter
+    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    socials?: XOR<SocialsNullableScalarRelationFilter, SocialsWhereInput> | null
   }
 
   export type FlareOrgOrderByWithRelationInput = {
@@ -6534,9 +9160,11 @@ export namespace Prisma {
     user_id?: SortOrder
     description?: SortOrderInput | SortOrder
     verified?: SortOrder
-    locationData?: SortOrder
+    location_id?: SortOrder
     user?: UserOrderByWithRelationInput
     events?: EventOrderByRelationAggregateInput
+    location?: LocationOrderByWithRelationInput
+    socials?: SocialsOrderByWithRelationInput
   }
 
   export type FlareOrgWhereUniqueInput = Prisma.AtLeast<{
@@ -6547,9 +9175,11 @@ export namespace Prisma {
     NOT?: FlareOrgWhereInput | FlareOrgWhereInput[]
     description?: StringNullableFilter<"FlareOrg"> | string | null
     verified?: BoolFilter<"FlareOrg"> | boolean
-    locationData?: JsonFilter<"FlareOrg">
+    location_id?: StringFilter<"FlareOrg"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     events?: EventListRelationFilter
+    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    socials?: XOR<SocialsNullableScalarRelationFilter, SocialsWhereInput> | null
   }, "id" | "user_id">
 
   export type FlareOrgOrderByWithAggregationInput = {
@@ -6557,7 +9187,7 @@ export namespace Prisma {
     user_id?: SortOrder
     description?: SortOrderInput | SortOrder
     verified?: SortOrder
-    locationData?: SortOrder
+    location_id?: SortOrder
     _count?: FlareOrgCountOrderByAggregateInput
     _max?: FlareOrgMaxOrderByAggregateInput
     _min?: FlareOrgMinOrderByAggregateInput
@@ -6571,7 +9201,7 @@ export namespace Prisma {
     user_id?: StringWithAggregatesFilter<"FlareOrg"> | string
     description?: StringNullableWithAggregatesFilter<"FlareOrg"> | string | null
     verified?: BoolWithAggregatesFilter<"FlareOrg"> | boolean
-    locationData?: JsonWithAggregatesFilter<"FlareOrg">
+    location_id?: StringWithAggregatesFilter<"FlareOrg"> | string
   }
 
   export type spatial_ref_sysWhereInput = {
@@ -6642,7 +9272,9 @@ export namespace Prisma {
     ticketLink?: StringNullableFilter<"Event"> | string | null
     verified?: BoolFilter<"Event"> | boolean
     createdAt?: DateTimeFilter<"Event"> | Date | string
+    location_id?: StringFilter<"Event"> | string
     organization?: XOR<FlareOrgScalarRelationFilter, FlareOrgWhereInput>
+    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
   }
 
   export type EventOrderByWithRelationInput = {
@@ -6656,7 +9288,9 @@ export namespace Prisma {
     ticketLink?: SortOrderInput | SortOrder
     verified?: SortOrder
     createdAt?: SortOrder
+    location_id?: SortOrder
     organization?: FlareOrgOrderByWithRelationInput
+    location?: LocationOrderByWithRelationInput
   }
 
   export type EventWhereUniqueInput = Prisma.AtLeast<{
@@ -6673,7 +9307,9 @@ export namespace Prisma {
     ticketLink?: StringNullableFilter<"Event"> | string | null
     verified?: BoolFilter<"Event"> | boolean
     createdAt?: DateTimeFilter<"Event"> | Date | string
+    location_id?: StringFilter<"Event"> | string
     organization?: XOR<FlareOrgScalarRelationFilter, FlareOrgWhereInput>
+    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
   }, "id">
 
   export type EventOrderByWithAggregationInput = {
@@ -6687,6 +9323,7 @@ export namespace Prisma {
     ticketLink?: SortOrderInput | SortOrder
     verified?: SortOrder
     createdAt?: SortOrder
+    location_id?: SortOrder
     _count?: EventCountOrderByAggregateInput
     _avg?: EventAvgOrderByAggregateInput
     _max?: EventMaxOrderByAggregateInput
@@ -6708,6 +9345,120 @@ export namespace Prisma {
     ticketLink?: StringNullableWithAggregatesFilter<"Event"> | string | null
     verified?: BoolWithAggregatesFilter<"Event"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    location_id?: StringWithAggregatesFilter<"Event"> | string
+  }
+
+  export type LocationWhereInput = {
+    AND?: LocationWhereInput | LocationWhereInput[]
+    OR?: LocationWhereInput[]
+    NOT?: LocationWhereInput | LocationWhereInput[]
+    id?: StringFilter<"Location"> | string
+    place_id?: StringFilter<"Location"> | string
+    name?: StringNullableFilter<"Location"> | string | null
+    flare_id?: StringNullableFilter<"Location"> | string | null
+    organizations?: FlareOrgListRelationFilter
+    events?: EventListRelationFilter
+  }
+
+  export type LocationOrderByWithRelationInput = {
+    id?: SortOrder
+    place_id?: SortOrder
+    name?: SortOrderInput | SortOrder
+    flare_id?: SortOrderInput | SortOrder
+    organizations?: FlareOrgOrderByRelationAggregateInput
+    events?: EventOrderByRelationAggregateInput
+  }
+
+  export type LocationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    place_id?: string
+    AND?: LocationWhereInput | LocationWhereInput[]
+    OR?: LocationWhereInput[]
+    NOT?: LocationWhereInput | LocationWhereInput[]
+    name?: StringNullableFilter<"Location"> | string | null
+    flare_id?: StringNullableFilter<"Location"> | string | null
+    organizations?: FlareOrgListRelationFilter
+    events?: EventListRelationFilter
+  }, "id" | "place_id">
+
+  export type LocationOrderByWithAggregationInput = {
+    id?: SortOrder
+    place_id?: SortOrder
+    name?: SortOrderInput | SortOrder
+    flare_id?: SortOrderInput | SortOrder
+    _count?: LocationCountOrderByAggregateInput
+    _max?: LocationMaxOrderByAggregateInput
+    _min?: LocationMinOrderByAggregateInput
+  }
+
+  export type LocationScalarWhereWithAggregatesInput = {
+    AND?: LocationScalarWhereWithAggregatesInput | LocationScalarWhereWithAggregatesInput[]
+    OR?: LocationScalarWhereWithAggregatesInput[]
+    NOT?: LocationScalarWhereWithAggregatesInput | LocationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Location"> | string
+    place_id?: StringWithAggregatesFilter<"Location"> | string
+    name?: StringNullableWithAggregatesFilter<"Location"> | string | null
+    flare_id?: StringNullableWithAggregatesFilter<"Location"> | string | null
+  }
+
+  export type SocialsWhereInput = {
+    AND?: SocialsWhereInput | SocialsWhereInput[]
+    OR?: SocialsWhereInput[]
+    NOT?: SocialsWhereInput | SocialsWhereInput[]
+    id?: StringFilter<"Socials"> | string
+    flare_id?: StringFilter<"Socials"> | string
+    twitter?: StringNullableFilter<"Socials"> | string | null
+    facebook?: StringNullableFilter<"Socials"> | string | null
+    instagram?: StringNullableFilter<"Socials"> | string | null
+    other?: StringNullableFilter<"Socials"> | string | null
+    organization?: XOR<FlareOrgScalarRelationFilter, FlareOrgWhereInput>
+  }
+
+  export type SocialsOrderByWithRelationInput = {
+    id?: SortOrder
+    flare_id?: SortOrder
+    twitter?: SortOrderInput | SortOrder
+    facebook?: SortOrderInput | SortOrder
+    instagram?: SortOrderInput | SortOrder
+    other?: SortOrderInput | SortOrder
+    organization?: FlareOrgOrderByWithRelationInput
+  }
+
+  export type SocialsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    flare_id?: string
+    AND?: SocialsWhereInput | SocialsWhereInput[]
+    OR?: SocialsWhereInput[]
+    NOT?: SocialsWhereInput | SocialsWhereInput[]
+    twitter?: StringNullableFilter<"Socials"> | string | null
+    facebook?: StringNullableFilter<"Socials"> | string | null
+    instagram?: StringNullableFilter<"Socials"> | string | null
+    other?: StringNullableFilter<"Socials"> | string | null
+    organization?: XOR<FlareOrgScalarRelationFilter, FlareOrgWhereInput>
+  }, "id" | "flare_id">
+
+  export type SocialsOrderByWithAggregationInput = {
+    id?: SortOrder
+    flare_id?: SortOrder
+    twitter?: SortOrderInput | SortOrder
+    facebook?: SortOrderInput | SortOrder
+    instagram?: SortOrderInput | SortOrder
+    other?: SortOrderInput | SortOrder
+    _count?: SocialsCountOrderByAggregateInput
+    _max?: SocialsMaxOrderByAggregateInput
+    _min?: SocialsMinOrderByAggregateInput
+  }
+
+  export type SocialsScalarWhereWithAggregatesInput = {
+    AND?: SocialsScalarWhereWithAggregatesInput | SocialsScalarWhereWithAggregatesInput[]
+    OR?: SocialsScalarWhereWithAggregatesInput[]
+    NOT?: SocialsScalarWhereWithAggregatesInput | SocialsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Socials"> | string
+    flare_id?: StringWithAggregatesFilter<"Socials"> | string
+    twitter?: StringNullableWithAggregatesFilter<"Socials"> | string | null
+    facebook?: StringNullableWithAggregatesFilter<"Socials"> | string | null
+    instagram?: StringNullableWithAggregatesFilter<"Socials"> | string | null
+    other?: StringNullableWithAggregatesFilter<"Socials"> | string | null
   }
 
   export type UserCreateInput = {
@@ -6794,13 +9545,34 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
   }
 
+  export type FlareOrgCreateInput = {
+    id?: string
+    description?: string | null
+    verified?: boolean
+    user: UserCreateNestedOneWithoutFlareOrgInput
+    events?: EventCreateNestedManyWithoutOrganizationInput
+    location: LocationCreateNestedOneWithoutOrganizationsInput
+    socials?: SocialsCreateNestedOneWithoutOrganizationInput
+  }
+
+  export type FlareOrgUncheckedCreateInput = {
+    id?: string
+    user_id: string
+    description?: string | null
+    verified?: boolean
+    location_id: string
+    events?: EventUncheckedCreateNestedManyWithoutOrganizationInput
+    socials?: SocialsUncheckedCreateNestedOneWithoutOrganizationInput
+  }
+
   export type FlareOrgUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
-    locationData?: JsonNullValueInput | InputJsonValue
     user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
     events?: EventUpdateManyWithoutOrganizationNestedInput
+    location?: LocationUpdateOneRequiredWithoutOrganizationsNestedInput
+    socials?: SocialsUpdateOneWithoutOrganizationNestedInput
   }
 
   export type FlareOrgUncheckedUpdateInput = {
@@ -6808,15 +9580,23 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
-    locationData?: JsonNullValueInput | InputJsonValue
+    location_id?: StringFieldUpdateOperationsInput | string
     events?: EventUncheckedUpdateManyWithoutOrganizationNestedInput
+    socials?: SocialsUncheckedUpdateOneWithoutOrganizationNestedInput
+  }
+
+  export type FlareOrgCreateManyInput = {
+    id?: string
+    user_id: string
+    description?: string | null
+    verified?: boolean
+    location_id: string
   }
 
   export type FlareOrgUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
-    locationData?: JsonNullValueInput | InputJsonValue
   }
 
   export type FlareOrgUncheckedUpdateManyInput = {
@@ -6824,7 +9604,7 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
-    locationData?: JsonNullValueInput | InputJsonValue
+    location_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type spatial_ref_sysCreateInput = {
@@ -6883,6 +9663,34 @@ export namespace Prisma {
     proj4text?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type EventCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    price?: number | null
+    ticketLink?: string | null
+    verified?: boolean
+    createdAt?: Date | string
+    organization: FlareOrgCreateNestedOneWithoutEventsInput
+    location: LocationCreateNestedOneWithoutEventsInput
+  }
+
+  export type EventUncheckedCreateInput = {
+    id?: string
+    flare_id: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    price?: number | null
+    ticketLink?: string | null
+    verified?: boolean
+    createdAt?: Date | string
+    location_id: string
+  }
+
   export type EventUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -6894,6 +9702,7 @@ export namespace Prisma {
     verified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: FlareOrgUpdateOneRequiredWithoutEventsNestedInput
+    location?: LocationUpdateOneRequiredWithoutEventsNestedInput
   }
 
   export type EventUncheckedUpdateInput = {
@@ -6907,6 +9716,21 @@ export namespace Prisma {
     ticketLink?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EventCreateManyInput = {
+    id?: string
+    flare_id: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    price?: number | null
+    ticketLink?: string | null
+    verified?: boolean
+    createdAt?: Date | string
+    location_id: string
   }
 
   export type EventUpdateManyMutationInput = {
@@ -6932,6 +9756,101 @@ export namespace Prisma {
     ticketLink?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LocationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    place_id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
+    organizations?: FlareOrgUpdateManyWithoutLocationNestedInput
+    events?: EventUpdateManyWithoutLocationNestedInput
+  }
+
+  export type LocationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    place_id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
+    organizations?: FlareOrgUncheckedUpdateManyWithoutLocationNestedInput
+    events?: EventUncheckedUpdateManyWithoutLocationNestedInput
+  }
+
+  export type LocationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    place_id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LocationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    place_id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SocialsCreateInput = {
+    id?: string
+    twitter?: string | null
+    facebook?: string | null
+    instagram?: string | null
+    other?: string | null
+    organization: FlareOrgCreateNestedOneWithoutSocialsInput
+  }
+
+  export type SocialsUncheckedCreateInput = {
+    id?: string
+    flare_id: string
+    twitter?: string | null
+    facebook?: string | null
+    instagram?: string | null
+    other?: string | null
+  }
+
+  export type SocialsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    twitter?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    other?: NullableStringFieldUpdateOperationsInput | string | null
+    organization?: FlareOrgUpdateOneRequiredWithoutSocialsNestedInput
+  }
+
+  export type SocialsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flare_id?: StringFieldUpdateOperationsInput | string
+    twitter?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    other?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SocialsCreateManyInput = {
+    id?: string
+    flare_id: string
+    twitter?: string | null
+    facebook?: string | null
+    instagram?: string | null
+    other?: string | null
+  }
+
+  export type SocialsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    twitter?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    other?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SocialsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flare_id?: StringFieldUpdateOperationsInput | string
+    twitter?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    other?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -7034,34 +9953,21 @@ export namespace Prisma {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
-  export type JsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type EventListRelationFilter = {
     every?: EventWhereInput
     some?: EventWhereInput
     none?: EventWhereInput
+  }
+
+  export type LocationScalarRelationFilter = {
+    is?: LocationWhereInput
+    isNot?: LocationWhereInput
+  }
+
+  export type SocialsNullableScalarRelationFilter = {
+    is?: SocialsWhereInput | null
+    isNot?: SocialsWhereInput | null
   }
 
   export type SortOrderInput = {
@@ -7078,7 +9984,7 @@ export namespace Prisma {
     user_id?: SortOrder
     description?: SortOrder
     verified?: SortOrder
-    locationData?: SortOrder
+    location_id?: SortOrder
   }
 
   export type FlareOrgMaxOrderByAggregateInput = {
@@ -7086,6 +9992,7 @@ export namespace Prisma {
     user_id?: SortOrder
     description?: SortOrder
     verified?: SortOrder
+    location_id?: SortOrder
   }
 
   export type FlareOrgMinOrderByAggregateInput = {
@@ -7093,6 +10000,7 @@ export namespace Prisma {
     user_id?: SortOrder
     description?: SortOrder
     verified?: SortOrder
+    location_id?: SortOrder
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -7119,32 +10027,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
-  }
-  export type JsonWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedJsonFilter<$PrismaModel>
-    _max?: NestedJsonFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -7273,6 +10155,7 @@ export namespace Prisma {
     ticketLink?: SortOrder
     verified?: SortOrder
     createdAt?: SortOrder
+    location_id?: SortOrder
   }
 
   export type EventAvgOrderByAggregateInput = {
@@ -7290,6 +10173,7 @@ export namespace Prisma {
     ticketLink?: SortOrder
     verified?: SortOrder
     createdAt?: SortOrder
+    location_id?: SortOrder
   }
 
   export type EventMinOrderByAggregateInput = {
@@ -7303,6 +10187,7 @@ export namespace Prisma {
     ticketLink?: SortOrder
     verified?: SortOrder
     createdAt?: SortOrder
+    location_id?: SortOrder
   }
 
   export type EventSumOrderByAggregateInput = {
@@ -7339,7 +10224,67 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type FlareOrgListRelationFilter = {
+    every?: FlareOrgWhereInput
+    some?: FlareOrgWhereInput
+    none?: FlareOrgWhereInput
+  }
+
+  export type FlareOrgOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LocationCountOrderByAggregateInput = {
+    id?: SortOrder
+    place_id?: SortOrder
+    name?: SortOrder
+    flare_id?: SortOrder
+  }
+
+  export type LocationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    place_id?: SortOrder
+    name?: SortOrder
+    flare_id?: SortOrder
+  }
+
+  export type LocationMinOrderByAggregateInput = {
+    id?: SortOrder
+    place_id?: SortOrder
+    name?: SortOrder
+    flare_id?: SortOrder
+  }
+
+  export type SocialsCountOrderByAggregateInput = {
+    id?: SortOrder
+    flare_id?: SortOrder
+    twitter?: SortOrder
+    facebook?: SortOrder
+    instagram?: SortOrder
+    other?: SortOrder
+  }
+
+  export type SocialsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    flare_id?: SortOrder
+    twitter?: SortOrder
+    facebook?: SortOrder
+    instagram?: SortOrder
+    other?: SortOrder
+  }
+
+  export type SocialsMinOrderByAggregateInput = {
+    id?: SortOrder
+    flare_id?: SortOrder
+    twitter?: SortOrder
+    facebook?: SortOrder
+    instagram?: SortOrder
+    other?: SortOrder
+  }
+
   export type FlareOrgCreateNestedOneWithoutUserInput = {
+    create?: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
+    connectOrCreate?: FlareOrgCreateOrConnectWithoutUserInput
     connect?: FlareOrgWhereUniqueInput
   }
 
@@ -7350,6 +10295,8 @@ export namespace Prisma {
   }
 
   export type FlareOrgUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
+    connectOrCreate?: FlareOrgCreateOrConnectWithoutUserInput
     connect?: FlareOrgWhereUniqueInput
   }
 
@@ -7364,6 +10311,9 @@ export namespace Prisma {
   }
 
   export type FlareOrgUpdateOneWithoutUserNestedInput = {
+    create?: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
+    connectOrCreate?: FlareOrgCreateOrConnectWithoutUserInput
+    upsert?: FlareOrgUpsertWithoutUserInput
     disconnect?: FlareOrgWhereInput | boolean
     delete?: FlareOrgWhereInput | boolean
     connect?: FlareOrgWhereUniqueInput
@@ -7381,6 +10331,9 @@ export namespace Prisma {
   }
 
   export type FlareOrgUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
+    connectOrCreate?: FlareOrgCreateOrConnectWithoutUserInput
+    upsert?: FlareOrgUpsertWithoutUserInput
     disconnect?: FlareOrgWhereInput | boolean
     delete?: FlareOrgWhereInput | boolean
     connect?: FlareOrgWhereUniqueInput
@@ -7411,6 +10364,42 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFlareUserInput, UserUpdateWithoutFlareUserInput>, UserUncheckedUpdateWithoutFlareUserInput>
   }
 
+  export type UserCreateNestedOneWithoutFlareOrgInput = {
+    create?: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFlareOrgInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EventCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<EventCreateWithoutOrganizationInput, EventUncheckedCreateWithoutOrganizationInput> | EventCreateWithoutOrganizationInput[] | EventUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutOrganizationInput | EventCreateOrConnectWithoutOrganizationInput[]
+    createMany?: EventCreateManyOrganizationInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type LocationCreateNestedOneWithoutOrganizationsInput = {
+    connect?: LocationWhereUniqueInput
+  }
+
+  export type SocialsCreateNestedOneWithoutOrganizationInput = {
+    create?: XOR<SocialsCreateWithoutOrganizationInput, SocialsUncheckedCreateWithoutOrganizationInput>
+    connectOrCreate?: SocialsCreateOrConnectWithoutOrganizationInput
+    connect?: SocialsWhereUniqueInput
+  }
+
+  export type EventUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<EventCreateWithoutOrganizationInput, EventUncheckedCreateWithoutOrganizationInput> | EventCreateWithoutOrganizationInput[] | EventUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutOrganizationInput | EventCreateOrConnectWithoutOrganizationInput[]
+    createMany?: EventCreateManyOrganizationInputEnvelope
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type SocialsUncheckedCreateNestedOneWithoutOrganizationInput = {
+    create?: XOR<SocialsCreateWithoutOrganizationInput, SocialsUncheckedCreateWithoutOrganizationInput>
+    connectOrCreate?: SocialsCreateOrConnectWithoutOrganizationInput
+    connect?: SocialsWhereUniqueInput
+  }
+
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
   }
@@ -7428,6 +10417,10 @@ export namespace Prisma {
   }
 
   export type EventUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<EventCreateWithoutOrganizationInput, EventUncheckedCreateWithoutOrganizationInput> | EventCreateWithoutOrganizationInput[] | EventUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutOrganizationInput | EventCreateOrConnectWithoutOrganizationInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutOrganizationInput | EventUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: EventCreateManyOrganizationInputEnvelope
     set?: EventWhereUniqueInput | EventWhereUniqueInput[]
     disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
     delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
@@ -7437,7 +10430,26 @@ export namespace Prisma {
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
+  export type LocationUpdateOneRequiredWithoutOrganizationsNestedInput = {
+    connect?: LocationWhereUniqueInput
+    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutOrganizationsInput, LocationUpdateWithoutOrganizationsInput>, LocationUncheckedUpdateWithoutOrganizationsInput>
+  }
+
+  export type SocialsUpdateOneWithoutOrganizationNestedInput = {
+    create?: XOR<SocialsCreateWithoutOrganizationInput, SocialsUncheckedCreateWithoutOrganizationInput>
+    connectOrCreate?: SocialsCreateOrConnectWithoutOrganizationInput
+    upsert?: SocialsUpsertWithoutOrganizationInput
+    disconnect?: SocialsWhereInput | boolean
+    delete?: SocialsWhereInput | boolean
+    connect?: SocialsWhereUniqueInput
+    update?: XOR<XOR<SocialsUpdateToOneWithWhereWithoutOrganizationInput, SocialsUpdateWithoutOrganizationInput>, SocialsUncheckedUpdateWithoutOrganizationInput>
+  }
+
   export type EventUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<EventCreateWithoutOrganizationInput, EventUncheckedCreateWithoutOrganizationInput> | EventCreateWithoutOrganizationInput[] | EventUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutOrganizationInput | EventCreateOrConnectWithoutOrganizationInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutOrganizationInput | EventUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: EventCreateManyOrganizationInputEnvelope
     set?: EventWhereUniqueInput | EventWhereUniqueInput[]
     disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
     delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
@@ -7445,6 +10457,16 @@ export namespace Prisma {
     update?: EventUpdateWithWhereUniqueWithoutOrganizationInput | EventUpdateWithWhereUniqueWithoutOrganizationInput[]
     updateMany?: EventUpdateManyWithWhereWithoutOrganizationInput | EventUpdateManyWithWhereWithoutOrganizationInput[]
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type SocialsUncheckedUpdateOneWithoutOrganizationNestedInput = {
+    create?: XOR<SocialsCreateWithoutOrganizationInput, SocialsUncheckedCreateWithoutOrganizationInput>
+    connectOrCreate?: SocialsCreateOrConnectWithoutOrganizationInput
+    upsert?: SocialsUpsertWithoutOrganizationInput
+    disconnect?: SocialsWhereInput | boolean
+    delete?: SocialsWhereInput | boolean
+    connect?: SocialsWhereUniqueInput
+    update?: XOR<XOR<SocialsUpdateToOneWithWhereWithoutOrganizationInput, SocialsUpdateWithoutOrganizationInput>, SocialsUncheckedUpdateWithoutOrganizationInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -7463,6 +10485,16 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type FlareOrgCreateNestedOneWithoutEventsInput = {
+    create?: XOR<FlareOrgCreateWithoutEventsInput, FlareOrgUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: FlareOrgCreateOrConnectWithoutEventsInput
+    connect?: FlareOrgWhereUniqueInput
+  }
+
+  export type LocationCreateNestedOneWithoutEventsInput = {
+    connect?: LocationWhereUniqueInput
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
   }
@@ -7476,8 +10508,86 @@ export namespace Prisma {
   }
 
   export type FlareOrgUpdateOneRequiredWithoutEventsNestedInput = {
+    create?: XOR<FlareOrgCreateWithoutEventsInput, FlareOrgUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: FlareOrgCreateOrConnectWithoutEventsInput
+    upsert?: FlareOrgUpsertWithoutEventsInput
     connect?: FlareOrgWhereUniqueInput
     update?: XOR<XOR<FlareOrgUpdateToOneWithWhereWithoutEventsInput, FlareOrgUpdateWithoutEventsInput>, FlareOrgUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type LocationUpdateOneRequiredWithoutEventsNestedInput = {
+    connect?: LocationWhereUniqueInput
+    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutEventsInput, LocationUpdateWithoutEventsInput>, LocationUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type FlareOrgUpdateManyWithoutLocationNestedInput = {
+    create?: XOR<FlareOrgCreateWithoutLocationInput, FlareOrgUncheckedCreateWithoutLocationInput> | FlareOrgCreateWithoutLocationInput[] | FlareOrgUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: FlareOrgCreateOrConnectWithoutLocationInput | FlareOrgCreateOrConnectWithoutLocationInput[]
+    upsert?: FlareOrgUpsertWithWhereUniqueWithoutLocationInput | FlareOrgUpsertWithWhereUniqueWithoutLocationInput[]
+    createMany?: FlareOrgCreateManyLocationInputEnvelope
+    set?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    disconnect?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    delete?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    connect?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    update?: FlareOrgUpdateWithWhereUniqueWithoutLocationInput | FlareOrgUpdateWithWhereUniqueWithoutLocationInput[]
+    updateMany?: FlareOrgUpdateManyWithWhereWithoutLocationInput | FlareOrgUpdateManyWithWhereWithoutLocationInput[]
+    deleteMany?: FlareOrgScalarWhereInput | FlareOrgScalarWhereInput[]
+  }
+
+  export type EventUpdateManyWithoutLocationNestedInput = {
+    create?: XOR<EventCreateWithoutLocationInput, EventUncheckedCreateWithoutLocationInput> | EventCreateWithoutLocationInput[] | EventUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutLocationInput | EventCreateOrConnectWithoutLocationInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutLocationInput | EventUpsertWithWhereUniqueWithoutLocationInput[]
+    createMany?: EventCreateManyLocationInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutLocationInput | EventUpdateWithWhereUniqueWithoutLocationInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutLocationInput | EventUpdateManyWithWhereWithoutLocationInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type FlareOrgUncheckedUpdateManyWithoutLocationNestedInput = {
+    create?: XOR<FlareOrgCreateWithoutLocationInput, FlareOrgUncheckedCreateWithoutLocationInput> | FlareOrgCreateWithoutLocationInput[] | FlareOrgUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: FlareOrgCreateOrConnectWithoutLocationInput | FlareOrgCreateOrConnectWithoutLocationInput[]
+    upsert?: FlareOrgUpsertWithWhereUniqueWithoutLocationInput | FlareOrgUpsertWithWhereUniqueWithoutLocationInput[]
+    createMany?: FlareOrgCreateManyLocationInputEnvelope
+    set?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    disconnect?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    delete?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    connect?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    update?: FlareOrgUpdateWithWhereUniqueWithoutLocationInput | FlareOrgUpdateWithWhereUniqueWithoutLocationInput[]
+    updateMany?: FlareOrgUpdateManyWithWhereWithoutLocationInput | FlareOrgUpdateManyWithWhereWithoutLocationInput[]
+    deleteMany?: FlareOrgScalarWhereInput | FlareOrgScalarWhereInput[]
+  }
+
+  export type EventUncheckedUpdateManyWithoutLocationNestedInput = {
+    create?: XOR<EventCreateWithoutLocationInput, EventUncheckedCreateWithoutLocationInput> | EventCreateWithoutLocationInput[] | EventUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: EventCreateOrConnectWithoutLocationInput | EventCreateOrConnectWithoutLocationInput[]
+    upsert?: EventUpsertWithWhereUniqueWithoutLocationInput | EventUpsertWithWhereUniqueWithoutLocationInput[]
+    createMany?: EventCreateManyLocationInputEnvelope
+    set?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    disconnect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    delete?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+    update?: EventUpdateWithWhereUniqueWithoutLocationInput | EventUpdateWithWhereUniqueWithoutLocationInput[]
+    updateMany?: EventUpdateManyWithWhereWithoutLocationInput | EventUpdateManyWithWhereWithoutLocationInput[]
+    deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type FlareOrgCreateNestedOneWithoutSocialsInput = {
+    create?: XOR<FlareOrgCreateWithoutSocialsInput, FlareOrgUncheckedCreateWithoutSocialsInput>
+    connectOrCreate?: FlareOrgCreateOrConnectWithoutSocialsInput
+    connect?: FlareOrgWhereUniqueInput
+  }
+
+  export type FlareOrgUpdateOneRequiredWithoutSocialsNestedInput = {
+    create?: XOR<FlareOrgCreateWithoutSocialsInput, FlareOrgUncheckedCreateWithoutSocialsInput>
+    connectOrCreate?: FlareOrgCreateOrConnectWithoutSocialsInput
+    upsert?: FlareOrgUpsertWithoutSocialsInput
+    connect?: FlareOrgWhereUniqueInput
+    update?: XOR<XOR<FlareOrgUpdateToOneWithWhereWithoutSocialsInput, FlareOrgUpdateWithoutSocialsInput>, FlareOrgUncheckedUpdateWithoutSocialsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -7576,29 +10686,6 @@ export namespace Prisma {
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
   }
-  export type NestedJsonFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
@@ -7695,6 +10782,29 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type FlareOrgCreateWithoutUserInput = {
+    id?: string
+    description?: string | null
+    verified?: boolean
+    events?: EventCreateNestedManyWithoutOrganizationInput
+    location: LocationCreateNestedOneWithoutOrganizationsInput
+    socials?: SocialsCreateNestedOneWithoutOrganizationInput
+  }
+
+  export type FlareOrgUncheckedCreateWithoutUserInput = {
+    id?: string
+    description?: string | null
+    verified?: boolean
+    location_id: string
+    events?: EventUncheckedCreateNestedManyWithoutOrganizationInput
+    socials?: SocialsUncheckedCreateNestedOneWithoutOrganizationInput
+  }
+
+  export type FlareOrgCreateOrConnectWithoutUserInput = {
+    where: FlareOrgWhereUniqueInput
+    create: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
+  }
+
   export type FlareUserCreateWithoutUserInput = {
     id?: string
   }
@@ -7708,6 +10818,12 @@ export namespace Prisma {
     create: XOR<FlareUserCreateWithoutUserInput, FlareUserUncheckedCreateWithoutUserInput>
   }
 
+  export type FlareOrgUpsertWithoutUserInput = {
+    update: XOR<FlareOrgUpdateWithoutUserInput, FlareOrgUncheckedUpdateWithoutUserInput>
+    create: XOR<FlareOrgCreateWithoutUserInput, FlareOrgUncheckedCreateWithoutUserInput>
+    where?: FlareOrgWhereInput
+  }
+
   export type FlareOrgUpdateToOneWithWhereWithoutUserInput = {
     where?: FlareOrgWhereInput
     data: XOR<FlareOrgUpdateWithoutUserInput, FlareOrgUncheckedUpdateWithoutUserInput>
@@ -7717,16 +10833,18 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
-    locationData?: JsonNullValueInput | InputJsonValue
     events?: EventUpdateManyWithoutOrganizationNestedInput
+    location?: LocationUpdateOneRequiredWithoutOrganizationsNestedInput
+    socials?: SocialsUpdateOneWithoutOrganizationNestedInput
   }
 
   export type FlareOrgUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
-    locationData?: JsonNullValueInput | InputJsonValue
+    location_id?: StringFieldUpdateOperationsInput | string
     events?: EventUncheckedUpdateManyWithoutOrganizationNestedInput
+    socials?: SocialsUncheckedUpdateOneWithoutOrganizationNestedInput
   }
 
   export type FlareUserUpsertWithoutUserInput = {
@@ -7811,6 +10929,63 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
   }
 
+  export type EventCreateWithoutOrganizationInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    price?: number | null
+    ticketLink?: string | null
+    verified?: boolean
+    createdAt?: Date | string
+    location: LocationCreateNestedOneWithoutEventsInput
+  }
+
+  export type EventUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    price?: number | null
+    ticketLink?: string | null
+    verified?: boolean
+    createdAt?: Date | string
+    location_id: string
+  }
+
+  export type EventCreateOrConnectWithoutOrganizationInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutOrganizationInput, EventUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type EventCreateManyOrganizationInputEnvelope = {
+    data: EventCreateManyOrganizationInput | EventCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SocialsCreateWithoutOrganizationInput = {
+    id?: string
+    twitter?: string | null
+    facebook?: string | null
+    instagram?: string | null
+    other?: string | null
+  }
+
+  export type SocialsUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    twitter?: string | null
+    facebook?: string | null
+    instagram?: string | null
+    other?: string | null
+  }
+
+  export type SocialsCreateOrConnectWithoutOrganizationInput = {
+    where: SocialsWhereUniqueInput
+    create: XOR<SocialsCreateWithoutOrganizationInput, SocialsUncheckedCreateWithoutOrganizationInput>
+  }
+
   export type UserUpsertWithoutFlareOrgInput = {
     update: XOR<UserUpdateWithoutFlareOrgInput, UserUncheckedUpdateWithoutFlareOrgInput>
     create: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
@@ -7834,6 +11009,12 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     account_type?: StringFieldUpdateOperationsInput | string
     flareUser?: FlareUserUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type EventUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: EventWhereUniqueInput
+    update: XOR<EventUpdateWithoutOrganizationInput, EventUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<EventCreateWithoutOrganizationInput, EventUncheckedCreateWithoutOrganizationInput>
   }
 
   export type EventUpdateWithWhereUniqueWithoutOrganizationInput = {
@@ -7860,6 +11041,84 @@ export namespace Prisma {
     ticketLink?: StringNullableFilter<"Event"> | string | null
     verified?: BoolFilter<"Event"> | boolean
     createdAt?: DateTimeFilter<"Event"> | Date | string
+    location_id?: StringFilter<"Event"> | string
+  }
+
+  export type LocationUpdateToOneWithWhereWithoutOrganizationsInput = {
+    where?: LocationWhereInput
+    data: XOR<LocationUpdateWithoutOrganizationsInput, LocationUncheckedUpdateWithoutOrganizationsInput>
+  }
+
+  export type LocationUpdateWithoutOrganizationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    place_id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
+    events?: EventUpdateManyWithoutLocationNestedInput
+  }
+
+  export type LocationUncheckedUpdateWithoutOrganizationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    place_id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
+    events?: EventUncheckedUpdateManyWithoutLocationNestedInput
+  }
+
+  export type SocialsUpsertWithoutOrganizationInput = {
+    update: XOR<SocialsUpdateWithoutOrganizationInput, SocialsUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<SocialsCreateWithoutOrganizationInput, SocialsUncheckedCreateWithoutOrganizationInput>
+    where?: SocialsWhereInput
+  }
+
+  export type SocialsUpdateToOneWithWhereWithoutOrganizationInput = {
+    where?: SocialsWhereInput
+    data: XOR<SocialsUpdateWithoutOrganizationInput, SocialsUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type SocialsUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    twitter?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    other?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type SocialsUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    twitter?: NullableStringFieldUpdateOperationsInput | string | null
+    facebook?: NullableStringFieldUpdateOperationsInput | string | null
+    instagram?: NullableStringFieldUpdateOperationsInput | string | null
+    other?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FlareOrgCreateWithoutEventsInput = {
+    id?: string
+    description?: string | null
+    verified?: boolean
+    user: UserCreateNestedOneWithoutFlareOrgInput
+    location: LocationCreateNestedOneWithoutOrganizationsInput
+    socials?: SocialsCreateNestedOneWithoutOrganizationInput
+  }
+
+  export type FlareOrgUncheckedCreateWithoutEventsInput = {
+    id?: string
+    user_id: string
+    description?: string | null
+    verified?: boolean
+    location_id: string
+    socials?: SocialsUncheckedCreateNestedOneWithoutOrganizationInput
+  }
+
+  export type FlareOrgCreateOrConnectWithoutEventsInput = {
+    where: FlareOrgWhereUniqueInput
+    create: XOR<FlareOrgCreateWithoutEventsInput, FlareOrgUncheckedCreateWithoutEventsInput>
+  }
+
+  export type FlareOrgUpsertWithoutEventsInput = {
+    update: XOR<FlareOrgUpdateWithoutEventsInput, FlareOrgUncheckedUpdateWithoutEventsInput>
+    create: XOR<FlareOrgCreateWithoutEventsInput, FlareOrgUncheckedCreateWithoutEventsInput>
+    where?: FlareOrgWhereInput
   }
 
   export type FlareOrgUpdateToOneWithWhereWithoutEventsInput = {
@@ -7871,8 +11130,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
-    locationData?: JsonNullValueInput | InputJsonValue
     user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
+    location?: LocationUpdateOneRequiredWithoutOrganizationsNestedInput
+    socials?: SocialsUpdateOneWithoutOrganizationNestedInput
   }
 
   export type FlareOrgUncheckedUpdateWithoutEventsInput = {
@@ -7880,7 +11140,201 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
-    locationData?: JsonNullValueInput | InputJsonValue
+    location_id?: StringFieldUpdateOperationsInput | string
+    socials?: SocialsUncheckedUpdateOneWithoutOrganizationNestedInput
+  }
+
+  export type LocationUpdateToOneWithWhereWithoutEventsInput = {
+    where?: LocationWhereInput
+    data: XOR<LocationUpdateWithoutEventsInput, LocationUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type LocationUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    place_id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
+    organizations?: FlareOrgUpdateManyWithoutLocationNestedInput
+  }
+
+  export type LocationUncheckedUpdateWithoutEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    place_id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
+    organizations?: FlareOrgUncheckedUpdateManyWithoutLocationNestedInput
+  }
+
+  export type FlareOrgCreateWithoutLocationInput = {
+    id?: string
+    description?: string | null
+    verified?: boolean
+    user: UserCreateNestedOneWithoutFlareOrgInput
+    events?: EventCreateNestedManyWithoutOrganizationInput
+    socials?: SocialsCreateNestedOneWithoutOrganizationInput
+  }
+
+  export type FlareOrgUncheckedCreateWithoutLocationInput = {
+    id?: string
+    user_id: string
+    description?: string | null
+    verified?: boolean
+    events?: EventUncheckedCreateNestedManyWithoutOrganizationInput
+    socials?: SocialsUncheckedCreateNestedOneWithoutOrganizationInput
+  }
+
+  export type FlareOrgCreateOrConnectWithoutLocationInput = {
+    where: FlareOrgWhereUniqueInput
+    create: XOR<FlareOrgCreateWithoutLocationInput, FlareOrgUncheckedCreateWithoutLocationInput>
+  }
+
+  export type FlareOrgUpsertWithWhereUniqueWithoutLocationInput = {
+    where: FlareOrgWhereUniqueInput
+    update: XOR<FlareOrgUpdateWithoutLocationInput, FlareOrgUncheckedUpdateWithoutLocationInput>
+    create: XOR<FlareOrgCreateWithoutLocationInput, FlareOrgUncheckedCreateWithoutLocationInput>
+  }
+
+  export type FlareOrgCreateManyLocationInputEnvelope = {
+    data: FlareOrgCreateManyLocationInput | FlareOrgCreateManyLocationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FlareOrgUpdateWithWhereUniqueWithoutLocationInput = {
+    where: FlareOrgWhereUniqueInput
+    data: XOR<FlareOrgUpdateWithoutLocationInput, FlareOrgUncheckedUpdateWithoutLocationInput>
+  }
+
+  export type FlareOrgUpdateManyWithWhereWithoutLocationInput = {
+    where: FlareOrgScalarWhereInput
+    data: XOR<FlareOrgUpdateManyMutationInput, FlareOrgUncheckedUpdateManyWithoutLocationInput>
+  }
+
+  export type FlareOrgScalarWhereInput = {
+    AND?: FlareOrgScalarWhereInput | FlareOrgScalarWhereInput[]
+    OR?: FlareOrgScalarWhereInput[]
+    NOT?: FlareOrgScalarWhereInput | FlareOrgScalarWhereInput[]
+    id?: StringFilter<"FlareOrg"> | string
+    user_id?: StringFilter<"FlareOrg"> | string
+    description?: StringNullableFilter<"FlareOrg"> | string | null
+    verified?: BoolFilter<"FlareOrg"> | boolean
+    location_id?: StringFilter<"FlareOrg"> | string
+  }
+
+  export type EventCreateWithoutLocationInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    price?: number | null
+    ticketLink?: string | null
+    verified?: boolean
+    createdAt?: Date | string
+    organization: FlareOrgCreateNestedOneWithoutEventsInput
+  }
+
+  export type EventUncheckedCreateWithoutLocationInput = {
+    id?: string
+    flare_id: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    price?: number | null
+    ticketLink?: string | null
+    verified?: boolean
+    createdAt?: Date | string
+  }
+
+  export type EventCreateOrConnectWithoutLocationInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutLocationInput, EventUncheckedCreateWithoutLocationInput>
+  }
+
+  export type EventUpsertWithWhereUniqueWithoutLocationInput = {
+    where: EventWhereUniqueInput
+    update: XOR<EventUpdateWithoutLocationInput, EventUncheckedUpdateWithoutLocationInput>
+    create: XOR<EventCreateWithoutLocationInput, EventUncheckedCreateWithoutLocationInput>
+  }
+
+  export type EventCreateManyLocationInputEnvelope = {
+    data: EventCreateManyLocationInput | EventCreateManyLocationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EventUpdateWithWhereUniqueWithoutLocationInput = {
+    where: EventWhereUniqueInput
+    data: XOR<EventUpdateWithoutLocationInput, EventUncheckedUpdateWithoutLocationInput>
+  }
+
+  export type EventUpdateManyWithWhereWithoutLocationInput = {
+    where: EventScalarWhereInput
+    data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutLocationInput>
+  }
+
+  export type FlareOrgCreateWithoutSocialsInput = {
+    id?: string
+    description?: string | null
+    verified?: boolean
+    user: UserCreateNestedOneWithoutFlareOrgInput
+    events?: EventCreateNestedManyWithoutOrganizationInput
+    location: LocationCreateNestedOneWithoutOrganizationsInput
+  }
+
+  export type FlareOrgUncheckedCreateWithoutSocialsInput = {
+    id?: string
+    user_id: string
+    description?: string | null
+    verified?: boolean
+    location_id: string
+    events?: EventUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type FlareOrgCreateOrConnectWithoutSocialsInput = {
+    where: FlareOrgWhereUniqueInput
+    create: XOR<FlareOrgCreateWithoutSocialsInput, FlareOrgUncheckedCreateWithoutSocialsInput>
+  }
+
+  export type FlareOrgUpsertWithoutSocialsInput = {
+    update: XOR<FlareOrgUpdateWithoutSocialsInput, FlareOrgUncheckedUpdateWithoutSocialsInput>
+    create: XOR<FlareOrgCreateWithoutSocialsInput, FlareOrgUncheckedCreateWithoutSocialsInput>
+    where?: FlareOrgWhereInput
+  }
+
+  export type FlareOrgUpdateToOneWithWhereWithoutSocialsInput = {
+    where?: FlareOrgWhereInput
+    data: XOR<FlareOrgUpdateWithoutSocialsInput, FlareOrgUncheckedUpdateWithoutSocialsInput>
+  }
+
+  export type FlareOrgUpdateWithoutSocialsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
+    events?: EventUpdateManyWithoutOrganizationNestedInput
+    location?: LocationUpdateOneRequiredWithoutOrganizationsNestedInput
+  }
+
+  export type FlareOrgUncheckedUpdateWithoutSocialsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    location_id?: StringFieldUpdateOperationsInput | string
+    events?: EventUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type EventCreateManyOrganizationInput = {
+    id?: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    price?: number | null
+    ticketLink?: string | null
+    verified?: boolean
+    createdAt?: Date | string
+    location_id: string
   }
 
   export type EventUpdateWithoutOrganizationInput = {
@@ -7893,6 +11347,7 @@ export namespace Prisma {
     ticketLink?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: LocationUpdateOneRequiredWithoutEventsNestedInput
   }
 
   export type EventUncheckedUpdateWithoutOrganizationInput = {
@@ -7905,10 +11360,96 @@ export namespace Prisma {
     ticketLink?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location_id?: StringFieldUpdateOperationsInput | string
   }
 
   export type EventUncheckedUpdateManyWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    ticketLink?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FlareOrgUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
+    events?: EventUpdateManyWithoutOrganizationNestedInput
+    socials?: SocialsUpdateOneWithoutOrganizationNestedInput
+  }
+
+  export type FlareOrgUncheckedUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    events?: EventUncheckedUpdateManyWithoutOrganizationNestedInput
+    socials?: SocialsUncheckedUpdateOneWithoutOrganizationNestedInput
+  }
+
+  export type FlareOrgCreateManyLocationInput = {
+    id?: string
+    user_id: string
+    description?: string | null
+    verified?: boolean
+  }
+
+  export type FlareOrgUncheckedUpdateManyWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type EventUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    ticketLink?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: FlareOrgUpdateOneRequiredWithoutEventsNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flare_id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
+    ticketLink?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventCreateManyLocationInput = {
+    id?: string
+    flare_id: string
+    title: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    price?: number | null
+    ticketLink?: string | null
+    verified?: boolean
+    createdAt?: Date | string
+  }
+
+  export type EventUncheckedUpdateManyWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flare_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string

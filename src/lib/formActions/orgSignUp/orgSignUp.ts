@@ -7,7 +7,8 @@ import getAuthError from '@/lib/utils/error/getAuthError';
 import { zodFieldErrors } from '@/lib/utils/error/zodFeildErrors';
 import { formErrors } from '@/lib/utils/text/text';
 import { convertFormData } from '@/lib/zod/convertFormData';
-import { CreateOrgSchema } from '@/lib/zod/org/createOrgSchema';
+import { OrgSignUpFormSchema } from '@/lib/zod/org/createOrgSchema';
+
 import {
   createUserWithEmailAndPassword,
   deleteUser,
@@ -17,7 +18,7 @@ import {
 export default async function orgSignUp(prevState: any, formData: FormData): Promise<ActionResponse>{
   
 
-  const res = convertFormData(CreateOrgSchema, formData)
+  const res = convertFormData(OrgSignUpFormSchema, formData)
   
   if(!res.success) {
     console.log(res.error)

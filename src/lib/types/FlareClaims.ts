@@ -5,4 +5,10 @@ export interface FlareClaims {
   admin?: boolean;
 }
 
+
+
+export interface FlareContext extends FlareClaims{
+  uid?: string
+}
+
 export type FlareClaimKeys = keyof FlareClaims; 

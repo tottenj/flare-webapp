@@ -24,7 +24,7 @@ export default async function requireAuth(requiredClaims?: (keyof verifyResponse
       'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.INTERNAL_API_KEY}`,
     },
-    body: JSON.stringify({ data: { sessionCookie } }),
+    credentials: "include"
   });
   if (!verifyResponse.ok) {
     console.error('Verify function failed', await verifyResponse.text());

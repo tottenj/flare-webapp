@@ -20,21 +20,22 @@ model User {
 
 model FlareUser {
   id      String @id @default(cuid())
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id String @unique
-  user    User   @relation(fields: [user_id], references: [id])
 
   @@map("flare_user")
 }
 
 model FlareOrg {
-  id           String                                @id @default(cuid())
-  user_id      String                                @unique
-  description  String?
-  verified     Boolean                               @default(false)
-  locationData Json
-  location     Unsupported("geography(Point, 4326)")
-  user         User                                  @relation(fields: [user_id], references: [id])
-  events       Event[]
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id     String   @unique
+  description String?
+  verified    Boolean  @default(false)
+  events      Event[]
+  location    Location @relation(fields: [location_id], references: [id], onDelete: Restrict)
+  location_id String
+  socials     Socials?
 
   @@map("flare_org")
 }
@@ -49,18 +50,43 @@ model spatial_ref_sys {
 }
 
 model Event {
-  id           String                                @id @default(cuid())
-  organization FlareOrg                              @relation(fields: [flare_id], references: [user_id])
+  id           String   @id @default(cuid())
+  organization FlareOrg @relation(fields: [flare_id], references: [id], onDelete: Cascade)
   flare_id     String
   title        String
   description  String?
   startDate    DateTime
   endDate      DateTime
-  location     Unsupported("geography(Point, 4326)")
-  price        Float?                                @default(0)
+  price        Float?   @default(0)
   ticketLink   String?
-  verified     Boolean                               @default(false)
-  createdAt    DateTime                              @default(now())
+  verified     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  location     Location @relation(fields: [location_id], references: [id], onDelete: Restrict)
+  location_id  String
 
   @@map("event")
+}
+
+model Location {
+  id            String                                @id @default(cuid())
+  place_id      String                                @unique
+  name          String?
+  coordinates   Unsupported("geography(Point, 4326)")
+  organizations FlareOrg[]
+  flare_id      String?
+  events        Event[]
+
+  @@map("location")
+}
+
+model Socials {
+  id           String   @id @default(cuid())
+  organization FlareOrg @relation(fields: [flare_id], references: [id], onDelete: Cascade)
+  flare_id     String   @unique
+  twitter      String?
+  facebook     String?
+  instagram    String?
+  other        String?
+
+  @@map("socials")
 }

@@ -1,12 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { GeoPoint } from 'firebase/firestore';
 import { Autocomplete, AutocompleteItem } from '@heroui/react';
 import { useAsyncList } from '@react-stately/data';
 import flareLocation from '@/lib/types/Location';
-import getPlaces from '@/lib/utils/places/getPlaces/getPlaces';
-import { getPlaceDetails } from '@/lib/utils/places/getPlaceDetails/getPlaceDetails';
 
 interface placeOption {
   label: string;
@@ -79,11 +76,12 @@ export default function PlaceSearch({ lab, required = true, z, defVal }: placeSe
     const selected = list.items.find((item) => item.value === key);
     if (!selected) return;
     const place = await getPlaceDetails(selected.value);
+    console.log(place)
     if (!place || !place.place.location) return;
     const location: flareLocation = {
       id: place.place.id,
       name: place.place.displayName,
-      coordinates: new GeoPoint(place.place.location.lat(), place.place.location.lng()),
+      coordinates: {lat: place.place.location.lat(), lng: place.place.location.lng()}
     };
     setLocation(location);
   }

@@ -108,7 +108,7 @@ exports.Prisma.FlareOrgScalarFieldEnum = {
   user_id: 'user_id',
   description: 'description',
   verified: 'verified',
-  locationData: 'locationData'
+  location_id: 'location_id'
 };
 
 exports.Prisma.Spatial_ref_sysScalarFieldEnum = {
@@ -129,7 +129,24 @@ exports.Prisma.EventScalarFieldEnum = {
   price: 'price',
   ticketLink: 'ticketLink',
   verified: 'verified',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  location_id: 'location_id'
+};
+
+exports.Prisma.LocationScalarFieldEnum = {
+  id: 'id',
+  place_id: 'place_id',
+  name: 'name',
+  flare_id: 'flare_id'
+};
+
+exports.Prisma.SocialsScalarFieldEnum = {
+  id: 'id',
+  flare_id: 'flare_id',
+  twitter: 'twitter',
+  facebook: 'facebook',
+  instagram: 'instagram',
+  other: 'other'
 };
 
 exports.Prisma.SortOrder = {
@@ -137,19 +154,9 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.JsonNullValueInput = {
-  JsonNull: Prisma.JsonNull
-};
-
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
-};
-
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
 };
 
 exports.Prisma.NullsOrder = {
@@ -163,7 +170,9 @@ exports.Prisma.ModelName = {
   FlareUser: 'FlareUser',
   FlareOrg: 'FlareOrg',
   spatial_ref_sys: 'spatial_ref_sys',
-  Event: 'Event'
+  Event: 'Event',
+  Location: 'Location',
+  Socials: 'Socials'
 };
 /**
  * Create the Client
@@ -212,13 +221,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id           String     @id\n  email        String     @unique\n  account_type String\n  flareOrg     FlareOrg?\n  flareUser    FlareUser?\n\n  @@map(\"user\")\n}\n\nmodel FlareUser {\n  id      String @id @default(cuid())\n  user_id String @unique\n  user    User   @relation(fields: [user_id], references: [id])\n\n  @@map(\"flare_user\")\n}\n\nmodel FlareOrg {\n  id           String                                @id @default(cuid())\n  user_id      String                                @unique\n  description  String?\n  verified     Boolean                               @default(false)\n  locationData Json\n  location     Unsupported(\"geography(Point, 4326)\")\n  user         User                                  @relation(fields: [user_id], references: [id])\n  events       Event[]\n\n  @@map(\"flare_org\")\n}\n\n/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.\nmodel spatial_ref_sys {\n  srid      Int     @id\n  auth_name String? @db.VarChar(256)\n  auth_srid Int?\n  srtext    String? @db.VarChar(2048)\n  proj4text String? @db.VarChar(2048)\n}\n\nmodel Event {\n  id           String                                @id @default(cuid())\n  organization FlareOrg                              @relation(fields: [flare_id], references: [user_id])\n  flare_id     String\n  title        String\n  description  String?\n  startDate    DateTime\n  endDate      DateTime\n  location     Unsupported(\"geography(Point, 4326)\")\n  price        Float?                                @default(0)\n  ticketLink   String?\n  verified     Boolean                               @default(false)\n  createdAt    DateTime                              @default(now())\n\n  @@map(\"event\")\n}\n",
-  "inlineSchemaHash": "462931dc457922eab4aa04604c97afe29ecf382cf87c4b0bb6e6db0931160148",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/app/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id           String     @id\n  email        String     @unique\n  account_type String\n  flareOrg     FlareOrg?\n  flareUser    FlareUser?\n\n  @@map(\"user\")\n}\n\nmodel FlareUser {\n  id      String @id @default(cuid())\n  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)\n  user_id String @unique\n\n  @@map(\"flare_user\")\n}\n\nmodel FlareOrg {\n  id          String   @id @default(cuid())\n  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)\n  user_id     String   @unique\n  description String?\n  verified    Boolean  @default(false)\n  events      Event[]\n  location    Location @relation(fields: [location_id], references: [id], onDelete: Restrict)\n  location_id String\n  socials     Socials?\n\n  @@map(\"flare_org\")\n}\n\n/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.\nmodel spatial_ref_sys {\n  srid      Int     @id\n  auth_name String? @db.VarChar(256)\n  auth_srid Int?\n  srtext    String? @db.VarChar(2048)\n  proj4text String? @db.VarChar(2048)\n}\n\nmodel Event {\n  id           String   @id @default(cuid())\n  organization FlareOrg @relation(fields: [flare_id], references: [id], onDelete: Cascade)\n  flare_id     String\n  title        String\n  description  String?\n  startDate    DateTime\n  endDate      DateTime\n  price        Float?   @default(0)\n  ticketLink   String?\n  verified     Boolean  @default(false)\n  createdAt    DateTime @default(now())\n  location     Location @relation(fields: [location_id], references: [id], onDelete: Restrict)\n  location_id  String\n\n  @@map(\"event\")\n}\n\nmodel Location {\n  id            String                                @id @default(cuid())\n  place_id      String                                @unique\n  name          String?\n  coordinates   Unsupported(\"geography(Point, 4326)\")\n  organizations FlareOrg[]\n  flare_id      String?\n  events        Event[]\n\n  @@map(\"location\")\n}\n\nmodel Socials {\n  id           String   @id @default(cuid())\n  organization FlareOrg @relation(fields: [flare_id], references: [id], onDelete: Cascade)\n  flare_id     String   @unique\n  twitter      String?\n  facebook     String?\n  instagram    String?\n  other        String?\n\n  @@map(\"socials\")\n}\n",
+  "inlineSchemaHash": "5feb0800a63113f7c5765fabd63412d76b068f6602788a1dccebb94983fb29eb",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"account_type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"flareOrg\",\"kind\":\"object\",\"type\":\"FlareOrg\",\"relationName\":\"FlareOrgToUser\"},{\"name\":\"flareUser\",\"kind\":\"object\",\"type\":\"FlareUser\",\"relationName\":\"FlareUserToUser\"}],\"dbName\":\"user\"},\"FlareUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FlareUserToUser\"}],\"dbName\":\"flare_user\"},\"FlareOrg\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"locationData\",\"kind\":\"scalar\",\"type\":\"Json\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FlareOrgToUser\"},{\"name\":\"events\",\"kind\":\"object\",\"type\":\"Event\",\"relationName\":\"EventToFlareOrg\"}],\"dbName\":\"flare_org\"},\"spatial_ref_sys\":{\"fields\":[{\"name\":\"srid\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"auth_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"auth_srid\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"srtext\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"proj4text\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"Event\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"organization\",\"kind\":\"object\",\"type\":\"FlareOrg\",\"relationName\":\"EventToFlareOrg\"},{\"name\":\"flare_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"ticketLink\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":\"event\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"account_type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"flareOrg\",\"kind\":\"object\",\"type\":\"FlareOrg\",\"relationName\":\"FlareOrgToUser\"},{\"name\":\"flareUser\",\"kind\":\"object\",\"type\":\"FlareUser\",\"relationName\":\"FlareUserToUser\"}],\"dbName\":\"user\"},\"FlareUser\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FlareUserToUser\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":\"flare_user\"},\"FlareOrg\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"FlareOrgToUser\"},{\"name\":\"user_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"events\",\"kind\":\"object\",\"type\":\"Event\",\"relationName\":\"EventToFlareOrg\"},{\"name\":\"location\",\"kind\":\"object\",\"type\":\"Location\",\"relationName\":\"FlareOrgToLocation\"},{\"name\":\"location_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"socials\",\"kind\":\"object\",\"type\":\"Socials\",\"relationName\":\"FlareOrgToSocials\"}],\"dbName\":\"flare_org\"},\"spatial_ref_sys\":{\"fields\":[{\"name\":\"srid\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"auth_name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"auth_srid\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"srtext\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"proj4text\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"Event\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"organization\",\"kind\":\"object\",\"type\":\"FlareOrg\",\"relationName\":\"EventToFlareOrg\"},{\"name\":\"flare_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"price\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"ticketLink\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"location\",\"kind\":\"object\",\"type\":\"Location\",\"relationName\":\"EventToLocation\"},{\"name\":\"location_id\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":\"event\"},\"Location\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"place_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"organizations\",\"kind\":\"object\",\"type\":\"FlareOrg\",\"relationName\":\"FlareOrgToLocation\"},{\"name\":\"flare_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"events\",\"kind\":\"object\",\"type\":\"Event\",\"relationName\":\"EventToLocation\"}],\"dbName\":\"location\"},\"Socials\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"organization\",\"kind\":\"object\",\"type\":\"FlareOrg\",\"relationName\":\"FlareOrgToSocials\"},{\"name\":\"flare_id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"twitter\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"facebook\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"instagram\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"other\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":\"socials\"}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

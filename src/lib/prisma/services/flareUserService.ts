@@ -3,6 +3,7 @@ import flareUserDal from '../dals/flareUserDal';
 import BaseService from './baseService';
 import { Prisma } from '@/app/generated/prisma';
 import isUsersAccount from '@/lib/firebase/auth/isUsersAccount';
+import { FlareContext } from '@/lib/types/FlareClaims';
 
 type keys = keyof Prisma.FlareUserGetPayload<{}>;
 export default class FlareUserService extends BaseService<flareUserDal, keys> {
@@ -11,9 +12,16 @@ export default class FlareUserService extends BaseService<flareUserDal, keys> {
   }
   publicFields: Partial<Record<'id' | 'user_id', boolean>> = {};
 
-  async createFlareUser(id: string) {
-    const { uid } = await requireAuth();
+  async createFlareUser(id: string, tx?: Prisma.TransactionClient, context?: FlareContext) {
+    const uid = context?.uid ?? (await requireAuth(['org'])).uid;
     if (!isUsersAccount(id, uid)) throw new Error('Cannot create account');
-    await this.dal.createFlareUser(id);
+    const data: Prisma.FlareUserCreateInput = {
+      user: {
+        connect: {
+          id: uid,
+        },
+      },
+    };
+    await this.dal.createFlareUser(data, tx);
   }
 }

@@ -4,8 +4,10 @@ import BaseService from './baseService';
 import FlareUserService from './flareUserService';
 import { CreateDbUserSchema, CreateUserDto } from '../dtos/UserDto';
 import { Prisma } from '@/app/generated/prisma';
-type UserKeys = keyof Prisma.UserGetPayload<{}>; 
-
+import { createOrgDb, createOrgDbSchema } from '../dtos/FlareOrgDto';
+import FlareOrgService from './flareOrgService';
+import prisma from '../prisma';
+type UserKeys = keyof Prisma.UserGetPayload<{}>;
 
 export default class userService extends BaseService<UserDal, UserKeys> {
   constructor() {
@@ -16,26 +18,33 @@ export default class userService extends BaseService<UserDal, UserKeys> {
     account_type: true,
   };
 
-  
+  async createUser(incoming: CreateUserDto, org?: createOrgDb) {
+    const parse = CreateDbUserSchema.safeParse(incoming);
+    if (!parse.success) throw new Error('Invalid Data');
+    const { data } = parse;
+    const { uid } = await requireAuth();
 
-  async createUser(incoming: CreateUserDto) {
-    const parse = CreateDbUserSchema.safeParse(incoming)
-    if(!parse.success) throw new Error("Invalid Data")
-    const {data} = parse
-    const {uid} = await requireAuth();
-    const result = await this.dal.createUser({ id: uid, ...data });
-    const { account_type, id } = result;
-    if (account_type === 'user') {
-      const flareUserService = new FlareUserService();
-      flareUserService.createFlareUser(id);
-    } else if (account_type === 'org') {
+    try {
+      await prisma.$transaction(async (tx) => {
+        const result = await this.dal.createUser({ id: uid, ...data }, tx);
+        const { account_type, id } = result;
+        if (account_type === 'user') {
+          const flareUserService = new FlareUserService();
+          flareUserService.createFlareUser(id, tx, {uid});
+        } else if (account_type === 'org' && org) {
+          const flareOrgService = new FlareOrgService();
+          flareOrgService.createOrg(org, tx);
+        } else {
+          throw new Error('No Account Type Recived');
+        }
+      });
+    } catch (error) {
+      throw new Error('Error while creating user');
     }
   }
 
-  async deleteUser(){
-    const {uid} = await requireAuth()
-    await this.dal.delete(uid)
+  async deleteUser() {
+    const { uid } = await requireAuth();
+    await this.dal.delete(uid);
   }
-
-  
 }
