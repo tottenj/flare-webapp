@@ -164,8 +164,7 @@ exports.Prisma.EventScalarFieldEnum = {
 exports.Prisma.LocationScalarFieldEnum = {
   id: 'id',
   place_id: 'place_id',
-  name: 'name',
-  flare_id: 'flare_id'
+  name: 'name'
 };
 
 exports.Prisma.SocialsScalarFieldEnum = {

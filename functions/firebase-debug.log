@@ -1,0 +1,73 @@
+[debug] [2025-10-22T03:14:11.425Z] ----------------------------------------------------------------------
+[debug] [2025-10-22T03:14:11.427Z] Command:       /Users/joshtotten/.nvm/versions/node/v22.14.0/bin/node /Users/joshtotten/.nvm/versions/node/v22.14.0/bin/firebase functions:shell
+[debug] [2025-10-22T03:14:11.427Z] CLI Version:   14.17.0
+[debug] [2025-10-22T03:14:11.427Z] Platform:      darwin
+[debug] [2025-10-22T03:14:11.427Z] Node Version:  v22.14.0
+[debug] [2025-10-22T03:14:11.428Z] Time:          Tue Oct 21 2025 23:14:11 GMT-0400 (Eastern Daylight Time)
+[debug] [2025-10-22T03:14:11.428Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-10-22T03:14:11.532Z] Object "/storage" in "firebase.json" has unknown property: {"additionalProperty":"defaultBucket"}
+[debug] [2025-10-22T03:14:11.533Z] Field "/storage" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-10-22T03:14:11.533Z] Field "/storage" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[debug] [2025-10-22T03:14:11.535Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-10-22T03:14:11.535Z] > authorizing via signed-in user (josh.totten8@gmail.com)
+[debug] [2025-10-22T03:14:11.535Z] [iam] checking project flare-7091a for permissions ["firebase.projects.get"]
+[debug] [2025-10-22T03:14:11.535Z] Checked if tokens are valid: true, expires at: 1761104018081
+[debug] [2025-10-22T03:14:11.535Z] Checked if tokens are valid: true, expires at: 1761104018081
+[debug] [2025-10-22T03:14:11.536Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions [none]
+[debug] [2025-10-22T03:14:11.536Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions x-goog-quota-user=projects/flare-7091a
+[debug] [2025-10-22T03:14:11.536Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2025-10-22T03:14:11.789Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions 200
+[debug] [2025-10-22T03:14:11.789Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2025-10-22T03:14:11.790Z] Emulator locator file path: /var/folders/gb/5rzbh44j51zchrk6n0cynpc40000gn/T/hub-flare-7091a.json
+[debug] [2025-10-22T03:14:11.878Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[warn] ⚠  functions: Application Default Credentials detected. Non-emulated services will access production using these credentials. Be careful! {"metadata":{"emulator":{"name":"functions"},"message":"Application Default Credentials detected. Non-emulated services will access production using these credentials. Be careful!"}}
+[debug] [2025-10-22T03:14:12.388Z] Checked if tokens are valid: true, expires at: 1761104018081
+[debug] [2025-10-22T03:14:12.388Z] Checked if tokens are valid: true, expires at: 1761104018081
+[debug] [2025-10-22T03:14:12.388Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig [none]
+[debug] [2025-10-22T03:14:12.791Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig 200
+[debug] [2025-10-22T03:14:12.792Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig {"projectId":"flare-7091a","storageBucket":"flare-7091a.firebasestorage.app"}
+[debug] [2025-10-22T03:14:12.801Z] [functions] Watching "/Users/joshtotten/Desktop/Flare/flare-webapp/functions" for Cloud Functions...
+[debug] [2025-10-22T03:14:12.804Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2025-10-22T03:14:13.180Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "cookie": "^1.0.2",
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "latest",
+    "geofire": "^6.0.0",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^5.8.3"
+  },
+  "private": true
+}
+[debug] [2025-10-22T03:14:13.180Z] Building nodejs source
+[debug] [2025-10-22T03:14:13.180Z] Failed to find version of module node: reached end of search path /Users/joshtotten/Desktop/Flare/flare-webapp/functions/node_modules
+[info] ✔  functions: Using node@22 from host. 
+[info] i  functions: Loaded environment variables from .env.local. 
+[debug] [2025-10-22T03:14:13.182Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-10-22T03:14:13.186Z] Found firebase-functions binary at '/Users/joshtotten/Desktop/Flare/flare-webapp/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8880
+
+[info] 🔥 Loaded addOrgClaim at 2025-10-22T03:14:13.476Z
+
+[debug] [2025-10-22T03:14:13.479Z] Got response from /__/functions.yaml {"endpoints":{"addOrgClaim":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"addOrgClaim"},"verifySessionCookie":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"verifySessionCookie"},"signToken":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"signToken"},"verify":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"verify"},"addMyself":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"addMyself"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}

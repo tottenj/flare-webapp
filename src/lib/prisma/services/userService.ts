@@ -30,15 +30,16 @@ export default class userService extends BaseService<UserDal, UserKeys> {
         const { account_type, id } = result;
         if (account_type === 'user') {
           const flareUserService = new FlareUserService();
-          flareUserService.createFlareUser(id, tx, {uid});
+          await flareUserService.createFlareUser(id, tx, {uid});
         } else if (account_type === 'org' && org) {
           const flareOrgService = new FlareOrgService();
-          flareOrgService.createOrg(org, tx);
+          await flareOrgService.createOrg(org, tx);
         } else {
           throw new Error('No Account Type Recived');
         }
       });
     } catch (error) {
+      console.log(error)
       throw new Error('Error while creating user');
     }
   }

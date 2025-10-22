@@ -12,6 +12,7 @@ export const OrgSignUpFormSchema = z
     facebook: z.string().optional(),
     twitter: z.string().optional(),
     other: z.string().optional(),
+    idToken: z.string(),
     'instagram-file': z.file().optional(),
     'twitter-file': z.file().optional(),
     'facebook-file': z.file().optional(),

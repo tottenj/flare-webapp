@@ -23,15 +23,15 @@ export default async function requireAuth(requiredClaims?: (keyof verifyResponse
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${process.env.INTERNAL_API_KEY}`,
+      Cookie: `__session=${sessionCookie}`,
     },
-    credentials: "include"
   });
   if (!verifyResponse.ok) {
     console.error('Verify function failed', await verifyResponse.text());
     throw new Error('Unauthorized');
   }
   const result = (await verifyResponse.json()) as verifyResponse;
-  if(!result.uid) throw Error("Missing UID")
+  if (!result.uid) throw Error('Missing UID');
 
   if (requiredClaims?.length) {
     for (const claim of requiredClaims) {

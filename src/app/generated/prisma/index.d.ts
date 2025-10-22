@@ -6883,21 +6883,18 @@ export namespace Prisma {
     id: string | null
     place_id: string | null
     name: string | null
-    flare_id: string | null
   }
 
   export type LocationMaxAggregateOutputType = {
     id: string | null
     place_id: string | null
     name: string | null
-    flare_id: string | null
   }
 
   export type LocationCountAggregateOutputType = {
     id: number
     place_id: number
     name: number
-    flare_id: number
     _all: number
   }
 
@@ -6906,21 +6903,18 @@ export namespace Prisma {
     id?: true
     place_id?: true
     name?: true
-    flare_id?: true
   }
 
   export type LocationMaxAggregateInputType = {
     id?: true
     place_id?: true
     name?: true
-    flare_id?: true
   }
 
   export type LocationCountAggregateInputType = {
     id?: true
     place_id?: true
     name?: true
-    flare_id?: true
     _all?: true
   }
 
@@ -7000,7 +6994,6 @@ export namespace Prisma {
     id: string
     place_id: string
     name: string | null
-    flare_id: string | null
     _count: LocationCountAggregateOutputType | null
     _min: LocationMinAggregateOutputType | null
     _max: LocationMaxAggregateOutputType | null
@@ -7024,7 +7017,6 @@ export namespace Prisma {
     id?: boolean
     place_id?: boolean
     name?: boolean
-    flare_id?: boolean
     organizations?: boolean | Location$organizationsArgs<ExtArgs>
     events?: boolean | Location$eventsArgs<ExtArgs>
     _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
@@ -7035,17 +7027,15 @@ export namespace Prisma {
     id?: boolean
     place_id?: boolean
     name?: boolean
-    flare_id?: boolean
   }, ExtArgs["result"]["location"]>
 
   export type LocationSelectScalar = {
     id?: boolean
     place_id?: boolean
     name?: boolean
-    flare_id?: boolean
   }
 
-  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "place_id" | "name" | "flare_id", ExtArgs["result"]["location"]>
+  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "place_id" | "name", ExtArgs["result"]["location"]>
   export type LocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organizations?: boolean | Location$organizationsArgs<ExtArgs>
     events?: boolean | Location$eventsArgs<ExtArgs>
@@ -7063,7 +7053,6 @@ export namespace Prisma {
       id: string
       place_id: string
       name: string | null
-      flare_id: string | null
     }, ExtArgs["result"]["location"]>
     composites: {}
   }
@@ -7421,7 +7410,6 @@ export namespace Prisma {
     readonly id: FieldRef<"Location", 'String'>
     readonly place_id: FieldRef<"Location", 'String'>
     readonly name: FieldRef<"Location", 'String'>
-    readonly flare_id: FieldRef<"Location", 'String'>
   }
     
 
@@ -8938,8 +8926,7 @@ export namespace Prisma {
   export const LocationScalarFieldEnum: {
     id: 'id',
     place_id: 'place_id',
-    name: 'name',
-    flare_id: 'flare_id'
+    name: 'name'
   };
 
   export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
@@ -9355,7 +9342,6 @@ export namespace Prisma {
     id?: StringFilter<"Location"> | string
     place_id?: StringFilter<"Location"> | string
     name?: StringNullableFilter<"Location"> | string | null
-    flare_id?: StringNullableFilter<"Location"> | string | null
     organizations?: FlareOrgListRelationFilter
     events?: EventListRelationFilter
   }
@@ -9364,7 +9350,6 @@ export namespace Prisma {
     id?: SortOrder
     place_id?: SortOrder
     name?: SortOrderInput | SortOrder
-    flare_id?: SortOrderInput | SortOrder
     organizations?: FlareOrgOrderByRelationAggregateInput
     events?: EventOrderByRelationAggregateInput
   }
@@ -9376,7 +9361,6 @@ export namespace Prisma {
     OR?: LocationWhereInput[]
     NOT?: LocationWhereInput | LocationWhereInput[]
     name?: StringNullableFilter<"Location"> | string | null
-    flare_id?: StringNullableFilter<"Location"> | string | null
     organizations?: FlareOrgListRelationFilter
     events?: EventListRelationFilter
   }, "id" | "place_id">
@@ -9385,7 +9369,6 @@ export namespace Prisma {
     id?: SortOrder
     place_id?: SortOrder
     name?: SortOrderInput | SortOrder
-    flare_id?: SortOrderInput | SortOrder
     _count?: LocationCountOrderByAggregateInput
     _max?: LocationMaxOrderByAggregateInput
     _min?: LocationMinOrderByAggregateInput
@@ -9398,7 +9381,6 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Location"> | string
     place_id?: StringWithAggregatesFilter<"Location"> | string
     name?: StringNullableWithAggregatesFilter<"Location"> | string | null
-    flare_id?: StringNullableWithAggregatesFilter<"Location"> | string | null
   }
 
   export type SocialsWhereInput = {
@@ -9763,7 +9745,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     place_id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
     organizations?: FlareOrgUpdateManyWithoutLocationNestedInput
     events?: EventUpdateManyWithoutLocationNestedInput
   }
@@ -9772,7 +9753,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     place_id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
     organizations?: FlareOrgUncheckedUpdateManyWithoutLocationNestedInput
     events?: EventUncheckedUpdateManyWithoutLocationNestedInput
   }
@@ -9781,14 +9761,12 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     place_id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LocationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     place_id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SocialsCreateInput = {
@@ -10238,21 +10216,18 @@ export namespace Prisma {
     id?: SortOrder
     place_id?: SortOrder
     name?: SortOrder
-    flare_id?: SortOrder
   }
 
   export type LocationMaxOrderByAggregateInput = {
     id?: SortOrder
     place_id?: SortOrder
     name?: SortOrder
-    flare_id?: SortOrder
   }
 
   export type LocationMinOrderByAggregateInput = {
     id?: SortOrder
     place_id?: SortOrder
     name?: SortOrder
-    flare_id?: SortOrder
   }
 
   export type SocialsCountOrderByAggregateInput = {
@@ -11053,7 +11028,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     place_id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
     events?: EventUpdateManyWithoutLocationNestedInput
   }
 
@@ -11061,7 +11035,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     place_id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
     events?: EventUncheckedUpdateManyWithoutLocationNestedInput
   }
 
@@ -11153,7 +11126,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     place_id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
     organizations?: FlareOrgUpdateManyWithoutLocationNestedInput
   }
 
@@ -11161,7 +11133,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     place_id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    flare_id?: NullableStringFieldUpdateOperationsInput | string | null
     organizations?: FlareOrgUncheckedUpdateManyWithoutLocationNestedInput
   }
 

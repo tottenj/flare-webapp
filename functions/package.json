@@ -12,7 +12,7 @@
   "engines": {
     "node": "22"
   },
-  "main": "lib/functions/src/index.js",
+  "main": "lib/index.js",
   "dependencies": {
     "cookie": "^1.0.2",
     "firebase-admin": "^13.4.0",

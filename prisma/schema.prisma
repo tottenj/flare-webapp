@@ -72,9 +72,7 @@ model Location{
   name            String?
   coordinates     Unsupported("geography(Point, 4326)")
   organizations   FlareOrg[]
-  flare_id        String?
   events          Event[]
-
   @@map("location")
 }
 

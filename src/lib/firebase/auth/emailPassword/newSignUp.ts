@@ -16,6 +16,7 @@ export default async function newSignUp(
   try {
     userCred = await createUserWithEmailAndPassword(auth, email, password);
     const token = await userCred.user.getIdToken(true);
+    formData.append('idToken', token)
     const cookieRes = await fetch('/api/loginToken', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

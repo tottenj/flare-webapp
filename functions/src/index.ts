@@ -1,22 +1,17 @@
-import Collections from '../../enums/Collections';
 import { logger } from 'firebase-functions';
 import { getAuth } from 'firebase-admin/auth';
 import { CallableRequest, onCall } from 'firebase-functions/v2/https';
-import { GeoPoint, getFirestore } from 'firebase-admin/firestore';
+import { getFirestore } from 'firebase-admin/firestore';
 import { initializeApp } from 'firebase-admin/app';
-import FlareOrg, { orgConverter } from '../classes/FlareOrg';
-import FlareUser, { userConverter } from '../classes/FlareUser';
-import flareLocation from '../classes/flareLocation';
-import Event, { eventConverter } from '../classes/Event';
-import eventType from '../../enums/EventType';
 import { onRequest } from 'firebase-functions/v2/https';
 import cors from 'cors';
-import cookie from 'cookie';
+import * as cookie from 'cookie';
 
 initializeApp();
 const auth = getAuth();
 const firestore = getFirestore();
 firestore.settings({ ignoreUndefinedProperties: true });
+console.log('🔥 Loaded addOrgClaim at', new Date().toISOString());
 
 exports.signToken = onRequest(async (req: any, res: any) => {
   const token = req.body?.idToken;
@@ -33,27 +28,37 @@ exports.signToken = onRequest(async (req: any, res: any) => {
   }
 });
 
-const corsHandler = cors({ origin: true, credentials: true }); // Allow all origins or specify your domain
+const corsHandler = cors({ origin: true, credentials: false }); // Allow all origins or specify your domain
 
 export const addOrgClaim = onRequest((req, res) => {
   corsHandler(req, res, async () => {
+     console.log({
+       headers: req.headers,
+       body: req.body,
+     });
     try {
       if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
       }
 
-      const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-      const sessionCookie = cookies.session;
-      if (!sessionCookie) {
-        return res.status(400).json({ error: 'Missing session cookie' });
-      }
-      const decoded = await auth.verifySessionCookie(sessionCookie, true);
-    
+      const authHeader = req.headers.authorization;
+      if (!authHeader?.startsWith('Bearer '))
+        return res.status(401).json({ error: 'Missing Authorization header' });
+
+      const apiKey = authHeader.split('Bearer ')[1];
+      if (apiKey !== process.env.INTERNAL_API_KEY)
+        return res.status(403).json({ error: 'Unauthorized: Invalid API key' });
+
+      const { idToken } = req.body;
+      if (!idToken) return res.status(400).json({ error: 'Missing idToken in request body' });
+
+      const decoded = await auth.verifyIdToken(idToken, true);
       await auth.setCustomUserClaims(decoded.uid, { org: true });
-      return res.status(200)
+
+      return res.status(200).json({ success: true });
     } catch (error) {
       console.error('Verification failed:', error);
-      return res.status(401).json({ error: 'Invalid or expired session cookie.' });
+      return res.status(401).json({ error: 'Invalid or expired ID token.' });
     }
   });
 });
@@ -66,8 +71,20 @@ export const verifySessionCookie = onRequest((req, res) => {
         return res.status(405).json({ error: 'Method not allowed' });
       }
 
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Missing or invalid Authorization header' });
+      }
+
+      const apiKey = authHeader.split(' ')[1];
+      if (apiKey !== process.env.INTERNAL_API_KEY) {
+        return res.status(403).json({ error: 'Unauthorized: invalid API key' });
+      }
+
+
       const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-      const sessionCookie = cookies.session;
+      console.log(cookies)
+      const sessionCookie = cookies.__session;
 
       if (!sessionCookie) {
         return res.status(400).json({ error: 'Missing session cookie' });
@@ -80,7 +97,7 @@ export const verifySessionCookie = onRequest((req, res) => {
         uid: decoded.uid,
         claims: {
           admin: decoded.admin ?? null,
-          org: decoded.organization ?? null,
+          org: decoded.org ?? null,
           verified: decoded.verified ?? null,
           emailVerified: decoded.email_verified ?? false,
         },

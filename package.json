@@ -26,7 +26,9 @@
     "test:e2e:local": "npm run e2e:setup && concurrently -k -n 'EMULATORS,APP,CYPRESS' -c 'blue.bold,green.bold,magenta.bold' \"npm run emulators:start\" \"npm run dev:cyp\" \"npm run wait-and-open\"",
     "wait-and-test": "node scripts/wait-for-emulators.js && npx wait-on http-get://localhost:3000/api/health && npm run cypress:run",
     "wait-and-open": "node scripts/wait-for-emulators.js && npx wait-on http-get://localhost:3000/api/health && npm run cypress:open",
-    "dev:migrate": "npx dotenv -e .env.dev -- prisma migrate dev"
+    "dev:migrate": "npx dotenv -e .env.dev -- prisma migrate dev",
+    "dev:reset": "npx dotenv -e .env.dev -- prisma migrate reset",
+    "dev:studio": "npx dotenv -e .env.dev -- prisma studio"
   },
   "jest-junit": {
     "outputDirectory": "./reports/jest",
@@ -59,6 +61,7 @@
     "@vis.gl/react-google-maps": "^1.5.2",
     "chroma-js": "^3.1.2",
     "cookies-next": "^5.1.0",
+    "cuid": "^3.0.0",
     "dotenv": "^16.5.0",
     "eslint-plugin-jest-dom": "^5.5.0",
     "firebase": "^11.6.0",
