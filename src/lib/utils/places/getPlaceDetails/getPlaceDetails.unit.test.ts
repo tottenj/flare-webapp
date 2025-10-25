@@ -1,4 +1,4 @@
-import { fetchFieldsMock, PlaceMock } from "../../../../../__jestMocks__/@googlemaps/js-api-loader";
+import { fetchFieldsMock, PlaceMock } from "../../../../../__mocks__/@googlemaps/js-api-loader";
 import { getPlaceDetails } from "./getPlaceDetails"
 import { expect, jest } from '@jest/globals';
 

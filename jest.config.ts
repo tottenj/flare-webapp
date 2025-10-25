@@ -7,7 +7,7 @@ const baseConfig: Config = {
   projects: [
     {
       displayName: 'unit',
-      testMatch: ['<rootDir>/src/**/*.test.unit.{ts,tsx}'],
+      testMatch: ['<rootDir>/src/**/*.unit.test.{ts,tsx}'],
       testEnvironment: 'jsdom',
       setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
     },
