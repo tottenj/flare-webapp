@@ -6,9 +6,7 @@
     "dev": "next dev --turbopack",
     "dev:dev": "npx dotenv -e .env -e .env.dev -- next dev --turbopack",
     "dev:cyp": "npx dotenv -e .env -e .env.test -- next dev",
-    "test": "jest",
     "test:watch": "jest --watch",
-    "coverage": "jest --coverage --reporters=default --reporters=jest-junit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test-storybook": "vitest --project=storybook",
@@ -28,7 +26,11 @@
     "wait-and-open": "node scripts/wait-for-emulators.js && npx wait-on http-get://localhost:3000/api/health && npm run cypress:open",
     "dev:migrate": "npx dotenv -e .env.dev -- prisma migrate dev",
     "dev:reset": "npx dotenv -e .env.dev -- prisma migrate reset",
-    "dev:studio": "npx dotenv -e .env.dev -- prisma studio"
+    "dev:studio": "npx dotenv -e .env.dev -- prisma studio",
+    "test": "jest",
+    "test:unit": "jest --selectProjects unit",
+    "test:integration": "npm run e2e:setup && firebase emulators:exec --only auth,firestore,functions 'jest --selectProjects integration'",
+    "coverage": "jest --coverage --reporters=default --reporters=jest-junit"
   },
   "jest-junit": {
     "outputDirectory": "./reports/jest",

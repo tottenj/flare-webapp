@@ -1,6 +1,6 @@
 import Collections from "@/lib/enums/collections"
 import { getCollectionByFields, WhereClause } from "@/lib/firebase/firestore/firestoreOperations"
-import { orgConverter } from "../flareOrg/FlareOrg"
+
 import { Firestore } from "firebase/firestore"
 import { getFile } from "@/lib/firebase/storage/storageOperations"
 import { FirebaseStorage } from "firebase/storage"

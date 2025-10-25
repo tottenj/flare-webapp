@@ -1,10 +1,10 @@
 import { Prisma } from '@/app/generated/prisma';
 import flareOrgDal from '../dals/flareOrgDal';
 import BaseService from './baseService';
-import { createOrgDb, createOrgDbSchema } from '../dtos/FlareOrgDto';
 import requireAuth from '@/lib/firebase/auth/requireAuth';
 import LocationService from './locationService';
 import { FlareContext } from '@/lib/types/FlareClaims';
+import { createOrgDBSchema, createOrgDtoType } from '../dtos/FlareOrgDto';
 
 type keys = keyof Prisma.FlareOrgGetPayload<{}>;
 export default class FlareOrgService extends BaseService<flareOrgDal, keys> {
@@ -18,9 +18,9 @@ export default class FlareOrgService extends BaseService<flareOrgDal, keys> {
     description: true,
   };
 
-  async createOrg(org: createOrgDb, tx?: Prisma.TransactionClient, context?: FlareContext) {
+  async createOrg(org: createOrgDtoType, tx?: Prisma.TransactionClient, context?: FlareContext) {
   
-    const sanitized = createOrgDbSchema.safeParse(org);
+    const sanitized = createOrgDBSchema.safeParse(org);
     if (!sanitized.success) throw new Error('Invalid Organization');
     const uid = context?.uid ?? (await requireAuth()).uid;
     const { location, socials, description } = sanitized.data;

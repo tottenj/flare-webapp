@@ -13,9 +13,13 @@ export const OrgSignUpFormSchema = z
     twitter: z.string().optional(),
     other: z.string().optional(),
     idToken: z.string(),
+    account_type: z.string().includes("org"),
     'instagram-file': z.file().optional(),
     'twitter-file': z.file().optional(),
     'facebook-file': z.file().optional(),
     'other-file': z.file().optional(),
   })
   .strict();
+
+
+  export type OrgSignUpFormType = z.infer<typeof OrgSignUpFormSchema>

@@ -1,35 +1,40 @@
-// jest.config.ts
 import type { Config } from 'jest';
 import nextJest from 'next/jest.js';
 
-const createJestConfig = nextJest({
-  // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
-  dir: './',
-});
+const createJestConfig = nextJest({ dir: './' });
 
-// Add any custom config to be passed to Jest
-const config: Config = {
-  coverageProvider: 'v8',
-  testEnvironment: 'jsdom',
+const baseConfig: Config = {
+  projects: [
+    {
+      displayName: 'unit',
+      testMatch: ['<rootDir>/src/**/*.test.unit.{ts,tsx}'],
+      testEnvironment: 'jsdom',
+      setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+    },
+    {
+      displayName: 'integration',
+      testMatch: ['<rootDir>/__tests__/integration/**/*.test.ts'],
+      testEnvironment: 'node',
+      setupFilesAfterEnv: ['<rootDir>/jest.setup.integration.ts'],
+    },
+  ],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1', // <- THIS IS CORRECT
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
   clearMocks: true,
+  coverageProvider: 'v8',
   coverageThreshold: {
     global: {
       branches: 20,
       functions: 20,
       lines: 20,
       statements: 20,
-    }
+    },
   },
-  // Add more setup options before each test is run
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   reporters: [
     'default',
     ['jest-junit', { outputDirectory: 'reports/jest', outputName: 'junit.xml' }],
   ],
 };
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-export default createJestConfig(config);
+export default createJestConfig(baseConfig);

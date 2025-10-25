@@ -7,6 +7,7 @@ import { execSync } from 'child_process';
 export default defineConfig({
   projectId: 'f7wjfu',
   e2e: {
+    specPattern: 'tests/e2e/**/*.cy.{js,jsx,ts,tsx}',
     retries: {
       runMode: 1,
       openMode: 0,
@@ -39,7 +40,7 @@ export default defineConfig({
       });
     },
     baseUrl: 'http://localhost:3000', // Adjust to your app's URL
-    chromeWebSecurity: false
+    chromeWebSecurity: false,
   },
   video: true,
   videosFolder: 'reports/cypress/videos',
@@ -52,5 +53,4 @@ export default defineConfig({
       toConsole: false,
     },
   },
-  
 });

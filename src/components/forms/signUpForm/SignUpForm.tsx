@@ -8,8 +8,8 @@ import Link from 'next/link';
 import { toast } from 'react-toastify';
 import HeroInput from '@/components/inputs/hero/input/HeroInput';
 import newSignUp from '@/lib/firebase/auth/emailPassword/newSignUp';
-import signUpUser from '@/lib/formActions/auth/signUpUser';
 import getAuthError from '@/lib/utils/error/getAuthError';
+import handleSignUpSubmit from '@/lib/utils/authentication/handleSignUpSubmit';
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -19,19 +19,12 @@ export default function SignUpForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   
-    if(!email || !password){
-      toast.error("Must have both email and password")
-      return
-    }
     setPending(true);
-    const formData = new FormData(e.currentTarget);
     try {
-      await newSignUp(formData, signUpUser);
-      router.push('/confirmation');
-    } catch (err: any) {
-      sessionStorage.removeItem('manualLoginInProgress');
-      toast.error(getAuthError(err) || 'Something went wrong');
+      await handleSignUpSubmit(e, 'user');
+      router.push("/confirmation")
+    } catch (error) {
+      toast.error(getAuthError(error) || 'Something went wrong');
     } finally {
       setPending(false);
     }
@@ -42,7 +35,10 @@ export default function SignUpForm() {
       <ServerLogo size="medium" />
       <h1 className="mt-4 mb-4 text-4xl">Sign Up</h1>
 
-      <form onSubmit={(e) => handleSubmit(e)} className="mb-8 flex w-full flex-col sm:w-5/6 @lg:w-2/3">
+      <form
+        onSubmit={(e) => handleSubmit(e)}
+        className="mb-8 flex w-full flex-col sm:w-5/6 @lg:w-2/3"
+      >
         <HeroInput
           label="Email"
           name="email"

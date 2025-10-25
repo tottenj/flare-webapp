@@ -15,8 +15,6 @@ export default async function DashboardLayout({
   const { claims, isAdmin } = await verifyOrg();
 
   return (
-    <>
-      <div className="relative mt-4 h-[calc(100dvh-82px)] max-w-[1440px] m-auto">{isAdmin ? admin : claims ? org : user}{modal}</div>
-    </>
+    <div></div>
   );
 }

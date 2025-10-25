@@ -29,9 +29,6 @@ export async function POST(req: NextRequest) {
       maxAge: data.expiresIn / 1000,
       path: '/',
     });
-
-    console.log('COOKIE SEt');
-
     return NextResponse.json('Cookie set', { status: 200 });
   } catch (error) {
     console.log(error);

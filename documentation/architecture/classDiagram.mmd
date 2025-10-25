@@ -1,0 +1,21 @@
+classDiagram
+  class FlareOrg {
+    +id: string
+    +name: string
+    +static create(userData, orgData)
+    +verify()
+  }
+
+  class FlareOrgService {
+    +createOrg(data)
+    +updateOrg(id, data)
+    +verifyOrg(id)
+  }
+
+  class FlareOrgDAL {
+    +create(data)
+    +findById(id)
+  }
+
+  FlareOrg --> FlareOrgService
+  FlareOrgService --> FlareOrgDAL

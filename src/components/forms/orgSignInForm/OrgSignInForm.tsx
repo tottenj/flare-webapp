@@ -1,6 +1,5 @@
 'use client';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
-import { useServerUser } from '@/components/context/ServerUserContext';
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
 import FileInput from '@/components/inputs/file/FileInput';
 import FormSection from '@/components/inputs/formSection/FormSection';
@@ -12,6 +11,7 @@ import { addFile } from '@/lib/firebase/storage/storageOperations';
 import signUpOrg from '@/lib/formActions/auth/signUpOrg';
 import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
 import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
+import handleSignUpSubmit from '@/lib/utils/authentication/handleSignUpSubmit';
 import { orgSocials } from '@/lib/utils/text/text';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -43,25 +43,21 @@ export default function OrgSignInForm() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setPending(true);
     if (passStatus) {
       toast.error('Passwords must match');
       return;
     }
-    const formData = new FormData(e.currentTarget);
+    setPending(true);
     try {
-      await newSignUp(formData, signUpOrg);
+      await handleSignUpSubmit(e, 'org');
       if (unifiedUser.user?.uid) await uploadFilesToFirebase(unifiedUser.user.uid);
       router.push('/confirmation');
-    } catch (err: any) {
-      sessionStorage.removeItem('manualLoginInProgress');
-      toast.error(err.message || 'Something went wrong');
+    } catch (error: any) {
+      toast.error(error.message || 'Something went wrong');
     } finally {
       setPending(false);
     }
   }
-
-
 
   return (
     <div className="@container mt-16 mb-8 flex h-auto w-11/12 flex-col items-center justify-center rounded-xl bg-white p-4 pt-8 pb-8 sm:w-5/6 sm:p-10 lg:w-1/2">
@@ -128,8 +124,8 @@ export default function OrgSignInForm() {
           />
 
           <FileInput
-            onChange={(file) => handleFileChange('other-file', file)}
-            name="other"
+            onChange={(file) => handleFileChange('other', file)}
+            name="other-file"
             fileAdded={!!validFiles.find((f) => f.key === 'other')}
           />
         </FormSection>

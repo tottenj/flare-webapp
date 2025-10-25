@@ -1,14 +1,13 @@
 'use server';
-
-import { createOrgDb } from '@/lib/prisma/dtos/FlareOrgDto';
-import userService from '@/lib/prisma/services/userService';
+import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
+import { createOrgDtoType } from '@/lib/prisma/dtos/FlareOrgDto';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { zodFieldErrors } from '@/lib/utils/error/zodFeildErrors';
-import { convertFormData } from '@/lib/zod/convertFormData';
 import { OrgSignUpFormSchema } from '@/lib/zod/org/createOrgSchema';
 
 export default async function signUpOrg(formData: FormData): Promise<ActionResponse> {
    const rawData = Object.fromEntries(formData.entries());
+
 
    if (rawData.location && typeof rawData.location === 'string') {
      rawData.location = JSON.parse(rawData.location);
@@ -18,7 +17,9 @@ export default async function signUpOrg(formData: FormData): Promise<ActionRespo
     console.log(result.error)
     return { status: 'error', message: 'Invalid Data', errors: zodFieldErrors(result.error) };
   }
+
   const { data } = result;
+
   if (data.password != data.confirmPassword)
     return { status: 'error', message: 'Passwords must match' };
 
@@ -37,13 +38,12 @@ export default async function signUpOrg(formData: FormData): Promise<ActionRespo
 
   if (!verifyResponse.ok) {
     const resp = await verifyResponse.text()
-    console.log(resp)
-    console.error('Verify function failed');
     throw new Error('Unauthorized');
   }
 
+  console.log("MADE IT ALL THE WAY HERE")
 
-  const orgData: createOrgDb = {
+  const orgData: createOrgDtoType = {
     location: {
       place_id: data.location.id,
       coordinates: {
@@ -60,10 +60,8 @@ export default async function signUpOrg(formData: FormData): Promise<ActionRespo
     },
   };
   try {
-    const service = new userService();
-    await service.createUser({ email: data.email, account_type: 'org' }, orgData);
+    await FlareOrg.create({email: data.email, account_type: "org"}, orgData)
   } catch (error) {
-    console.log(error)
     return { status: 'error', message: 'Error Signing Up At This Time' };
   }
   return { status: 'success', message: 'Created Organization' };

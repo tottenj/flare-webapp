@@ -4,9 +4,10 @@ import BaseService from './baseService';
 import FlareUserService from './flareUserService';
 import { CreateDbUserSchema, CreateUserDto } from '../dtos/UserDto';
 import { Prisma } from '@/app/generated/prisma';
-import { createOrgDb, createOrgDbSchema } from '../dtos/FlareOrgDto';
+
 import FlareOrgService from './flareOrgService';
 import prisma from '../prisma';
+import { createOrgDtoType } from '../dtos/FlareOrgDto';
 type UserKeys = keyof Prisma.UserGetPayload<{}>;
 
 export default class userService extends BaseService<UserDal, UserKeys> {
@@ -18,7 +19,7 @@ export default class userService extends BaseService<UserDal, UserKeys> {
     account_type: true,
   };
 
-  async createUser(incoming: CreateUserDto, org?: createOrgDb) {
+  async createUser(incoming: CreateUserDto, org?: createOrgDtoType) {
     const parse = CreateDbUserSchema.safeParse(incoming);
     if (!parse.success) throw new Error('Invalid Data');
     const { data } = parse;

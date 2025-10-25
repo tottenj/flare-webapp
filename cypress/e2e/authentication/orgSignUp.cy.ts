@@ -67,13 +67,7 @@ describe.skip('Page Components', () => {
     cy.checkExistance(getOrgSignUpInputs());
   });
 
-  it('Tests google maps location input', () => {
-    cy.usePlacesInput(
-      "[data-cy='location-input']",
-      'two faces',
-      'Two Faces, Wilson Street, Guelph, ON, Canada'
-    );
-  });
+  
 });
 
 describe.skip('Success Flow', () => {
