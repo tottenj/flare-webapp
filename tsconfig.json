@@ -13,15 +13,17 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "types": ["node"],
     "plugins": [
       {
         "name": "next"
       }
     ],
+    
     "paths": {
       "@/*": ["./src/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "cypress/support/commands.ts", "cypress/support/e2e.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "cypress/support/commands.ts", "cypress/support/e2e.ts", "jest.setup.ts", "jest.setup.integration.ts", "tsconfig.jest.json"],
   "exclude": ["node_modules"]
 }

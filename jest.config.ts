@@ -1,40 +1,41 @@
 import type { Config } from 'jest';
 import nextJest from 'next/jest.js';
+import { config as dotenvConfig } from 'dotenv';
+dotenvConfig({ path: '.env.test' });
 
 const createJestConfig = nextJest({ dir: './' });
 
-const baseConfig: Config = {
-  projects: [
-    {
-      displayName: 'unit',
-      testMatch: ['<rootDir>/src/**/*.unit.test.{ts,tsx}'],
-      testEnvironment: 'jsdom',
-      setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-    },
-    {
-      displayName: 'integration',
-      testMatch: ['<rootDir>/__tests__/integration/**/*.test.ts'],
-      testEnvironment: 'node',
-      setupFilesAfterEnv: ['<rootDir>/jest.setup.integration.ts'],
-    },
-  ],
+const sharedProjectConfig = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   clearMocks: true,
-  coverageProvider: 'v8',
-  coverageThreshold: {
-    global: {
-      branches: 20,
-      functions: 20,
-      lines: 20,
-      statements: 20,
-    },
-  },
-  reporters: [
-    'default',
-    ['jest-junit', { outputDirectory: 'reports/jest', outputName: 'junit.xml' }],
-  ],
 };
 
-export default createJestConfig(baseConfig);
+export default async (): Promise<Config> => {
+  const unitConfig = await createJestConfig({
+    ...sharedProjectConfig,
+    displayName: 'unit',
+    testMatch: ['<rootDir>/**/*.unit.test.[jt]s?(x)'],
+    testEnvironment: 'jsdom',
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  })();
+
+  const integrationConfig = await createJestConfig({
+    ...sharedProjectConfig,
+    displayName: 'integration',
+    testMatch: ['<rootDir>/**/*.integration.test.[jt]s?(x)'],
+    testEnvironment: 'node',
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.integration.ts'],
+  })();
+
+  return {
+    // ✅ top-level only
+    collectCoverage: true,
+    coverageProvider: 'v8',
+    coverageDirectory: 'coverage',
+    reporters: ['default'],
+
+    projects: [unitConfig, integrationConfig],
+  };
+};

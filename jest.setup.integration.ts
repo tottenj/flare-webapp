@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '.env.test' });
+
 import '@testing-library/jest-dom';
 import { initializeApp } from 'firebase/app';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
@@ -17,4 +17,5 @@ beforeAll(() => {
   connectFirestoreEmulator(firestore, '127.0.0.1', 8080);
   resetTestDb();
 });
+
 
