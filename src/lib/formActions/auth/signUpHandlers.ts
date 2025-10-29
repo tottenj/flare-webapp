@@ -1,7 +1,6 @@
-
 import { ActionResponse } from '@/lib/types/ActionResponse';
-import signUpOrg from './signUpOrg';
-import signUpUser from './signUpUser';
+import signUpOrg from './signUpOrg/signUpOrg';
+import signUpUser from './signUpUser/signUpUser';
 
 export async function handleSignUp(
   accountType: string,

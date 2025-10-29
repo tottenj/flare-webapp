@@ -19,6 +19,8 @@ export default async (): Promise<Config> => {
     testMatch: ['<rootDir>/**/*.unit.test.[jt]s?(x)'],
     testEnvironment: 'jsdom',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+    coveragePathIgnorePatterns: ['node_modules','/src/app/generated/prisma/'],
+    testPathIgnorePatterns: ['/node_modules/', '/app/generated/prisma/'],
   })();
 
   const integrationConfig = await createJestConfig({
@@ -35,6 +37,7 @@ export default async (): Promise<Config> => {
     coverageProvider: 'v8',
     coverageDirectory: 'coverage',
     reporters: ['default'],
+   
 
     projects: [unitConfig, integrationConfig],
   };

@@ -8,7 +8,7 @@ import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import { storage } from '@/lib/firebase/auth/configs/clientApp';
 import newSignUp from '@/lib/firebase/auth/emailPassword/newSignUp';
 import { addFile } from '@/lib/firebase/storage/storageOperations';
-import signUpOrg from '@/lib/formActions/auth/signUpOrg';
+import signUpOrg from '@/lib/formActions/auth/signUpOrg/signUpOrg';
 import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
 import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
 import handleSignUpSubmit from '@/lib/utils/authentication/handleSignUpSubmit';

@@ -1,13 +1,13 @@
-import UserDal from '../dals/userDal';
-import requireAuth from '@/lib/firebase/auth/requireAuth';
-import BaseService from './baseService';
-import FlareUserService from './flareUserService';
+import UserDal from '../dals/userDal/userDal';
+import BaseService from './BaseService/baseService';
+import FlareUserService from './FlareUserService/flareUserService';
 import { CreateDbUserSchema, CreateUserDto } from '../dtos/UserDto';
 import { Prisma } from '@/app/generated/prisma';
 
-import FlareOrgService from './flareOrgService';
+import FlareOrgService from './FlareOrgService/flareOrgService';
 import prisma from '../prisma';
 import { createOrgDtoType } from '../dtos/FlareOrgDto';
+import requireAuth from '@/lib/firebase/auth/utils/requireAuth';
 type UserKeys = keyof Prisma.UserGetPayload<{}>;
 
 export default class userService extends BaseService<UserDal, UserKeys> {
@@ -31,7 +31,7 @@ export default class userService extends BaseService<UserDal, UserKeys> {
         const { account_type, id } = result;
         if (account_type === 'user') {
           const flareUserService = new FlareUserService();
-          await flareUserService.createFlareUser(id, tx, {uid});
+          await flareUserService.createFlareUser(id, tx, { uid });
         } else if (account_type === 'org' && org) {
           const flareOrgService = new FlareOrgService();
           await flareOrgService.createOrg(org, tx);
@@ -40,7 +40,7 @@ export default class userService extends BaseService<UserDal, UserKeys> {
         }
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       throw new Error('Error while creating user');
     }
   }
