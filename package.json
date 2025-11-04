@@ -17,7 +17,8 @@
     "emulators:start": "firebase emulators:start --only auth,functions,storage",
     "db:reset": "prisma migrate reset --force --skip-seed",
     "seed:test": "node prisma/seedTest.js",
-    "e2e:setup": "docker compose --env-file .env.test -f compose.test.yaml up -d && npx wait-on tcp:localhost:5434 && npx dotenv -e .env -e .env.test -- npx prisma migrate reset --force --skip-seed",
+    "e2e:setup": "npx wait-on tcp:5432 && npx dotenv -e .env -e .env.test -- npx prisma migrate reset --force --skip-seed",
+
     "cypress:open": "wait-on http://localhost:3000 && cypress open",
     "cypress:run": "cypress run",
     "test:e2e": "npm run e2e:setup && concurrently -k -n 'EMULATORS,APP,CYPRESS' -c 'blue.bold,green.bold,magenta.bold' \"npm run emulators:start\" \"npm run dev:cyp\" \"npm run wait-and-test\"",
