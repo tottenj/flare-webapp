@@ -41,7 +41,7 @@ jest:integration:
   services:
     - name: postgis/postgis:latest
       alias: postgres
-      command: ["postgres", "-c", "listen_addresses='*'"]
+      command: ["postgres", "-c", "listen_addresses=*"]
   variables:
     NODE_ENV: test
     POSTGRES_USER: test
