@@ -31,8 +31,10 @@
     "test": "jest",
     "test:unit": "jest --selectProjects unit",
     "test:integration": "npm run e2e:setup && firebase emulators:exec --only auth,firestore,functions 'jest --selectProjects integration'",
+    "test:integration:ci": "jest --selectProjects integration --coverage --coverageDirectory=coverage/integration",
     "coverage": "jest --coverage --reporters=default --reporters=jest-junit"
   },
+
   "type": "module",
   "jest-junit": {
     "outputDirectory": "./reports/jest",
