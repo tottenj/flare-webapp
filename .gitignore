@@ -53,6 +53,6 @@ certificates
 /src/generated/prisma
 
 
-prisma/migrations/*
+
 
 reports/*
