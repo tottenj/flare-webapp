@@ -1421,13 +1421,13 @@ export namespace Prisma {
    */
 
   export type LocationCountOutputType = {
-    organizations: number
     events: number
+    organizations: number
   }
 
   export type LocationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organizations?: boolean | LocationCountOutputTypeCountOrganizationsArgs
     events?: boolean | LocationCountOutputTypeCountEventsArgs
+    organizations?: boolean | LocationCountOutputTypeCountOrganizationsArgs
   }
 
   // Custom InputTypes
@@ -1444,15 +1444,15 @@ export namespace Prisma {
   /**
    * LocationCountOutputType without action
    */
-  export type LocationCountOutputTypeCountOrganizationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: FlareOrgWhereInput
+  export type LocationCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventWhereInput
   }
 
   /**
    * LocationCountOutputType without action
    */
-  export type LocationCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: EventWhereInput
+  export type LocationCountOutputTypeCountOrganizationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FlareOrgWhereInput
   }
 
 
@@ -3703,9 +3703,9 @@ export namespace Prisma {
     description?: boolean
     verified?: boolean
     location_id?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     events?: boolean | FlareOrg$eventsArgs<ExtArgs>
     location?: boolean | LocationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     socials?: boolean | FlareOrg$socialsArgs<ExtArgs>
     _count?: boolean | FlareOrgCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flareOrg"]>
@@ -3716,8 +3716,8 @@ export namespace Prisma {
     description?: boolean
     verified?: boolean
     location_id?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     location?: boolean | LocationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flareOrg"]>
 
   export type FlareOrgSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3726,8 +3726,8 @@ export namespace Prisma {
     description?: boolean
     verified?: boolean
     location_id?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
     location?: boolean | LocationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flareOrg"]>
 
   export type FlareOrgSelectScalar = {
@@ -3740,27 +3740,27 @@ export namespace Prisma {
 
   export type FlareOrgOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "description" | "verified" | "location_id", ExtArgs["result"]["flareOrg"]>
   export type FlareOrgInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     events?: boolean | FlareOrg$eventsArgs<ExtArgs>
     location?: boolean | LocationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
     socials?: boolean | FlareOrg$socialsArgs<ExtArgs>
     _count?: boolean | FlareOrgCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FlareOrgIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     location?: boolean | LocationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type FlareOrgIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
     location?: boolean | LocationDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $FlareOrgPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "FlareOrg"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
       events: Prisma.$EventPayload<ExtArgs>[]
       location: Prisma.$LocationPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
       socials: Prisma.$SocialsPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -4163,9 +4163,9 @@ export namespace Prisma {
    */
   export interface Prisma__FlareOrgClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     events<T extends FlareOrg$eventsArgs<ExtArgs> = {}>(args?: Subset<T, FlareOrg$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     location<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     socials<T extends FlareOrg$socialsArgs<ExtArgs> = {}>(args?: Subset<T, FlareOrg$socialsArgs<ExtArgs>>): Prisma__SocialsClient<$Result.GetResult<Prisma.$SocialsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7017,8 +7017,8 @@ export namespace Prisma {
     id?: boolean
     place_id?: boolean
     name?: boolean
-    organizations?: boolean | Location$organizationsArgs<ExtArgs>
     events?: boolean | Location$eventsArgs<ExtArgs>
+    organizations?: boolean | Location$organizationsArgs<ExtArgs>
     _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["location"]>
 
@@ -7037,8 +7037,8 @@ export namespace Prisma {
 
   export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "place_id" | "name", ExtArgs["result"]["location"]>
   export type LocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    organizations?: boolean | Location$organizationsArgs<ExtArgs>
     events?: boolean | Location$eventsArgs<ExtArgs>
+    organizations?: boolean | Location$organizationsArgs<ExtArgs>
     _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LocationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -7046,8 +7046,8 @@ export namespace Prisma {
   export type $LocationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Location"
     objects: {
-      organizations: Prisma.$FlareOrgPayload<ExtArgs>[]
       events: Prisma.$EventPayload<ExtArgs>[]
+      organizations: Prisma.$FlareOrgPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7376,8 +7376,8 @@ export namespace Prisma {
    */
   export interface Prisma__LocationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    organizations<T extends Location$organizationsArgs<ExtArgs> = {}>(args?: Subset<T, Location$organizationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     events<T extends Location$eventsArgs<ExtArgs> = {}>(args?: Subset<T, Location$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    organizations<T extends Location$organizationsArgs<ExtArgs> = {}>(args?: Subset<T, Location$organizationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlareOrgPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7716,30 +7716,6 @@ export namespace Prisma {
   }
 
   /**
-   * Location.organizations
-   */
-  export type Location$organizationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the FlareOrg
-     */
-    select?: FlareOrgSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the FlareOrg
-     */
-    omit?: FlareOrgOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: FlareOrgInclude<ExtArgs> | null
-    where?: FlareOrgWhereInput
-    orderBy?: FlareOrgOrderByWithRelationInput | FlareOrgOrderByWithRelationInput[]
-    cursor?: FlareOrgWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: FlareOrgScalarFieldEnum | FlareOrgScalarFieldEnum[]
-  }
-
-  /**
    * Location.events
    */
   export type Location$eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7761,6 +7737,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: EventScalarFieldEnum | EventScalarFieldEnum[]
+  }
+
+  /**
+   * Location.organizations
+   */
+  export type Location$organizationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FlareOrg
+     */
+    select?: FlareOrgSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FlareOrg
+     */
+    omit?: FlareOrgOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FlareOrgInclude<ExtArgs> | null
+    where?: FlareOrgWhereInput
+    orderBy?: FlareOrgOrderByWithRelationInput | FlareOrgOrderByWithRelationInput[]
+    cursor?: FlareOrgWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FlareOrgScalarFieldEnum | FlareOrgScalarFieldEnum[]
   }
 
   /**
@@ -9136,9 +9136,9 @@ export namespace Prisma {
     description?: StringNullableFilter<"FlareOrg"> | string | null
     verified?: BoolFilter<"FlareOrg"> | boolean
     location_id?: StringFilter<"FlareOrg"> | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     events?: EventListRelationFilter
     location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     socials?: XOR<SocialsNullableScalarRelationFilter, SocialsWhereInput> | null
   }
 
@@ -9148,9 +9148,9 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     verified?: SortOrder
     location_id?: SortOrder
-    user?: UserOrderByWithRelationInput
     events?: EventOrderByRelationAggregateInput
     location?: LocationOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
     socials?: SocialsOrderByWithRelationInput
   }
 
@@ -9163,9 +9163,9 @@ export namespace Prisma {
     description?: StringNullableFilter<"FlareOrg"> | string | null
     verified?: BoolFilter<"FlareOrg"> | boolean
     location_id?: StringFilter<"FlareOrg"> | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     events?: EventListRelationFilter
     location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
     socials?: XOR<SocialsNullableScalarRelationFilter, SocialsWhereInput> | null
   }, "id" | "user_id">
 
@@ -9342,16 +9342,16 @@ export namespace Prisma {
     id?: StringFilter<"Location"> | string
     place_id?: StringFilter<"Location"> | string
     name?: StringNullableFilter<"Location"> | string | null
-    organizations?: FlareOrgListRelationFilter
     events?: EventListRelationFilter
+    organizations?: FlareOrgListRelationFilter
   }
 
   export type LocationOrderByWithRelationInput = {
     id?: SortOrder
     place_id?: SortOrder
     name?: SortOrderInput | SortOrder
-    organizations?: FlareOrgOrderByRelationAggregateInput
     events?: EventOrderByRelationAggregateInput
+    organizations?: FlareOrgOrderByRelationAggregateInput
   }
 
   export type LocationWhereUniqueInput = Prisma.AtLeast<{
@@ -9361,8 +9361,8 @@ export namespace Prisma {
     OR?: LocationWhereInput[]
     NOT?: LocationWhereInput | LocationWhereInput[]
     name?: StringNullableFilter<"Location"> | string | null
-    organizations?: FlareOrgListRelationFilter
     events?: EventListRelationFilter
+    organizations?: FlareOrgListRelationFilter
   }, "id" | "place_id">
 
   export type LocationOrderByWithAggregationInput = {
@@ -9531,9 +9531,9 @@ export namespace Prisma {
     id?: string
     description?: string | null
     verified?: boolean
-    user: UserCreateNestedOneWithoutFlareOrgInput
     events?: EventCreateNestedManyWithoutOrganizationInput
     location: LocationCreateNestedOneWithoutOrganizationsInput
+    user: UserCreateNestedOneWithoutFlareOrgInput
     socials?: SocialsCreateNestedOneWithoutOrganizationInput
   }
 
@@ -9551,9 +9551,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
-    user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
     events?: EventUpdateManyWithoutOrganizationNestedInput
     location?: LocationUpdateOneRequiredWithoutOrganizationsNestedInput
+    user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
     socials?: SocialsUpdateOneWithoutOrganizationNestedInput
   }
 
@@ -9745,16 +9745,16 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     place_id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    organizations?: FlareOrgUpdateManyWithoutLocationNestedInput
     events?: EventUpdateManyWithoutLocationNestedInput
+    organizations?: FlareOrgUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     place_id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
-    organizations?: FlareOrgUncheckedUpdateManyWithoutLocationNestedInput
     events?: EventUncheckedUpdateManyWithoutLocationNestedInput
+    organizations?: FlareOrgUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUpdateManyMutationInput = {
@@ -10339,12 +10339,6 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFlareUserInput, UserUpdateWithoutFlareUserInput>, UserUncheckedUpdateWithoutFlareUserInput>
   }
 
-  export type UserCreateNestedOneWithoutFlareOrgInput = {
-    create?: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
-    connectOrCreate?: UserCreateOrConnectWithoutFlareOrgInput
-    connect?: UserWhereUniqueInput
-  }
-
   export type EventCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<EventCreateWithoutOrganizationInput, EventUncheckedCreateWithoutOrganizationInput> | EventCreateWithoutOrganizationInput[] | EventUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: EventCreateOrConnectWithoutOrganizationInput | EventCreateOrConnectWithoutOrganizationInput[]
@@ -10354,6 +10348,12 @@ export namespace Prisma {
 
   export type LocationCreateNestedOneWithoutOrganizationsInput = {
     connect?: LocationWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutFlareOrgInput = {
+    create?: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFlareOrgInput
+    connect?: UserWhereUniqueInput
   }
 
   export type SocialsCreateNestedOneWithoutOrganizationInput = {
@@ -10383,14 +10383,6 @@ export namespace Prisma {
     set?: boolean
   }
 
-  export type UserUpdateOneRequiredWithoutFlareOrgNestedInput = {
-    create?: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
-    connectOrCreate?: UserCreateOrConnectWithoutFlareOrgInput
-    upsert?: UserUpsertWithoutFlareOrgInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFlareOrgInput, UserUpdateWithoutFlareOrgInput>, UserUncheckedUpdateWithoutFlareOrgInput>
-  }
-
   export type EventUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<EventCreateWithoutOrganizationInput, EventUncheckedCreateWithoutOrganizationInput> | EventCreateWithoutOrganizationInput[] | EventUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: EventCreateOrConnectWithoutOrganizationInput | EventCreateOrConnectWithoutOrganizationInput[]
@@ -10408,6 +10400,14 @@ export namespace Prisma {
   export type LocationUpdateOneRequiredWithoutOrganizationsNestedInput = {
     connect?: LocationWhereUniqueInput
     update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutOrganizationsInput, LocationUpdateWithoutOrganizationsInput>, LocationUncheckedUpdateWithoutOrganizationsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutFlareOrgNestedInput = {
+    create?: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFlareOrgInput
+    upsert?: UserUpsertWithoutFlareOrgInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFlareOrgInput, UserUpdateWithoutFlareOrgInput>, UserUncheckedUpdateWithoutFlareOrgInput>
   }
 
   export type SocialsUpdateOneWithoutOrganizationNestedInput = {
@@ -10495,20 +10495,6 @@ export namespace Prisma {
     update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutEventsInput, LocationUpdateWithoutEventsInput>, LocationUncheckedUpdateWithoutEventsInput>
   }
 
-  export type FlareOrgUpdateManyWithoutLocationNestedInput = {
-    create?: XOR<FlareOrgCreateWithoutLocationInput, FlareOrgUncheckedCreateWithoutLocationInput> | FlareOrgCreateWithoutLocationInput[] | FlareOrgUncheckedCreateWithoutLocationInput[]
-    connectOrCreate?: FlareOrgCreateOrConnectWithoutLocationInput | FlareOrgCreateOrConnectWithoutLocationInput[]
-    upsert?: FlareOrgUpsertWithWhereUniqueWithoutLocationInput | FlareOrgUpsertWithWhereUniqueWithoutLocationInput[]
-    createMany?: FlareOrgCreateManyLocationInputEnvelope
-    set?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
-    disconnect?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
-    delete?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
-    connect?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
-    update?: FlareOrgUpdateWithWhereUniqueWithoutLocationInput | FlareOrgUpdateWithWhereUniqueWithoutLocationInput[]
-    updateMany?: FlareOrgUpdateManyWithWhereWithoutLocationInput | FlareOrgUpdateManyWithWhereWithoutLocationInput[]
-    deleteMany?: FlareOrgScalarWhereInput | FlareOrgScalarWhereInput[]
-  }
-
   export type EventUpdateManyWithoutLocationNestedInput = {
     create?: XOR<EventCreateWithoutLocationInput, EventUncheckedCreateWithoutLocationInput> | EventCreateWithoutLocationInput[] | EventUncheckedCreateWithoutLocationInput[]
     connectOrCreate?: EventCreateOrConnectWithoutLocationInput | EventCreateOrConnectWithoutLocationInput[]
@@ -10523,7 +10509,7 @@ export namespace Prisma {
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
-  export type FlareOrgUncheckedUpdateManyWithoutLocationNestedInput = {
+  export type FlareOrgUpdateManyWithoutLocationNestedInput = {
     create?: XOR<FlareOrgCreateWithoutLocationInput, FlareOrgUncheckedCreateWithoutLocationInput> | FlareOrgCreateWithoutLocationInput[] | FlareOrgUncheckedCreateWithoutLocationInput[]
     connectOrCreate?: FlareOrgCreateOrConnectWithoutLocationInput | FlareOrgCreateOrConnectWithoutLocationInput[]
     upsert?: FlareOrgUpsertWithWhereUniqueWithoutLocationInput | FlareOrgUpsertWithWhereUniqueWithoutLocationInput[]
@@ -10549,6 +10535,20 @@ export namespace Prisma {
     update?: EventUpdateWithWhereUniqueWithoutLocationInput | EventUpdateWithWhereUniqueWithoutLocationInput[]
     updateMany?: EventUpdateManyWithWhereWithoutLocationInput | EventUpdateManyWithWhereWithoutLocationInput[]
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
+  }
+
+  export type FlareOrgUncheckedUpdateManyWithoutLocationNestedInput = {
+    create?: XOR<FlareOrgCreateWithoutLocationInput, FlareOrgUncheckedCreateWithoutLocationInput> | FlareOrgCreateWithoutLocationInput[] | FlareOrgUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: FlareOrgCreateOrConnectWithoutLocationInput | FlareOrgCreateOrConnectWithoutLocationInput[]
+    upsert?: FlareOrgUpsertWithWhereUniqueWithoutLocationInput | FlareOrgUpsertWithWhereUniqueWithoutLocationInput[]
+    createMany?: FlareOrgCreateManyLocationInputEnvelope
+    set?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    disconnect?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    delete?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    connect?: FlareOrgWhereUniqueInput | FlareOrgWhereUniqueInput[]
+    update?: FlareOrgUpdateWithWhereUniqueWithoutLocationInput | FlareOrgUpdateWithWhereUniqueWithoutLocationInput[]
+    updateMany?: FlareOrgUpdateManyWithWhereWithoutLocationInput | FlareOrgUpdateManyWithWhereWithoutLocationInput[]
+    deleteMany?: FlareOrgScalarWhereInput | FlareOrgScalarWhereInput[]
   }
 
   export type FlareOrgCreateNestedOneWithoutSocialsInput = {
@@ -10885,25 +10885,6 @@ export namespace Prisma {
     flareOrg?: FlareOrgUncheckedUpdateOneWithoutUserNestedInput
   }
 
-  export type UserCreateWithoutFlareOrgInput = {
-    id: string
-    email: string
-    account_type: string
-    flareUser?: FlareUserCreateNestedOneWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutFlareOrgInput = {
-    id: string
-    email: string
-    account_type: string
-    flareUser?: FlareUserUncheckedCreateNestedOneWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutFlareOrgInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
-  }
-
   export type EventCreateWithoutOrganizationInput = {
     id?: string
     title: string
@@ -10940,6 +10921,25 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UserCreateWithoutFlareOrgInput = {
+    id: string
+    email: string
+    account_type: string
+    flareUser?: FlareUserCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutFlareOrgInput = {
+    id: string
+    email: string
+    account_type: string
+    flareUser?: FlareUserUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutFlareOrgInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
+  }
+
   export type SocialsCreateWithoutOrganizationInput = {
     id?: string
     twitter?: string | null
@@ -10959,31 +10959,6 @@ export namespace Prisma {
   export type SocialsCreateOrConnectWithoutOrganizationInput = {
     where: SocialsWhereUniqueInput
     create: XOR<SocialsCreateWithoutOrganizationInput, SocialsUncheckedCreateWithoutOrganizationInput>
-  }
-
-  export type UserUpsertWithoutFlareOrgInput = {
-    update: XOR<UserUpdateWithoutFlareOrgInput, UserUncheckedUpdateWithoutFlareOrgInput>
-    create: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutFlareOrgInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutFlareOrgInput, UserUncheckedUpdateWithoutFlareOrgInput>
-  }
-
-  export type UserUpdateWithoutFlareOrgInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    account_type?: StringFieldUpdateOperationsInput | string
-    flareUser?: FlareUserUpdateOneWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutFlareOrgInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    account_type?: StringFieldUpdateOperationsInput | string
-    flareUser?: FlareUserUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type EventUpsertWithWhereUniqueWithoutOrganizationInput = {
@@ -11038,6 +11013,31 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutLocationNestedInput
   }
 
+  export type UserUpsertWithoutFlareOrgInput = {
+    update: XOR<UserUpdateWithoutFlareOrgInput, UserUncheckedUpdateWithoutFlareOrgInput>
+    create: XOR<UserCreateWithoutFlareOrgInput, UserUncheckedCreateWithoutFlareOrgInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFlareOrgInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFlareOrgInput, UserUncheckedUpdateWithoutFlareOrgInput>
+  }
+
+  export type UserUpdateWithoutFlareOrgInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    account_type?: StringFieldUpdateOperationsInput | string
+    flareUser?: FlareUserUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFlareOrgInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    account_type?: StringFieldUpdateOperationsInput | string
+    flareUser?: FlareUserUncheckedUpdateOneWithoutUserNestedInput
+  }
+
   export type SocialsUpsertWithoutOrganizationInput = {
     update: XOR<SocialsUpdateWithoutOrganizationInput, SocialsUncheckedUpdateWithoutOrganizationInput>
     create: XOR<SocialsCreateWithoutOrganizationInput, SocialsUncheckedCreateWithoutOrganizationInput>
@@ -11069,8 +11069,8 @@ export namespace Prisma {
     id?: string
     description?: string | null
     verified?: boolean
-    user: UserCreateNestedOneWithoutFlareOrgInput
     location: LocationCreateNestedOneWithoutOrganizationsInput
+    user: UserCreateNestedOneWithoutFlareOrgInput
     socials?: SocialsCreateNestedOneWithoutOrganizationInput
   }
 
@@ -11103,8 +11103,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
-    user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
     location?: LocationUpdateOneRequiredWithoutOrganizationsNestedInput
+    user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
     socials?: SocialsUpdateOneWithoutOrganizationNestedInput
   }
 
@@ -11134,61 +11134,6 @@ export namespace Prisma {
     place_id?: StringFieldUpdateOperationsInput | string
     name?: NullableStringFieldUpdateOperationsInput | string | null
     organizations?: FlareOrgUncheckedUpdateManyWithoutLocationNestedInput
-  }
-
-  export type FlareOrgCreateWithoutLocationInput = {
-    id?: string
-    description?: string | null
-    verified?: boolean
-    user: UserCreateNestedOneWithoutFlareOrgInput
-    events?: EventCreateNestedManyWithoutOrganizationInput
-    socials?: SocialsCreateNestedOneWithoutOrganizationInput
-  }
-
-  export type FlareOrgUncheckedCreateWithoutLocationInput = {
-    id?: string
-    user_id: string
-    description?: string | null
-    verified?: boolean
-    events?: EventUncheckedCreateNestedManyWithoutOrganizationInput
-    socials?: SocialsUncheckedCreateNestedOneWithoutOrganizationInput
-  }
-
-  export type FlareOrgCreateOrConnectWithoutLocationInput = {
-    where: FlareOrgWhereUniqueInput
-    create: XOR<FlareOrgCreateWithoutLocationInput, FlareOrgUncheckedCreateWithoutLocationInput>
-  }
-
-  export type FlareOrgUpsertWithWhereUniqueWithoutLocationInput = {
-    where: FlareOrgWhereUniqueInput
-    update: XOR<FlareOrgUpdateWithoutLocationInput, FlareOrgUncheckedUpdateWithoutLocationInput>
-    create: XOR<FlareOrgCreateWithoutLocationInput, FlareOrgUncheckedCreateWithoutLocationInput>
-  }
-
-  export type FlareOrgCreateManyLocationInputEnvelope = {
-    data: FlareOrgCreateManyLocationInput | FlareOrgCreateManyLocationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type FlareOrgUpdateWithWhereUniqueWithoutLocationInput = {
-    where: FlareOrgWhereUniqueInput
-    data: XOR<FlareOrgUpdateWithoutLocationInput, FlareOrgUncheckedUpdateWithoutLocationInput>
-  }
-
-  export type FlareOrgUpdateManyWithWhereWithoutLocationInput = {
-    where: FlareOrgScalarWhereInput
-    data: XOR<FlareOrgUpdateManyMutationInput, FlareOrgUncheckedUpdateManyWithoutLocationInput>
-  }
-
-  export type FlareOrgScalarWhereInput = {
-    AND?: FlareOrgScalarWhereInput | FlareOrgScalarWhereInput[]
-    OR?: FlareOrgScalarWhereInput[]
-    NOT?: FlareOrgScalarWhereInput | FlareOrgScalarWhereInput[]
-    id?: StringFilter<"FlareOrg"> | string
-    user_id?: StringFilter<"FlareOrg"> | string
-    description?: StringNullableFilter<"FlareOrg"> | string | null
-    verified?: BoolFilter<"FlareOrg"> | boolean
-    location_id?: StringFilter<"FlareOrg"> | string
   }
 
   export type EventCreateWithoutLocationInput = {
@@ -11243,13 +11188,68 @@ export namespace Prisma {
     data: XOR<EventUpdateManyMutationInput, EventUncheckedUpdateManyWithoutLocationInput>
   }
 
+  export type FlareOrgCreateWithoutLocationInput = {
+    id?: string
+    description?: string | null
+    verified?: boolean
+    events?: EventCreateNestedManyWithoutOrganizationInput
+    user: UserCreateNestedOneWithoutFlareOrgInput
+    socials?: SocialsCreateNestedOneWithoutOrganizationInput
+  }
+
+  export type FlareOrgUncheckedCreateWithoutLocationInput = {
+    id?: string
+    user_id: string
+    description?: string | null
+    verified?: boolean
+    events?: EventUncheckedCreateNestedManyWithoutOrganizationInput
+    socials?: SocialsUncheckedCreateNestedOneWithoutOrganizationInput
+  }
+
+  export type FlareOrgCreateOrConnectWithoutLocationInput = {
+    where: FlareOrgWhereUniqueInput
+    create: XOR<FlareOrgCreateWithoutLocationInput, FlareOrgUncheckedCreateWithoutLocationInput>
+  }
+
+  export type FlareOrgUpsertWithWhereUniqueWithoutLocationInput = {
+    where: FlareOrgWhereUniqueInput
+    update: XOR<FlareOrgUpdateWithoutLocationInput, FlareOrgUncheckedUpdateWithoutLocationInput>
+    create: XOR<FlareOrgCreateWithoutLocationInput, FlareOrgUncheckedCreateWithoutLocationInput>
+  }
+
+  export type FlareOrgCreateManyLocationInputEnvelope = {
+    data: FlareOrgCreateManyLocationInput | FlareOrgCreateManyLocationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FlareOrgUpdateWithWhereUniqueWithoutLocationInput = {
+    where: FlareOrgWhereUniqueInput
+    data: XOR<FlareOrgUpdateWithoutLocationInput, FlareOrgUncheckedUpdateWithoutLocationInput>
+  }
+
+  export type FlareOrgUpdateManyWithWhereWithoutLocationInput = {
+    where: FlareOrgScalarWhereInput
+    data: XOR<FlareOrgUpdateManyMutationInput, FlareOrgUncheckedUpdateManyWithoutLocationInput>
+  }
+
+  export type FlareOrgScalarWhereInput = {
+    AND?: FlareOrgScalarWhereInput | FlareOrgScalarWhereInput[]
+    OR?: FlareOrgScalarWhereInput[]
+    NOT?: FlareOrgScalarWhereInput | FlareOrgScalarWhereInput[]
+    id?: StringFilter<"FlareOrg"> | string
+    user_id?: StringFilter<"FlareOrg"> | string
+    description?: StringNullableFilter<"FlareOrg"> | string | null
+    verified?: BoolFilter<"FlareOrg"> | boolean
+    location_id?: StringFilter<"FlareOrg"> | string
+  }
+
   export type FlareOrgCreateWithoutSocialsInput = {
     id?: string
     description?: string | null
     verified?: boolean
-    user: UserCreateNestedOneWithoutFlareOrgInput
     events?: EventCreateNestedManyWithoutOrganizationInput
     location: LocationCreateNestedOneWithoutOrganizationsInput
+    user: UserCreateNestedOneWithoutFlareOrgInput
   }
 
   export type FlareOrgUncheckedCreateWithoutSocialsInput = {
@@ -11281,9 +11281,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
-    user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
     events?: EventUpdateManyWithoutOrganizationNestedInput
     location?: LocationUpdateOneRequiredWithoutOrganizationsNestedInput
+    user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
   }
 
   export type FlareOrgUncheckedUpdateWithoutSocialsInput = {
@@ -11347,38 +11347,6 @@ export namespace Prisma {
     location_id?: StringFieldUpdateOperationsInput | string
   }
 
-  export type FlareOrgUpdateWithoutLocationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
-    user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
-    events?: EventUpdateManyWithoutOrganizationNestedInput
-    socials?: SocialsUpdateOneWithoutOrganizationNestedInput
-  }
-
-  export type FlareOrgUncheckedUpdateWithoutLocationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    user_id?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
-    events?: EventUncheckedUpdateManyWithoutOrganizationNestedInput
-    socials?: SocialsUncheckedUpdateOneWithoutOrganizationNestedInput
-  }
-
-  export type FlareOrgCreateManyLocationInput = {
-    id?: string
-    user_id: string
-    description?: string | null
-    verified?: boolean
-  }
-
-  export type FlareOrgUncheckedUpdateManyWithoutLocationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    user_id?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    verified?: BoolFieldUpdateOperationsInput | boolean
-  }
-
   export type EventUpdateWithoutLocationInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -11429,6 +11397,38 @@ export namespace Prisma {
     ticketLink?: NullableStringFieldUpdateOperationsInput | string | null
     verified?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FlareOrgUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    events?: EventUpdateManyWithoutOrganizationNestedInput
+    user?: UserUpdateOneRequiredWithoutFlareOrgNestedInput
+    socials?: SocialsUpdateOneWithoutOrganizationNestedInput
+  }
+
+  export type FlareOrgUncheckedUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    events?: EventUncheckedUpdateManyWithoutOrganizationNestedInput
+    socials?: SocialsUncheckedUpdateOneWithoutOrganizationNestedInput
+  }
+
+  export type FlareOrgCreateManyLocationInput = {
+    id?: string
+    user_id: string
+    description?: string | null
+    verified?: boolean
+  }
+
+  export type FlareOrgUncheckedUpdateManyWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
   }
 
 

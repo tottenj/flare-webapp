@@ -71,3 +71,84 @@
 [info] 🔥 Loaded addOrgClaim at 2025-10-22T03:14:13.476Z
 
 [debug] [2025-10-22T03:14:13.479Z] Got response from /__/functions.yaml {"endpoints":{"addOrgClaim":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"addOrgClaim"},"verifySessionCookie":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"verifySessionCookie"},"signToken":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"signToken"},"verify":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"verify"},"addMyself":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"addMyself"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2025-11-04T02:25:58.769Z] ----------------------------------------------------------------------
+[debug] [2025-11-04T02:25:58.771Z] Command:       /Users/joshtotten/.nvm/versions/node/v22.14.0/bin/node /Users/joshtotten/.nvm/versions/node/v22.14.0/bin/firebase functions:shell
+[debug] [2025-11-04T02:25:58.771Z] CLI Version:   14.17.0
+[debug] [2025-11-04T02:25:58.772Z] Platform:      darwin
+[debug] [2025-11-04T02:25:58.772Z] Node Version:  v22.14.0
+[debug] [2025-11-04T02:25:58.772Z] Time:          Mon Nov 03 2025 21:25:58 GMT-0500 (Eastern Standard Time)
+[debug] [2025-11-04T02:25:58.772Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-11-04T02:25:58.871Z] Object "/storage" in "firebase.json" has unknown property: {"additionalProperty":"defaultBucket"}
+[debug] [2025-11-04T02:25:58.871Z] Field "/storage" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-11-04T02:25:58.871Z] Field "/storage" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[debug] [2025-11-04T02:25:58.873Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-11-04T02:25:58.873Z] > authorizing via signed-in user (josh.totten8@gmail.com)
+[debug] [2025-11-04T02:25:58.873Z] [iam] checking project flare-7091a for permissions ["firebase.projects.get"]
+[debug] [2025-11-04T02:25:58.873Z] Checked if tokens are valid: true, expires at: 1762224437818
+[debug] [2025-11-04T02:25:58.873Z] Checked if tokens are valid: true, expires at: 1762224437818
+[debug] [2025-11-04T02:25:58.873Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions [none]
+[debug] [2025-11-04T02:25:58.874Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions x-goog-quota-user=projects/flare-7091a
+[debug] [2025-11-04T02:25:58.874Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2025-11-04T02:25:59.155Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions 200
+[debug] [2025-11-04T02:25:59.155Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2025-11-04T02:25:59.155Z] Emulator locator file path: /var/folders/gb/5rzbh44j51zchrk6n0cynpc40000gn/T/hub-flare-7091a.json
+[debug] [2025-11-04T02:25:59.247Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[warn] ⚠  functions: Application Default Credentials detected. Non-emulated services will access production using these credentials. Be careful! {"metadata":{"emulator":{"name":"functions"},"message":"Application Default Credentials detected. Non-emulated services will access production using these credentials. Be careful!"}}
+[debug] [2025-11-04T02:26:00.299Z] Checked if tokens are valid: true, expires at: 1762224437818
+[debug] [2025-11-04T02:26:00.299Z] Checked if tokens are valid: true, expires at: 1762224437818
+[debug] [2025-11-04T02:26:00.300Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig [none]
+[debug] [2025-11-04T02:26:00.761Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig 200
+[debug] [2025-11-04T02:26:00.761Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig {"projectId":"flare-7091a","storageBucket":"flare-7091a.firebasestorage.app"}
+[debug] [2025-11-04T02:26:00.776Z] [functions] Watching "/Users/joshtotten/Desktop/flare-webapp/functions" for Cloud Functions...
+[debug] [2025-11-04T02:26:00.779Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[debug] [2025-11-04T02:26:01.280Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "cookie": "^1.0.2",
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "latest",
+    "geofire": "^6.0.0",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^5.8.3"
+  },
+  "private": true
+}
+[debug] [2025-11-04T02:26:01.280Z] Building nodejs source
+[debug] [2025-11-04T02:26:01.281Z] Failed to find version of module node: reached end of search path /Users/joshtotten/Desktop/flare-webapp/functions/node_modules
+[info] ✔  functions: Using node@22 from host. 
+[debug] [2025-11-04T02:26:01.281Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-11-04T02:26:01.289Z] Found firebase-functions binary at '/Users/joshtotten/Desktop/flare-webapp/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8980
+
+[info] 🔥 Loaded addOrgClaim at 2025-11-04T02:26:01.878Z
+
+[debug] [2025-11-04T02:26:01.882Z] Got response from /__/functions.yaml {"endpoints":{"addOrgClaim":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"addOrgClaim"},"verifySessionCookie":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"verifySessionCookie"},"seedAuthEmulator":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"seedAuthEmulator"},"signToken":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"signToken"},"verify":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"verify"},"addMyself":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"addMyself"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2025-11-04T02:26:05.910Z] [functions] Loaded functions definitions from source: addOrgClaim, verifySessionCookie, seedAuthEmulator, signToken, verify, addMyself.
+[debug] [2025-11-04T02:26:05.911Z] [functions[us-central1-addOrgClaim]] http function initialized (http://127.0.0.1:5001/flare-7091a/us-central1/addOrgClaim).
+[debug] [2025-11-04T02:26:05.911Z] [functions[us-central1-verifySessionCookie]] http function initialized (http://127.0.0.1:5001/flare-7091a/us-central1/verifySessionCookie).
+[debug] [2025-11-04T02:26:05.911Z] [functions[us-central1-seedAuthEmulator]] http function initialized (http://127.0.0.1:5001/flare-7091a/us-central1/seedAuthEmulator).
+[debug] [2025-11-04T02:26:05.912Z] [functions[us-central1-signToken]] http function initialized (http://127.0.0.1:5001/flare-7091a/us-central1/signToken).
+[debug] [2025-11-04T02:26:05.912Z] [functions[us-central1-verify]] http function initialized (http://127.0.0.1:5001/flare-7091a/us-central1/verify).
+[debug] [2025-11-04T02:26:05.912Z] [functions[us-central1-addMyself]] http function initialized (http://127.0.0.1:5001/flare-7091a/us-central1/addMyself).
+[info] i  functions: Loaded functions: addOrgClaim, verifySessionCookie, seedAuthEmulator, signToken, verify, addMyself 
+[warn] ⚠  functions: The following emulators are not running, calls to these services will affect production: firestore, database, pubsub, storage, eventarc, tasks 

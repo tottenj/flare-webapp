@@ -14,7 +14,7 @@ export default class FlareUser {
 
   static async create(userData: CreateUserDto) {
     const { account_type, ...rest } = userData;
-    const toSend: CreateUserDto = { account_type: 'org', ...rest };
+    const toSend: CreateUserDto = { account_type: 'user', ...rest };
     const service = new userService();
     await service.createUser(toSend);
   }

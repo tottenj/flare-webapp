@@ -32,10 +32,10 @@ const corsHandler = cors({ origin: true, credentials: false }); // Allow all ori
 
 export const addOrgClaim = onRequest((req, res) => {
   corsHandler(req, res, async () => {
-     console.log({
-       headers: req.headers,
-       body: req.body,
-     });
+    console.log({
+      headers: req.headers,
+      body: req.body,
+    });
     try {
       if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
@@ -81,9 +81,8 @@ export const verifySessionCookie = onRequest((req, res) => {
         return res.status(403).json({ error: 'Unauthorized: invalid API key' });
       }
 
-
       const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-      console.log(cookies)
+      console.log(cookies);
       const sessionCookie = cookies.__session;
 
       if (!sessionCookie) {
@@ -137,4 +136,31 @@ exports.addMyself = onCall((request: any) => {
   auth.getUserByEmail('josh.totten8@gmail.com').then((val) => {
     auth.setCustomUserClaims(val.uid, { admin: true });
   });
+});
+
+export const seedAuthEmulator = onRequest(async (req:any, res:any) => {
+  try {
+    if (process.env.FUNCTIONS_EMULATOR !== 'true') {
+      return res.status(403).send('Forbidden outside emulator');
+    }
+
+    const listUsersResult = await auth.listUsers();
+    const uids = listUsersResult.users.map((u) => u.uid);
+    if (uids.length) await auth.deleteUsers(uids);
+
+    const usersToCreate = [
+      { uid: 'user1', email: 'user1@test.com', password: 'password123' },
+      { uid: 'org1', email: 'org1@test.com', password: 'password123' },
+      {uid: 'verifiedOrg', email: "verified@test.com", password: "password123"}
+    ];
+
+    const createdUsers = await Promise.all(usersToCreate.map((u) => auth.createUser(u)));
+
+    await auth.setCustomUserClaims('org1', {org: true, verified: false});
+    await auth.setCustomUserClaims('verifiedOrg', { org: true, verified: true });
+    res.json({ success: true, createdUsers });
+  } catch (error:any) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
 });
