@@ -44,6 +44,9 @@ jest:integration:
       command: ["postgres", "-c", "listen_addresses='*'"]
   variables:
     NODE_ENV: test
+    POSTGRES_USER: test
+    POSTGRES_PASSWORD: tester
+    POSTGRES_DB: flare_test
     DATABASE_URL: "postgresql://test:tester@postgres:5432/flare_test?schema=public"
     NEXT_PUBLIC_APP_URL: "http://localhost:3000"
     FUNCTIONS_URL: "http://127.0.0.1:5001"
