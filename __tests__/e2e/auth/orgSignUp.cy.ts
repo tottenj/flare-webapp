@@ -84,7 +84,9 @@ describe('Success Flow', () => {
   });
 
 
- 
+  it("Ensures account exists", () => {
+    cy.userExists(createOrg.email, createOrg.password).shouldMatch(createOrgResponse)
+  })
 });
 
 describe('Unsuccessful Flow', () => {

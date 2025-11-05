@@ -19,7 +19,7 @@ function signUpUser(email: string, password: string, name: string, isOrg: boolea
       url: `${AUTH_EMULATOR}/accounts:signUp?key=${apiKey}`,
       body: { email, password, returnSecureToken: true },
     })
-    .then((response) => response.body)
+    .then((response) => response.body);
 }
 
 function decodeFirestoreDocument(doc: any) {
@@ -120,7 +120,7 @@ Cypress.Commands.add('loginUser', (email: string, password: string) => {
             returnSecureToken: true,
           },
         }).then((response) => {
-           const { idToken } = response.body;
+          const { idToken } = response.body;
           return cy.request('POST', '/api/test/testLogin', { idToken });
         });
       })
@@ -209,7 +209,7 @@ Cypress.Commands.add('checkToast', (message: string) => {
 });
 
 Cypress.Commands.add('clearAllEmulators', () => {
- // cy.clearFirestore();
+  // cy.clearFirestore();
   cy.clearAuth();
 });
 
@@ -280,7 +280,7 @@ Cypress.Commands.add(
     contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
   ) => {
     const location = cy.get(selector);
-    const newContains = "CN Tower, Toronto"
+    const newContains = 'CN Tower, Toronto';
     //cy.intercept('POST', '**/places.googleapis.com/**').as('places');
     location.type(loc);
     cy.contains(newContains).should('exist');
@@ -298,11 +298,7 @@ Cypress.Commands.add('userExists', (email: string, password: string, org: boolea
     expect(resp.body.localId).to.not.be.undefined;
     const col = org ? 'Organizations' : 'Users';
 
-    return cy.getDocument(`${col}/${resp.body.localId}`, resp.body.idToken).then((response) => {
-      //expect(response.body.id).not.to.be.null
-      //expect(response.body.id).not.to.be.undefined
-      return response.body;
-    });
+    return resp.body;
   });
 });
 
@@ -380,7 +376,6 @@ Cypress.Commands.add(
   }
 );
 
-
 Cypress.Commands.add('fillSelect', (label: string, option: string) => {
   // Find button by label
   cy.contains('label', label)
@@ -415,8 +410,6 @@ Cypress.Commands.add('fillTypedSelect', (label: string, option: string) => {
     .should('be.visible')
     .click();
 });
-
-
 
 Cypress.Commands.add('resetAndSeed', () => {
   cy.task('db:resetAndSeed');
