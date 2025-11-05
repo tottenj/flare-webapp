@@ -1,5 +1,8 @@
 "use client"
-import { auth } from "./configs/clientApp";
+
+import { auth } from "../configs/clientApp";
+
+
 
 export async function signOutUser() {
   try {

@@ -6,35 +6,50 @@
     "dev": "next dev --turbopack",
     "dev:dev": "npx dotenv -e .env -e .env.dev -- next dev --turbopack",
     "dev:cyp": "npx dotenv -e .env -e .env.test -- next dev",
-    "test:watch": "jest --watch",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "test-storybook": "vitest --project=storybook",
-    "build": "next build",
-    "start": "next start",
-    "format": "prettier --write .",
-    "chromatic": "npx chromatic --project-token=chpt_63b29bbeaa870ab",
-    "emulators:start": "firebase emulators:start --only auth,functions,storage",
+    "dev:cypci": "next dev",
+
     "db:reset": "prisma migrate reset --force --skip-seed",
     "seed:test": "node prisma/seedTest.js",
-    "e2e:setup": "npx wait-on tcp:5432 && npx dotenv -e .env -e .env.test -- npx prisma migrate reset --force --skip-seed",
+
+    "emulators:start": "firebase emulators:start --only auth,functions,storage",
+    "emulators:integration": "firebase emulators:start --only functions, storage",
+    "emulators:e2e": "firebase emulators:start --only auth,functions,storage",
+
+
+    "e2e:setup": "docker compose --env-file .env.test -f compose.test.yaml up -d && npx dotenv -e .env -e .env.test -- npx prisma migrate deploy && npx dotenv -e .env -e .env.test -- npm run seed:test",
+    "e2e:setupci": "docker compose -f compose.test.yaml up -d && npx prisma migrate deploy && npm run seed:test",
+    "e2e:teardown": "docker compose -f compose.test.yaml down -v",
 
     "cypress:open": "wait-on http://localhost:3000 && cypress open",
     "cypress:run": "cypress run",
-    "test:e2e": "npm run e2e:setup && concurrently -k -n 'EMULATORS,APP,CYPRESS' -c 'blue.bold,green.bold,magenta.bold' \"npm run emulators:start\" \"npm run dev:cyp\" \"npm run wait-and-test\"",
-    "test:e2e:local": "npm run e2e:setup && concurrently -k -n 'EMULATORS,APP,CYPRESS' -c 'blue.bold,green.bold,magenta.bold' \"npm run emulators:start\" \"npm run dev:cyp\" \"npm run wait-and-open\"",
+    "cypress:runLocal": "cypress run --env isLocal=true",
+
+
+    "test:e2e:local": "npm run e2e:setup && concurrently -k -n 'EMULATORS,APP,CYPRESS' -c 'blue.bold,green.bold,magenta.bold' \"npm run emulators:e2e\" \"npm run dev:cyp\" \"npm run wait-and-open\"",
+    "test:e2eci": "npm run e2e:setupci && npx start-server-and-test dev:cypci http://localhost:3000 cypress:run",
+
     "wait-and-test": "node scripts/wait-for-emulators.js && npx wait-on http-get://localhost:3000/api/health && npm run cypress:run",
     "wait-and-open": "node scripts/wait-for-emulators.js && npx wait-on http-get://localhost:3000/api/health && npm run cypress:open",
-    "dev:migrate": "npx dotenv -e .env.dev -- prisma migrate dev",
-    "dev:reset": "npx dotenv -e .env.dev -- prisma migrate reset",
-    "dev:studio": "npx dotenv -e .env.dev -- prisma studio",
+
+    "test:integration": "npm run e2e:setup && firebase emulators:exec --only functions 'jest --selectProjects integration'",
+    "test:integration:ci": "npm run e2e:setupci && firebase emulators:exec --only functions 'jest --selectProjects integration --coverage --coverageDirectory=coverage/integration'",
+
+
     "test": "jest",
     "test:unit": "jest --selectProjects unit",
-    "test:integration": "npm run e2e:setup && firebase emulators:exec --only auth,firestore,functions 'jest --selectProjects integration'",
-    "test:integration:ci": "jest --selectProjects integration --coverage --coverageDirectory=coverage/integration",
-    "coverage": "jest --coverage --reporters=default --reporters=jest-junit"
-  },
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage --reporters=default --reporters=jest-junit",
 
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test-storybook": "vitest --project=storybook",
+    "chromatic": "npx chromatic --project-token=chpt_63b29bbeaa870ab",
+    "format": "prettier --write .",
+
+  
+    "build": "next build",
+    "start": "next start"
+  },
   "type": "module",
   "jest-junit": {
     "outputDirectory": "./reports/jest",

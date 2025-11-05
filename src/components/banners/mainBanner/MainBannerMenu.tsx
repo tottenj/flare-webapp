@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { signOutUser } from '@/lib/firebase/auth/signOutUser';
 import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
+import { signOutUser } from '@/lib/firebase/auth/utils/signOutUser';
 
 export default function MainBannerMenu({ children }: { children: React.ReactNode, isSignedIn?:boolean }) {
   const [open, setOpen] = useState(false);

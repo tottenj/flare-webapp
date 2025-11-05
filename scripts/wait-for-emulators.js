@@ -1,5 +1,5 @@
-const waitOn = require('wait-on');
-const axios = require('axios');
+import axios from 'axios';
+
 
 // Check if emulator hub is ready (most reliable method)
 const checkEmulatorHub = async () => {
