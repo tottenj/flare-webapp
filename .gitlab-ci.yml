@@ -100,6 +100,7 @@ cypress:e2e:
     FUNCTIONS_URL: "http://127.0.0.1:5001"
     NEXT_TELEMETRY_DISABLED: "1"
     NEXT_DISABLE_FAST_REFRESH: "true"
+    INTERNAL_API_KEY: "4d522cbb22ae4ad19fe69211623a3a6bf8e9c098a16593b0ca0e0c0359c6f2d0"
   cache:
     key: "npm-cache"
     paths:

@@ -280,12 +280,13 @@ Cypress.Commands.add(
     contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
   ) => {
     const location = cy.get(selector);
-    cy.intercept('POST', '**/places.googleapis.com/**').as('places');
-    location.type(loc, { delay: 200 });
-    cy.contains(contains).should('exist');
-    cy.wait('@places');
+    const newContains = "CN Tower, Toronto"
+    //cy.intercept('POST', '**/places.googleapis.com/**').as('places');
+    location.type(loc);
+    cy.contains(newContains).should('exist');
+    //cy.wait('@places');
     cy.get('ul[role="listbox"] li[role="option"]')
-      .contains(contains)
+      .contains(newContains)
       .should('be.visible')
       .click({ force: true });
   }

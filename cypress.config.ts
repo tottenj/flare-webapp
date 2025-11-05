@@ -7,7 +7,7 @@ import { execSync } from 'child_process';
 export default defineConfig({
   projectId: 'f7wjfu',
   e2e: {
-    specPattern: 'tests/e2e/**/*.cy.{js,jsx,ts,tsx}',
+    specPattern: '__tests__/e2e/**/*.cy.{js,jsx,ts,tsx}',
     retries: {
       runMode: 1,
       openMode: 0,
