@@ -122,8 +122,8 @@ cypress:e2e:
   artifacts:
     when: always
     paths:
-      - cypress/videos
-      - cypress/screenshots
+      - reports/cypress/videos
+      - reports/cypress/screenshots
       - coverage/e2e
     expire_in: 1 week
   only:
