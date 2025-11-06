@@ -104,6 +104,7 @@ cypress:e2e:
     MODE: "test"
     NEXT_PUBLIC_FIREBASE_API_KEY: "AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU"
     NEXT_PUBLIC_MODE: "test"
+    NEXT_PUBLIC_FIREBASE_PROJECT_ID: "flare-7091a"
   cache:
     key: "npm-cache"
     paths:
