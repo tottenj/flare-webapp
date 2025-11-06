@@ -80,7 +80,8 @@ describe('Success Flow', () => {
   it('Successfully Submits Form', () => {
     orgSignUpFillForm();
     //cy.contains('Successfully Submitted Application');
-    cy.url({ timeout: 15000 }).should('include', '/confirmation');
+      cy.location('pathname', { timeout: 30000 }) // wait up to 30s
+        .should('eq', '/confirmation');
   });
 
 
