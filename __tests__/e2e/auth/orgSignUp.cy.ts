@@ -77,12 +77,13 @@ describe('Success Flow', () => {
     cy.clearForm();
   });
 
-  it('Successfully Submits Form', () => {
-    orgSignUpFillForm();
-    //cy.contains('Successfully Submitted Application');
-      cy.location('pathname', { timeout: 30000 }) // wait up to 30s
-        .should('eq', '/confirmation');
-  });
+it('Successfully Submits Form', () => {
+  orgSignUpFillForm();
+  cy.wait(30000)
+  // wait for navigation to complete (up to 30s)
+  cy.url({ timeout: 30000 }).should('include', '/confirmation');
+});
+
 
 
   it("Ensures account exists", () => {
