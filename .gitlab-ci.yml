@@ -115,10 +115,7 @@ cypress:e2e:
     - cd functions && npm ci --cache .npm --prefer-offline && npm run build && cd ..
     - npx wait-on tcp:postgres:5432 --timeout 60000
   script:
-    - export DATABASE_URL="postgresql://test:tester@postgres:5432/flare_test?schema=public"
-    - npx prisma migrate reset --force --skip-seed
-    - npm run e2e:setupci
-    - npm run test:e2eci:ci
+    - npm run test:e2eci
   artifacts:
     when: always
     paths:
