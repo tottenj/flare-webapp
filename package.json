@@ -30,8 +30,8 @@
 
     "wait-and-test": "node scripts/wait-for-emulators.js && npx wait-on http-get://localhost:3000/api/health && npm run cypress:run",
     "wait-and-open": "node scripts/wait-for-emulators.js && npx wait-on http-get://localhost:3000/api/health && npm run cypress:open",
-    "wait-and-test-ci": "npx wait-on http://localhost:3000/api/health && npx wait-on tcp:127.0.0.1:9099 && npx wait-on tcp:127.0.0.1:5001 && cypress run",
-
+    "wait-and-test-ci": "npx wait-on http://localhost:3000/api/health && npx wait-on tcp:127.0.0.1:9099 && npx wait-on tcp:127.0.0.1:5001 && npx cypress run",
+    
     "test:integration": "npm run e2e:setup && firebase emulators:exec --only functions 'jest --selectProjects integration'",
     "test:integration:ci": "npm run e2e:setupci && firebase emulators:exec --only functions 'jest --selectProjects integration --coverage --coverageDirectory=coverage/integration'",
 
