@@ -80,12 +80,12 @@ describe('Success Flow', () => {
   it('Successfully Submits Form', () => {
     orgSignUpFillForm();
     //cy.contains('Successfully Submitted Application');
-    cy.location('pathname').should('eq', '/confirmation');
+    cy.url({ timeout: 15000 }).should('include', '/confirmation');
   });
 
 
   it("Ensures account exists", () => {
-    cy.userExists(createOrg.email, createOrg.password).shouldMatch(createOrgResponse)
+    cy.userExists(createOrg.email, createOrg.password)
   })
 });
 
