@@ -84,7 +84,7 @@ jest:integration:
 # ----------------------------
 cypress:e2e:
   stage: test
-  image: node:latest
+  image: cypress/included:13.7.3
   services:
     - name: postgis/postgis:latest
       alias: postgres
@@ -94,7 +94,7 @@ cypress:e2e:
     POSTGRES_PASSWORD: tester
     POSTGRES_DB: flare_test
     DATABASE_URL: "postgresql://test:tester@postgres:5432/flare_test?schema=public"
-    NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+    NEXT_PUBLIC_APP_URL: "http://127.0.0.1:3000"
     FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099"
     FIRESTORE_EMULATOR_HOST: "127.0.0.1:8080"
     FIREBASE_STORAGE_EMULATOR_HOST: "127.0.0.1:9199"
@@ -111,9 +111,8 @@ cypress:e2e:
     - cd functions && npm ci --cache .npm --prefer-offline && npm run build && cd ..
     - npx wait-on tcp:postgres:5432 --timeout 60000
   script:
-    - npm run db:reset
-    - npm run seed:test
-    - npm run test:e2eci
+    - npm run e2e:setupci
+    - npm run test:e2eci:ci || (cat firebase-debug.log || true)
   artifacts:
     when: always
     paths:

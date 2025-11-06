@@ -39,7 +39,7 @@ export default defineConfig({
         },
       });
     },
-    baseUrl: 'http://localhost:3000', // Adjust to your app's URL
+    baseUrl: 'http://127.0.0.1:3000', // Adjust to your app's URL
     chromeWebSecurity: false,
   },
   video: true,
