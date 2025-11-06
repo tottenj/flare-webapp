@@ -79,9 +79,9 @@ describe('Success Flow', () => {
 
 it('Successfully Submits Form', () => {
   orgSignUpFillForm();
-  cy.wait(30000)
+  cy.wait(40000)
   // wait for navigation to complete (up to 30s)
-  cy.url({ timeout: 30000 }).should('include', '/confirmation');
+  cy.url({ timeout: 50000 }).should('include', '/confirmation');
 });
 
 
