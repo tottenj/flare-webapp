@@ -84,7 +84,7 @@ jest:integration:
 # ----------------------------
 cypress:e2e:
   stage: test
-  image: cypress/included:13.7.3
+  image: node:$NODE_VERSION
   services:
     - name: postgis/postgis:latest
       alias: postgres
