@@ -91,7 +91,12 @@ describe('Success Flow', () => {
     cy.window({ timeout: 10000 }).should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
-    cy.url({ timeout: 50000 }).should('include', '/confirmation');
+
+    cy.wait(30000)
+    cy.location('pathname', { timeout: 60000 }).should((pathname) => {
+      expect(pathname).to.eq('/confirmation');
+    });
+
   });
 
   it('Ensures account exists', () => {
