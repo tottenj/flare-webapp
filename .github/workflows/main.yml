@@ -72,7 +72,7 @@ jobs:
         run: npm ci
 
       - name: Start Postgres container
-        run: docker compose -f docker-compose.test.yaml up -d
+        run: docker compose -f compose.test.yaml up -d
 
       - name: Wait for Postgres to be healthy
         run: |
@@ -94,7 +94,7 @@ jobs:
 
       - name: Stop Postgres
         if: always()
-        run: docker compose -f docker-compose.test.yaml down -v
+        run: docker compose -f compose.test.yaml down -v
 
 
   # =========================
@@ -157,7 +157,7 @@ jobs:
         run: npm ci
 
       - name: Start test stack
-        run: docker compose -f docker-compose.test.yaml up -d
+        run: docker compose -f compose.test.yaml up -d
 
       - name: Wait for Postgres to be healthy
         run: |
@@ -206,4 +206,4 @@ jobs:
 
       - name: Stop test stack
         if: always()
-        run: docker compose -f docker-compose.test.yaml down -v
+        run: docker compose -f compose.test.yaml down -v
