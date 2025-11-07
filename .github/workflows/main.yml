@@ -1,0 +1,209 @@
+name: CI
+
+on:
+  push:
+    branches: [main, preProduction, cypressTests]
+  pull_request:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # =========================
+  # 🔹 JEST UNIT TESTS
+  # =========================
+  jest-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Jest unit tests
+        run: npm run test:unit -- --ci --runInBand
+
+
+  # =========================
+  # 🔹 JEST INTEGRATION TESTS
+  # =========================
+  integration-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      NODE_ENV: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: tester
+      POSTGRES_DB: flare_test
+      DATABASE_URL: "postgresql://test:tester@localhost:5434/flare_test?schema=public"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+      FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099"
+      FIRESTORE_EMULATOR_HOST: "127.0.0.1:8080"
+      FIREBASE_STORAGE_EMULATOR_HOST: "127.0.0.1:9199"
+      FUNCTIONS_URL: "http://127.0.0.1:5001"
+      INTERNAL_API_KEY: "4d522cbb22ae4ad19fe69211623a3a6bf8e9c098a16593b0ca0e0c0359c6f2d0"
+      NEXT_PUBLIC_USE_PLACES_MOCK: true
+      MODE: "test"
+      NEXT_PUBLIC_FIREBASE_API_KEY: "AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU"
+      NEXT_PUBLIC_MODE: "test"
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: "flare-7091a"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start Postgres container
+        run: docker compose -f docker-compose.test.yaml up -d
+
+      - name: Wait for Postgres to be healthy
+        run: |
+          echo "Waiting for Postgres to be healthy..."
+          for i in {1..10}; do
+            if docker exec flare-test pg_isready -U test -d flare_test; then
+              echo "✅ Postgres is ready!"
+              break
+            fi
+            echo "⏳ Waiting..."
+            sleep 2
+          done
+
+      - name: Prepare DB
+        run: npx prisma db push --force-reset && npm run seed:test
+
+      - name: Run Jest Integration Tests
+        run: NODE_OPTIONS="$NODE_OPTIONS --experimental-vm-modules" npx jest --selectProjects integration
+
+      - name: Stop Postgres
+        if: always()
+        run: docker compose -f docker-compose.test.yaml down -v
+
+
+  # =========================
+  # 🔹 CYPRESS E2E TESTS
+  # =========================
+  e2e-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    env:
+      NODE_ENV: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: tester
+      POSTGRES_DB: flare_test
+      DATABASE_URL: "postgresql://test:tester@localhost:5434/flare_test?schema=public"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+      FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099"
+      FIRESTORE_EMULATOR_HOST: "127.0.0.1:8080"
+      FIREBASE_STORAGE_EMULATOR_HOST: "127.0.0.1:9199"
+      FUNCTIONS_URL: "http://127.0.0.1:5001"
+      INTERNAL_API_KEY: "4d522cbb22ae4ad19fe69211623a3a6bf8e9c098a16593b0ca0e0c0359c6f2d0"
+      NEXT_PUBLIC_USE_PLACES_MOCK: true
+      MODE: "test"
+      NEXT_PUBLIC_FIREBASE_API_KEY: "AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU"
+      NEXT_PUBLIC_MODE: "test"
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: "flare-7091a"
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      OLD_AUTH_SECRET: ${{ secrets.OLD_AUTH_SECRET }}
+      COOKIE_NAME: ${{ secrets.COOKIE_NAME }}
+      TEST_BLOB_READ_WRITE_TOKEN: ${{ secrets.TEST_BLOB_READ_WRITE_TOKEN }}
+      BLOB_READ_WRITE_TOKEN: ${{ secrets.TEST_BLOB_READ_WRITE_TOKEN }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-
+
+      - name: Cache Cypress binary
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start test stack
+        run: docker compose -f docker-compose.test.yaml up -d
+
+      - name: Wait for Postgres to be healthy
+        run: |
+          echo "Waiting for Postgres to be healthy..."
+          for i in {1..10}; do
+            if docker exec flare-test pg_isready -U test -d flare_test; then
+              echo "✅ Postgres is ready!"
+              break
+            fi
+            echo "⏳ Waiting..."
+            sleep 2
+          done
+
+      - name: Prepare DB
+        run: npx prisma migrate deploy && npm run seed:test
+
+      - name: Start Firebase Emulators
+        run: |
+          nohup firebase emulators:start --only auth,functions,storage > firebase.log 2>&1 &
+          sleep 5
+          echo "🔥 Firebase emulators started."
+
+      - name: Run Cypress E2E tests
+        run: npx start-server-and-test dev:cypci http://localhost:3000 "cypress run --forceExit"
+
+      - name: Upload Cypress Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Upload Cypress Videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos
+
+      - name: Upload Firebase logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: firebase-logs
+          path: firebase.log
+
+      - name: Stop test stack
+        if: always()
+        run: docker compose -f docker-compose.test.yaml down -v
