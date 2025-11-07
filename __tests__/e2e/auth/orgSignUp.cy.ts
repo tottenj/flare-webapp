@@ -1,6 +1,4 @@
-import { createOrg, createOrgResponse } from "../../../cypress/support/constants/Organization";
-
-
+import { createOrg } from '../../../cypress/support/constants/Organization';
 
 function getOrgSignUpInputs() {
   return {
@@ -17,9 +15,10 @@ function getOrgSignUpInputs() {
   };
 }
 function getProofOfOwnershipInputs() {
-  return cy.get('label')
-      .filter((_, el) => el.textContent?.includes('Proof of Ownership') === true)
-      .find('input');
+  return cy
+    .get('label')
+    .filter((_, el) => el.textContent?.includes('Proof of Ownership') === true)
+    .find('input');
 }
 
 function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, shouldSubmit?: boolean) {
@@ -66,8 +65,6 @@ describe('Page Components', () => {
       });
     cy.checkExistance(getOrgSignUpInputs());
   });
-
-  
 });
 
 describe('Success Flow', () => {
@@ -77,18 +74,29 @@ describe('Success Flow', () => {
     cy.clearForm();
   });
 
-it('Successfully Submits Form', () => {
-  orgSignUpFillForm();
-  cy.wait(40000)
-  // wait for navigation to complete (up to 30s)
-  cy.url({ timeout: 50000 }).should('include', '/confirmation');
-});
+  it('Successfully Submits Form', () => {
+    cy.intercept('POST', '/api/loginToken').as('loginToken');
+    cy.intercept('POST', '/api/auth/signUp').as('signup');
+    cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
+    orgSignUpFillForm();
 
+    cy.window({ timeout: 10000 }).should((win) => {
+      expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
+    });
 
+    cy.wait('@loginToken');
+    cy.wait('@signup');
+    cy.wait('@deleteLoginToken');
 
-  it("Ensures account exists", () => {
-    cy.userExists(createOrg.email, createOrg.password)
-  })
+    cy.window({ timeout: 10000 }).should((win) => {
+      expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
+    });
+    cy.url({ timeout: 50000 }).should('include', '/confirmation');
+  });
+
+  it('Ensures account exists', () => {
+    cy.userExists(createOrg.email, createOrg.password);
+  });
 });
 
 describe('Unsuccessful Flow', () => {
@@ -97,8 +105,6 @@ describe('Unsuccessful Flow', () => {
     cy.clearAllEmulators();
     cy.clearForm();
   });
-
- 
 
   it('Tests confirm password with different passwords', () => {
     const { password, confirmPassword } = getOrgSignUpInputs();

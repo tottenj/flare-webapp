@@ -10,3 +10,8 @@ firebase emulators:start --import=localTest --export-on-exit=localTest
 * npx jest --ci --reporters=default --reporters=jest-junit           
 ls -R reports/jest
 * npx cypress run --browser chrome
+
+
+
+"DATABASE_URL": "postgresql://test:tester@postgres:5432/flare_test?schema=public",
+"DATABASE_URL": "postgresql://test:tester@localhost:5434/flare_test?schema=public",
