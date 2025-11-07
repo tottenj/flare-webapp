@@ -171,31 +171,22 @@ jobs:
             sleep 2
           done
 
-      - name: Prepare DB
-        run: npx prisma migrate deploy && npm run seed:test
-
-      - name: Start Firebase Emulators
-        run: |
-          nohup firebase emulators:start --only auth,functions,storage > firebase.log 2>&1 &
-          sleep 5
-          echo "🔥 Firebase emulators started."
-
-      - name: Run Cypress E2E tests
-        run: npx start-server-and-test dev:cypci http://localhost:3000 "cypress run"
+      - name: run e2e tests
+        run: npm run teste2e:ci
 
       - name: Upload Cypress Screenshots
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: cypress-screenshots
-          path: cypress/screenshots
+          path: reports/cypress/screenshots
 
       - name: Upload Cypress Videos
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
-          path: cypress/videos
+          path: reports/cypress/videos
 
       - name: Upload Firebase logs
         if: failure()
