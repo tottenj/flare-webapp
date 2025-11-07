@@ -87,7 +87,7 @@ jobs:
           done
 
       - name: Prepare DB
-        run: npx prisma db push --force-reset && npm run seed:test
+        run: npx prisma migrate deploy && npm run seed:test
 
       - name: Run Jest Integration Tests
         run: NODE_OPTIONS="$NODE_OPTIONS --experimental-vm-modules" npx jest --selectProjects integration
@@ -181,7 +181,7 @@ jobs:
           echo "🔥 Firebase emulators started."
 
       - name: Run Cypress E2E tests
-        run: npx start-server-and-test dev:cypci http://localhost:3000 "cypress run --forceExit"
+        run: npx start-server-and-test dev:cypci http://localhost:3000 "cypress run"
 
       - name: Upload Cypress Screenshots
         if: failure()
