@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, preProduction, cypressTests]
+    branches: [main, preProduction, prisma]
   pull_request:
 
 concurrency:
