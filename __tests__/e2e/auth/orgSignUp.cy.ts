@@ -78,7 +78,7 @@ describe('Success Flow', () => {
     cy.intercept('POST', '/api/loginToken').as('loginToken');
     cy.intercept('POST', '/api/auth/signUp').as('signup');
     cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
-    cy.intercept('GET', '/confirmation/*').as('confirmation');
+    cy.intercept('GET', '/confirmation*').as('confirmation');
 
     orgSignUpFillForm();
 
@@ -94,7 +94,7 @@ describe('Success Flow', () => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
 
-    
+
     cy.wait("@confirmation")
 
     cy.location('pathname', { timeout: 60000 }).should((pathname) => {
