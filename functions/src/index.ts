@@ -11,7 +11,13 @@ initializeApp();
 const auth = getAuth();
 const firestore = getFirestore();
 firestore.settings({ ignoreUndefinedProperties: true });
-console.log('🔥 Loaded addOrgClaim at', new Date().toISOString());
+
+
+if (process.env.FUNCTIONS_EMULATOR) {
+  process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
+  process.env.FIREBASE_AUTH_EMULATOR_HOST = 'localhost:9099';
+}
+
 
 exports.signToken = onRequest(async (req: any, res: any) => {
   const token = req.body?.idToken;

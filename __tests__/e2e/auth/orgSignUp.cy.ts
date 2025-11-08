@@ -89,10 +89,11 @@ describe('Success Flow', () => {
    cy.wait('@loginToken', { timeout: 30000 }).then((interception) => {
      if (!interception.response) {
        cy.log('Request: ' + JSON.stringify(interception.request));
+       cy.log("INTERCEPTION" + JSON.stringify(interception))
        console.error('No response for loginToken request');
        console.error('Request:', interception.request);
      } else {
-      cy.log("MASSIVE ERROR")
+      
        console.log('Status Code:', interception.response.statusCode);
        console.log('Response Body:', interception.response.body);
      }
