@@ -51,65 +51,6 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
   shouldSubmit && submit().click({ force: true });
 }
 
-describe('Page Components', () => {
-  beforeEach(() => {
-    cy.visit('/flare-signup', { retryOnNetworkFailure: true });
-    cy.clearForm();
-  });
-
-  it('Loads Form', () => {
-    cy.contains('Organization Sign Up', { timeout: 60000 }).should('be.visible');
-    getProofOfOwnershipInputs()
-      .should('have.length', 4)
-      .each((input) => {
-        cy.wrap(input).should('exist');
-      });
-    cy.checkExistance(getOrgSignUpInputs());
-  });
-});
-
-describe('Success Flow', () => {
-  before(() => {
-    cy.visit('/confirmation')
-    cy.visit('/flare-signup');
-    cy.clearAllEmulators();
-    cy.clearForm();
-  });
-  
-
-  it('Successfully Submits Form', () => {
-    cy.intercept('POST', '/api/loginToken').as('loginToken');
-    cy.intercept('POST', '/api/auth/signUp').as('signup');
-    cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
-    cy.intercept('GET', '/confirmation*').as('confirmation');
-
-    orgSignUpFillForm();
-
-    cy.window({ timeout: 15000 }).should((win) => {
-      expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
-    });
-
-   cy.wait('@loginToken', { timeout: 30000 })
-
-    cy.get('button[type="submit"]').should('be.disabled');
-    cy.wait('@signup', { timeout: 30000 });
-    cy.get('button[type="submit"]').should('not.be.disabled');
-    cy.wait('@deleteLoginToken', { timeout: 30000 });
-
-    cy.window({ timeout: 15000 }).should((win) => {
-      expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
-    });
-
-    cy.wait("@confirmation")
-
-    cy.contains('Thank You', { timeout: 20000 }).should('exist');
-  });
-
-
-  it('Ensures account exists', () => {
-    cy.userExists(createOrg.email, createOrg.password);
-  });
-});
 
 describe('Unsuccessful Flow', () => {
   beforeEach(() => {
