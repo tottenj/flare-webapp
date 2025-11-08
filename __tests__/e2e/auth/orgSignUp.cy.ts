@@ -89,7 +89,6 @@ describe('Success Flow', () => {
 
     cy.wait('@loginToken', { timeout: 20000 });
     cy.get('button[type="submit"]').should('be.disabled');
-
     cy.wait('@signup', { timeout: 30000 });
     cy.get('button[type="submit"]').should('not.be.disabled');
 
