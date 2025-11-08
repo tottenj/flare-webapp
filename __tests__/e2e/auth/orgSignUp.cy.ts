@@ -113,7 +113,6 @@ describe('Success Flow', () => {
   });
 });
 
-
 describe('Unsuccessful Flow', () => {
   beforeEach(() => {
     cy.visit('/flare-signup');
@@ -136,10 +135,18 @@ describe('Unsuccessful Flow', () => {
 
   it('tests to ensure toast on not all form fields filled', () => {
     const { orgName, submit } = getOrgSignUpInputs();
+
+    // Fill the form, but skip one required field
     orgSignUpFillForm(undefined, undefined, undefined, false);
+
+    // Clear the orgName field to trigger validation
     orgName().clear();
+
+    // Submit the form
     submit().click();
-    cy.contains('Sign up error');
+
+    // Wait for the toast to appear
+    cy.contains('Sign up error', { timeout: 10000 }).should('be.visible');
   });
 
   it('tests to ensure error on duplicate emails', () => {
