@@ -69,13 +69,11 @@ describe('Page Components', () => {
 
 describe('Success Flow', () => {
   before(() => {
+    cy.visit('/flare-signup');
     cy.clearAllEmulators();
     cy.clearForm();
   });
-
-  beforeEach(() => {
-    cy.visit('/flare-signup');
-  });
+  
 
   it('Successfully Submits Form', () => {
     cy.intercept('POST', '/api/loginToken').as('loginToken');
@@ -89,17 +87,18 @@ describe('Success Flow', () => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
-    cy.wait('@loginToken', { timeout: 30000 }).then((interception) => {
-      if (!interception.response) {
-        cy.log('Request: ' + JSON.stringify(interception.request));
-        cy.log('INTERCEPTION' + JSON.stringify(interception));
-        console.error('No response for loginToken request');
-        console.error('Request:', interception.request);
-      } else {
-        console.log('Status Code:', interception.response.statusCode);
-        console.log('Response Body:', interception.response.body);
-      }
-    });
+   cy.wait('@loginToken', { timeout: 30000 }).then((interception) => {
+     if (!interception.response) {
+       cy.log('Request: ' + JSON.stringify(interception.request));
+       cy.log("INTERCEPTION" + JSON.stringify(interception))
+       console.error('No response for loginToken request');
+       console.error('Request:', interception.request);
+     } else {
+      
+       console.log('Status Code:', interception.response.statusCode);
+       console.log('Response Body:', interception.response.body);
+     }
+   });
 
     cy.get('button[type="submit"]').should('be.disabled');
     cy.wait('@signup', { timeout: 30000 });
@@ -123,6 +122,7 @@ describe('Success Flow', () => {
     // Optional: ensure the confirmation page actually rendered
     cy.contains('Thank You', { timeout: 20000 }).should('exist');
   });
+
 
   it('Ensures account exists', () => {
     cy.userExists(createOrg.email, createOrg.password);
