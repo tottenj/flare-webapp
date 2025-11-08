@@ -193,9 +193,7 @@ jobs:
         run: docker compose -f compose.test.yaml up -d
 
 
-      - name: Start Firebase Emulators
-        run: npm run emulators:e2e &
-
+ 
       - name: Run Cypress Tests
         run: npm run test:e2eci
 
