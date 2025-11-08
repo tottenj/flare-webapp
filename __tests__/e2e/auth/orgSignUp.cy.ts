@@ -1,4 +1,4 @@
-import { createOrg } from '../../../cypress/support/constants/Organization';
+import { createOrg, preMadeOrg1 } from '../../../cypress/support/constants/Organization';
 
 function getOrgSignUpInputs() {
   return {
@@ -131,4 +131,10 @@ describe('Unsuccessful Flow', () => {
     submit().click();
     cy.contains('Sign up error');
   });
+
+
+  it("tests to ensure error on duplicate emails", () => {
+    orgSignUpFillForm(preMadeOrg1.user.email)
+    cy.contains("Sign up error")
+  })
 });
