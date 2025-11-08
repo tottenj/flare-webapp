@@ -89,18 +89,7 @@ describe('Success Flow', () => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
-   cy.wait('@loginToken', { timeout: 30000 }).then((interception) => {
-     if (!interception.response) {
-       cy.log('Request: ' + JSON.stringify(interception.request));
-       cy.log("INTERCEPTION" + JSON.stringify(interception))
-       console.error('No response for loginToken request');
-       console.error('Request:', interception.request);
-     } else {
-      
-       console.log('Status Code:', interception.response.statusCode);
-       console.log('Response Body:', interception.response.body);
-     }
-   });
+   cy.wait('@loginToken', { timeout: 30000 })
 
     cy.get('button[type="submit"]').should('be.disabled');
     cy.wait('@signup', { timeout: 30000 });
@@ -116,11 +105,9 @@ describe('Success Flow', () => {
       console.log('SessionStorage:', win.sessionStorage);
     });
 
-    // Allow router navigation and DOM to settle
-    cy.location('pathname', { timeout: 60000 }).should((pathname) => {
-      expect(pathname).to.include('/confirmation');
-    });
+    cy.wait("@confirmation")
 
+ 
     // Optional: ensure the confirmation page actually rendered
     cy.contains('Thank You', { timeout: 20000 }).should('exist');
   });
