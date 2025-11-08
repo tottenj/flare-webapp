@@ -107,7 +107,7 @@ describe('Success Flow', () => {
     });
 
     // Optional: ensure the confirmation page actually rendered
-    cy.contains('Confirmation', { timeout: 20000 }).should('exist');
+    cy.contains('Thank You', { timeout: 20000 }).should('exist');
   });
 
 

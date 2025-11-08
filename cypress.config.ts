@@ -51,7 +51,7 @@ export default defineConfig({
     reporterEnabled: 'mocha-junit-reporter',
     mochaJunitReporterReporterOptions: {
       mochaFile: 'reports/cypress/junit-[hash].xml',
-      toConsole: true,
+      toConsole: false,
     },
   },
 });

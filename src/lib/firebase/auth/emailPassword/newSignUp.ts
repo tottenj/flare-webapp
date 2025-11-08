@@ -25,11 +25,10 @@ export default async function newSignUp(formData: FormData) {
       cache: 'no-store',
     });
     if (!cookieRes.ok) throw new Error('Failed to set session cookie');
-    const json = Object.fromEntries(formData.entries());
+    
     const res = await fetch('/api/auth/signUp', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(json),
+      body: formData,
     });
     if (!res.ok) throw new Error('Sign up error');
     await sendEmailVerification(userCred.user);
