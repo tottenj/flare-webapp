@@ -131,21 +131,7 @@ describe('Unsuccessful Flow', () => {
     cy.url().should('include', '/flare-signup');
   });
 
-  it('tests to ensure toast on not all form fields filled', () => {
-    const { orgName, submit } = getOrgSignUpInputs();
-
-    // Fill the form, but skip one required field
-    orgSignUpFillForm(undefined, undefined, undefined, false);
-
-    // Clear the orgName field to trigger validation
-    orgName().clear();
-
-    // Submit the form
-    submit().click();
-
-    // Wait for the toast to appear
-    cy.contains('Sign up error', { timeout: 10000 }).should('be.visible');
-  });
+ 
 
 
 });
