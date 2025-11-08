@@ -37,6 +37,7 @@ export default defineConfig({
           });
           return null;
         },
+        
       });
     },
     baseUrl: 'http://127.0.0.1:3000', // Adjust to your app's URL

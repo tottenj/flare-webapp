@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
     let formData: FormData;
 
     if (contentType.includes('application/json')) {
-      // ✅ If JSON
       const body = await req.json();
       accountType = body.account_type;
       formData = new FormData();

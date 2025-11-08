@@ -414,3 +414,16 @@ Cypress.Commands.add('fillTypedSelect', (label: string, option: string) => {
 Cypress.Commands.add('resetAndSeed', () => {
   cy.task('db:resetAndSeed');
 });
+
+
+
+Cypress.Commands.add('seedAuthEmulator', () => {
+  const functionsUrl = `${Cypress.env('FUNCTIONS_URL')}/${Cypress.env('NEXT_PUBLIC_FIREBASE_PROJECT_ID')}/us-central1/seedAuthEmulator`;
+
+  cy.log('Seeding Firebase Auth Emulator');
+
+  cy.request('POST', functionsUrl).then((response) => {
+    expect(response.status).to.eq(200);
+    expect(response.body).to.have.property('success', true);
+  });
+});

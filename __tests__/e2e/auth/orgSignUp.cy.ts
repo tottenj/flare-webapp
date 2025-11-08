@@ -87,7 +87,9 @@ describe('Success Flow', () => {
     });
 
     cy.wait('@loginToken');
+    cy.get('button[type="submit"]').should('be.disabled');
     cy.wait('@signup');
+    cy.get('button[type="submit"]').should('not.be.disabled');
     cy.wait('@deleteLoginToken');
 
     cy.window({ timeout: 10000 }).should((win) => {
@@ -125,6 +127,7 @@ describe('Unsuccessful Flow', () => {
   it('tests that with different passwords form will be unsuccessful', () => {
     orgSignUpFillForm(undefined, 'password', 'notPassword');
     cy.contains('Successfully Submitted Application').should('not.exist');
+    cy.url().should('include', '/flare-signup');
   });
 
   it('tests to ensure toast on not all form fields filled', () => {

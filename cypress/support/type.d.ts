@@ -38,7 +38,7 @@ declare namespace Cypress {
     seedDb(maxRetries: number = 1): Chainable<Cypress.Response<any>>;
     loginTestUser(): Chainable<void>;
     loginTestOrg(): Chainable<void>;
-    loginVerifiedOrg(): Chainable<void>
+    loginVerifiedOrg(): Chainable<void>;
     checkToast(message: string): Chainable<Cypress.Response<any>>;
     checkExistance(ffuncs: Record<string, () => Cypress.Chainable>): Chainable<void>;
     clearForm(): Chainable<void>;
@@ -53,9 +53,10 @@ declare namespace Cypress {
     waitForEmulators(): Chainable<void>;
     getDocument(path: string, idToken: string): Chainable<{ [k: string]: any }>;
     shouldMatch(reference: any, numberTolerance: number = 0.0001): Chainable<Subject>;
-    fillSelect(label:string, option: string): Chainable<void>
-    fillTypedSelect(label:string, option:string):Chainable<void>
-    resetAndSeed():Chainable<void>
+    fillSelect(label: string, option: string): Chainable<void>;
+    fillTypedSelect(label: string, option: string): Chainable<void>;
+    resetAndSeed(): Chainable<void>;
+    seedAuthEmulator(): Chainable<void>
   }
 
 
