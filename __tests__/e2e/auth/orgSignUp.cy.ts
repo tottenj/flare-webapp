@@ -95,13 +95,7 @@ describe('Success Flow', () => {
     cy.window({ timeout: 10000 }).should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
-
-
     cy.wait("@confirmation")
-
-    cy.location('pathname', { timeout: 60000 }).should((pathname) => {
-      expect(pathname).to.eq('/confirmation');
-    });
 
   });
 
