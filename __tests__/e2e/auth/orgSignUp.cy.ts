@@ -58,6 +58,7 @@ describe('Page Components', () => {
   });
 
   it('Loads Form', () => {
+    cy.contains('Organization Sign Up', { timeout: 60000 }).should('be.visible');
     getProofOfOwnershipInputs()
       .should('have.length', 4)
       .each((input) => {
@@ -69,6 +70,7 @@ describe('Page Components', () => {
 
 describe('Success Flow', () => {
   before(() => {
+    cy.visit('/confirmation')
     cy.visit('/flare-signup');
     cy.clearAllEmulators();
     cy.clearForm();
