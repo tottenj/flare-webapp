@@ -420,7 +420,6 @@ Cypress.Commands.add('resetAndSeed', () => {
 Cypress.Commands.add('seedAuthEmulator', () => {
   const functionsUrl = `${Cypress.env('FUNCTIONS_URL')}/${Cypress.env('NEXT_PUBLIC_FIREBASE_PROJECT_ID')}/us-central1/seedAuthEmulator`;
 
-  cy.log('Seeding Firebase Auth Emulator');
 
   cy.request('POST', functionsUrl).then((response) => {
     expect(response.status).to.eq(200);
