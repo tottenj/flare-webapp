@@ -26,7 +26,7 @@
 
     "test:e2eci:local": "npm run e2e:setup && concurrently -k -n 'EMULATORS,APP,CYPRESS' -c 'blue.bold,green.bold,magenta.bold' \"npm run emulators:e2e\" \"npm run dev:cyp\" \"npm run wait-and-test\"",
     "test:e2e:local": "npm run e2e:setup && concurrently -k -n 'EMULATORS,APP,CYPRESS' -c 'blue.bold,green.bold,magenta.bold' \"npm run emulators:e2e\" \"npm run dev:cyp\" \"npm run wait-and-open\"",
-    "test:e2eci": "npm run e2e:setupci && concurrently -k \"npm run emulators:e2e\" \"npm run dev:cypci\" \"npx wait-on http://localhost:3000 && cypress run\"",
+    "test:e2eci": "npm run e2e:setupci && concurrently --success first -k \"npm run emulators:e2e\" \"npm run dev:cypci\" \"npx wait-on http://localhost:3000 \"npm run wait-and-test \"",
 
     "wait-and-test": "node scripts/wait-for-emulators.js && npx wait-on http-get://localhost:3000/api/health && npm run cypress:run",
     "wait-and-open": "node scripts/wait-for-emulators.js && npx wait-on http-get://localhost:3000/api/health && npm run cypress:open",
