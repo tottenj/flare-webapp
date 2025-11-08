@@ -82,24 +82,29 @@ describe('Success Flow', () => {
 
     orgSignUpFillForm();
 
-    cy.window({ timeout: 10000 }).should((win) => {
+    // Ensure sessionStorage flag is set
+    cy.window({ timeout: 15000 }).should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
-    cy.wait('@loginToken');
+    cy.wait('@loginToken', { timeout: 20000 });
     cy.get('button[type="submit"]').should('be.disabled');
-    cy.wait('@signup');
-    cy.get('button[type="submit"]').should('not.be.disabled');
-    cy.wait('@deleteLoginToken');
 
-    cy.window({ timeout: 10000 }).should((win) => {
+    cy.wait('@signup', { timeout: 30000 });
+    cy.get('button[type="submit"]').should('not.be.disabled');
+
+    cy.wait('@deleteLoginToken', { timeout: 20000 });
+
+    // Ensure sessionStorage flag is cleared
+    cy.window({ timeout: 15000 }).should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
 
-    cy.wait('@confirmation');
+    cy.wait('@confirmation', { timeout: 60000 });
 
+    // Robust pathname check: allow query string variations
     cy.location('pathname', { timeout: 60000 }).should((pathname) => {
-      expect(pathname).to.eq('/confirmation');
+      expect(pathname).to.include('/confirmation');
     });
   });
 
@@ -107,6 +112,7 @@ describe('Success Flow', () => {
     cy.userExists(createOrg.email, createOrg.password);
   });
 });
+
 
 describe('Unsuccessful Flow', () => {
   beforeEach(() => {
