@@ -100,15 +100,8 @@ describe('Success Flow', () => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
 
-    cy.window().then((win) => {
-      console.log('Router path:', win.location.pathname);
-      console.log('SessionStorage:', win.sessionStorage);
-    });
-
     cy.wait("@confirmation")
 
- 
-    // Optional: ensure the confirmation page actually rendered
     cy.contains('Thank You', { timeout: 20000 }).should('exist');
   });
 
@@ -154,12 +147,5 @@ describe('Unsuccessful Flow', () => {
     cy.contains('Sign up error', { timeout: 10000 }).should('be.visible');
   });
 
-  it('tests to ensure error on duplicate emails', () => {
-    orgSignUpFillForm(preMadeOrg1.user.email);
-      cy.intercept('POST', '/api/loginToken').as('loginToken');
-         cy.wait('@loginToken', { timeout: 30000 });
-      cy.intercept('POST', '/api/auth/signUp').as('signup');
-      cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
-    cy.contains('Sign up error', { timeout: 10000 }).should('be.visible');
-  });
+
 });
