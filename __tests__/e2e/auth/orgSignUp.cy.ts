@@ -53,7 +53,7 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
 
 describe('Page Components', () => {
   beforeEach(() => {
-    cy.visit('/flare-signup');
+    cy.visit('/flare-signup', { retryOnNetworkFailure: true });
     cy.clearForm();
   });
 
@@ -156,6 +156,10 @@ describe('Unsuccessful Flow', () => {
 
   it('tests to ensure error on duplicate emails', () => {
     orgSignUpFillForm(preMadeOrg1.user.email);
+      cy.intercept('POST', '/api/loginToken').as('loginToken');
+         cy.wait('@loginToken', { timeout: 30000 });
+      cy.intercept('POST', '/api/auth/signUp').as('signup');
+      cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
     cy.contains('Sign up error', { timeout: 10000 }).should('be.visible');
   });
 });
