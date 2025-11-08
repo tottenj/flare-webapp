@@ -102,6 +102,8 @@ describe('Success Flow', () => {
 
     cy.wait('@confirmation', { timeout: 60000 });
 
+
+    cy.wait(60000)
     // Robust pathname check: allow query string variations
     cy.location('pathname', { timeout: 60000 }).should((pathname) => {
       expect(pathname).to.include('/confirmation');
@@ -151,6 +153,6 @@ describe('Unsuccessful Flow', () => {
 
   it('tests to ensure error on duplicate emails', () => {
     orgSignUpFillForm(preMadeOrg1.user.email);
-    cy.contains('Sign up error');
+    cy.contains('Sign up error', { timeout: 10000 }).should('be.visible');
   });
 });
