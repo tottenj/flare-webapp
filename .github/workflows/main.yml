@@ -183,10 +183,10 @@ jobs:
             sleep 2
           done
 
-      - name: Start Firebase emulators in background
+      - name: Run E2E tests with Firebase emulators
         run: |
-          nohup firebase emulators:start --only auth,functions,storage --project demo-project > firebase.log 2>&1 &
-          npx wait-on tcp:9099 tcp:8080 tcp:9199 tcp:5001
+          firebase emulators:exec --only auth,functions,storage --project flare-7091a \
+          "npm run test:e2eci"
 
       - name: Apply Prisma migrations and seed DB
         run: npm run e2e:setupci
