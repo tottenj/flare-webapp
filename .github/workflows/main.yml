@@ -126,6 +126,9 @@ jobs:
       COOKIE_NAME: ${{ secrets.COOKIE_NAME }}
       TEST_BLOB_READ_WRITE_TOKEN: ${{ secrets.TEST_BLOB_READ_WRITE_TOKEN }}
       BLOB_READ_WRITE_TOKEN: ${{ secrets.TEST_BLOB_READ_WRITE_TOKEN }}
+      NEXT_DISABLE_FAST_REFRESH: true
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_TURBOPACK: 0
 
     steps:
       - name: Checkout code
