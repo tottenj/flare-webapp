@@ -48,7 +48,7 @@ export default function OrgSignInForm() {
     setPending(true);
     try {
       await handleSignUpSubmit(e, 'org');
-      if (unifiedUser.user?.uid) await uploadFilesToFirebase(unifiedUser.user.uid);
+     // if (unifiedUser.user?.uid) await uploadFilesToFirebase(unifiedUser.user.uid);
       router.push('/confirmation');
     } catch (error: any) {
       toast.error(error.message || 'Something went wrong');
