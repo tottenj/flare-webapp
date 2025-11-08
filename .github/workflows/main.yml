@@ -197,7 +197,7 @@ jobs:
         run: npm run emulators:e2e &
 
       - name: Run Cypress Tests
-        run: npx start-server-and-test dev:cypci http://localhost:3000 cypress:run
+        run: npm run test:e2eci
 
       - name: Upload Cypress Screenshots
         if: failure()
