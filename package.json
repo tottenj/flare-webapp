@@ -31,6 +31,7 @@
     "start:test:ci": "npm run emulators:e2e & npm run dev:cypci & npx wait-on http://localhost:3000 && npx cypress run",
 
     
+    
     "wait-and-test": "node scripts/wait-for-emulators.js && npx wait-on http-get://localhost:3000/api/health && npm run cypress:run",
     "wait-and-open": "node scripts/wait-for-emulators.js && npx wait-on http-get://localhost:3000/api/health && npm run cypress:open",
 
