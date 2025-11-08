@@ -10,6 +10,7 @@ export default function Confirmation() {
         </div>
         <div>
           
+          
           <h1>Thank You For Signing Up!</h1>
           <p>Please Check Your Email To Verify Your Account!</p>
         </div>
