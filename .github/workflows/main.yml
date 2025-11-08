@@ -209,8 +209,14 @@ jobs:
             sleep 2
           done
 
-      - name: run e2e tests
-        run: npm run test:e2eci
+      - name: Start Firebase Emulators
+        run: npm run emulators:e2e &
+      - name: Start Next.js Dev Server
+        run: npm run dev:cypci &
+      - name: Wait for app to be ready
+        run: npx wait-on http://localhost:3000
+      - name: Run Cypress Tests
+        run: npx cypress run
 
       - name: Upload Cypress Screenshots
         if: failure()
