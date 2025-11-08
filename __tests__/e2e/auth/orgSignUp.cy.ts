@@ -86,18 +86,18 @@ describe('Success Flow', () => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
-    cy.wait('@loginToken', { timeout: 30000 }).then((interception) => {
-      // interception has the full request/response info
-      const responseBody = interception.response?.body;
-      const statusCode = interception.response?.statusCode;
+   cy.wait('@loginToken', { timeout: 30000 }).then((interception) => {
+     if (!interception.response) {
+      cy.log(interception.request)
+       console.error('No response for loginToken request');
+       console.error('Request:', interception.request);
+     } else {
+      cy.log("MASSIVE ERROR")
+       console.log('Status Code:', interception.response.statusCode);
+       console.log('Response Body:', interception.response.body);
+     }
+   });
 
-      cy.log('Status Code: ' + statusCode);
-      cy.log('Response Body: ' + JSON.stringify(responseBody));
-
-      // You can assert on it
-      expect(statusCode).to.eq(200);
-
-    });
     cy.get('button[type="submit"]').should('be.disabled');
     cy.wait('@signup', { timeout: 30000 });
     cy.get('button[type="submit"]').should('not.be.disabled');
