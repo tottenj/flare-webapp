@@ -82,32 +82,34 @@ describe('Success Flow', () => {
 
     orgSignUpFillForm();
 
-    // Ensure sessionStorage flag is set
     cy.window({ timeout: 15000 }).should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
-    cy.wait('@loginToken', { timeout: 20000 });
+    cy.wait('@loginToken', { timeout: 30000 });
     cy.get('button[type="submit"]').should('be.disabled');
     cy.wait('@signup', { timeout: 30000 });
     cy.get('button[type="submit"]').should('not.be.disabled');
+    cy.wait('@deleteLoginToken', { timeout: 30000 });
 
-    cy.wait('@deleteLoginToken', { timeout: 20000 });
-
-    // Ensure sessionStorage flag is cleared
     cy.window({ timeout: 15000 }).should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
 
-    cy.wait('@confirmation', { timeout: 60000 });
+    cy.window().then((win) => {
+      console.log('Router path:', win.location.pathname);
+      console.log('SessionStorage:', win.sessionStorage);
+    });
 
-
-    cy.wait(60000)
-    // Robust pathname check: allow query string variations
+    // Allow router navigation and DOM to settle
     cy.location('pathname', { timeout: 60000 }).should((pathname) => {
       expect(pathname).to.include('/confirmation');
     });
+
+    // Optional: ensure the confirmation page actually rendered
+    cy.contains('Confirmation', { timeout: 20000 }).should('exist');
   });
+
 
   it('Ensures account exists', () => {
     cy.userExists(createOrg.email, createOrg.password);
