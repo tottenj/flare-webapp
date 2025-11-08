@@ -18,6 +18,7 @@ export const preMadeOrg1 = {
   verified: false,
 };
 
+
 export const preMadeOrg2 = {
   user: preMadeUser3,
   password: 'password123',
