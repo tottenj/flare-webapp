@@ -6,6 +6,7 @@ export async function POST(req: NextRequest) {
   const { idToken } = await req.json();
   const isLocal = process.env.MODE === 'test';
 
+
   try {
     const resp = await fetch(
       `${process.env.FUNCTIONS_URL}/${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}/us-central1/signToken`,
@@ -16,10 +17,15 @@ export async function POST(req: NextRequest) {
       }
     );
 
+    
     const data  = await resp.json()
+  
+   
     if (!data || !data.sessionCookie || !data.expiresIn) {
       return NextResponse.json('No data returned', { status: 400 });
     }
+
+    
 
     const cookiesObj = await cookies();
     cookiesObj.set('__session', data.sessionCookie, {
@@ -32,6 +38,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json('Cookie set', { status: 200 });
   } catch (error) {
     console.log(error);
+    return NextResponse.json('Error', {status: 400})
+    
   }
 }
 

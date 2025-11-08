@@ -1,6 +1,7 @@
 # Flare, Ignite, Community
 
 ## Run ems:
+INTERNAL_API_KEY=4d522cbb22ae4ad19fe69211623a3a6bf8e9c098a16593b0ca0e0c0359c6f2d0
 STORAGE_EMULATOR_HOST=127.0.0.1:9199 \
 FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099 \
 firebase emulators:start --import=localTest --export-on-exit=localTest

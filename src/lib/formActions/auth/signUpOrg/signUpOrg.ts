@@ -21,6 +21,7 @@ export default async function signUpOrg(formData: FormData): Promise<ActionRespo
     return { status: 'error', message: 'Passwords must match' };
 
   const verifyUrl = `${process.env.FUNCTIONS_URL}/${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}/us-central1/addOrgClaim`;
+ 
   const verifyResponse = await fetch(verifyUrl, {
     method: 'POST',
     headers: {
@@ -35,6 +36,7 @@ export default async function signUpOrg(formData: FormData): Promise<ActionRespo
 
   if (!verifyResponse.ok) {
     const resp = await verifyResponse.text()
+    console.log(resp)
     throw new Error('Unauthorized');
   }
 

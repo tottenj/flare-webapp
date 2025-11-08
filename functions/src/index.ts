@@ -32,10 +32,7 @@ const corsHandler = cors({ origin: true, credentials: false }); // Allow all ori
 
 export const addOrgClaim = onRequest((req, res) => {
   corsHandler(req, res, async () => {
-    console.log({
-      headers: req.headers,
-      body: req.body,
-    });
+    
     try {
       if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
@@ -46,6 +43,7 @@ export const addOrgClaim = onRequest((req, res) => {
         return res.status(401).json({ error: 'Missing Authorization header' });
 
       const apiKey = authHeader.split('Bearer ')[1];
+   
       if (apiKey !== process.env.INTERNAL_API_KEY)
         return res.status(403).json({ error: 'Unauthorized: Invalid API key' });
 
@@ -82,7 +80,7 @@ export const verifySessionCookie = onRequest((req, res) => {
       }
 
       const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-      console.log(cookies);
+     
       const sessionCookie = cookies.__session;
 
       if (!sessionCookie) {
