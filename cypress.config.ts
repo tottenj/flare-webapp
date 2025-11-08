@@ -46,12 +46,5 @@ export default defineConfig({
   video: true,
   videosFolder: 'reports/cypress/videos',
   screenshotsFolder: 'reports/cypress/screenshots',
-  reporter: 'cypress-multi-reporters',
-  reporterOptions: {
-    reporterEnabled: 'mocha-junit-reporter',
-    mochaJunitReporterReporterOptions: {
-      mochaFile: 'reports/cypress/junit-[hash].xml',
-      toConsole: false,
-    },
-  },
+
 });

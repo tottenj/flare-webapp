@@ -88,7 +88,7 @@ describe('Success Flow', () => {
 
    cy.wait('@loginToken', { timeout: 30000 }).then((interception) => {
      if (!interception.response) {
-      cy.log(interception.request)
+       cy.log('Request: ' + JSON.stringify(interception.request));
        console.error('No response for loginToken request');
        console.error('Request:', interception.request);
      } else {

@@ -145,11 +145,6 @@ jobs:
       NEXT_PUBLIC_FIREBASE_API_KEY: "AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU"
       NEXT_PUBLIC_MODE: "test"
       NEXT_PUBLIC_FIREBASE_PROJECT_ID: "flare-7091a"
-      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
-      OLD_AUTH_SECRET: ${{ secrets.OLD_AUTH_SECRET }}
-      COOKIE_NAME: ${{ secrets.COOKIE_NAME }}
-      TEST_BLOB_READ_WRITE_TOKEN: ${{ secrets.TEST_BLOB_READ_WRITE_TOKEN }}
-      BLOB_READ_WRITE_TOKEN: ${{ secrets.TEST_BLOB_READ_WRITE_TOKEN }}
       NEXT_DISABLE_FAST_REFRESH: true
       NEXT_TELEMETRY_DISABLED: 1
       NEXT_PUBLIC_TURBOPACK: 0
@@ -162,15 +157,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
+        
 
-      - name: Cache Next.js build
+      - name: Cache npm
         uses: actions/cache@v4
         with:
-          path: .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-
+            ${{ runner.os }}-node-
 
       - name: Cache Cypress binary
         uses: actions/cache@v4
@@ -197,26 +192,12 @@ jobs:
       - name: Start test stack
         run: docker compose -f compose.test.yaml up -d
 
-      - name: Wait for Postgres to be healthy
-        run: |
-          echo "Waiting for Postgres to be healthy..."
-          for i in {1..10}; do
-            if docker exec flare-test pg_isready -U test -d flare_test; then
-              echo "✅ Postgres is ready!"
-              break
-            fi
-            echo "⏳ Waiting..."
-            sleep 2
-          done
 
       - name: Start Firebase Emulators
         run: npm run emulators:e2e &
-      - name: Start Next.js Dev Server
-        run: npm run dev:cypci &
-      - name: Wait for app to be ready
-        run: npx wait-on http://localhost:3000
+
       - name: Run Cypress Tests
-        run: npx cypress run
+        run: npx start-server-and-test dev:cypci http://localhost:3000 cypress:run
 
       - name: Upload Cypress Screenshots
         if: failure()
