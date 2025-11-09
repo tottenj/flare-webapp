@@ -138,7 +138,7 @@ jobs:
       # ✅ Start Next.js and wait for it
       - name: Start Next.js
         run: |
-          npm run next:start-ci &
+          npm run next:start-ci > next.log 2>&1 &
           npm run wait:next
 
       # ✅ Run emulators + warm pages + Cypress
@@ -160,6 +160,13 @@ jobs:
         with:
           name: cypress-screenshots
           path: reports/cypress/screenshots
+
+      - name: Print Next.js server logs
+        if: failure()
+        run: |
+          echo "===== NEXT SERVER LOGS ====="
+          cat next.log || echo "No logs found"
+
 
       - run: docker compose -f compose.test.yaml down -v
         if: always()
