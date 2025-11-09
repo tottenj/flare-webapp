@@ -1,4 +1,4 @@
-import { createOrg, preMadeOrg1 } from '../../../cypress/support/constants/Organization';
+import { createOrg } from '../../../cypress/support/constants/Organization';
 
 function getOrgSignUpInputs() {
   return {
@@ -52,6 +52,21 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
 }
 
 
+describe('success flow', () => {
+  before(() => {
+    cy.visit("/flare-signup")
+    cy.clearAllEmulators()
+    cy.clearForm()
+  })
+
+  it("Tests success flow", () => {
+    orgSignUpFillForm()
+    cy.wait(60000)
+    cy.contains('Thank You For Signing Up!');
+  })
+})
+
+
 describe('Unsuccessful Flow', () => {
   beforeEach(() => {
     cy.visit('/flare-signup');
@@ -71,8 +86,4 @@ describe('Unsuccessful Flow', () => {
     cy.contains('Successfully Submitted Application').should('not.exist');
     cy.url().should('include', '/flare-signup');
   });
-
- 
-
-
 });

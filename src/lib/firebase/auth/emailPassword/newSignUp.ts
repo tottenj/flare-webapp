@@ -35,6 +35,7 @@ export default async function newSignUp(formData: FormData) {
     await signOut(auth);
     await fetch('/api/loginToken', { method: 'DELETE' });
     sessionStorage.removeItem('manualLoginInProgress');
+    return userCred.user.uid
   } catch (err: any) {
     try {
       await fetch('/api/loginToken', { method: 'DELETE' });
