@@ -53,7 +53,7 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
 
 
 describe('success flow', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit("/flare-signup")
     //cy.clearAllEmulators()
     cy.clearForm()

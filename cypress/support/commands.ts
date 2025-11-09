@@ -422,6 +422,8 @@ Cypress.Commands.add('seedAuthEmulator', () => {
 
 
   cy.request('POST', functionsUrl).then((response) => {
+    cy.log(functionsUrl)
+    cy.log(JSON.stringify(response.body))
     expect(response.status).to.eq(200);
     expect(response.body).to.have.property('success', true);
   });
