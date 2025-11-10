@@ -55,14 +55,15 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
 describe('success flow', () => {
   beforeEach(() => {
     cy.visit("/flare-signup")
-    //cy.clearAllEmulators()
+    cy.clearAllEmulators()
     cy.clearForm()
   })
 
   it("Tests success flow", () => {
     orgSignUpFillForm()
     cy.wait(60000)
-    cy.contains('Thank You For Signing Up!');
+   cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
+
   })
 })
 
