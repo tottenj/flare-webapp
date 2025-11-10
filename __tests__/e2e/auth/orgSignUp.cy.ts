@@ -61,7 +61,7 @@ describe('success flow', () => {
 
   it("Tests success flow", () => {
     orgSignUpFillForm()
-    //cy.wait(60000)
+    cy.wait(60000)
     cy.contains('Thank You For Signing Up!');
   })
 })
