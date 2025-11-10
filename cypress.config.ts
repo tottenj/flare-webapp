@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env' });
 import { defineConfig } from 'cypress';
 import { execSync } from 'child_process';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from './src/app/generated/prisma';
+
 
 export default defineConfig({
   projectId: 'f7wjfu',
@@ -47,6 +48,7 @@ export default defineConfig({
         },
 
         async prismaFind({ table, where }) {
+          //@ts-ignore
           return prisma[table].findFirst({ where });
         },
       });

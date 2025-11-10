@@ -10,9 +10,12 @@ const projectId = Cypress.env('FIREBASE_PROJECT_ID');
 const AUTH_EMULATOR = `http://localhost:9099/identitytoolkit.googleapis.com/v1`;
 const AUTH_ADMIN = `http://localhost:9099/emulator/v1/projects/${projectId}`;
 const FIRESTORE_ADMIN = `http://localhost:8080`;
+const storageBucket = 'flare-7091a.firebasestorage.app';
+const storageEms = `http://127.0.0.1:9199/v0/b/${storageBucket}/o`
+
 
 // Helper Functions
-function signUpUser(email: string, password: string, name: string, isOrg: boolean = false) {
+ function signUpUser(email: string, password: string, name: string, isOrg: boolean = false) {
   return cy
     .request({
       method: 'POST',
@@ -430,4 +433,33 @@ Cypress.Commands.add('seedAuthEmulator', () => {
 
 Cypress.Commands.add('prismaFind', (table, where) => {
   return cy.task('prismaFind', { table, where });
+});
+
+Cypress.Commands.add('getStorageFile', (path: string) => {
+  const encodedPath = encodeURIComponent(path);
+  const url = `${storageEms}/${encodedPath}`;
+
+  const MAX_RETRIES = 10; // same as your Firestore helper
+  const DELAY_MS = 500;
+
+  const attempt = (retryCount: number): Cypress.Chainable<any> => {
+    return cy
+      .request({
+        method: 'GET',
+        url,
+        failOnStatusCode: false, // allow 404 on missing file
+      })
+      .then((resp) => {
+        if (resp.status === 200) {
+          return resp.body; // ✅ File metadata found
+        } else if (retryCount > 0) {
+          cy.wait(DELAY_MS);
+          return attempt(retryCount - 1); // 🔁 retry
+        } else {
+          throw new Error(`Storage file "${path}" not found after ${MAX_RETRIES} retries`);
+        }
+      });
+  };
+
+  return attempt(MAX_RETRIES);
 });

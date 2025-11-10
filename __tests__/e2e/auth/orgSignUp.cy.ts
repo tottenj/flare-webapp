@@ -14,11 +14,24 @@ function getOrgSignUpInputs() {
     otherProof: () => cy.get("[data-cy='other-input']"),
   };
 }
+
+function getOrgFileInputs() {
+  return {
+    instagram: () => cy.get("[data-cy='instagram-file-input']"),
+  };
+}
+
 function getProofOfOwnershipInputs() {
   return cy
     .get('label')
     .filter((_, el) => el.textContent?.includes('Proof of Ownership') === true)
     .find('input');
+}
+
+function orgsignUpFillFiles() {
+  const { instagram } = getOrgFileInputs();
+
+  instagram().selectFile('cypress/fixtures/stockEvent.jpg', { force: true });
 }
 
 function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, shouldSubmit?: boolean) {
@@ -51,21 +64,22 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
   shouldSubmit && submit().click({ force: true });
 }
 
-
 describe('check for page components', () => {
   beforeEach(() => {
-    cy.visit('flare-signup')
-  }) 
-
+    cy.visit('flare-signup');
+  });
 
   it('tests that page compoents load', () => {
-    getProofOfOwnershipInputs()
-  })
-})
+    getProofOfOwnershipInputs();
+  });
+});
 
 describe('success flow', () => {
-  beforeEach(() => {
+  before(() => {
     cy.clearAllEmulators();
+  });
+
+  beforeEach(() => {
     cy.visit('/flare-signup');
     cy.clearForm();
   });
@@ -95,16 +109,13 @@ describe('success flow', () => {
   });
 
   it('Ensures user info is added', () => {
-    cy.userExists(createOrg.email,createOrg.password)
-    cy.prismaFind("user", {email: createOrg.email}).then((user) => {
-      expect(user).not.to.be.null
+    cy.userExists(createOrg.email, createOrg.password);
+    cy.prismaFind('user', { email: createOrg.email }).then((user) => {
+      expect(user).not.to.be.null;
       expect(user.account_type).to.equal('org');
-    })
-  })
-
-
+    });
+  });
 });
-
 
 describe('Unsuccessful Flow', () => {
   beforeEach(() => {

@@ -47,7 +47,7 @@ declare namespace Cypress {
       loc: string = verifiedOrg.location.name,
       contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
     ): Chainable<void>;
-    userExists(email: string, password: string, org: boolean = true): Chainable<Response<any>>;
+    userExists(email: string, password: string, org: boolean = true): Chainable<any>;
     waitForFirestoreEmulator(): Chainable<void>;
     waitForAuthEmulator(): Chainable<void>;
     waitForEmulators(): Chainable<void>;
@@ -58,6 +58,7 @@ declare namespace Cypress {
     resetAndSeed(): Chainable<void>;
     seedAuthEmulator(): Chainable<void>;
     prismaFind(table: string, where: any): Chainable<any>;
+    getStorageFile(path:string): Chainable<any>;
   }
 
 

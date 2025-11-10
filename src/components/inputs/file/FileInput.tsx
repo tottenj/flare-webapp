@@ -25,6 +25,7 @@ export default function FileInput({
       >
         {fileAdded ? <FontAwesomeIcon icon={faCheck} /> : buttonText}
         <input
+          data-cy={`${name}-input`}
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (file) onChange(file);
