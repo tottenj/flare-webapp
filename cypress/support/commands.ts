@@ -296,8 +296,6 @@ Cypress.Commands.add('userExists', (email: string, password: string, org: boolea
   return cy.loginUser(email, password).then((resp) => {
     expect(resp.body.localId).to.not.be.null;
     expect(resp.body.localId).to.not.be.undefined;
-    const col = org ? 'Organizations' : 'Users';
-
     return resp.body;
   });
 });
@@ -427,4 +425,9 @@ Cypress.Commands.add('seedAuthEmulator', () => {
     expect(response.status).to.eq(200);
     expect(response.body).to.have.property('success', true);
   });
+});
+
+
+Cypress.Commands.add('prismaFind', (table, where) => {
+  return cy.task('prismaFind', { table, where });
 });

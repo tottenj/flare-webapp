@@ -56,7 +56,8 @@ declare namespace Cypress {
     fillSelect(label: string, option: string): Chainable<void>;
     fillTypedSelect(label: string, option: string): Chainable<void>;
     resetAndSeed(): Chainable<void>;
-    seedAuthEmulator(): Chainable<void>
+    seedAuthEmulator(): Chainable<void>;
+    prismaFind(table: string, where: any): Chainable<any>;
   }
 
 

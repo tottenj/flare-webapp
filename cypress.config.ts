@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env' });
 import { defineConfig } from 'cypress';
 import { execSync } from 'child_process';
+import { PrismaClient } from '@prisma/client';
 
 export default defineConfig({
   projectId: 'f7wjfu',
@@ -13,6 +14,13 @@ export default defineConfig({
       openMode: 0,
     },
     setupNodeEvents(on, config) {
+       const prisma = new PrismaClient({
+         datasources: {
+           db: {
+             url: process.env.DATABASE_URL || config.env.DATABASE_URL,
+           },
+         },
+       });
       on('task', {
         'db:resetAndSeed': () => {
           console.log('Resetting and seeding the database...');
@@ -37,7 +45,10 @@ export default defineConfig({
           });
           return null;
         },
-        
+
+        async prismaFind({ table, where }) {
+          return prisma[table].findFirst({ where });
+        },
       });
     },
     baseUrl: 'http://localhost:3000',

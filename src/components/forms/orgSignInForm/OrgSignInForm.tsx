@@ -22,8 +22,7 @@ export default function OrgSignInForm() {
   const [passStatus, setPassStatus] = useState(false);
   const router = useRouter();
   const { validFiles, handleFileChange } = useFileChange();
-  const unifiedUser = useUnifiedUser();
-
+ 
   async function uploadFilesToFirebase(orgId: string) {
     for (const { key, file } of validFiles) {
       const path = `Organizations/${orgId}/${key}`;

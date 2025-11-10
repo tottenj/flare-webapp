@@ -51,6 +51,18 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
   shouldSubmit && submit().click({ force: true });
 }
 
+
+describe('check for page components', () => {
+  beforeEach(() => {
+    cy.visit('flare-signup')
+  }) 
+
+
+  it('tests that page compoents load', () => {
+    getProofOfOwnershipInputs()
+  })
+})
+
 describe('success flow', () => {
   beforeEach(() => {
     cy.clearAllEmulators();
@@ -65,7 +77,6 @@ describe('success flow', () => {
 
     orgSignUpFillForm();
 
-    // Flag should be set
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
@@ -74,19 +85,24 @@ describe('success flow', () => {
     cy.wait('@signup');
     cy.wait('@deleteLoginToken');
 
-    // ✅ Wait for URL to update (App Router does NOT fetch "GET /confirmation")
     cy.location('pathname', { timeout: 60000 }).should('eq', '/confirmation');
 
-    // ✅ After navigation, session flag SHOULD be cleared
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
 
-    // Validate page content
-
-    
     cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
   });
+
+  it('Ensures user info is added', () => {
+    cy.userExists(createOrg.email,createOrg.password)
+    cy.prismaFind("user", {email: createOrg.email}).then((user) => {
+      expect(user).not.to.be.null
+      expect(user.account_type).to.equal('org');
+    })
+  })
+
+
 });
 
 
