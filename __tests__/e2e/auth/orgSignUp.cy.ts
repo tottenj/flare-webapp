@@ -59,12 +59,31 @@ describe('success flow', () => {
     cy.clearForm()
   })
 
-  it("Tests success flow", () => {
-    orgSignUpFillForm()
-    cy.wait(60000)
-   cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
+  it('Tests success flow', () => {
+    orgSignUpFillForm();
 
-  })
+    // Wait until the app triggers manual login progress
+    cy.window().should((win) => {
+      expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
+    });
+
+    // Wait for the API flows
+    cy.wait('@loginToken');
+    cy.wait('@signup');
+    cy.wait('@deleteLoginToken');
+
+    // Make sure login flag is cleared
+    cy.window().should((win) => {
+      expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
+    });
+
+    // ✅ The real fix: wait for navigation and compilation
+    cy.location('pathname', { timeout: 60000 }).should('eq', '/confirmation');
+
+    // Now check content
+    cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
+  });
+
 })
 
 
