@@ -94,72 +94,64 @@ jobs:
       DATABASE_URL: postgresql://test:tester@localhost:5434/flare_test?schema=public
 
       NEXT_PUBLIC_APP_URL: http://localhost:3000
+      FUNCTIONS_URL: http://127.0.0.1:5001
 
-      FUNCTIONS_URL: "http://127.0.0.1:5001"
-      FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099"
-      FIRESTORE_EMULATOR_HOST: "127.0.0.1:8080"
-      FIREBASE_STORAGE_EMULATOR_HOST: "127.0.0.1:9199"
-      STORAGE_EMULATOR_HOST: "127.0.0.1:9199"
+      FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
+      FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
+      FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
+      STORAGE_EMULATOR_HOST: 127.0.0.1:9199
+
+      INTERNAL_API_KEY: 4d522cbb22ae4ad19fe69211623a3a6bf8e9c098a16593b0ca0e0c0359c6f2d0
+
+      NEXT_PUBLIC_USE_PLACES_MOCK: true
+      NEXT_DISABLE_FAST_REFRESH: true
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_TURBOPACK: 0
+      NEXT_PUBLIC_MODE: test
+      MODE: test
 
       NEXT_PUBLIC_FIREBASE_API_KEY: "AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU"
-      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: "flare-7091a.firebaseapp.com"
       NEXT_PUBLIC_FIREBASE_PROJECT_ID: "flare-7091a"
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: "flare-7091a.firebaseapp.com"
       NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: "flare-7091a.firebasestorage.app"
       NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: "192465328955"
       NEXT_PUBLIC_FIREBASE_APP_ID: "1:192465328955:web:108bbe86f58f4bbcb2f51e"
-
-      INTERNAL_API_KEY: "4d522cbb22ae4ad19fe69211623a3a6bf8e9c098a16593b0ca0e0c0359c6f2d0"
-      FUNCTIONS_EMULATOR: "true"
-
-
-      NEXT_PUBLIC_USE_PLACES_MOCK: true
-      NEXT_PUBLIC_MODE: test
+      NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: "G-JR9NDGTPV9"
 
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
-      - run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      - name: Build Functions
+      - name: Install & build Firebase Functions
         working-directory: functions
         run: |
           npm ci
           npm run build
 
-      - name: Start Postgres
+      - name: Start Postgres (Docker)
         run: |
           docker compose -f compose.test.yaml up -d
-          until docker exec $(docker ps -qf "name=flare-test") pg_isready -U test; do sleep 2; done
+          echo "Waiting for Postgres..."
+          until docker exec $(docker ps -qf "name=flare-test") pg_isready -U test; do
+            sleep 2
+          done
 
-      - name: Prepare DB
+      - name: Apply Prisma migrations + seed DB
         run: npm run e2e:setupci
 
-      # ✅ Start Next.js and wait for it
-      - name: Start Next.js
-        run: |
-          npm run next:start-ci > next.log 2>&1 &
-          npm run wait:next
-
-      # ✅ Run emulators + warm pages + Cypress
-      - name: Run E2E tests
-        run: |
-          firebase emulators:exec --only auth,functions,storage --project flare-7091a \
-          "npm run warm-and-test"
-
-      - name: Upload Cypress Videos
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-videos
-          path: reports/cypress/videos
+      - name: Run Full E2E (Next.js + Firebase + Cypress)
+        run: npm run test:e2e:ci
 
       - name: Upload Cypress Screenshots
         if: failure()
@@ -168,12 +160,13 @@ jobs:
           name: cypress-screenshots
           path: reports/cypress/screenshots
 
-      - name: Print Next.js server logs
-        if: failure()
-        run: |
-          echo "===== NEXT SERVER LOGS ====="
-          cat next.log || echo "No logs found"
-
-
-      - run: docker compose -f compose.test.yaml down -v
+      - name: Upload Cypress Videos
         if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: reports/cypress/videos
+
+      - name: Teardown Docker
+        if: always()
+        run: docker compose -f compose.test.yaml down -v

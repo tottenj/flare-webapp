@@ -52,16 +52,26 @@
     "next:start-ci": "next dev",
 
 
-    "wait:next": "npx wait-on tcp:3000",
-
-
-    "warm-pages": "curl -s http://localhost:3000/flare-signup > /dev/null && curl -s http://localhost:3000/confirmation > /dev/null && curl -s http://localhost:3000/api/loginToken > /dev/null",
-
-
+ 
+ 
     "ci:test:e2e": "npm run cypress:run",
 
 
-    "warm-and-test": "npm run warm-pages && npm run ci:test:e2e"
+    "wait:next": "npx wait-on http://localhost:3000",
+
+
+    "warm-pages": "curl -s http://localhost:3000/flare-signup > /dev/null && curl -s http://localhost:3000/confirmation > /dev/null",
+
+
+   
+
+   
+
+
+    "test:e2e:ci": "npm run e2e:setupci && concurrently -k -n 'EMULATORS,APP,WAIT,CYPRESS' -c 'blue.bold,green.bold,yellow.bold,magenta.bold' \"npm run emulators:start\" \"npm run next:start-ci\" \"npm run wait-and-test-ci\" \"\"",
+
+
+    "wait-and-test-ci": "node scripts/wait-for-emulators.js && npm run wait:next && npm run warm-pages && npm run cypress:run"
   },
 
 
