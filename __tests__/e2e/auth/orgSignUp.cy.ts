@@ -54,18 +54,18 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
 describe('success flow', () => {
   beforeEach(() => {
     cy.clearAllEmulators();
-
-    cy.intercept('POST', '/api/loginToken').as('loginToken');
-    cy.intercept('POST', '/api/auth/signUp').as('signup');
-    cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
-
     cy.visit('/flare-signup');
     cy.clearForm();
   });
 
   it('Tests success flow', () => {
+    cy.intercept('POST', '/api/loginToken').as('loginToken');
+    cy.intercept('POST', '/api/auth/signUp').as('signup');
+    cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
+
     orgSignUpFillForm();
 
+    // Flag should be set
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
@@ -74,15 +74,19 @@ describe('success flow', () => {
     cy.wait('@signup');
     cy.wait('@deleteLoginToken');
 
+    // ✅ Wait for URL to update (App Router does NOT fetch "GET /confirmation")
+    cy.location('pathname', { timeout: 60000 }).should('eq', '/confirmation');
+
+    // ✅ After navigation, session flag SHOULD be cleared
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
 
-    cy.location('pathname', { timeout: 60000 }).should('eq', '/confirmation');
-
+    // Validate page content
     cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
   });
 });
+
 
 describe('Unsuccessful Flow', () => {
   beforeEach(() => {
