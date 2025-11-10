@@ -83,6 +83,8 @@ describe('success flow', () => {
     });
 
     // Validate page content
+
+    
     cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
   });
 });
