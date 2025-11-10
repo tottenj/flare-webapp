@@ -95,6 +95,9 @@ describe('success flow', () => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
+
+
+    
     cy.wait('@loginToken');
     cy.wait('@signup');
     cy.wait('@deleteLoginToken');
