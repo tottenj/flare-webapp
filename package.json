@@ -68,7 +68,7 @@
    
 
 
-   "test:e2e:ci": "npm run e2e:setupci && concurrently -k -n 'EMULATORS,APP,WAIT,CYPRESS' -c 'blue.bold,green.bold,yellow.bold,magenta.bold' \"npm run emulators:start\" \"npm run next:start-ci\" \"npm run wait-and-test-ci\"",
+   "test:e2e:ci": "npm run e2e:setupci && concurrently -k --success first -n 'EMULATORS,APP,WAIT,CYPRESS' -c 'blue.bold,green.bold,yellow.bold,magenta.bold' \"npm run emulators:start\" \"npm run next:start-ci\" \"npm run wait-and-test-ci\"",
 
 
     "wait-and-test-ci": "node scripts/wait-for-emulators.js && npm run wait:next && npm run warm-pages && npm run cypress:run"
