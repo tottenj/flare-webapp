@@ -51,41 +51,38 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
   shouldSubmit && submit().click({ force: true });
 }
 
-
 describe('success flow', () => {
   beforeEach(() => {
-    cy.visit("/flare-signup")
-    cy.clearAllEmulators()
-    cy.clearForm()
-  })
+    cy.clearAllEmulators();
+
+    cy.intercept('POST', '/api/loginToken').as('loginToken');
+    cy.intercept('POST', '/api/auth/signUp').as('signup');
+    cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
+
+    cy.visit('/flare-signup');
+    cy.clearForm();
+  });
 
   it('Tests success flow', () => {
     orgSignUpFillForm();
 
-    // Wait until the app triggers manual login progress
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
-    // Wait for the API flows
     cy.wait('@loginToken');
     cy.wait('@signup');
     cy.wait('@deleteLoginToken');
 
-    // Make sure login flag is cleared
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
 
-    // ✅ The real fix: wait for navigation and compilation
     cy.location('pathname', { timeout: 60000 }).should('eq', '/confirmation');
 
-    // Now check content
     cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
   });
-
-})
-
+});
 
 describe('Unsuccessful Flow', () => {
   beforeEach(() => {
