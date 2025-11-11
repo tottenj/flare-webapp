@@ -113,11 +113,12 @@ describe('success flow', () => {
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
-    
+
 
     // ✅ Now check UI text (retry-safe)
     cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
   });
+  
 
   it('Ensures user info is added', () => {
     cy.userExists(createOrg.email, createOrg.password);
