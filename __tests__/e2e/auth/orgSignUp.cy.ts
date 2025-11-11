@@ -98,6 +98,8 @@ describe('success flow', () => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
+    
+
     // ✅ Wait for ALL backend flows to fire
     cy.wait('@loginToken', { timeout: 60000 });
     cy.wait('@signup', { timeout: 60000 });
@@ -119,7 +121,7 @@ describe('success flow', () => {
 
 
 
-  
+
 
 
 
