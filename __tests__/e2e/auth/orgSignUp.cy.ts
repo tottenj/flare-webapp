@@ -80,15 +80,16 @@ describe('success flow', () => {
   });
 
   beforeEach(() => {
+    cy.intercept('POST', '/api/loginToken').as('loginToken');
+    cy.intercept('POST', '/api/auth/signUp').as('signup');
+    cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
     cy.visit('/flare-signup');
     cy.clearForm();
   });
 
   it('Tests success flow', () => {
     // ✅ Install intercepts BEFORE any UI events
-    cy.intercept('POST', '/api/loginToken').as('loginToken');
-    cy.intercept('POST', '/api/auth/signUp').as('signup');
-    cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
+    
 
     // ✅ Fill out the form & submit
     orgSignUpFillForm();
