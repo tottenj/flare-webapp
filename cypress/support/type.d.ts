@@ -59,7 +59,10 @@ declare namespace Cypress {
     seedAuthEmulator(): Chainable<void>;
     prismaFind(table: string, where: any): Chainable<any>;
     getStorageFile(path:string): Chainable<any>;
+    ensurePageLoaded(path: string): Chainable<void> 
+    waitForNextApi(routeAlias:string): Chainable<void>
   }
+  
 
 
   interface cypressUser{

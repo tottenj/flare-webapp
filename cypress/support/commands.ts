@@ -463,3 +463,14 @@ Cypress.Commands.add('getStorageFile', (path: string) => {
 
   return attempt(MAX_RETRIES);
 });
+
+
+
+Cypress.Commands.add('ensurePageLoaded', (path) => {
+  cy.location('pathname', { timeout: 60000 }).should('eq', path);
+});
+
+
+Cypress.Commands.add('waitForNextApi', (routeAlias) => {
+  cy.wait(routeAlias, { timeout: 60000 }).its('response.statusCode').should('be.oneOf', [200, 201]);
+});

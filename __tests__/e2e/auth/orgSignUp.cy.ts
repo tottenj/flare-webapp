@@ -99,15 +99,12 @@ describe('success flow', () => {
     });
 
     // ✅ Wait for ALL backend flows to fire
-    cy.wait('@loginToken', { timeout: 60000 });
-    cy.wait('@signup', { timeout: 60000 });
-    cy.wait('@deleteLoginToken', { timeout: 60000 });
+    cy.waitForNextApi('@loginToken');
+    cy.waitForNextApi('@signup');
+    cy.waitForNextApi('@deleteLoginToken');
 
     // ✅ Wait FOR NAVIGATION FIRST
-    cy.location('pathname', { timeout: 60000 }).should('eq', '/confirmation');
-
-    // ✅ Now wait for React to finish hydrating
-    cy.get('body').should('be.visible');
+    cy.ensurePageLoaded("/confirmation")
 
     // ✅ Check session cleared AFTER hydration
     cy.window().should((win) => {
@@ -117,8 +114,6 @@ describe('success flow', () => {
     // ✅ Now check UI text (retry-safe)
     cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
   });
-
-  
 
   it('Ensures user info is added', () => {
     cy.userExists(createOrg.email, createOrg.password);
