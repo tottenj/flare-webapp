@@ -118,6 +118,8 @@ describe('success flow', () => {
     cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
   });
 
+  
+
   it('Ensures user info is added', () => {
     cy.userExists(createOrg.email, createOrg.password);
     cy.prismaFind('user', { email: createOrg.email }).then((user) => {
