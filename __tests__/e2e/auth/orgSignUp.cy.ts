@@ -98,15 +98,14 @@ describe('success flow', () => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
-    
-
     // ✅ Wait for ALL backend flows to fire
     cy.wait('@loginToken', { timeout: 60000 });
     cy.wait('@signup', { timeout: 60000 });
     cy.wait('@deleteLoginToken', { timeout: 60000 });
 
     // ✅ Wait FOR NAVIGATION FIRST
-    cy.ensurePageLoaded('/confirmation');
+    cy.location('pathname', { timeout: 60000 }).should('eq', '/confirmation');
+
     // ✅ Now wait for React to finish hydrating
     cy.get('body').should('be.visible');
 
@@ -114,16 +113,11 @@ describe('success flow', () => {
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
+    
 
     // ✅ Now check UI text (retry-safe)
     cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
   });
-
-
-
-
-
-
 
   it('Ensures user info is added', () => {
     cy.userExists(createOrg.email, createOrg.password);
