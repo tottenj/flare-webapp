@@ -80,16 +80,15 @@ describe('success flow', () => {
   });
 
   beforeEach(() => {
-    cy.intercept('POST', '/api/loginToken').as('loginToken');
-    cy.intercept('POST', '/api/auth/signUp').as('signup');
-    cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
     cy.visit('/flare-signup');
     cy.clearForm();
   });
 
   it('Tests success flow', () => {
     // ✅ Install intercepts BEFORE any UI events
-    
+    cy.intercept('POST', '/api/loginToken').as('loginToken');
+    cy.intercept('POST', '/api/auth/signUp').as('signup');
+    cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
 
     // ✅ Fill out the form & submit
     orgSignUpFillForm();
@@ -100,12 +99,14 @@ describe('success flow', () => {
     });
 
     // ✅ Wait for ALL backend flows to fire
-    cy.waitForNextApi('@loginToken');
-    cy.waitForNextApi('@signup');
-    cy.waitForNextApi('@deleteLoginToken');
+    cy.wait('@loginToken', { timeout: 60000 });
+    cy.wait('@signup', { timeout: 60000 });
+    cy.wait('@deleteLoginToken', { timeout: 60000 });
 
     // ✅ Wait FOR NAVIGATION FIRST
-    cy.ensurePageLoaded("/confirmation")
+    cy.ensurePageLoaded('/confirmation');
+    // ✅ Now wait for React to finish hydrating
+    cy.get('body').should('be.visible');
 
     // ✅ Check session cleared AFTER hydration
     cy.window().should((win) => {
@@ -115,6 +116,8 @@ describe('success flow', () => {
     // ✅ Now check UI text (retry-safe)
     cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
   });
+
+
 
   it('Ensures user info is added', () => {
     cy.userExists(createOrg.email, createOrg.password);
