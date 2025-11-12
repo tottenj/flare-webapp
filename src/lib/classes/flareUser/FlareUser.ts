@@ -1,6 +1,6 @@
 import { FlareUser as FlareUserModel } from '@/app/generated/prisma';
 import { CreateUserDto } from '@/lib/prisma/dtos/UserDto';
-import userService from '@/lib/prisma/services/userService';
+import userService from '@/lib/prisma/services/UserService/userService';
 import FlareUserService from '@/lib/prisma/services/FlareUserService/flareUserService';
 
 export default class FlareUser {

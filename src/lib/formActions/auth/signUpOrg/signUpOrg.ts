@@ -31,17 +31,10 @@ export default async function signUpOrg(formData: FormData): Promise<ActionRespo
     body: JSON.stringify({ idToken: data.idToken }),
   });
 
-
-  
-
-
-
   if (!verifyResponse.ok) {
     const resp = await verifyResponse.text()
-    console.log(resp)
     throw new Error('Unauthorized');
   }
-
 
   const orgData: createOrgDtoType = {
     location: {

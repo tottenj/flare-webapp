@@ -1,8 +1,8 @@
 import FlareOrg from './FlareOrg';
-import userService from '@/lib/prisma/services/userService';
+import userService from '@/lib/prisma/services/UserService/userService';
 import { expect } from '@jest/globals';
 
-jest.mock('@/lib/prisma/services/userService', () => {
+jest.mock('@/lib/prisma/services/UserService/userService', () => {
   return jest.fn().mockImplementation(() => ({
     createUser: jest.fn(),
   }));
@@ -19,7 +19,7 @@ describe('FlareOrg.create', () => {
     const userData = {
       email: 'test@example.com',
       password: '123',
-      account_type: 'org' as "org" | "user",
+      account_type: 'org' as 'org' | 'user',
     };
 
     const orgData = {
@@ -54,7 +54,7 @@ describe('FlareOrg.create', () => {
     const userData = {
       email: 'user2@example.com',
       password: 'abc',
-      account_type: 'user' as "org" | "user", // should be overwritten
+      account_type: 'user' as 'org' | 'user', // should be overwritten
     };
 
     const orgData = {
