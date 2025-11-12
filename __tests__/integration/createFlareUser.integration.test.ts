@@ -26,6 +26,7 @@ describe('Flare User Integration', () => {
     expect(flareUser).not.toBeNull();
   });
 
+  
   it('throws error if invalid data', async () => {
     await expect(FlareUser.create({ account_type: 'org' } as any)).rejects.toThrow('Invalid Data');
   });
