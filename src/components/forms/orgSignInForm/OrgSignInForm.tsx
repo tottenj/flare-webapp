@@ -8,7 +8,6 @@ import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import { storage } from '@/lib/firebase/auth/configs/clientApp';
 import { addFile } from '@/lib/firebase/storage/storageOperations';
 import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
-import useUnifiedUser from '@/lib/hooks/useUnifiedUser';
 import handleSignUpSubmit from '@/lib/utils/authentication/handleSignUpSubmit';
 import { orgSocials } from '@/lib/utils/text/text';
 import { useRouter } from 'next/navigation';
