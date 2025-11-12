@@ -23,6 +23,16 @@ export default async (): Promise<Config> => {
     testPathIgnorePatterns: ['/node_modules/', '/app/generated/prisma/'],
   })();
 
+  const apiConfig = await createJestConfig({
+    ...sharedProjectConfig,
+    displayName: 'api',
+    testMatch: ['<rootDir>/**/*.api.test.[jt]s?(x)'],
+    testEnvironment: 'node',
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.api.ts'],
+    coveragePathIgnorePatterns: ['node_modules', '/src/app/generated/prisma/'],
+    testPathIgnorePatterns: ['/node_modules/', '/app/generated/prisma/'],
+  })();
+
   const integrationConfig = await createJestConfig({
     ...sharedProjectConfig,
     displayName: 'integration',
@@ -39,6 +49,6 @@ export default async (): Promise<Config> => {
     reporters: ['default'],
    
 
-    projects: [unitConfig, integrationConfig],
+    projects: [unitConfig, apiConfig, integrationConfig],
   };
 };
