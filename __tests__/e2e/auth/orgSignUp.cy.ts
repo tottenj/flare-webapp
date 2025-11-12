@@ -74,54 +74,38 @@ describe('check for page components', () => {
   });
 });
 
-describe('success flow', () => {
-  before(() => {
-    cy.clearAllEmulators();
-  });
-
+describe('Org signup flow', () => {
   beforeEach(() => {
+    cy.clearAllEmulators();
+    cy.intercept('POST', '/api/loginToken').as('loginToken');
+    cy.intercept('POST', '/api/auth/signUp').as('signup');
+    cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
+
     cy.visit('/flare-signup');
     cy.clearForm();
   });
 
   it('Tests success flow', () => {
-    // ✅ Install intercepts BEFORE any UI events
-    cy.intercept('POST', '/api/loginToken').as('loginToken');
-    cy.intercept('POST', '/api/auth/signUp').as('signup');
-    cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
-
-    // ✅ Fill out the form & submit
     orgSignUpFillForm();
 
-    // ✅ Ensure flag was set
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
-    // ✅ Wait for ALL backend flows to fire
-    cy.wait('@loginToken', { timeout: 60000 });
-    cy.wait('@signup', { timeout: 60000 });
-    cy.wait('@deleteLoginToken', { timeout: 60000 });
+    cy.wait('@loginToken');
+    cy.wait('@signup');
+    cy.wait('@deleteLoginToken');
 
-    // ✅ Wait FOR NAVIGATION FIRST
     cy.location('pathname', { timeout: 60000 }).should('eq', '/confirmation');
-
-    // ✅ Now wait for React to finish hydrating
-    cy.get('body').should('be.visible');
-
-    // ✅ Check session cleared AFTER hydration
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
     });
 
-
-    // ✅ Now check UI text (retry-safe)
     cy.contains('Thank You For Signing Up!', { timeout: 60000 }).should('be.visible');
+    cy.userExists(createOrg.email, createOrg.password);
   });
-  
 
   it('Ensures user info is added', () => {
-    cy.userExists(createOrg.email, createOrg.password);
     cy.prismaFind('user', { email: createOrg.email }).then((user) => {
       expect(user).not.to.be.null;
       expect(user.account_type).to.equal('org');
