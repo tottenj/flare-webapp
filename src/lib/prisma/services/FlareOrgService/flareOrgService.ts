@@ -17,7 +17,7 @@ export default class FlareOrgService extends BaseService<flareOrgDal, keys> {
     description: true,
   };
 
-  async createOrg(org: createOrgDtoType, tx?: Prisma.TransactionClient, context?: FlareContext) {
+  async create(org: createOrgDtoType, tx?: Prisma.TransactionClient, context?: FlareContext) {
     const sanitized = createOrgDBSchema.safeParse(org);
     if (!sanitized.success) throw new Error('Invalid Organization');
     const uid = context?.uid ?? (await requireAuth()).uid;
