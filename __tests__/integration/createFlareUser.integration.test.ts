@@ -36,7 +36,7 @@ describe('Flare User Integration', () => {
     (isUsersAccount as jest.Mock).mockReturnValue(false);
 
     const flareUserService = new FlareUserService();
-    await expect(flareUserService.createFlareUser('other-id')).rejects.toThrow(
+    await expect(flareUserService.create('other-id')).rejects.toThrow(
       'Cannot create account'
     );
   });

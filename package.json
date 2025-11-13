@@ -137,6 +137,7 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "prisma": "^6.17.1",
     "storybook": "^9.1.8",
+    "storybook-addon-pseudo-states": "^9.1.16",
     "tailwindcss": "^4",
     "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",

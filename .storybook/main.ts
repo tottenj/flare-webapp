@@ -12,6 +12,7 @@ const config: StorybookConfig = {
     '@chromatic-com/storybook',
     '@storybook/addon-vitest',
     '@storybook/addon-docs',
+    'storybook-addon-pseudo-states'
   ],
   framework: {
     name: '@storybook/nextjs',
@@ -39,11 +40,10 @@ const config: StorybookConfig = {
       '__mocks__/next/navigation.ts'
     );
 
-    config.resolve.alias['src/lib/firebase/auth/configs'] = path.resolve(__dirname, '__mocks__/lib/firebase/auth/configs/getFirestoreFromServer')
-
-  
-
-
+    config.resolve.alias['src/lib/firebase/auth/configs'] = path.resolve(
+      __dirname,
+      '__mocks__/lib/firebase/auth/configs/getFirestoreFromServer'
+    );
 
     return config;
   },

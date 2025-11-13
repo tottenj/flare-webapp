@@ -58,6 +58,22 @@ export const small: Story = {
   },
 };
 
+export const hovered: Story = {
+  parameters: {
+    pseudo: {
+      hover: true,
+    },
+  },
+  args: {
+    text: 'Submit',
+    type: 'submit',
+    styleOver: undefined,
+    size: 'full',
+    action: undefined,
+    click: undefined,
+  },
+};
+
 
 export const disabled: Story = {
   args: {

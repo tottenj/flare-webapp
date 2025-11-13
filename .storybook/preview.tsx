@@ -1,9 +1,9 @@
 import type { Preview } from '@storybook/nextjs';
 //@ts-ignore
-import '../src/app/globals.css'
+import '../src/app/globals.css';
 import MockAuthProvider from './__mocks__/MockAuthProvider';
 import { initialize } from 'msw-storybook-addon';
-import {sb} from "storybook/test"
+import { sb } from 'storybook/test';
 
 initialize();
 
@@ -11,12 +11,13 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <MockAuthProvider>
-        <Story/>
+        <div className='w-full h-full flex justify-center'>
+          <Story />
+        </div>
       </MockAuthProvider>
-    )
+    ),
   ],
   parameters: {
-
     backgrounds: {
       values: [
         { name: 'light', value: '#fff' },
