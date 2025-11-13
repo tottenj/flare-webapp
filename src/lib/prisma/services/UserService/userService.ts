@@ -31,7 +31,7 @@ export default class userService extends BaseService<UserDal, UserKeys> {
         const { account_type, id } = result;
         if (account_type === 'user') {
           const flareUserService = new FlareUserService();
-          await flareUserService.createFlareUser(id, tx, { uid });
+          await flareUserService.create(id, tx, { uid });
         } else if (account_type === 'org' && org) {
           const flareOrgService = new FlareOrgService();
           await flareOrgService.create(org, tx);

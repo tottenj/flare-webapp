@@ -28,7 +28,7 @@ describe('Flare User Service', () => {
     (isUsersAccount as jest.Mock).mockReturnValue(true);
 
     //act
-    await service.createFlareUser('mock-uid');
+    await service.create('mock-uid');
 
     //assert
     expect(requireAuth).toHaveBeenCalled();
@@ -45,14 +45,14 @@ describe('Flare User Service', () => {
     (requireAuth as jest.Mock).mockResolvedValue({ uid: 'mock-uid' });
     (isUsersAccount as jest.Mock).mockReturnValue(false);
 
-    await expect(service.createFlareUser('other-id')).rejects.toThrow('Cannot create account');
+    await expect(service.create('other-id')).rejects.toThrow('Cannot create account');
   });
 
   it('uses context.uid if provided (skips requireAuth)', async () => {
     const context = { uid: 'context-uid' };
     (isUsersAccount as jest.Mock).mockReturnValue(true);
 
-    await service.createFlareUser('context-uid', undefined, context);
+    await service.create('context-uid', undefined, context);
 
     expect(requireAuth).not.toHaveBeenCalled();
     expect(isUsersAccount).toHaveBeenCalledWith('context-uid', 'context-uid');
@@ -63,7 +63,7 @@ describe('Flare User Service', () => {
     (requireAuth as jest.Mock).mockRejectedValue(new Error('Unauthorized'));
 
     // Act + Assert
-    await expect(service.createFlareUser('some-id')).rejects.toThrow('Unauthorized');
+    await expect(service.create('some-id')).rejects.toThrow('Unauthorized');
 
     // 🔍 Ensure we never get to DAL layer
     expect(mockCreateFlareUser).not.toHaveBeenCalled();

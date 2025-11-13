@@ -13,7 +13,7 @@ export default class FlareUserService extends BaseService<flareUserDal, keys> {
   }
   publicFields: Partial<Record<'id' | 'user_id', boolean>> = {};
 
-  async createFlareUser(id: string, tx?: Prisma.TransactionClient, context?: FlareContext) {
+  async create(id: string, tx?: Prisma.TransactionClient, context?: FlareContext) {
     const uid = context?.uid ?? (await requireAuth()).uid;
     if (!isUsersAccount(id, uid)) throw new Error('Cannot create account');
     const data: Prisma.FlareUserCreateInput = {
