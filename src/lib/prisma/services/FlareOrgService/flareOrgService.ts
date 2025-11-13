@@ -1,5 +1,5 @@
 import { Prisma } from '@/app/generated/prisma';
-import flareOrgDal from '../../dals/flareOrgDal';
+import flareOrgDal from '../../dals/flareOrgDal/flareOrgDal';
 import BaseService from '../BaseService/baseService';
 
 import LocationService from '../locationService/locationService';

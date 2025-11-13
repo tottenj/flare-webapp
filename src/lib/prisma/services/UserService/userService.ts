@@ -40,7 +40,6 @@ export default class userService extends BaseService<UserDal, UserKeys> {
         }
       });
     } catch (error) {
-      console.log(error);
       throw new Error('Error while creating user');
     }
   }

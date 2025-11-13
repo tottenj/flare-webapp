@@ -56,10 +56,10 @@ describe('User Service', () => {
     });
 
     it('Calls createFlareUser if account type is user', async () => {
-       (service['dal'].createUser as jest.Mock).mockResolvedValue({
-         id: 'user-123',
-         account_type: 'user',
-       });
+      (service['dal'].createUser as jest.Mock).mockResolvedValue({
+        id: 'user-123',
+        account_type: 'user',
+      });
       const fakeIncoming = { email: 'test@gmail.com', account_type: 'user' as 'user' };
 
       const mockCreate = jest.fn();
@@ -78,7 +78,65 @@ describe('User Service', () => {
         }),
         expect.any(Object)
       );
-      expect(mockCreate).toHaveBeenCalledWith("user-123", expect.any(Object), {uid: "mock-uid"});
+      expect(mockCreate).toHaveBeenCalledWith('user-123', expect.any(Object), { uid: 'mock-uid' });
     });
   });
+
+  it('Throws error on incorrect data', async () => {
+    const incorrectIncoming = { email: 'email@gmail.com', account_type: 'blah' };
+    //@ts-expect-error
+    await expect(service.createUser(incorrectIncoming)).rejects.toThrow('Invalid Data');
+  });
+
+  it('Throws if error', async () => {
+    (service['dal'].createUser as jest.Mock).mockRejectedValueOnce(new Error('Boom'));
+    const fakeIncoming = { email: 'test@gmail.com', account_type: 'user' as 'user' };
+    await expect(service.createUser(fakeIncoming)).rejects.toThrow('Error while creating user');
+  });
+
+  it('Throws if created User called with invalid account type', async () => {
+    const fakeIncoming = { email: 'test@gmail.com', account_type: 'user' as 'user' };
+    const mockCreate = jest.fn();
+    (FlareUserService as jest.Mock).mockImplementation(() => ({
+      create: mockCreate,
+    }));
+    (FlareOrgService as jest.Mock).mockImplementation(() => ({
+      create: mockCreate,
+    }));
+
+    (service['dal'].createUser as jest.Mock).mockResolvedValue({
+      id: 'user-123',
+      account_type: 'fake',
+    });
+
+    await expect(service.createUser(fakeIncoming)).rejects.toThrow('Error while creating user');
+    expect(mockCreate).not.toHaveBeenCalled()
+  });
 });
+
+
+describe("deleteUser", () => {
+  let service: userService;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    service = new userService();
+    (requireAuth as jest.Mock).mockResolvedValue({ uid: 'mock-uid' });
+  });
+
+
+  it('deletes the user using the uid from requireAuth', async () => {
+    (requireAuth as jest.Mock).mockResolvedValue({ uid: '123' });
+    const mockDelete = jest.fn();
+    service['dal'].delete = mockDelete;
+
+    await service.deleteUser();
+
+    expect(requireAuth).toHaveBeenCalled();
+    expect(mockDelete).toHaveBeenCalledWith('123');
+  });
+
+
+
+
+})
