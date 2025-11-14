@@ -60,7 +60,7 @@ declare namespace Cypress {
     prismaFind(table: string, where: any): Chainable<any>;
     getStorageFile(path:string): Chainable<any>;
     ensurePageLoaded(path: string): Chainable<void> 
-    waitForNextApi(routeAlias:string): Chainable<void>
+    waitForNextApi(alias:any): Chainable<any>
   }
   
 

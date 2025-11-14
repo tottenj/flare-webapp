@@ -39,7 +39,6 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
     submit,
     orgName,
     email,
-    location,
     password,
     confirmPassword,
     instagram,
@@ -92,9 +91,9 @@ describe('Org signup flow', () => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
-    cy.wait('@loginToken');
-    cy.wait('@signup');
-    cy.wait('@deleteLoginToken');
+    cy.waitForNextApi('@loginToken'); // POST
+    cy.waitForNextApi('@signup'); // POST
+    cy.waitForNextApi('@deleteLoginToken'); // DELETE
 
     cy.location('pathname', { timeout: 60000 }).should('eq', '/confirmation');
     cy.window().should((win) => {

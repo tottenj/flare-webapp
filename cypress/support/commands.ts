@@ -11,11 +11,10 @@ const AUTH_EMULATOR = `http://localhost:9099/identitytoolkit.googleapis.com/v1`;
 const AUTH_ADMIN = `http://localhost:9099/emulator/v1/projects/${projectId}`;
 const FIRESTORE_ADMIN = `http://localhost:8080`;
 const storageBucket = 'flare-7091a.firebasestorage.app';
-const storageEms = `http://127.0.0.1:9199/v0/b/${storageBucket}/o`
-
+const storageEms = `http://127.0.0.1:9199/v0/b/${storageBucket}/o`;
 
 // Helper Functions
- function signUpUser(email: string, password: string, name: string, isOrg: boolean = false) {
+function signUpUser(email: string, password: string, name: string, isOrg: boolean = false) {
   return cy
     .request({
       method: 'POST',
@@ -23,27 +22,6 @@ const storageEms = `http://127.0.0.1:9199/v0/b/${storageBucket}/o`
       body: { email, password, returnSecureToken: true },
     })
     .then((response) => response.body);
-}
-
-function decodeFirestoreDocument(doc: any) {
-  const parseValue = (val: any): any => {
-    if ('stringValue' in val) return val.stringValue;
-    if ('booleanValue' in val) return val.booleanValue;
-    if ('nullValue' in val) return null;
-    if ('integerValue' in val) return parseInt(val.integerValue, 10);
-    if ('doubleValue' in val) return val.doubleValue;
-    if ('geoPointValue' in val) return val.geoPointValue;
-    if ('mapValue' in val) {
-      return decodeFirestoreDocument({ fields: val.mapValue.fields });
-    }
-    if ('arrayValue' in val) {
-      return (val.arrayValue.values || []).map(parseValue);
-    }
-    return val;
-  };
-
-  const fields = doc.fields || {};
-  return Object.fromEntries(Object.entries(fields).map(([k, v]) => [k, parseValue(v)]));
 }
 
 function sendVerifyEmail(idToken: string) {
@@ -212,14 +190,7 @@ Cypress.Commands.add('checkToast', (message: string) => {
 });
 
 Cypress.Commands.add('clearAllEmulators', () => {
-  // cy.clearFirestore();
   cy.clearAuth();
-});
-
-Cypress.Commands.add('clearFirestore', () => {
-  cy.request('POST', `${FIRESTORE_ADMIN}/reset`).then((response) => {
-    expect(response.status).to.eq(200);
-  });
 });
 
 Cypress.Commands.add('clearAuth', () => {
@@ -295,13 +266,21 @@ Cypress.Commands.add(
   }
 );
 
-Cypress.Commands.add('userExists', (email: string, password: string, org: boolean = true) => {
-  return cy.loginUser(email, password).then((resp) => {
-    expect(resp.body.localId).to.not.be.null;
-    expect(resp.body.localId).to.not.be.undefined;
-    return resp.body;
-  });
-});
+Cypress.Commands.add(
+  'userExists',
+  (email: string, password: string, shouldExist: boolean = true) => {
+    return cy.loginUser(email, password).then((resp) => {
+      if (shouldExist) {
+        expect(resp.body.localId).to.not.be.null;
+        expect(resp.body.localId).to.not.be.undefined;
+      } else {
+        expect(resp.body.localId).to.be.null;
+        expect(resp.body.localId).to.be.undefined;
+      }
+      return resp.body;
+    });
+  }
+);
 
 Cypress.Commands.add('waitForAuthEmulator', () => {
   const AUTH_ADMIN = `http://localhost:9099/emulator/v1/projects/${Cypress.env('FIREBASE_PROJECT_ID')}`;
@@ -319,54 +298,10 @@ Cypress.Commands.add('waitForAuthEmulator', () => {
   });
 });
 
-Cypress.Commands.add('waitForFirestoreEmulator', () => {
-  const FIRESTORE_ADMIN = `http://localhost:8080`;
 
-  cy.request({
-    method: 'GET',
-    url: `${FIRESTORE_ADMIN}/documents`,
-    failOnStatusCode: false,
-  }).then((resp) => {
-    if (resp.status !== 200) {
-      cy.wait(500);
-      cy.waitForFirestoreEmulator();
-    }
-  });
-});
 
 Cypress.Commands.add('waitForEmulators', () => {
   cy.waitForAuthEmulator();
-  cy.waitForFirestoreEmulator();
-});
-
-Cypress.Commands.add('getDocument', (path: string, idToken: string) => {
-  const firestoreEmulatorFullUrl = `http://localhost:8080/v1/projects/${projectId}/databases/(default)/documents/${path}`;
-  const headers = { Authorization: `Bearer ${idToken}` };
-
-  const MAX_RETRIES = 10; // always retry 10 times
-  const DELAY_MS = 500; // wait 500ms between retries
-
-  const attempt = (retryCount: number): Cypress.Chainable<any> => {
-    return cy
-      .request({
-        method: 'GET',
-        url: firestoreEmulatorFullUrl,
-        headers,
-        failOnStatusCode: false, // allow 404
-      })
-      .then((resp) => {
-        if (resp.status === 200) {
-          return decodeFirestoreDocument(resp.body); // document exists
-        } else if (retryCount > 0) {
-          cy.wait(DELAY_MS);
-          return attempt(retryCount - 1); // retry
-        } else {
-          throw new Error(`Document at path "${path}" not found after ${MAX_RETRIES} retries`);
-        }
-      });
-  };
-
-  return attempt(MAX_RETRIES);
 });
 
 Cypress.Commands.add(
@@ -416,20 +351,16 @@ Cypress.Commands.add('resetAndSeed', () => {
   cy.task('db:resetAndSeed');
 });
 
-
-
 Cypress.Commands.add('seedAuthEmulator', () => {
   const functionsUrl = `${Cypress.env('FUNCTIONS_URL')}/${Cypress.env('NEXT_PUBLIC_FIREBASE_PROJECT_ID')}/us-central1/seedAuthEmulator`;
 
-
   cy.request('POST', functionsUrl).then((response) => {
-    cy.log(functionsUrl)
-    cy.log(JSON.stringify(response.body))
+    cy.log(functionsUrl);
+    cy.log(JSON.stringify(response.body));
     expect(response.status).to.eq(200);
     expect(response.body).to.have.property('success', true);
   });
 });
-
 
 Cypress.Commands.add('prismaFind', (table, where) => {
   return cy.task('prismaFind', { table, where });
@@ -465,12 +396,11 @@ Cypress.Commands.add('getStorageFile', (path: string) => {
 });
 
 
-
-Cypress.Commands.add('ensurePageLoaded', (path) => {
-  cy.location('pathname', { timeout: 60000 }).should('eq', path);
-});
-
-
-Cypress.Commands.add('waitForNextApi', (routeAlias) => {
-  cy.wait(routeAlias, { timeout: 60000 }).its('response.statusCode').should('be.oneOf', [200, 201]);
+Cypress.Commands.add('waitForNextApi', (alias) => {
+  return cy.wait(alias).then((interception) => {
+    if (!interception.response) {
+      throw new Error(`No response for ${alias}`);
+    }
+    return interception;
+  });
 });
