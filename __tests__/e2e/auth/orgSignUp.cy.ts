@@ -79,7 +79,7 @@ describe('Org signup flow', () => {
     cy.clearAllEmulators();
     cy.intercept('POST', '/api/auth/signUp').as('signup');
     //cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
-
+    cy.intercept('GET', '/confirmation*').as('confirmationPage');
     cy.visit('/flare-signup');
     cy.clearForm();
   });
@@ -93,7 +93,7 @@ describe('Org signup flow', () => {
 
     cy.waitForNextApi('@signup'); // POST
     //cy.waitForNextApi('@deleteLoginToken'); // DELETE
-
+    cy.wait("@confirmation")
     cy.location('pathname', { timeout: 60000 }).should('eq', '/confirmation');
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
