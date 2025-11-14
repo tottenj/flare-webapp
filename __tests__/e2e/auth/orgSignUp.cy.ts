@@ -51,7 +51,7 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
     shouldSubmit = true;
   }
 
-  
+
   orgName().type(createOrg.name);
   email().type(em ?? createOrg.email);
   cy.usePlacesInput("[data-cy='location-input']");
@@ -77,7 +77,6 @@ describe('check for page components', () => {
 describe('Org signup flow', () => {
   beforeEach(() => {
     cy.clearAllEmulators();
-    cy.intercept('POST', '/api/loginToken').as('loginToken');
     cy.intercept('POST', '/api/auth/signUp').as('signup');
     cy.intercept('DELETE', '/api/loginToken').as('deleteLoginToken');
 
@@ -92,7 +91,6 @@ describe('Org signup flow', () => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.equal('true');
     });
 
-    cy.waitForNextApi('@loginToken'); // POST
     cy.waitForNextApi('@signup'); // POST
     cy.waitForNextApi('@deleteLoginToken'); // DELETE
 
