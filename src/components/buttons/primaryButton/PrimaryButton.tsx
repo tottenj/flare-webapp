@@ -10,9 +10,10 @@ export interface primaryButtonProps {
   styleOver?: React.CSSProperties;
   size?: 'small' | 'medium' | 'large' | 'full';
   action?: string | ((formData: FormData) => void | Promise<void>);
-  click?: (e:any) => void | Promise<void>;
-  form?: string
-  datacy?:string
+  click?: (e: any) => void | Promise<void>;
+  form?: string;
+  datacy?: string;
+  state?: 'initial' | 'hover' | 'tap';
 }
 
 export default function PrimaryButton({
@@ -24,7 +25,8 @@ export default function PrimaryButton({
   action,
   click,
   form,
-  datacy
+  datacy,
+  state
 }: primaryButtonProps) {
   const sizeClass = {
     full: 'w-full',
@@ -49,6 +51,7 @@ export default function PrimaryButton({
   return (
     <motion.button
       onClick={click}
+      animate={state}
       formAction={action}
       style={styleOver}
       type={type}

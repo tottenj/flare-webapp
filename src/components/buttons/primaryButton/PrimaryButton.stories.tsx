@@ -59,11 +59,11 @@ export const small: Story = {
 };
 
 export const hovered: Story = {
-  parameters: {
-    pseudo: {
-      hover: true,
-    },
-  },
+  decorators: (Story) => (
+    <div className='w-11/12'>
+      <Story/>
+    </div>
+  ),
   args: {
     text: 'Submit',
     type: 'submit',
@@ -71,8 +71,11 @@ export const hovered: Story = {
     size: 'full',
     action: undefined,
     click: undefined,
+    state: "hover"
   },
 };
+
+
 
 
 export const disabled: Story = {

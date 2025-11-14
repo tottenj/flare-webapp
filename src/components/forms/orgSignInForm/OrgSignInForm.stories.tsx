@@ -6,6 +6,7 @@ import { within } from '@testing-library/dom';
 
 export default {
   component: OrgSignInForm,
+  title: "Forms/Org Sign Up Form",
 } satisfies Meta<typeof OrgSignInForm>;
 
 type Story = StoryObj<typeof OrgSignInForm>;
