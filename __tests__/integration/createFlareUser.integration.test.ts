@@ -16,6 +16,7 @@ describe('Flare User Integration', () => {
       email: 'test@example.com',
       account_type: 'org' as 'user' | 'org',
     };
+    
     await FlareUser.create(userData);
     const user = await prisma.user.findUnique({ where: { id: 'uid-123' } });
     expect(user).not.toBeNull();
