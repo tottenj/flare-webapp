@@ -93,7 +93,7 @@ describe('Org signup flow', () => {
 
     cy.waitForNextApi('@signup'); // POST
     //cy.waitForNextApi('@deleteLoginToken'); // DELETE
-    cy.wait("@confirmation")
+    cy.wait("@confirmationPage")
     cy.location('pathname', { timeout: 60000 }).should('eq', '/confirmation');
     cy.window().should((win) => {
       expect(win.sessionStorage.getItem('manualLoginInProgress')).to.be.null;
