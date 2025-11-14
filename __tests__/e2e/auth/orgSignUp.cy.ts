@@ -51,6 +51,7 @@ function orgSignUpFillForm(em?: string, pass?: string, confPass?: string, should
     shouldSubmit = true;
   }
 
+  
   orgName().type(createOrg.name);
   email().type(em ?? createOrg.email);
   cy.usePlacesInput("[data-cy='location-input']");
