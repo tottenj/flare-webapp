@@ -9,6 +9,7 @@ export interface verifyResponse {
     verified: boolean | null;
     emailVerified: boolean;
   };
+  email?: string;
 }
 
 export default async function requireAuth(requiredClaims?: (keyof verifyResponse['claims'])[]) {
@@ -32,6 +33,7 @@ export default async function requireAuth(requiredClaims?: (keyof verifyResponse
   }
   const result = (await verifyResponse.json()) as verifyResponse;
   if (!result.uid) throw Error('Missing UID');
+  if (!result.email) throw Error('Missing email');
 
   if (requiredClaims?.length) {
     for (const claim of requiredClaims) {
@@ -44,5 +46,6 @@ export default async function requireAuth(requiredClaims?: (keyof verifyResponse
   return {
     uid: result.uid,
     claims: result.claims,
+    email: result.email,
   };
 }

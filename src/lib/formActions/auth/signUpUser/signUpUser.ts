@@ -10,6 +10,7 @@ export default async function signUpUser(formData: FormData): Promise<ActionResp
   const result = convertFormData(createUserSchema, formData);
   if (!result.success)
     return { status: 'error', message: 'Invalid Form Data', errors: zodFieldErrors(result.error) };
+
   const userData: CreateUserDto = { email: result.data.email, account_type: 'user' };
   try {
     await FlareUser.create(userData)

@@ -104,6 +104,7 @@ export const verifySessionCookie = onRequest((req, res) => {
           verified: decoded.verified ?? null,
           emailVerified: decoded.email_verified ?? false,
         },
+        email: decoded.email
       });
     } catch (error) {
       console.error('Verification failed:', error);

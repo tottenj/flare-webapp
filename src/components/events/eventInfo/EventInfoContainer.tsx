@@ -3,7 +3,7 @@ import Event from '@/lib/classes/event/Event';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
 import { getServicesFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import EventInfo from './EventInfo';
-import getUser from '@/lib/firebase/auth/getUser';
+
 
 export default async function EventInfoContainer({ slug }: { slug: string }) {
   const { firestore, storage, currentUser } = await getServicesFromServer();

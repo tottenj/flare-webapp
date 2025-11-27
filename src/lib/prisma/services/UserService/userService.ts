@@ -21,11 +21,12 @@ export default class userService extends BaseService<UserDal, UserKeys> {
 
   async createUser(incoming: CreateUserDto, org?: createOrgDtoType) {
     const parse = CreateDbUserSchema.safeParse(incoming);
+    
     if (!parse.success) throw new Error('Invalid Data');
     const { data } = parse;
     const { uid } = await requireAuth();
+    
 
-    try {
       await prisma.$transaction(async (tx) => {
         const result = await this.dal.createUser({ id: uid, ...data }, tx);
         const { account_type, id } = result;
@@ -39,9 +40,7 @@ export default class userService extends BaseService<UserDal, UserKeys> {
           throw new Error('No Account Type Recived');
         }
       });
-    } catch (error) {
-      throw new Error('Error while creating user');
-    }
+    
   }
 
   async deleteUser() {

@@ -185,7 +185,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/joshtotten/nextjsProjects/flare-webapp/src/app/generated/prisma",
+      "value": "/Users/joshtotten/flare-webapp/src/app/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -199,12 +199,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/joshtotten/nextjsProjects/flare-webapp/prisma/schema.prisma",
+    "sourceFilePath": "/Users/joshtotten/flare-webapp/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../../prisma",
   "clientVersion": "6.17.1",
@@ -213,6 +212,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {

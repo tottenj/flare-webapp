@@ -1,21 +1,23 @@
 import { FlareUser as FlareUserModel } from '@/app/generated/prisma';
-import { CreateUserDto } from '@/lib/prisma/dtos/UserDto';
-import userService from '@/lib/prisma/services/UserService/userService';
-import FlareUserService from '@/lib/prisma/services/FlareUserService/flareUserService';
+import User from '../user/User';
+import { User as UserModel } from '@/app/generated/prisma';
 
 export default class FlareUser {
-  private service: FlareUserService;
-  private data: Partial<FlareUserModel>;
+  private id: string;
+  uid: string;
+  user: User;
 
-  constructor(data: FlareUserModel) {
-    this.data = data;
-    this.service = new FlareUserService();
+  constructor(data: FlareUserModel & { user: UserModel }) {
+    this.id = data.id;
+    this.uid = data.user_id
+    this.user = new User(data.user);
   }
 
-  static async create(userData: CreateUserDto) {
-    const { account_type, ...rest } = userData;
-    const toSend: CreateUserDto = { account_type: 'user', ...rest };
-    const service = new userService();
-    await service.createUser(toSend);
+  toJSON() {
+    return {
+      id: this.id,
+      uid: this.uid,
+      user: this.user.toJSON(),
+    };
   }
 }

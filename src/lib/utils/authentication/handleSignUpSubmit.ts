@@ -8,10 +8,5 @@ export default async function handleSignUpSubmit(
 ) {
   const formData = new FormData(e.currentTarget);
   formData.append('account_type', accountType);
-  try {
-    return await newSignUp(formData);
-  } catch (err: any) {
-    sessionStorage.removeItem('manualLoginInProgress');
-    throw err;
-  }
+  return await newSignUp(formData);
 }

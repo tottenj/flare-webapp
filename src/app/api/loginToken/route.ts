@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
     const data  = await resp.json()
   
    
+   
     if (!data || !data.sessionCookie || !data.expiresIn) {
       return NextResponse.json('No data returned', { status: 400 });
     }

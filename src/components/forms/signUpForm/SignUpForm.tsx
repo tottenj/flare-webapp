@@ -7,9 +7,7 @@ import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
 import HeroInput from '@/components/inputs/hero/input/HeroInput';
-import newSignUp from '@/lib/firebase/auth/emailPassword/newSignUp';
-import getAuthError from '@/lib/utils/error/getAuthError';
-import handleSignUpSubmit from '@/lib/utils/authentication/handleSignUpSubmit';
+import signUpUserClient from '@/lib/signUp/signUpUserClient';
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -17,14 +15,18 @@ export default function SignUpForm() {
   const [password, setPassword] = useState('');
   const [pending, setPending] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPending(true);
     try {
-      await handleSignUpSubmit(e, 'user');
-      router.push("/confirmation")
-    } catch (error) {
-      toast.error(getAuthError(error) || 'Something went wrong');
+      await signUpUserClient({
+        email,
+        password,
+        accountType: 'user',
+      });
+      router.push('/confirmation');
+    } catch (err: any) {
+      toast.error(err.message || 'Sign up failed');
     } finally {
       setPending(false);
     }
@@ -35,10 +37,7 @@ export default function SignUpForm() {
       <ServerLogo size="medium" />
       <h1 className="mt-4 mb-4 text-4xl">Sign Up</h1>
 
-      <form
-        onSubmit={(e) => handleSubmit(e)}
-        className="mb-8 flex w-full flex-col sm:w-5/6 @lg:w-2/3"
-      >
+      <form onSubmit={(e) => submit(e)} className="mb-8 flex w-full flex-col sm:w-5/6 @lg:w-2/3">
         <HeroInput
           label="Email"
           name="email"
