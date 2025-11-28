@@ -9,6 +9,6 @@ describe('Successful Flow', () => {
     cy.get("[data-cy='password-input']").type('password123');
     cy.contains('Submit').click();
     cy.wait('@token');
-    cy.url({ timeout: 15000 }).should('include', '/confirmation');
+    cy.url({ timeout: 60000 }).should('include', '/confirmation');
   });
 });

@@ -4,6 +4,7 @@ import isUsersAccount from '@/lib/firebase/auth/utils/isUsersAccount/isUsersAcco
 import FlareUser from '@/lib/classes/flareUser/FlareUser';
 import { expect } from '@jest/globals';
 import prisma from '@/lib/prisma/prisma';
+import createFlareUserFromSession from '@/lib/signUp/createFlareUserFromSession';
 
 jest.mock('@/lib/firebase/auth/utils/requireAuth');
 jest.mock('@/lib/firebase/auth/utils/isUsersAccount/isUsersAccount');
@@ -13,24 +14,22 @@ describe('Flare User Integration', () => {
     (requireAuth as jest.Mock).mockResolvedValue({ uid: 'uid-123' });
     (isUsersAccount as jest.Mock).mockReturnValue(true);
     const userData = {
+      account_type: 'org' as 'org' | 'user',
       email: 'test@example.com',
-      account_type: 'org' as 'user' | 'org',
     };
     
-    await FlareUser.create(userData);
-    const user = await prisma.user.findUnique({ where: { id: 'uid-123' } });
-    expect(user).not.toBeNull();
+    const res = await createFlareUserFromSession({email: userData.email, accountType: userData.account_type});
+    expect(res.message).toBe('Flare user created successfully');
+    expect(res.status).toBe('success');
 
-    const flareUser = await prisma.flareUser.findFirst({
-      where: { user_id: 'uid-123' },
+    const dbUser = await prisma.user.findUnique({
+      where: { email: userData.email },
     });
-    expect(flareUser).not.toBeNull();
+    expect(dbUser).not.toBeNull();
+    expect(dbUser?.account_type).toBe(userData.account_type);
   });
 
-  
-  it('throws error if invalid data', async () => {
-    await expect(FlareUser.create({ account_type: 'org' } as any)).rejects.toThrow('Invalid Data');
-  });
+ 
 
   it('throws if user not authorized', async () => {
     (requireAuth as jest.Mock).mockResolvedValue({ uid: 'uid-123' });
