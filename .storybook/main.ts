@@ -1,7 +1,12 @@
-import path from 'path';
+// This file has been automatically migrated to valid ESM format by Storybook.
+import { fileURLToPath } from "node:url";
+import path, { dirname } from 'path';
 import type { StorybookConfig } from '@storybook/nextjs';
 import fs from 'fs';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 console.log('File exists?', fs.existsSync(path.resolve('src/lib/firebase/auth/configs')));
 

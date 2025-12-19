@@ -19,11 +19,11 @@ const preview: Preview = {
   ],
   parameters: {
     backgrounds: {
-      values: [
-        { name: 'light', value: '#fff' },
-        { name: 'dark', value: 'oklch(16.15% 0.0828 273.4)' },
-        { name: 'grad', value: 'linear-gradient(135deg, #ffa301, #ff005c)' },
-      ],
+      options: {
+        light: { name: 'light', value: '#fff' },
+        dark: { name: 'dark', value: 'oklch(16.15% 0.0828 273.4)' },
+        grad: { name: 'grad', value: 'linear-gradient(135deg, #ffa301, #ff005c)' }
+      },
     },
     controls: {
       matchers: {
