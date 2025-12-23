@@ -4,7 +4,6 @@ import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
 import TextInput from '@/components/inputs/textInput/TextInput';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
-import getAuthError from '@/lib/utils/error/getAuthError';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -23,7 +22,7 @@ export default function SignInForm() {
         await signInWithEmailAndPassword(auth, email.current.value, pass.current.value);
         router.push("/dashboard")
       } catch (error) {
-        toast.error(getAuthError(error));
+        
       }
     }
   }

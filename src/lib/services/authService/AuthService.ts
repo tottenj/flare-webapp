@@ -1,9 +1,9 @@
-import AuthGateway from '../auth/authGateway';
-import { userDal } from '../dal/UserDal';
-import { UserDomain } from '../domain/UserDomain';
-import { AuthErrors } from '../errors/authError';
-import { SignUpInput } from '../schemas/signUpSchema';
-import { UniqueConstraintError } from '../errors/DalErrors';
+import AuthGateway from '../../auth/authGateway';
+import { userDal } from '../../dal/UserDal';
+import { UserDomain } from '../../domain/UserDomain';
+import { AuthErrors } from '../../errors/authError';
+import { SignUpInput } from '../../schemas/signUpSchema';
+import { UniqueConstraintError } from '../../errors/DalErrors';
 
 export class AuthService {
   static async signUp(input: SignUpInput) {
