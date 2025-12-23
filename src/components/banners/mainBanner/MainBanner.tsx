@@ -14,7 +14,7 @@ export default async function MainBanner() {
   let src: string | undefined = '/defaultProfile.svg';
   //if (res?.uid) src = undefined;
 
-  const res = {uid: "klsdj"}
+
   return (
     <div className="relative -ml-[calc((100vw-100%)/2)] flex h-[50px] w-screen items-center justify-between bg-white p-4">
       <Link href={'/'}>
@@ -22,7 +22,7 @@ export default async function MainBanner() {
       </Link>
 
       <div className="flex items-center justify-center gap-4">
-        {!res?.uid && <GradientLink link="flare-signup" linkText="Become a Flare" />}
+         <GradientLink link="flare-signup" linkText="Become a Flare" />
         <MainBannerMenu>
           <Suspense fallback={<ProfilePictureSkeleton size={45} />}>
             <ProfilePicture src={src} size={45} />

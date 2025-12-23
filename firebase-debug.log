@@ -1,0 +1,305 @@
+[debug] [2025-12-23T17:39:22.309Z] ----------------------------------------------------------------------
+[debug] [2025-12-23T17:39:22.310Z] Command:       /Users/joshtotten/.nvm/versions/node/v22.14.0/bin/node /Users/joshtotten/.nvm/versions/node/v22.14.0/bin/firebase emulators:start --import=localTest --export-on-exit=localTest
+[debug] [2025-12-23T17:39:22.311Z] CLI Version:   14.17.0
+[debug] [2025-12-23T17:39:22.311Z] Platform:      darwin
+[debug] [2025-12-23T17:39:22.311Z] Node Version:  v22.14.0
+[debug] [2025-12-23T17:39:22.311Z] Time:          Tue Dec 23 2025 12:39:22 GMT-0500 (Eastern Standard Time)
+[debug] [2025-12-23T17:39:22.311Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-12-23T17:39:22.430Z] Object "/storage" in "firebase.json" has unknown property: {"additionalProperty":"defaultBucket"}
+[debug] [2025-12-23T17:39:22.431Z] Field "/storage" in "firebase.json" is possibly invalid: must be array
+[debug] [2025-12-23T17:39:22.431Z] Field "/storage" in "firebase.json" is possibly invalid: must match a schema in anyOf
+[debug] [2025-12-23T17:39:22.433Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-23T17:39:22.434Z] > authorizing via signed-in user (josh.totten8@gmail.com)
+[debug] [2025-12-23T17:39:22.774Z] java version "15.0.1" 2020-10-20
+
+[debug] [2025-12-23T17:39:22.775Z] Java(TM) SE Runtime Environment (build 15.0.1+9-18)
+Java HotSpot(TM) 64-Bit Server VM (build 15.0.1+9-18, mixed mode, sharing)
+
+[debug] [2025-12-23T17:39:22.783Z] Parsed Java major version: 15
+[info] i  emulators: Starting emulators: auth, functions, firestore, storage, extensions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, storage, extensions"}}
+[debug] [2025-12-23T17:39:22.784Z] Checked if tokens are valid: true, expires at: 1766513532014
+[debug] [2025-12-23T17:39:22.784Z] Checked if tokens are valid: true, expires at: 1766513532014
+[debug] [2025-12-23T17:39:22.784Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a [none]
+[debug] [2025-12-23T17:39:23.020Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a 200
+[debug] [2025-12-23T17:39:23.020Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/flare-7091a {"projectNumber":"192465328955","projectId":"flare-7091a","lifecycleState":"ACTIVE","name":"Flare","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2025-04-22T04:14:01.811589Z"}
+[debug] [2025-12-23T17:39:23.567Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-23T17:39:23.568Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-23T17:39:23.568Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-23T17:39:23.568Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-23T17:39:23.568Z] [storage] Storage Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-23T17:39:23.568Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2025-12-23T17:39:23.571Z] Emulator locator file path: /var/folders/gb/5rzbh44j51zchrk6n0cynpc40000gn/T/hub-flare-7091a.json
+[debug] [2025-12-23T17:39:23.571Z] [hub] writing locator at /var/folders/gb/5rzbh44j51zchrk6n0cynpc40000gn/T/hub-flare-7091a.json
+[debug] [2025-12-23T17:39:23.576Z] [Extensions] Started Extensions emulator, this is a noop.
+[debug] [2025-12-23T17:39:23.797Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-23T17:39:23.797Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-23T17:39:23.797Z] [tasks] Cloud Tasks Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-23T17:39:23.797Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}],"tasks":[{"address":"127.0.0.1","family":"IPv4","port":9499}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: apphosting, database, hosting, pubsub, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mapphosting, database, hosting, pubsub, dataconnect\u001b[22m"}}
+[warn] ⚠  functions: Application Default Credentials detected. Non-emulated services will access production using these credentials. Be careful! {"metadata":{"emulator":{"name":"functions"},"message":"Application Default Credentials detected. Non-emulated services will access production using these credentials. Be careful!"}}
+[debug] [2025-12-23T17:39:24.350Z] Checked if tokens are valid: true, expires at: 1766513532014
+[debug] [2025-12-23T17:39:24.350Z] Checked if tokens are valid: true, expires at: 1766513532014
+[debug] [2025-12-23T17:39:24.350Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig [none]
+[debug] [2025-12-23T17:39:24.644Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig 200
+[debug] [2025-12-23T17:39:24.644Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/flare-7091a/adminSdkConfig {"projectId":"flare-7091a","storageBucket":"flare-7091a.firebasestorage.app"}
+[info] i  firestore: Importing data from /Users/joshtotten/Documents/flare-webapp/localTest/firestore_export/firestore_export.overall_export_metadata {"metadata":{"emulator":{"name":"firestore"},"message":"Importing data from /Users/joshtotten/Documents/flare-webapp/localTest/firestore_export/firestore_export.overall_export_metadata"}}
+[warn] ⚠  firestore: Cloud Firestore rules file /Users/joshtotten/Documents/flare-webapp/firestore.rules specified in firebase.json does not exist. {"metadata":{"emulator":{"name":"firestore"},"message":"Cloud Firestore rules file \u001b[1m/Users/joshtotten/Documents/flare-webapp/firestore.rules\u001b[22m specified in firebase.json does not exist."}}
+[warn] ⚠  firestore: The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration. {"metadata":{"emulator":{"name":"firestore"},"message":"The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration."}}
+[debug] [2025-12-23T17:39:24.659Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-12-23T17:39:24.659Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2025-12-23T17:39:24.659Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","/Users/joshtotten/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.8.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","flare-7091a","--seed_from_export","/Users/joshtotten/Documents/flare-webapp/localTest/firestore_export/firestore_export.overall_export_metadata","--single_project_mode",true,"--functions_emulator","127.0.0.1:5001"],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false,"port":8080} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"/Users/joshtotten/.cache/firebase/emulators/cloud-firestore-emulator-v1.19.8.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"flare-7091a\",\"--seed_from_export\",\"/Users/joshtotten/Documents/flare-webapp/localTest/firestore_export/firestore_export.overall_export_metadata\",\"--single_project_mode\",true,\"--functions_emulator\",\"127.0.0.1:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false,\"port\":8080}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2025-12-23T17:39:26.978Z] Dec 23, 2025 12:39:26 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://127.0.0.1:9150
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 12:39:26 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\nINFO: Started WebSocket server on ws://127.0.0.1:9150\n"}}
+[debug] [2025-12-23T17:39:27.012Z] API endpoint: http:// {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://"}}
+[debug] [2025-12-23T17:39:27.012Z] 127.0.0.1:8080
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+ {"metadata":{"emulator":{"name":"firestore"},"message":"127.0.0.1:8080\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\n"}}
+[debug] [2025-12-23T17:39:27.013Z] 
+   export FIRESTORE_EMULATOR_HOST= {"metadata":{"emulator":{"name":"firestore"},"message":"\n   export FIRESTORE_EMULATOR_HOST="}}
+[debug] [2025-12-23T17:39:27.013Z] 127.0.0.1:8080 {"metadata":{"emulator":{"name":"firestore"},"message":"127.0.0.1:8080"}}
+[debug] [2025-12-23T17:39:27.013Z] 
+
+If you are running a Firestore in Datastore Mode project, run:
+ {"metadata":{"emulator":{"name":"firestore"},"message":"\n\nIf you are running a Firestore in Datastore Mode project, run:\n"}}
+[debug] [2025-12-23T17:39:27.014Z] 
+   export DATASTORE_EMULATOR_HOST=127.0.0.1:8080 {"metadata":{"emulator":{"name":"firestore"},"message":"\n   export DATASTORE_EMULATOR_HOST=127.0.0.1:8080"}}
+[debug] [2025-12-23T17:39:27.014Z] 
+
+Note: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"\n\nNote: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.\nDev App Server is now running.\n\n"}}
+[info] ✔  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[info] i  auth: Importing config from /Users/joshtotten/Documents/flare-webapp/localTest/auth_export/config.json {"metadata":{"emulator":{"name":"auth"},"message":"Importing config from /Users/joshtotten/Documents/flare-webapp/localTest/auth_export/config.json"}}
+[info] i  auth: Importing accounts from /Users/joshtotten/Documents/flare-webapp/localTest/auth_export/accounts.json {"metadata":{"emulator":{"name":"auth"},"message":"Importing accounts from /Users/joshtotten/Documents/flare-webapp/localTest/auth_export/accounts.json"}}
+[debug] [2025-12-23T17:39:30.031Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2025-12-23T17:39:31.725Z] Temp file directory for storage emulator: /var/folders/gb/5rzbh44j51zchrk6n0cynpc40000gn/T/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: /var/folders/gb/5rzbh44j51zchrk6n0cynpc40000gn/T/firebase/storage/blobs"}}
+[debug] [2025-12-23T17:39:31.730Z] [Extensions] Connecting Extensions emulator, this is a noop.
+[info] i  functions: Watching "/Users/joshtotten/Documents/flare-webapp/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/joshtotten/Documents/flare-webapp/functions\" for Cloud Functions..."}}
+[debug] [2025-12-23T17:39:31.733Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] ⚠  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2025-12-23T17:39:32.225Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "cookie": "^1.0.2",
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "latest",
+    "geofire": "^6.0.0",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^5.8.3"
+  },
+  "private": true
+}
+[debug] [2025-12-23T17:39:32.225Z] Building nodejs source
+[debug] [2025-12-23T17:39:32.225Z] Failed to find version of module node: reached end of search path /Users/joshtotten/Documents/flare-webapp/functions/node_modules
+[info] ✔  functions: Using node@22 from host. 
+[debug] [2025-12-23T17:39:32.226Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-12-23T17:39:32.232Z] Found firebase-functions binary at '/Users/joshtotten/Documents/flare-webapp/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8283
+
+[debug] [2025-12-23T17:39:32.571Z] Got response from /__/functions.yaml {"endpoints":{"createSession":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"createSession"},"verifyIdToken":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"httpsTrigger":{},"entryPoint":"verifyIdToken"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[warn] ⚠  functions: Application Default Credentials detected. Non-emulated services will access production using these credentials. Be careful! {"metadata":{"emulator":{"name":"functions"},"message":"Application Default Credentials detected. Non-emulated services will access production using these credentials. Be careful!"}}
+[info] ✔  functions: Loaded functions definitions from source: createSession, verifyIdToken. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: createSession, verifyIdToken."}}
+[info] ✔  functions[us-central1-createSession]: http function initialized (http://127.0.0.1:5001/flare-7091a/us-central1/createSession). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/flare-7091a/us-central1/createSession)."}}
+[info] ✔  functions[us-central1-verifyIdToken]: http function initialized (http://127.0.0.1:5001/flare-7091a/us-central1/verifyIdToken). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/flare-7091a/us-central1/verifyIdToken)."}}
+[debug] [2025-12-23T17:39:36.604Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬──────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI              │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4000/auth       │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Functions      │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Firestore      │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Storage        │ 127.0.0.1:9199 │ http://127.0.0.1:4000/storage    │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Extensions     │ 127.0.0.1:5001 │ http://127.0.0.1:4000/extensions │
+└────────────────┴────────────────┴──────────────────────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500, 9150
+┌─────────────────────────┬───────────────┬─────────────────────┐
+│ Extension Instance Name │ Extension Ref │ View in Emulator UI │
+└─────────────────────────┴───────────────┴─────────────────────┘
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2025-12-23T17:39:50.660Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast [none]
+[debug] [2025-12-23T17:39:50.660Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"eventId":"eec089b3-9b7e-4bf5-8608-3e31d0e19f2b","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/flare-7091a","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-12-23T17:39:50.660Z","data":{"uid":"jSQthE7Wpl7LyUBVZxb2yNN7Q9Vh","email":"josh.totten8@gmail.com","emailVerified":false,"metadata":{"creationTime":"2025-12-23T17:39:50.659Z","lastSignInTime":"2025-12-23T17:39:50.659Z"},"customClaims":{},"providerData":[{"rawId":"josh.totten8@gmail.com","providerId":"password","email":"josh.totten8@gmail.com","federatedId":"josh.totten8@gmail.com"}]}}
+[debug] [2025-12-23T17:39:50.666Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast 200
+[debug] [2025-12-23T17:39:50.666Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"status":"multicast_acknowledged"}
+[info] i  To verify the email address josh.totten8@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=sVGdHMnFWKa-m5Xmv_4kuSxx-NeuM_f43dg5z4y7_qMO09rX1Fupky&apiKey=fake-api-key {"metadata":{"emulator":{"name":"auth"},"message":"To verify the email address josh.totten8@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=sVGdHMnFWKa-m5Xmv_4kuSxx-NeuM_f43dg5z4y7_qMO09rX1Fupky&apiKey=fake-api-key"}}
+[debug] [2025-12-23T17:39:50.706Z] [work-queue] {"queuedWork":["/flare-7091a/us-central1/verifyIdToken-2025-12-23T17:39:50.706Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-23T17:39:50.706Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/flare-7091a/us-central1/verifyIdToken-2025-12-23T17:39:50.706Z"],"workRunningCount":1}
+[debug] [2025-12-23T17:39:50.706Z] Accepted request POST /flare-7091a/us-central1/verifyIdToken --> us-central1-verifyIdToken
+[debug] [2025-12-23T17:39:50.709Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-12-23T17:39:50.709Z] [functions] Got req.url=/flare-7091a/us-central1/verifyIdToken, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/flare-7091a/us-central1/verifyIdToken, mapping to path=/"}}
+[debug] [2025-12-23T17:39:50.711Z] [worker-pool] addWorker(us-central1-verifyIdToken) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(us-central1-verifyIdToken)"}}
+[debug] [2025-12-23T17:39:50.712Z] [worker-pool] Adding worker with key us-central1-verifyIdToken, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key us-central1-verifyIdToken, total=1"}}
+[debug] [2025-12-23T17:39:51.368Z] [runtime-status] [64074] Resolved module firebase-admin {"declared":true,"installed":true,"version":"13.5.0","resolution":"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"13.5.0\",\"resolution\":\"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2025-12-23T17:39:51.368Z] [runtime-status] [64074] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.4.0","resolution":"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.4.0\",\"resolution\":\"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2025-12-23T17:39:51.368Z] [runtime-status] [64074] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2025-12-23T17:39:51.369Z] [runtime-status] [64074] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.4.0","resolution":"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.4.0\",\"resolution\":\"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2025-12-23T17:39:51.565Z] [runtime-status] [64074] Checked functions.config() {"config":{}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] Checked functions.config() {\"config\":{}}"}}
+[debug] [2025-12-23T17:39:51.565Z] [runtime-status] [64074] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"6.4.0","resolution":"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-functions/lib/v2/index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"6.4.0\",\"resolution\":\"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-functions/lib/v2/index.js\"}}"}}
+[debug] [2025-12-23T17:39:51.565Z] [runtime-status] [64074] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.4.0","resolution":"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.4.0\",\"resolution\":\"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2025-12-23T17:39:51.567Z] [runtime-status] [64074] Resolved module firebase-admin {"declared":true,"installed":true,"version":"13.5.0","resolution":"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"13.5.0\",\"resolution\":\"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2025-12-23T17:39:51.568Z] [runtime-status] [64074] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.4.0","resolution":"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.4.0\",\"resolution\":\"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2025-12-23T17:39:51.568Z] [runtime-status] [64074] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"13.5.0","resolution":"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"13.5.0\",\"resolution\":\"/Users/joshtotten/Documents/flare-webapp/functions/node_modules/firebase-admin/lib/index.js\"}}"}}
+[debug] [2025-12-23T17:39:51.569Z] [runtime-status] [64074] initializeApp(DEFAULT) {"storageBucket":"flare-7091a.firebasestorage.app","projectId":"flare-7091a"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] initializeApp(DEFAULT) {\"storageBucket\":\"flare-7091a.firebasestorage.app\",\"projectId\":\"flare-7091a\"}"}}
+[debug] [2025-12-23T17:39:51.575Z] [runtime-status] [64074] Functions runtime initialized. {"cwd":"/Users/joshtotten/Documents/flare-webapp/functions","node_version":"22.14.0"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] Functions runtime initialized. {\"cwd\":\"/Users/joshtotten/Documents/flare-webapp/functions\",\"node_version\":\"22.14.0\"}"}}
+[debug] [2025-12-23T17:39:51.575Z] [runtime-status] [64074] Listening to port: /var/folders/gb/5rzbh44j51zchrk6n0cynpc40000gn/T/fire_emu_3e1c4813550d811f.sock {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[runtime-status] [64074] Listening to port: /var/folders/gb/5rzbh44j51zchrk6n0cynpc40000gn/T/fire_emu_3e1c4813550d811f.sock"}}
+[debug] [2025-12-23T17:39:51.628Z] [worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE"}}
+[debug] [2025-12-23T17:39:51.628Z] [worker-pool] submitRequest(triggerId=us-central1-verifyIdToken) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-verifyIdToken)"}}
+[info] i  functions: Beginning execution of "us-central1-verifyIdToken" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Beginning execution of \"us-central1-verifyIdToken\""}}
+[debug] [2025-12-23T17:39:51.628Z] [worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: BUSY"}}
+[debug] [2025-12-23T17:39:51.649Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-verifyIdToken" in 20.518625ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finished \"us-central1-verifyIdToken\" in 20.518625ms"}}
+[debug] [2025-12-23T17:39:51.649Z] [worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE"}}
+[debug] [2025-12-23T17:39:51.649Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-12-23T17:39:51.649Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-12-23T17:39:51.649Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-23T17:40:14.342Z] Dec 23, 2025 12:40:14 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 12:40:14 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2025-12-23T17:40:14.388Z] Dec 23, 2025 12:40:14 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 12:40:14 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2025-12-23T17:40:14.491Z] Dec 23, 2025 12:40:14 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
+INFO: Websocket client disconnected
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 12:40:14 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed\nINFO: Websocket client disconnected\n"}}
+[debug] [2025-12-23T17:40:51.466Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast [none]
+[debug] [2025-12-23T17:40:51.467Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"eventId":"b298a52f-3456-41fe-bdef-dae1e67c94de","eventType":"providers/firebase.auth/eventTypes/user.delete","resource":{"name":"projects/flare-7091a","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-12-23T17:40:51.466Z","data":{"uid":"jSQthE7Wpl7LyUBVZxb2yNN7Q9Vh","email":"josh.totten8@gmail.com","emailVerified":false,"metadata":{"creationTime":"2025-12-23T17:39:50.659Z","lastSignInTime":"2025-12-23T17:39:50.659Z"},"customClaims":{},"providerData":[{"rawId":"josh.totten8@gmail.com","providerId":"password","email":"josh.totten8@gmail.com","federatedId":"josh.totten8@gmail.com"}]}}
+[debug] [2025-12-23T17:40:51.469Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast 200
+[debug] [2025-12-23T17:40:51.470Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2025-12-23T17:40:59.047Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast [none]
+[debug] [2025-12-23T17:40:59.047Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"eventId":"5ba07e38-538e-4972-b196-9f3818d2c1a1","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/flare-7091a","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-12-23T17:40:59.047Z","data":{"uid":"19Q0Le2WPQWk0xTU2xtlmkyqE4aT","email":"josh.totten8@gmail.com","emailVerified":false,"metadata":{"creationTime":"2025-12-23T17:40:59.046Z","lastSignInTime":"2025-12-23T17:40:59.046Z"},"customClaims":{},"providerData":[{"rawId":"josh.totten8@gmail.com","providerId":"password","email":"josh.totten8@gmail.com","federatedId":"josh.totten8@gmail.com"}]}}
+[debug] [2025-12-23T17:40:59.052Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast 200
+[debug] [2025-12-23T17:40:59.052Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"status":"multicast_acknowledged"}
+[info] i  To verify the email address josh.totten8@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=-zz9ax7bW4s59RRjzP89iNqGq1Pr8iAEQlNQDoLWW9eNYV4JhFCBud&apiKey=fake-api-key {"metadata":{"emulator":{"name":"auth"},"message":"To verify the email address josh.totten8@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=-zz9ax7bW4s59RRjzP89iNqGq1Pr8iAEQlNQDoLWW9eNYV4JhFCBud&apiKey=fake-api-key"}}
+[debug] [2025-12-23T17:40:59.104Z] [work-queue] {"queuedWork":["/flare-7091a/us-central1/verifyIdToken-2025-12-23T17:40:59.104Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-23T17:40:59.104Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/flare-7091a/us-central1/verifyIdToken-2025-12-23T17:40:59.104Z"],"workRunningCount":1}
+[debug] [2025-12-23T17:40:59.104Z] Accepted request POST /flare-7091a/us-central1/verifyIdToken --> us-central1-verifyIdToken
+[debug] [2025-12-23T17:40:59.106Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-12-23T17:40:59.106Z] [functions] Got req.url=/flare-7091a/us-central1/verifyIdToken, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/flare-7091a/us-central1/verifyIdToken, mapping to path=/"}}
+[debug] [2025-12-23T17:40:59.106Z] [worker-pool] submitRequest(triggerId=us-central1-verifyIdToken) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-verifyIdToken)"}}
+[info] i  functions: Beginning execution of "us-central1-verifyIdToken" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Beginning execution of \"us-central1-verifyIdToken\""}}
+[debug] [2025-12-23T17:40:59.106Z] [worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: BUSY"}}
+[debug] [2025-12-23T17:40:59.123Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-verifyIdToken" in 17.025667ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finished \"us-central1-verifyIdToken\" in 17.025667ms"}}
+[debug] [2025-12-23T17:40:59.124Z] [worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE"}}
+[debug] [2025-12-23T17:40:59.124Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-12-23T17:40:59.124Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-12-23T17:40:59.124Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-23T17:52:33.028Z] Dec 23, 2025 12:52:33 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 12:52:33 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2025-12-23T17:52:33.039Z] Dec 23, 2025 12:52:33 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
+INFO: Websocket client disconnected
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 12:52:33 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed\nINFO: Websocket client disconnected\n"}}
+[debug] [2025-12-23T17:53:00.080Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast [none]
+[debug] [2025-12-23T17:53:00.081Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"eventId":"7a80fab4-dd71-4db3-a315-9a971eaf0cb3","eventType":"providers/firebase.auth/eventTypes/user.delete","resource":{"name":"projects/flare-7091a","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-12-23T17:53:00.079Z","data":{"uid":"19Q0Le2WPQWk0xTU2xtlmkyqE4aT","email":"josh.totten8@gmail.com","emailVerified":false,"metadata":{"creationTime":"2025-12-23T17:40:59.046Z","lastSignInTime":"2025-12-23T17:40:59.046Z"},"customClaims":{},"providerData":[{"rawId":"josh.totten8@gmail.com","providerId":"password","email":"josh.totten8@gmail.com","federatedId":"josh.totten8@gmail.com"}]}}
+[debug] [2025-12-23T17:53:00.086Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast 200
+[debug] [2025-12-23T17:53:00.086Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2025-12-23T17:53:06.445Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast [none]
+[debug] [2025-12-23T17:53:06.445Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"eventId":"7a7c2aa7-fb76-4af5-b82b-4527ccb6ff87","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/flare-7091a","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-12-23T17:53:06.445Z","data":{"uid":"IsbN1aZQff0I0zthEYpZe2tkoVt6","email":"josh.totten8@gmail.com","emailVerified":false,"metadata":{"creationTime":"2025-12-23T17:53:06.444Z","lastSignInTime":"2025-12-23T17:53:06.444Z"},"customClaims":{},"providerData":[{"rawId":"josh.totten8@gmail.com","providerId":"password","email":"josh.totten8@gmail.com","federatedId":"josh.totten8@gmail.com"}]}}
+[debug] [2025-12-23T17:53:06.449Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast 200
+[debug] [2025-12-23T17:53:06.449Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"status":"multicast_acknowledged"}
+[info] i  To verify the email address josh.totten8@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=FKWTu_wzRzBUALq_f1yM73c9VCyFEgmV3-F7bP6xWJKh5cURyReEql&apiKey=fake-api-key {"metadata":{"emulator":{"name":"auth"},"message":"To verify the email address josh.totten8@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=FKWTu_wzRzBUALq_f1yM73c9VCyFEgmV3-F7bP6xWJKh5cURyReEql&apiKey=fake-api-key"}}
+[debug] [2025-12-23T17:53:06.546Z] [work-queue] {"queuedWork":["/flare-7091a/us-central1/verifyIdToken-2025-12-23T17:53:06.546Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-23T17:53:06.546Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/flare-7091a/us-central1/verifyIdToken-2025-12-23T17:53:06.546Z"],"workRunningCount":1}
+[debug] [2025-12-23T17:53:06.546Z] Accepted request POST /flare-7091a/us-central1/verifyIdToken --> us-central1-verifyIdToken
+[debug] [2025-12-23T17:53:06.548Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-12-23T17:53:06.548Z] [functions] Got req.url=/flare-7091a/us-central1/verifyIdToken, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/flare-7091a/us-central1/verifyIdToken, mapping to path=/"}}
+[debug] [2025-12-23T17:53:06.548Z] [worker-pool] submitRequest(triggerId=us-central1-verifyIdToken) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-verifyIdToken)"}}
+[info] i  functions: Beginning execution of "us-central1-verifyIdToken" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Beginning execution of \"us-central1-verifyIdToken\""}}
+[debug] [2025-12-23T17:53:06.548Z] [worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: BUSY"}}
+[debug] [2025-12-23T17:53:06.556Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-verifyIdToken" in 7.732084ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finished \"us-central1-verifyIdToken\" in 7.732084ms"}}
+[debug] [2025-12-23T17:53:06.556Z] [worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE"}}
+[debug] [2025-12-23T17:53:06.556Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-12-23T17:53:06.556Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-12-23T17:53:06.556Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-23T17:53:59.193Z] Dec 23, 2025 12:53:59 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
+INFO: Websocket client disconnected
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 12:53:59 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed\nINFO: Websocket client disconnected\n"}}
+[debug] [2025-12-23T17:53:59.203Z] Dec 23, 2025 12:53:59 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 12:53:59 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2025-12-23T17:54:07.328Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast [none]
+[debug] [2025-12-23T17:54:07.329Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"eventId":"5191a0d3-1482-46c5-9302-e1915cd18d46","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/flare-7091a","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-12-23T17:54:07.327Z","data":{"uid":"qmWHDEn9zaEvsDpq4kkk1FpqYTmb","email":"josh.totten8@gmail.com","emailVerified":false,"metadata":{"creationTime":"2025-12-23T17:54:07.327Z","lastSignInTime":"2025-12-23T17:54:07.327Z"},"customClaims":{},"providerData":[{"rawId":"josh.totten8@gmail.com","providerId":"password","email":"josh.totten8@gmail.com","federatedId":"josh.totten8@gmail.com"}]}}
+[debug] [2025-12-23T17:54:07.335Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast 200
+[debug] [2025-12-23T17:54:07.335Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"status":"multicast_acknowledged"}
+[info] i  To verify the email address josh.totten8@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=qUNWQ5oH_tbTOSBF5wB7EEcipEwRRln7qzURU7qzNvVDb72yb0FNUJ&apiKey=fake-api-key {"metadata":{"emulator":{"name":"auth"},"message":"To verify the email address josh.totten8@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=qUNWQ5oH_tbTOSBF5wB7EEcipEwRRln7qzURU7qzNvVDb72yb0FNUJ&apiKey=fake-api-key"}}
+[debug] [2025-12-23T17:54:07.396Z] [work-queue] {"queuedWork":["/flare-7091a/us-central1/verifyIdToken-2025-12-23T17:54:07.396Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-23T17:54:07.396Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/flare-7091a/us-central1/verifyIdToken-2025-12-23T17:54:07.396Z"],"workRunningCount":1}
+[debug] [2025-12-23T17:54:07.396Z] Accepted request POST /flare-7091a/us-central1/verifyIdToken --> us-central1-verifyIdToken
+[debug] [2025-12-23T17:54:07.398Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-12-23T17:54:07.398Z] [functions] Got req.url=/flare-7091a/us-central1/verifyIdToken, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/flare-7091a/us-central1/verifyIdToken, mapping to path=/"}}
+[debug] [2025-12-23T17:54:07.398Z] [worker-pool] submitRequest(triggerId=us-central1-verifyIdToken) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-verifyIdToken)"}}
+[info] i  functions: Beginning execution of "us-central1-verifyIdToken" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Beginning execution of \"us-central1-verifyIdToken\""}}
+[debug] [2025-12-23T17:54:07.398Z] [worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: BUSY"}}
+[debug] [2025-12-23T17:54:07.412Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-verifyIdToken" in 14.197333ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finished \"us-central1-verifyIdToken\" in 14.197333ms"}}
+[debug] [2025-12-23T17:54:07.412Z] [worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE"}}
+[debug] [2025-12-23T17:54:07.412Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-12-23T17:54:07.412Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-12-23T17:54:07.412Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-23T17:56:01.376Z] Dec 23, 2025 12:56:01 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
+INFO: Websocket client disconnected
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 12:56:01 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed\nINFO: Websocket client disconnected\n"}}
+[debug] [2025-12-23T17:56:01.384Z] Dec 23, 2025 12:56:01 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 12:56:01 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}
+[debug] [2025-12-23T17:56:08.610Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast [none]
+[debug] [2025-12-23T17:56:08.610Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"eventId":"80fac2b4-177f-4319-86a0-7fecc3302f61","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/flare-7091a","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-12-23T17:56:08.609Z","data":{"uid":"CRbpNOpclYfzcWY5y2sed3VIwp5a","email":"josh.totten8@gmail.com","emailVerified":false,"metadata":{"creationTime":"2025-12-23T17:56:08.609Z","lastSignInTime":"2025-12-23T17:56:08.609Z"},"customClaims":{},"providerData":[{"rawId":"josh.totten8@gmail.com","providerId":"password","email":"josh.totten8@gmail.com","federatedId":"josh.totten8@gmail.com"}]}}
+[debug] [2025-12-23T17:56:08.614Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast 200
+[debug] [2025-12-23T17:56:08.614Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/flare-7091a/trigger_multicast {"status":"multicast_acknowledged"}
+[info] i  To verify the email address josh.totten8@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=tlB4oRK1_T1fKG8_-jbqcv4ejdSHqP0UMGRKJ_xgQnRJf3s9qsEQqJ&apiKey=fake-api-key {"metadata":{"emulator":{"name":"auth"},"message":"To verify the email address josh.totten8@gmail.com, follow this link: http://127.0.0.1:9099/emulator/action?mode=verifyEmail&lang=en&oobCode=tlB4oRK1_T1fKG8_-jbqcv4ejdSHqP0UMGRKJ_xgQnRJf3s9qsEQqJ&apiKey=fake-api-key"}}
+[debug] [2025-12-23T17:56:08.656Z] [work-queue] {"queuedWork":["/flare-7091a/us-central1/verifyIdToken-2025-12-23T17:56:08.656Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-23T17:56:08.656Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/flare-7091a/us-central1/verifyIdToken-2025-12-23T17:56:08.656Z"],"workRunningCount":1}
+[debug] [2025-12-23T17:56:08.656Z] Accepted request POST /flare-7091a/us-central1/verifyIdToken --> us-central1-verifyIdToken
+[debug] [2025-12-23T17:56:08.658Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-12-23T17:56:08.658Z] [functions] Got req.url=/flare-7091a/us-central1/verifyIdToken, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/flare-7091a/us-central1/verifyIdToken, mapping to path=/"}}
+[debug] [2025-12-23T17:56:08.658Z] [worker-pool] submitRequest(triggerId=us-central1-verifyIdToken) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-verifyIdToken)"}}
+[info] i  functions: Beginning execution of "us-central1-verifyIdToken" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Beginning execution of \"us-central1-verifyIdToken\""}}
+[debug] [2025-12-23T17:56:08.658Z] [worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: BUSY"}}
+[debug] [2025-12-23T17:56:08.665Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-verifyIdToken" in 7.198458ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finished \"us-central1-verifyIdToken\" in 7.198458ms"}}
+[debug] [2025-12-23T17:56:08.665Z] [worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"[worker-us-central1-verifyIdToken-18801d65-bdc4-4387-ac02-e72e770dccb1]: IDLE"}}
+[debug] [2025-12-23T17:56:08.665Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-12-23T17:56:08.665Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-verifyIdToken"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-12-23T17:56:08.665Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-23T18:11:16.214Z] Dec 23, 2025 1:11:16 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
+INFO: Websocket client disconnected
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 1:11:16 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed\nINFO: Websocket client disconnected\n"}}
+[debug] [2025-12-23T18:11:16.222Z] Dec 23, 2025 1:11:16 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Dec 23, 2025 1:11:16 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\nINFO: Connected to new websocket client\n"}}

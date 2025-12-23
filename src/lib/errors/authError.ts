@@ -1,0 +1,40 @@
+// src/lib/errors/authErrors.ts
+import { AppError } from './AppError';
+
+export const AuthErrors = {
+  InvalidInput: () =>
+    new AppError({
+      code: 'AUTH_INVALID_INPUT',
+      clientMessage: 'Invalid signup information.',
+      status: 400,
+    }),
+
+  InvalidToken: () =>
+    new AppError({
+      code: 'AUTH_INVALID_TOKEN',
+      clientMessage: 'Your session has expired. Please try again.',
+      status: 401,
+    }),
+
+  UserAlreadyExists: () => 
+    new AppError({
+      code: "AUTH_USER_EXISTS",
+      clientMessage: "A User Already Exists With These Credentials",
+      status: 400
+    }),
+
+  EmailRequired: () =>
+    new AppError({
+      code: 'AUTH_EMAIL_REQUIRED',
+      clientMessage: 'An email address is required to continue.',
+      status: 400,
+    }),
+
+  SignupFailed: (cause?: unknown) =>
+    new AppError({
+      code: 'AUTH_SIGNUP_FAILED',
+      clientMessage: 'Unable to complete signup. Please try again.',
+      status: 500,
+      cause,
+    }),
+};

@@ -7,24 +7,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+
+
 model User {
-  id           String     @id
-  email        String     @unique
-  account_type String
-  flareOrg     FlareOrg?
-  flareUser    FlareUser?
+  id            String   @id @default(cuid())
+  firebaseUid   String   @unique
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  status        UserStatus @default(PENDING)
+  role          UserRole   @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  @@map("user")
+  @@index([firebaseUid])
 }
 
-model FlareUser {
-  id      String @id @default(cuid())
-  user_id String @unique
-  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@map("flare_user")
-}
 
+/*
 model FlareOrg {
   id          String   @id @default(cuid())
   user_id     String   @unique
@@ -39,6 +40,8 @@ model FlareOrg {
   @@map("flare_org")
 }
 
+*/
+
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model spatial_ref_sys {
   srid      Int     @id
@@ -47,6 +50,8 @@ model spatial_ref_sys {
   srtext    String? @db.VarChar(2048)
   proj4text String? @db.VarChar(2048)
 }
+
+/*
 
 model Event {
   id           String   @id @default(cuid())
@@ -65,6 +70,8 @@ model Event {
 
   @@map("event")
 }
+
+
 
 model Location {
   id            String                   @id @default(cuid())
@@ -87,4 +94,19 @@ model Socials {
   organization FlareOrg @relation(fields: [flare_id], references: [id], onDelete: Cascade)
 
   @@map("socials")
+}
+
+*/
+
+
+
+enum UserStatus {
+  PENDING   // Signed up but email not verified
+  ACTIVE    // Email verified, allowed to log in
+  SUSPENDED // Admin action later
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }

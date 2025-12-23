@@ -1,63 +1,71 @@
 'use client';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import GoogleSignInButton from '../../buttons/googleButton/SignInWithGoogleButton';
 import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
 import Link from 'next/link';
-import { toast } from 'react-toastify';
 import HeroInput from '@/components/inputs/hero/input/HeroInput';
-import signUpUserClient from '@/lib/signUp/signUpUserClient';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase/auth/configs/clientApp';
+import { signUpAction } from '@/lib/auth/signUpAction';
+import { Form } from '@heroui/react';
+import { useFormAction } from '@/lib/hooks/useFormAction';
+import { ActionResult } from '@/lib/types/ActionResult';
+import firebaseSignUpHelper from '@/lib/auth/firebaseSignUpHelper';
 
 export default function SignUpForm() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [pending, setPending] = useState(false);
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setPending(true);
+  async function submitAction(formData: FormData): Promise<ActionResult<null>> {
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
     try {
-      await signUpUserClient({
-        email,
-        password,
-        accountType: 'user',
-      });
-      router.push('/confirmation');
-    } catch (err: any) {
-      toast.error(err.message || 'Sign up failed');
-    } finally {
-      setPending(false);
+      const idToken = await firebaseSignUpHelper(email, password)
+      const result = await signUpAction({ idToken });
+      await signOut(auth);
+      return result;
+    } catch {
+      return {
+        ok: false,
+        error: {
+          code: 'CLIENT_SIGNUP_FAILED',
+          message: 'Unable to sign up. Please try again.',
+        },
+      };
     }
-  };
+  }
+
+  const { action, pending, error, validationErrors } = useFormAction(submitAction, {
+    onSuccess: () => {
+      router.push('/confirmation');
+    },
+  });
 
   return (
     <div className="@container mt-16 mb-8 flex h-auto w-11/12 flex-col items-center justify-center rounded-xl bg-white p-4 pt-8 pb-8 sm:w-5/6 sm:p-10 lg:w-1/2">
       <ServerLogo size="medium" />
       <h1 className="mt-4 mb-4 text-4xl">Sign Up</h1>
 
-      <form onSubmit={(e) => submit(e)} className="mb-8 flex w-full flex-col sm:w-5/6 @lg:w-2/3">
-        <HeroInput
-          label="Email"
-          name="email"
-          placeholder="example@gmail.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <HeroInput
-          label="Password"
-          name="password"
-          placeholder="*******"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      {error && <div className="rounded bg-red-50 p-3 text-red-700">{error.message}</div>}
+
+      <Form
+        validationErrors={validationErrors}
+        action={action}
+        className="mb-8 flex w-full flex-col sm:w-5/6 @lg:w-2/3"
+      >
+        <HeroInput label="Email" name="email" placeholder="example@gmail.com" />
+        <HeroInput label="Password" name="password" placeholder="*******" type="password" />
 
         <div className="mt-4 flex justify-center">
-          <PrimaryButton text="Submit" type="submit" disabled={pending} size="full" />
+          <PrimaryButton
+            disabled={pending}
+            text={pending ? 'Creating account…' : 'Submit'}
+            type="submit"
+            size="full"
+          />
         </div>
-      </form>
+      </Form>
 
       <GoogleSignInButton signIn={false} />
 
