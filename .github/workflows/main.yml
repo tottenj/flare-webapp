@@ -89,6 +89,8 @@ jobs:
       POSTGRES_PASSWORD: tester
       POSTGRES_DB: flare_test
       DATABASE_URL: postgresql://test:tester@localhost:5434/flare_test?schema=public
+      NEXT_DISABLE_SOURCEMAPS: 1
+
 
       NEXT_PUBLIC_APP_URL: http://localhost:3000
       FUNCTIONS_URL: http://127.0.0.1:5001
