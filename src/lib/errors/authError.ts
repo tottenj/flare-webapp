@@ -16,11 +16,11 @@ export const AuthErrors = {
       status: 401,
     }),
 
-  UserAlreadyExists: () => 
+  UserAlreadyExists: () =>
     new AppError({
-      code: "AUTH_USER_EXISTS",
-      clientMessage: "A User Already Exists With These Credentials",
-      status: 400
+      code: 'AUTH_USER_EXISTS',
+      clientMessage: 'A User Already Exists With These Credentials',
+      status: 400,
     }),
 
   EmailRequired: () =>
@@ -30,10 +30,25 @@ export const AuthErrors = {
       status: 400,
     }),
 
+  EmailUnverified: () =>
+    new AppError({
+      code: 'UNVERIFIED_EMAIL',
+      clientMessage: 'Email Address Is Unverified',
+      status: 403,
+    }),
+
   SignupFailed: (cause?: unknown) =>
     new AppError({
       code: 'AUTH_SIGNUP_FAILED',
       clientMessage: 'Unable to complete signup. Please try again.',
+      status: 500,
+      cause,
+    }),
+
+  SigninFailed: (cause?: unknown) =>
+    new AppError({
+      code: 'AUTH_SIGNIN_FAILED',
+      clientMessage: 'Unable to complete login. Please try again.',
       status: 500,
       cause,
     }),

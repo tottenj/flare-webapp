@@ -25,13 +25,26 @@ export default class AuthGateway {
     }>;
   }
 
-  static async createSession(idToken: string) {
+  static async createSession(idToken: string): Promise<string> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
     const res = await fetch(`${process.env.FIREBASE_FUNCTION_URL}/createSession`, {
       method: 'POST',
+      signal: controller.signal,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idToken }),
     });
-    if (!res.ok) throw new Error('Session creation failed');
-    return res.json();
+
+    clearTimeout(timeout);
+
+    if (res.status === 401) throw AuthErrors.InvalidToken();
+    if(res.status === 403) throw AuthErrors.EmailUnverified();
+    if (!res.ok) throw AuthErrors.SigninFailed();
+
+    const { sessionCookie } = await res.json();
+    if (!sessionCookie) throw AuthErrors.SigninFailed();
+
+    return sessionCookie;
   }
 }

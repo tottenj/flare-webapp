@@ -15,7 +15,6 @@ export class AuthService {
       email: auth.email,
       emailVerified: false,
     });
-
     try {
       await userDal.createIfNotExists(user.props);
     } catch (e) {
@@ -24,5 +23,10 @@ export class AuthService {
       }
       throw e;
     }
+  }
+
+  static async signIn(input: SignUpInput): Promise<{ sessionToken: string }> {
+    const sessionToken = await AuthGateway.createSession(input.idToken);
+    return { sessionToken };
   }
 }

@@ -1,9 +1,9 @@
-import SignInForm from '@/components/forms/signInForm/SignInForm';
+import SignInFormContainer from '#src/components/forms/signUpForm/SignInFormContainer.js';
 
 export default async function SignIn() {
   return (
     <div className="flex h-lvh items-start justify-center">
-      <SignInForm/>
+      <SignInFormContainer/>
     </div>
   );
 }

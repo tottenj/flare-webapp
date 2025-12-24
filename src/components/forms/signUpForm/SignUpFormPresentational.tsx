@@ -12,13 +12,14 @@ type Props = {
   error?: string;
   validationErrors?: Record<string, string[]>;
   onSubmit: (formData: FormData) => void;
+  signUp?: boolean
 };
 
-export default function SignUpFormPresentational({ pending, error, validationErrors, onSubmit }: Props) {
+export default function SignUpFormPresentational({ pending, error, validationErrors, onSubmit, signUp = true }: Props) {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4 rounded-2xl bg-white p-4 shadow-2xl md:w-1/2 lg:w-2/5">
       <ServerLogo size="medium" />
-      <h1 className="mt-4 mb-4 text-4xl">Sign Up</h1>
+      <h1 className="mt-4 mb-4 text-4xl">{signUp ? "Sign Up" : "Sign In"}</h1>
 
       {error && <div className="rounded bg-red-50 p-3 text-red-700">{error}</div>}
 
@@ -39,13 +40,13 @@ export default function SignUpFormPresentational({ pending, error, validationErr
         />
       </Form>
 
-      <GoogleSignInButton signIn={false} />
+      <GoogleSignInButton signIn={!signUp} />
 
       <Link
         className="font-nunito mt-4 text-center font-bold text-balance underline"
-        href={'/signin'}
+        href={signUp ? '/signin' : '/signup'}
       >
-        Already Have An Account? Login
+        {signUp ? "Already Have An Account? Login" : "Don't Have An Account? Sign Up"}
       </Link>
     </div>
   );
