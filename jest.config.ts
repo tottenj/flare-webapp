@@ -47,8 +47,6 @@ export default async (): Promise<Config> => {
     coverageProvider: 'v8',
     coverageDirectory: 'coverage',
     reporters: ['default'],
-   
-
     projects: [unitConfig, apiConfig, integrationConfig],
   };
 };

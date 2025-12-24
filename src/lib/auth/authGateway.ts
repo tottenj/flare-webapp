@@ -4,8 +4,7 @@ import { HTTP_METHOD } from '../types/Method';
 export default class AuthGateway {
   static async verifyIdToken(idToken: string) {
     const controller = new AbortController();
-    setTimeout(() => controller.abort(), 5000);
-
+    const timeout = setTimeout(() => controller.abort(), 5000);
 
     const res = await fetch(`${process.env.FIREBASE_FUNCTION_URL}/verifyIdToken`, {
       signal: controller.signal,
@@ -13,6 +12,8 @@ export default class AuthGateway {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ idToken }),
     });
+
+    clearTimeout(timeout);
 
     if (res.status === 401) throw AuthErrors.InvalidToken();
     if (!res.ok) throw AuthErrors.SignupFailed(await res.text());

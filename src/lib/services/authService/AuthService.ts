@@ -1,5 +1,5 @@
 import AuthGateway from '../../auth/authGateway';
-import { userDal } from '../../dal/UserDal';
+import { userDal } from '../../dal/userDal/UserDal';
 import { UserDomain } from '../../domain/UserDomain';
 import { AuthErrors } from '../../errors/authError';
 import { SignUpInput } from '../../schemas/signUpSchema';

@@ -1,8 +1,7 @@
-import { Prisma, User } from "@prisma/client";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { UniqueConstraintError } from "../errors/DalErrors";
-import {prisma} from "../../../prisma/prismaClient"
-
+import { Prisma, User } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { UniqueConstraintError } from '../../errors/DalErrors';
+import { prisma } from '../../../../prisma/prismaClient';
 
 export class UserDal {
   async findByFirebaseUid(firebaseUid: string): Promise<User | null> {
@@ -18,13 +17,13 @@ export class UserDal {
   async createIfNotExists(input: Prisma.UserCreateInput): Promise<User> {
     const existing = await this.findByFirebaseUid(input.firebaseUid);
     if (existing) return existing;
-    try{
-    return await this.create(input);
-    }catch(e){
-      if(e instanceof PrismaClientKnownRequestError && e.code === "p2002"){
-        throw new UniqueConstraintError()
+    try {
+      return await this.create(input);
+    } catch (e) {
+      if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
+        throw new UniqueConstraintError();
       }
-      throw e
+      throw e;
     }
   }
 

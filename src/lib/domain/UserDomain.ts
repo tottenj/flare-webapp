@@ -1,5 +1,3 @@
-import { AuthErrors } from "../errors/authError";
-
 export interface UserProps {
   firebaseUid: string;
   email: string;
@@ -21,15 +19,6 @@ export class UserDomain {
       role: 'USER',
       createdAt: new Date(),
     });
-  }
-
-  static onEmailVerified(user: UserProps) {
-    if (user.status !== 'PENDING') return user;
-    return {
-      ...user,
-      emailVerified: true,
-      status: 'ACTIVE',
-    };
   }
   
 }

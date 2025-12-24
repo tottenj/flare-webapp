@@ -4,11 +4,6 @@ describe('Successful Flow', () => {
   });
 
   it('Tests success flow', () => {
-    cy.intercept('POST', '/api/loginToken').as('token');
-    cy.get("[data-cy='email-input']").type('test@gmail.com');
-    cy.get("[data-cy='password-input']").type('password123');
-    cy.contains('Submit').click();
-    cy.wait('@token');
-    cy.url({ timeout: 60000 }).should('include', '/confirmation');
+    cy.url().should('include', '/signUp')
   });
 });

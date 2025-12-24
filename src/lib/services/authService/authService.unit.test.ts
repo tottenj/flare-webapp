@@ -1,11 +1,11 @@
 import AuthGateway from '@/lib/auth/authGateway';
-import { userDal } from '@/lib/dal/UserDal';
+import { userDal } from '@/lib/dal/userDal/UserDal';
 import { AuthService } from './AuthService';
 import { expect } from '@jest/globals';
 import { AuthErrors } from '@/lib/errors/authError';
 import { UniqueConstraintError } from '@/lib/errors/DalErrors';
 
-jest.mock('@/lib/dal/UserDal', () => ({
+jest.mock('@/lib/dal/userDal/UserDal', () => ({
   userDal: {
     createIfNotExists: jest.fn(),
   },
@@ -34,7 +34,7 @@ describe('AuthService.signUp', () => {
         emailVerified: false,
       })
     );
-    expect(userDal.createIfNotExists).toHaveBeenCalledTimes(1)
+    expect(userDal.createIfNotExists).toHaveBeenCalledTimes(1);
   });
 
   it('throws if email is empty string', async () => {
@@ -49,7 +49,6 @@ describe('AuthService.signUp', () => {
 
     expect(userDal.createIfNotExists).not.toHaveBeenCalled();
   });
-
 
   it('throws if no email ', async () => {
     jest.spyOn(AuthGateway, 'verifyIdToken').mockResolvedValueOnce({
@@ -74,14 +73,13 @@ describe('AuthService.signUp', () => {
     );
   });
 
-
   it('throws on other error', async () => {
-       jest.spyOn(AuthGateway, 'verifyIdToken').mockResolvedValueOnce({
+    jest.spyOn(AuthGateway, 'verifyIdToken').mockResolvedValueOnce({
       uid: 'uid123',
       email: 'test@test.com',
       emailVerified: false,
     });
     (userDal.createIfNotExists as jest.Mock).mockRejectedValueOnce(new Error());
-    await expect(AuthService.signUp({idToken:mockToken})).rejects.toThrow()
-  })
+    await expect(AuthService.signUp({ idToken: mockToken })).rejects.toThrow();
+  });
 });
