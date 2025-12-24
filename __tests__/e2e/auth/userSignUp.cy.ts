@@ -6,7 +6,7 @@ describe('Successful Flow', () => {
   it('Tests success flow', () => {
     cy.get('[data-cy="email-input"]').type('test@gmail.com', {force: true});
     cy.get('[data-cy="password-input"]').type('password123', {force: true});
-    cy.get('[data-cy="submit-button"]').click();
+    cy.get('[data-cy="submit-button"]').click({force: true});
     cy.url().should('include', '/confirmation');
   });
 });
