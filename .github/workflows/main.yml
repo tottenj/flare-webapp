@@ -115,7 +115,7 @@ jobs:
       NEXT_PUBLIC_FIREBASE_APP_ID: "1:192465328955:web:108bbe86f58f4bbcb2f51e"
       NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: "G-JR9NDGTPV9"
 
-      
+
     steps:
       - uses: actions/checkout@v4
 
@@ -165,7 +165,7 @@ jobs:
           path: reports/cypress/screenshots
 
       - name: Upload Cypress Videos
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
