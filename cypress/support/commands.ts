@@ -54,6 +54,10 @@ function applyOobCode(oobCode: string) {
     .then((response) => response.body);
 }
 
+Cypress.Commands.add('recivedOobCode', (email:string) => {
+  getOobCode(email)
+})
+
 Cypress.Commands.add(
   'createUser',
   (

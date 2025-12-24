@@ -58,9 +58,10 @@ declare namespace Cypress {
     resetAndSeed(): Chainable<void>;
     seedAuthEmulator(): Chainable<void>;
     prismaFind(table: string, where: any): Chainable<any>;
-    getStorageFile(path:string): Chainable<any>;
-    ensurePageLoaded(path: string): Chainable<void> 
-    waitForNextApi(alias:any): Chainable<any>
+    getStorageFile(path: string): Chainable<any>;
+    ensurePageLoaded(path: string): Chainable<void>;
+    waitForNextApi(alias: any): Chainable<any>;
+    recivedOobCode(email:string): Chainable<void>
   }
   
 
