@@ -12,6 +12,6 @@ describe('Successful Flow', () => {
     cy.get('[data-cy="submit-button"]').should('not.be.disabled').click();
 
     cy.url().should('include', '/confirmation');
-    cy.contains('Check your email').should('exist');
+    cy.contains('Thank You For Signing Up!').should('exist');
   });
 });
