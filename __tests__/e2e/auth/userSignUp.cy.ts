@@ -8,7 +8,9 @@ describe('Successful Flow', () => {
     const password = 'password123';
 
     cy.get('[data-cy="email-input"]').should('be.visible').type(email);
+
     cy.get('[data-cy="password-input"]').should('be.visible').type(password);
+
     cy.get('[data-cy="submit-button"]').should('not.be.disabled').click();
 
     cy.url().should('include', '/confirmation');

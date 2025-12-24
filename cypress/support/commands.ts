@@ -4,6 +4,7 @@ import { org, verifiedUser } from './constants';
 import { createOrg } from './constants/Organization';
 import { compareWithTolerance, pickShared } from './helpers';
 
+
 // Constants
 const apiKey = Cypress.env('FIREBASE_API_KEY');
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
