@@ -1,3 +1,4 @@
+import 'server-only'
 import AuthGateway from '../../auth/authGateway';
 import { userDal } from '../../dal/userDal/UserDal';
 import { UserDomain } from '../../domain/UserDomain';

@@ -26,9 +26,8 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"],
+      "#.storybook/*": ["./.storybook/*"]
     }
   },
   "include": [

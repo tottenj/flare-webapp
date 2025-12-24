@@ -1,3 +1,4 @@
+import 'server-only';
 import { Prisma, User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { UniqueConstraintError } from '../../errors/DalErrors';

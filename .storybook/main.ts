@@ -1,12 +1,7 @@
-import { fileURLToPath } from 'node:url';
-import path, { dirname } from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-import type { StorybookConfig } from '@storybook/nextjs-vite';
+import { defineMain } from '@storybook/nextjs-vite/node';
 
 
-
-const config: StorybookConfig = {
+export default defineMain({
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
     '@chromatic-com/storybook',
@@ -19,5 +14,10 @@ const config: StorybookConfig = {
   features: {
     experimentalRSC: true,
   },
-};
-export default config;
+  docs: {
+    //👇 See the table below for the list of supported options
+    defaultName: 'Documentation',
+    docsMode: true,
+  },
+});
+

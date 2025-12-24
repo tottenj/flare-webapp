@@ -1,18 +1,13 @@
-import type { StoryObj, Meta } from '@storybook/react';
+import PrimaryButton from './PrimaryButton';
+import preview from '#.storybook/preview.js';
 
-import  PrimaryButton  from './PrimaryButton';
+const meta = preview.meta({ component: PrimaryButton, title: 'Buttons/Primary Button' });
 
-export default {
-  component: PrimaryButton,
-} satisfies Meta<typeof PrimaryButton>;
-
-type Story = StoryObj<typeof PrimaryButton>;
-
-export const Default: Story = {
+export const Default = meta.story({
   args: {
     text: 'Submit',
     type: 'button',
-    disabled: true,
+    disabled: false,
     styleOver: undefined,
     size: 'small',
     action: undefined,
@@ -21,4 +16,19 @@ export const Default: Story = {
     datacy: '',
     state: 'initial',
   },
-};
+});
+
+export const Disabled = meta.story({
+  args: {
+    ...Default.composed.args,
+    disabled: true,
+    
+  },
+});
+
+export const Full = meta.story({
+  args: {
+    ...Default.composed.args,
+    size: 'full',
+  },
+});
