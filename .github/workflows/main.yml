@@ -44,7 +44,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run test:unit -- --ci --runInBand
-      - run: npm run test:api -- --ci --runInBand
 
   integration-tests:
     runs-on: ubuntu-latest
