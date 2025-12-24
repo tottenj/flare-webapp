@@ -4,7 +4,8 @@ describe('Successful Flow', () => {
   });
 
   it('completes signup flow', () => {
-    cy.visit('/signup');
+    const email = 'test@gmail.com';
+    const password = 'password123';
 
     cy.get('[data-cy="email-input"]').should('be.visible').type(email);
     cy.get('[data-cy="password-input"]').should('be.visible').type(password);
@@ -13,5 +14,4 @@ describe('Successful Flow', () => {
     cy.url().should('include', '/confirmation');
     cy.contains('Check your email').should('exist');
   });
-
 });

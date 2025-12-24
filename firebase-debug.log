@@ -330,3 +330,4 @@ Issues? Report them at https://github.com/firebase/firebase-tools/issues and att
 [debug] [2025-12-24T02:07:19.267Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-seedAuthEmulator"},"extension":{},"message":"Finishing up request with event=finish"}}
 [debug] [2025-12-24T02:07:19.267Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-seedAuthEmulator"},"extension":{},"message":"Finishing up request with event=close"}}
 [debug] [2025-12-24T02:07:19.267Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-24T02:08:26.798Z] [work-queue] {"queuedWork":["/flare-7091a/us-central1/seedAuthEmulator-2025-12-24T02:08:26.798Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
