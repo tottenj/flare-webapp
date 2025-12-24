@@ -4,6 +4,6 @@ describe('Successful Flow', () => {
   });
 
   it('Tests success flow', () => {
-    cy.url().should('include', '/signUp')
+    cy.url().should('include', '/signup')
   });
 });
