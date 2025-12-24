@@ -4,6 +4,9 @@ describe('Successful Flow', () => {
   });
 
   it('Tests success flow', () => {
-    cy.url().should('include', '/signup')
+    cy.get('[data-cy="email-input"]').type('test@gmail.com');
+    cy.get('[data-cy="password-input"]').type('password123');
+    cy.get('[data-cy="submit-button"]').click();
+    cy.url().should('include', '/confirmation');
   });
 });

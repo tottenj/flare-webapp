@@ -92,6 +92,7 @@ jobs:
 
       NEXT_PUBLIC_APP_URL: http://localhost:3000
       FUNCTIONS_URL: http://127.0.0.1:5001
+      FIREBASE_FUNCTION_URL: http://127.0.0.1:5001/flare-7091a/us-central1
 
       FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
       FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080

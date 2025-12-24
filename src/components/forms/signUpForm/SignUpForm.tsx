@@ -63,6 +63,7 @@ export default function SignUpForm() {
             text={pending ? 'Creating account…' : 'Submit'}
             type="submit"
             size="full"
+            datacy='submit-button'
           />
         </div>
       </Form>
