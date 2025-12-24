@@ -4,7 +4,7 @@ import SignUpForm from "@/components/forms/signUpForm/SignUpForm";
 
 export default async function Login() {
   return (
-    <div className="flex h-lvh items-start justify-center">
+    <div className="w-full h-full flex justify-center items-center">
       <SignUpForm/>
     </div>
   );

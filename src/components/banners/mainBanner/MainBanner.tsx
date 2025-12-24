@@ -10,19 +10,15 @@ import MainBannerMenu from './MainBannerMenu';
 import GradientLink from '@/components/Links/GradientLink/GradientLink';
 
 export default async function MainBanner() {
-  //const res = await getClaims();
   let src: string | undefined = '/defaultProfile.svg';
-  //if (res?.uid) src = undefined;
-
-
   return (
-    <div className="relative -ml-[calc((100vw-100%)/2)] flex h-[50px] w-screen items-center justify-between bg-white p-4">
+    <div className='flex justify-between p-4'>
       <Link href={'/'}>
         <ServerLogo size="small" />
       </Link>
 
       <div className="flex items-center justify-center gap-4">
-         <GradientLink link="flare-signup" linkText="Become a Flare" />
+        <GradientLink link="flare-signup" linkText="Become a Flare" />
         <MainBannerMenu>
           <Suspense fallback={<ProfilePictureSkeleton size={45} />}>
             <ProfilePicture src={src} size={45} />

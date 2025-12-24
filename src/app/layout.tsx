@@ -30,23 +30,21 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${nunito.variable} ${pt_sans.variable} antialiased`}>
-        <div className="fullGradientBackground" />
-        <div className="flex h-dvh justify-center">
-          <div className="relative mb-4 h-dvh w-full overflow-auto overflow-x-hidden">
+        <Providers>
+          <main className="flex min-h-dvh flex-col">
+            <MainBanner />
+            <div className="gradient flex min-h-0 flex-1">
+              <div className="flex flex-1 flex-col">
+                {children}
+                {event}
+              </div>
+            </div>
+          </main>
+        </Providers>
 
-              <Providers>
-                <MainBanner />
-                <div className="pr-4 pl-4">
-                  {children}
-                  {event}
-                </div>
-              </Providers>
-
-            <Analytics />
-            <SpeedInsights />
-            <ToastContainer position="bottom-right" />
-          </div>
-        </div>
+        <Analytics />
+        <SpeedInsights />
+        <ToastContainer position="bottom-right" />
       </body>
     </html>
   );

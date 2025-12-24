@@ -18,6 +18,13 @@
   --font-pt_sans: var(--font-pt_sans);
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+
 
 h1 {
   font-family: var(--font-nunito);

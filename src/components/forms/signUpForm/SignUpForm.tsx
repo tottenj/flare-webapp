@@ -43,7 +43,7 @@ export default function SignUpForm() {
   });
 
   return (
-    <div className="@container mt-16 mb-8 flex h-auto w-11/12 flex-col items-center justify-center rounded-xl bg-white p-4 pt-8 pb-8 sm:w-5/6 sm:p-10 lg:w-1/2">
+    <div className='w-full md:w-1/2 lg:w-2/5 bg-white rounded-2xl flex items-center justify-center p-4 flex-col gap-4 shadow-2xl'>
       <ServerLogo size="medium" />
       <h1 className="mt-4 mb-4 text-4xl">Sign Up</h1>
 
@@ -52,12 +52,12 @@ export default function SignUpForm() {
       <Form
         validationErrors={validationErrors}
         action={action}
-        className="mb-8 flex w-full flex-col sm:w-5/6 @lg:w-2/3"
+        className="flex w-full flex-col sm:w-5/6 @lg:w-2/3 gap-4"
       >
         <HeroInput label="Email" name="email" placeholder="example@gmail.com" />
         <HeroInput label="Password" name="password" placeholder="*******" type="password" />
 
-        <div className="mt-4 flex justify-center">
+      
           <PrimaryButton
             disabled={pending}
             text={pending ? 'Creating account…' : 'Submit'}
@@ -65,7 +65,7 @@ export default function SignUpForm() {
             size="full"
             datacy='submit-button'
           />
-        </div>
+        
       </Form>
 
       <GoogleSignInButton signIn={false} />
