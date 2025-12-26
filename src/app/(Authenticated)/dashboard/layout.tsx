@@ -1,6 +1,4 @@
 'use server';
-import verifyOrg from '@/lib/firebase/utils/verifyOrg';
-
 export default async function DashboardLayout({
   org,
   user,
@@ -12,7 +10,7 @@ export default async function DashboardLayout({
   admin: React.ReactNode;
   modal: React.ReactNode
 }) {
-  const { claims, isAdmin } = await verifyOrg();
+
 
   return (
     <div></div>

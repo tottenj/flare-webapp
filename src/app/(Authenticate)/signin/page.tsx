@@ -1,4 +1,4 @@
-import SignInFormContainer from '#src/components/forms/signUpForm/SignInFormContainer.js';
+import SignInFormContainer from '#src/components/forms/signUpForm/SignInFormContainer';
 
 export default async function SignIn() {
   return (

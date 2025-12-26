@@ -20,7 +20,7 @@ describe('AuthGateway.verifyIdToken', () => {
       emailVerified: false,
     });
 
-    expect (global.fetch).toHaveBeenCalledTimes(1)
+    expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 
   it('throws on 401 status', async () => {
@@ -28,19 +28,77 @@ describe('AuthGateway.verifyIdToken', () => {
       ok: true,
       status: 401,
     });
-    await expect(AuthGateway.verifyIdToken('sample')).rejects.toEqual(AuthErrors.InvalidToken())
+    await expect(AuthGateway.verifyIdToken('sample')).rejects.toEqual(AuthErrors.InvalidToken());
   });
-
-
 
   it('throws error on not ok', async () => {
     const textMock = jest.fn().mockResolvedValue('error text');
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: false,
       status: 400,
-      text: textMock
+      text: textMock,
     });
-    await expect(AuthGateway.verifyIdToken('sample')).rejects.toEqual(AuthErrors.SignupFailed('error text'))
-    expect(textMock).toHaveBeenCalled()
-  })
+    await expect(AuthGateway.verifyIdToken('sample')).rejects.toEqual(
+      AuthErrors.SignupFailed('error text')
+    );
+    expect(textMock).toHaveBeenCalled();
+  });
+});
+
+describe('AuthGateway.createSession', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('Return session cookie on success', async () => {
+    const sessionCookie = 'mockSessionCooke';
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: jest.fn().mockResolvedValue({ sessionCookie }),
+    });
+    await expect(AuthGateway.createSession('fakeToken')).resolves.toBe(sessionCookie);
+  });
+
+  it('returns invalid token error on 401', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 401,
+    });
+    await expect(AuthGateway.createSession('token')).rejects.toMatchObject({
+      code: 'AUTH_INVALID_TOKEN',
+    });
+  });
+
+  it('returns email unverified error on 403', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 403,
+    });
+    await expect(AuthGateway.createSession('token')).rejects.toMatchObject({
+      code: 'UNVERIFIED_EMAIL',
+    });
+  });
+
+  it('throws error if res is not ok', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+    });
+    await expect(AuthGateway.createSession('token')).rejects.toMatchObject({
+      code: 'AUTH_SIGNIN_FAILED',
+    });
+  });
+
+
+  it('throws error if no session cookie recieved', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: jest.fn().mockResolvedValue({})
+    });
+    await expect(AuthGateway.createSession('token')).rejects.toMatchObject({
+      code: 'AUTH_SIGNIN_FAILED',
+    });
+  });
 });

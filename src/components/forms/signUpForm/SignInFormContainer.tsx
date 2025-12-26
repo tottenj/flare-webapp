@@ -1,12 +1,12 @@
 'use client';
 
-import { useFormAction } from '#src/lib/hooks/useFormAction.js';
-import { ActionResult } from '#src/lib/types/ActionResult.js';
+import { useFormAction } from '#src/lib/hooks/useFormAction';
+import { ActionResult } from '#src/lib/types/ActionResult';
 import { useRouter } from 'next/navigation';
 import SignUpFormPresentational from './SignUpFormPresentational';
 import { sendEmailVerification, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
-import signInAction from '#src/lib/auth/signInAction.js';
+import signInAction from '#src/lib/auth/signInAction';
 
 export default function SignInFormContainer() {
   const router = useRouter();

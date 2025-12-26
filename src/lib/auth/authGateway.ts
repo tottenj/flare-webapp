@@ -1,4 +1,4 @@
-import 'server-only'
+import 'server-only';
 import { AuthErrors } from '../errors/authError';
 import { HTTP_METHOD } from '../types/Method';
 
@@ -40,7 +40,7 @@ export default class AuthGateway {
     clearTimeout(timeout);
 
     if (res.status === 401) throw AuthErrors.InvalidToken();
-    if(res.status === 403) throw AuthErrors.EmailUnverified();
+    if (res.status === 403) throw AuthErrors.EmailUnverified();
     if (!res.ok) throw AuthErrors.SigninFailed();
 
     const { sessionCookie } = await res.json();

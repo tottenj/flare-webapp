@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   // 1. Get the session cookie
-  const session = (await cookies()).get('__session')?.value;
+  const session = (await cookies()).get('session')?.value;
 
   // 2. Define protected and public routes
   const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard');

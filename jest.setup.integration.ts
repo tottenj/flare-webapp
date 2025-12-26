@@ -20,10 +20,15 @@ afterAll(async () => {
 
 jest.mock('@/lib/auth/authGateway', () => ({
   verifyIdToken: jest.fn(),
+  createSession: jest.fn()
 }));
 
 (AuthGateway.verifyIdToken as jest.Mock).mockResolvedValue({
   uid: 'firebase-uid-123',
   email: 'test@example.com',
   emailVerified: true,
+});
+
+(AuthGateway.createSession as jest.Mock).mockResolvedValue({
+  sessionCookie: "sessionCookie"
 });
