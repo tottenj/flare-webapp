@@ -1,8 +1,7 @@
 import z from "zod";
 
-
-export const SignUpSchema = z.object({
+export const AuthTokenSchema = z.object({
   idToken: z.string(),
 });
 
-export type SignUpInput = z.infer<typeof SignUpSchema>;
+export type AuthTokenInput = z.infer<typeof AuthTokenSchema>;

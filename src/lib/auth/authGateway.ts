@@ -1,3 +1,4 @@
+import 'server-only'
 import { AuthErrors } from '../errors/authError';
 import { HTTP_METHOD } from '../types/Method';
 

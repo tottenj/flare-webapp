@@ -33,7 +33,7 @@ export const AuthErrors = {
   EmailUnverified: () =>
     new AppError({
       code: 'UNVERIFIED_EMAIL',
-      clientMessage: 'Email Address Is Unverified',
+      clientMessage: 'Email Address Is Unverified, Please Check Your Email For Verification Instructions',
       status: 403,
     }),
 

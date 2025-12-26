@@ -1,18 +1,17 @@
 'use server';
-
 import z from 'zod';
 import { AuthErrors } from '../errors/authError';
 import { extractFieldErrors } from '../errors/extractError';
-import { SignUpSchema } from '../schemas/signUpSchema';
 import { ActionResult } from '../types/ActionResult';
 import fail from '../errors/fail';
 import { AuthService } from '../services/authService/AuthService';
 import { AppError } from '../errors/AppError';
 import { logger } from '../logger';
 import { cookies } from 'next/headers';
+import { AuthTokenSchema } from '../schemas/signUpSchema';
 
 export default async function signInAction(input: unknown): Promise<ActionResult<null>> {
-  const data = SignUpSchema.safeParse(input);
+  const data = AuthTokenSchema.safeParse(input);
   if (!data.success) {
     const fieldErrors = extractFieldErrors(z.treeifyError(data.error));
     return fail(AuthErrors.InvalidInput(), fieldErrors);

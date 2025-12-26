@@ -3,14 +3,14 @@ import z from 'zod';
 import { AppError } from '../errors/AppError';
 import { AuthErrors } from '../errors/authError';
 import fail from '../errors/fail';
-import { SignUpSchema } from '../schemas/signUpSchema';
+import { AuthTokenSchema } from '../schemas/signUpSchema';
 import { ActionResult } from '../types/ActionResult';
 import { extractFieldErrors } from '../errors/extractError';
 import { logger } from '../logger';
 import { AuthService } from '../services/authService/AuthService';
 
 export async function signUpAction(input: unknown): Promise<ActionResult<null>> {
-  const data = SignUpSchema.safeParse(input);
+  const data = AuthTokenSchema.safeParse(input);
 
   if (!data.success) {
     const fieldErrors = extractFieldErrors(z.treeifyError(data.error));
