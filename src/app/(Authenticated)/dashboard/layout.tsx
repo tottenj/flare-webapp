@@ -1,18 +1,10 @@
 'use server';
-export default async function DashboardLayout({
-  org,
-  user,
-  admin,
-  modal
-}: {
-  org: React.ReactNode;
-  user: React.ReactNode;
-  admin: React.ReactNode;
-  modal: React.ReactNode
-}) {
+export default async function DashboardLayout({children}: {children: React.ReactNode}) {
 
 
   return (
-    <div></div>
+    <div>
+      {children}
+    </div>
   );
 }
