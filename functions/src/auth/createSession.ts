@@ -16,6 +16,7 @@ export const createSession = onRequest(async (req, res) => {
   const decoded = await auth.verifyIdToken(idToken);
   if(!decoded.email_verified){
     res.status(401).json({error: 'Email Unverified'})
+    return
   }
 
   const sessionCookie = await auth.createSessionCookie(idToken, {
@@ -23,4 +24,5 @@ export const createSession = onRequest(async (req, res) => {
   });
 
   res.json({ sessionCookie });
+  return 
 });

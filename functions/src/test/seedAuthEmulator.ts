@@ -12,7 +12,7 @@ export const seedAuthEmulator = onRequest(async (req: any, res: any) => {
     if (uids.length) await auth.deleteUsers(uids);
 
     const usersToCreate = [
-      { uid: 'user1', email: 'user@gmail.com', password: 'password123' },
+      { uid: 'user1', email: 'user@gmail.com', password: 'password123', emailVerified:true },
       { uid: 'org1', email: 'unverifiedOrg@gmail.com', password: 'password123' },
       { uid: 'org2', email: 'verifiedOrg@gmail.com', password: 'password123' },
     ];
