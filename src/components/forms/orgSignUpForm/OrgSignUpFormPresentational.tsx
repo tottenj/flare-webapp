@@ -7,16 +7,13 @@ import HeroInput from '@/components/inputs/hero/input/HeroInput';
 import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import useFileChange from '@/lib/hooks/useFileChange/useFileChange';
 
-import { useRouter } from 'next/navigation';
-
-export default function OrgSignInForm() {
-  const router = useRouter();
+export default function OrgSignUpFormPresentational() {
   const { validFiles, handleFileChange } = useFileChange();
 
   return (
-    <div className="@container mt-16 mb-8 flex h-auto w-11/12 flex-col items-center justify-center rounded-xl bg-white p-4 pt-8 pb-8 sm:w-5/6 sm:p-10 lg:w-1/2">
+    <div className="flex w-full flex-col items-center justify-center gap-4 rounded-2xl bg-white p-4 shadow-2xl md:w-1/2 lg:w-2/5">
       <LogoWithText size="medium" />
-      <h1 className="mt-4 text-center">Organization Sign Up</h1>
+      <h1 className="mt-4 mb-4 text-4xl">Become a Flare</h1>
       <p className="mt-2 mb-8 text-center">
         Welcome to Flare! We're excited to have your organization join our vibrant community. Once
         you sign up, your account will be reviewed for verification to ensure a safe and authentic
@@ -31,12 +28,6 @@ export default function OrgSignInForm() {
             <HeroInput label="Organization Email" name="email" />
             <PlaceSearch lab="Location" />
             <HeroInput label="Choose Password" name="password" type="password" />
-            <HeroInput
-              label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-              errorMessage={'Passwords Must Match'}
-            />
           </div>
         </FormSection>
         <FormSection

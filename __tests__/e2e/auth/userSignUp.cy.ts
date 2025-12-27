@@ -10,6 +10,7 @@ describe('User Sign Up = Successful Flow', () => {
     cy.get('[data-cy="email-input"]').type(email, { force: true });
     cy.get('[data-cy="password-input"]').type(password, { force: true });
     cy.get('[data-cy="submit-button"]').click({ force: true });
+    cy.contains('Created Account').should('be.visible');
     cy.url().should('include', '/confirmation');
   });
 });
