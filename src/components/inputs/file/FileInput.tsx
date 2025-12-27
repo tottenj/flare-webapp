@@ -21,7 +21,7 @@ export default function FileInput({
   return (
     <>
       <label
-        className={`${fileAdded ? 'bg-green' : 'bg-primary'} text-white w-full font-nunito hover:bg-background hover:border-primary hover:text-primary flex w-fit cursor-pointer items-center justify-center rounded-xl border-2 p-2 text-xs font-bold transition transition-normal ease-in-out`}
+        className={`${fileAdded ? 'bg-green' : 'bg-primary'} text-white w-full font-nunito hover:bg-background hover:border-primary hover:text-primary flex cursor-pointer items-center justify-center rounded-xl border-2 p-2 text-xs font-bold transition transition-normal ease-in-out`}
       >
         {fileAdded ? <FontAwesomeIcon icon={faCheck} /> : buttonText}
         <input

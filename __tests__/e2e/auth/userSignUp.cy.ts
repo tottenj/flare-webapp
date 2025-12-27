@@ -1,4 +1,4 @@
-describe('Successful Flow', () => {
+describe('User Sign Up = Successful Flow', () => {
   beforeEach(() => {
     cy.visit('/signup');
   });
@@ -14,7 +14,7 @@ describe('Successful Flow', () => {
   });
 });
 
-describe('Unsuccessful Flow', () => {
+describe('User Sign Up - Unsuccessful Flow', () => {
   beforeEach(() => {
     cy.visit('/signup');
   });

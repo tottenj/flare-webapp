@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import MainBannerMenu from './MainBannerMenu';
 import GradientLink from '@/components/Links/GradientLink/GradientLink';
-import LogoWithText from '@/components/flare/serverLogo/LogoWithText';
+import LogoWithText from '@/components/flare/logoWithText/LogoWithText';
 
 export default async function MainBanner() {
   let src: string | undefined = '/defaultProfile.svg';

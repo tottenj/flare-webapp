@@ -6,7 +6,7 @@ import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import HeroInput from '@/components/inputs/hero/input/HeroInput';
 import { Form } from '@heroui/react';
 import Link from 'next/link';
-import LogoWithText from '../../flare/serverLogo/LogoWithText';
+import LogoWithText from '../../flare/logoWithText/LogoWithText';
 import FormError from '@/components/errors/Formerror/FormError';
 
 type Props = {

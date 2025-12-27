@@ -13,6 +13,9 @@ const config: StorybookConfig = {
   "framework": "@storybook/nextjs-vite",
   "staticDirs": [
     "../public"
-  ]
+  ],
+  "typescript":{
+    check: false
+  }
 };
 export default config;

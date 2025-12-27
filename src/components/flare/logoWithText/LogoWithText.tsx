@@ -1,19 +1,43 @@
-"use client"
-import { useRouter } from "next/navigation";
-import Logo from "../logo/Logo";
-interface logoWithTextProps{
-    size: number
+import Logo from "@/components/flare/logo/Logo";
+
+
+
+interface LogoWithTextProps {
+  size: 'small' | 'medium' | 'large' | "xLarge";
 }
-export default function LogoWithText({size}:logoWithTextProps) {
-  const router = useRouter()
+
+export default function LogoWithText({ size }: LogoWithTextProps) {
+  // Map auxSizeMain to Tailwind text size classes
+  const titleSizeClass = {
+    small: 'text-xl',
+    medium: 'text-3xl',
+    large: 'text-5xl',
+    xLarge: 'text-7xl'
+  }[size];
+
+  const subtitleSizeClass = {
+    small: 'text-xs',
+    medium: 'text-lg',
+    large: 'text-2xl',
+    xLarge: 'text-4xl'
+  }[size];
+
+  const logoSize = {
+    small: 45,
+    medium: 80,
+    large: 125,
+    xLarge: 200,
+  }[size];
 
   return (
-    <div onClick={() => router.push("/")} className="flex flex-row items-center gap-4 cursor-pointer w-fit">
-        <Logo size={size}/>
-        <div className="flex flex-col font-nunito text-xl font-black">
-        <p className="text-3xl mb-0">Flare</p>
-        <p className="text-orange">Ignite Community</p>
-        </div>
+    <div
+      className="flex w-fit cursor-pointer flex-row items-center gap-2"
+    >
+      <Logo size={logoSize} />
+      <div className="font-nunito flex flex-col leading-none font-black">
+        <p className={`hidden sm:block ${titleSizeClass} mb-0`}>Flare</p>
+        <p className={`hidden sm:block text-orange ${subtitleSizeClass}`}>Ignite Community</p>
+      </div>
     </div>
-  )
+  );
 }
