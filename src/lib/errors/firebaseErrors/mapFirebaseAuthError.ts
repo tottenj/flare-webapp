@@ -19,7 +19,8 @@ export default function mapFirebaseAuthError(err: unknown): ActionResult<null> {
         ok: false,
         error: {
           code: 'EMAIL_IN_USE',
-          message: 'An account with this email already exists. Please login. If you forgot your password please click forgot password below.',
+          message:
+            'An account with this email already exists. Please login. If you forgot your password please click forgot password below.',
         },
       };
 
@@ -47,6 +48,35 @@ export default function mapFirebaseAuthError(err: unknown): ActionResult<null> {
         error: {
           code: 'NETWORK_ERROR',
           message: 'Network error. Please check your connection.',
+        },
+      };
+
+    case 'auth/user-not-found':
+    case 'auth/wrong-password':
+    case 'auth/invalid-credential':
+      return {
+        ok: false,
+        error: {
+          code: 'INVALID_CREDENTIALS',
+          message: 'Invalid email or password.',
+        },
+      };
+
+    case 'auth/user-disabled':
+      return {
+        ok: false,
+        error: {
+          code: 'USER_DISABLED',
+          message: 'This account has been disabled. Please contact support.',
+        },
+      };
+
+    case 'auth/too-many-requests':
+      return {
+        ok: false,
+        error: {
+          code: 'TOO_MANY_ATTEMPTS',
+          message: 'Too many attempts. Please try again later.',
         },
       };
 

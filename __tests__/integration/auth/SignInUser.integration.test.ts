@@ -1,6 +1,7 @@
-import AuthGateway from "#src/lib/auth/authGateway";
-import { AuthErrors } from "#src/lib/errors/authError";
-import { AuthService } from "#src/lib/services/authService/AuthService";
+
+import AuthGateway from "@/lib/auth/authGateway";
+import { AuthErrors } from "@/lib/errors/authError";
+import { AuthService } from "@/lib/services/authService/AuthService";
 import {expect} from "@jest/globals"
 
 

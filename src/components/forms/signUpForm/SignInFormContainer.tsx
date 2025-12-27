@@ -1,7 +1,4 @@
 'use client';
-
-
-
 import { useRouter } from 'next/navigation';
 import SignUpFormPresentational from './SignUpFormPresentational';
 import { sendEmailVerification, signInWithEmailAndPassword, signOut } from 'firebase/auth';

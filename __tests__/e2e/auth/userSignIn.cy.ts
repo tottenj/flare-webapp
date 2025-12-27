@@ -19,4 +19,37 @@ describe('Unsuccessful Flow', () => {
   beforeEach(() => {
     cy.visit("/signin")
   })
+
+  it('Tests missing password flow', () => {
+    const email = 'valid@gmail.com';
+    cy.get('[data-cy="email-input"]').type(email, { force: true });
+    cy.get('[data-cy="submit-button"]').click({ force: true });
+
+    cy.url().should('include', '/signin');
+    cy.contains('Must Enter A Valid Email and Password').should('be.visible');
+  });
+
+
+  it('Tests incorrect password flow', () => {
+    const email = 'user@gmail.com';
+    const password = 'password123';
+
+     cy.get('[data-cy="email-input"]').type(email, { force: true });
+     cy.get('[data-cy="password-input"]').type(password, { force: true });
+     cy.get('[data-cy="submit-button"]').click({ force: true });
+     cy.url().should('include', '/signin')
+     cy.contains('Invalid email or password.').should('be.visible')
+  })
+
+  it('Tests Unkown Email Flow', () => {
+    const email = 'userABC@gmail.com';
+    const password = 'password123';
+
+    cy.get('[data-cy="email-input"]').type(email, { force: true });
+    cy.get('[data-cy="password-input"]').type(password, { force: true });
+    cy.get('[data-cy="submit-button"]').click({ force: true });
+    cy.url().should('include', '/signin');
+    cy.contains('Invalid email or password.').should('be.visible');
+  });
+
 })
