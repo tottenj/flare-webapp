@@ -32,7 +32,7 @@ describe('Unsuccessful Flow', () => {
 
   it('Tests incorrect password flow', () => {
     const email = 'user@gmail.com';
-    const password = 'password123';
+    const password = 'password1233';
 
      cy.get('[data-cy="email-input"]').type(email, { force: true });
      cy.get('[data-cy="password-input"]').type(password, { force: true });
