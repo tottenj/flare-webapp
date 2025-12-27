@@ -1,11 +1,20 @@
+import AuthGateway from '@/lib/auth/authGateway';
 import { AuthErrors } from '../errors/authError';
 import { logger } from '../logger';
 import { AuthService } from '../services/authService/AuthService';
 import { signUpAction } from './signUpAction';
 import { expect } from '@jest/globals';
+import { RequiresCleanupError } from '@/lib/errors/CleanupError';
 
 jest.mock('../services/authService/AuthService');
 jest.mock('../logger');
+jest.mock('@/lib/auth/authGateway', () => ({
+  __esModule: true,
+  default: {
+    deleteUser: jest.fn(),
+    verifyIdToken: jest.fn(),
+  },
+}));
 
 const mockSignUp = AuthService.signUp as jest.Mock;
 const mockLoggerError = logger.error as jest.Mock;
@@ -29,6 +38,24 @@ describe('Sign Up Action', () => {
       expect(result.error.fieldErrors).toBeDefined();
       expect(mockSignUp).not.toHaveBeenCalled();
     }
+  });
+
+  it('cleans up user on cleanup error', async () => {
+    (mockSignUp as jest.Mock).mockRejectedValueOnce(new RequiresCleanupError('error', 'fakeUid'));
+    (AuthGateway.deleteUser as jest.Mock).mockResolvedValue(undefined);
+
+    const result = await signUpAction({ idToken: 'valid-token' });
+    if (result.ok) throw new Error('Should not succeed');
+    expect(AuthGateway.deleteUser).toHaveBeenCalledTimes(1);
+    expect(AuthGateway.deleteUser).toHaveBeenCalledWith('fakeUid');
+    expect(mockLoggerError).toHaveBeenCalled();
+    expect(result.error.code).toBe('UNKNOWN');
+  });
+
+  it('does NOT cleanup when user already exists', async () => {
+    mockSignUp.mockRejectedValueOnce(AuthErrors.UserAlreadyExists());
+    await signUpAction({ idToken: 'valid-token' });
+    expect(AuthGateway.deleteUser).not.toHaveBeenCalled();
   });
 
   it('returns AppError when AuthService throws AppError', async () => {

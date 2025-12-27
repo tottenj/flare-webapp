@@ -1,6 +1,6 @@
 'use client';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
-import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
+import ServerLogo from '#src/components/flare/serverLogo/LogoWithText.js';
 import FileInput from '@/components/inputs/file/FileInput';
 import FormSection from '@/components/inputs/formSection/FormSection';
 import HeroInput from '@/components/inputs/hero/input/HeroInput';
@@ -21,7 +21,7 @@ export default function OrgSignInForm() {
   const [passStatus, setPassStatus] = useState(false);
   const router = useRouter();
   const { validFiles, handleFileChange } = useFileChange();
- 
+
   async function uploadFilesToFirebase(orgId: string) {
     for (const { key, file } of validFiles) {
       const path = `Organizations/${orgId}/${key}`;

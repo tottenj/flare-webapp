@@ -4,6 +4,7 @@ import { AuthService } from './AuthService';
 import { expect } from '@jest/globals';
 import { AuthErrors } from '@/lib/errors/authError';
 import { UniqueConstraintError } from '@/lib/errors/DalErrors';
+import { RequiresCleanupError } from '@/lib/errors/CleanupError';
 
 jest.mock('@/lib/dal/userDal/UserDal', () => ({
   userDal: {
@@ -80,6 +81,6 @@ describe('AuthService.signUp', () => {
       emailVerified: false,
     });
     (userDal.createIfNotExists as jest.Mock).mockRejectedValueOnce(new Error());
-    await expect(AuthService.signUp({ idToken: mockToken })).rejects.toThrow();
+    await expect(AuthService.signUp({ idToken: mockToken })).rejects.toBeInstanceOf(RequiresCleanupError);
   });
 });

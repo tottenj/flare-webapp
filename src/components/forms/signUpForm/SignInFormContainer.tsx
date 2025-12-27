@@ -1,12 +1,15 @@
 'use client';
 
-import { useFormAction } from '#src/lib/hooks/useFormAction';
-import { ActionResult } from '#src/lib/types/ActionResult';
+
+
 import { useRouter } from 'next/navigation';
 import SignUpFormPresentational from './SignUpFormPresentational';
 import { sendEmailVerification, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
-import signInAction from '#src/lib/auth/signInAction';
+import { useFormAction } from '@/lib/hooks/useFormAction';
+import { ActionResult } from '@/lib/types/ActionResult';
+import signInAction from '@/lib/auth/signInAction';
+import mapFirebaseAuthError from '@/lib/errors/firebaseErrors/mapFirebaseAuthError';
 
 export default function SignInFormContainer() {
   const router = useRouter();
@@ -14,6 +17,16 @@ export default function SignInFormContainer() {
   async function submitAction(formData: FormData): Promise<ActionResult<null>> {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
+
+    if (!email || !password) {
+      return {
+        ok: false,
+        error: {
+          message: 'Must Enter A Valid Email and Password',
+          code: 'INVALID_INPUT',
+        },
+      };
+    }
 
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
@@ -25,13 +38,7 @@ export default function SignInFormContainer() {
       }
       return result;
     } catch (err) {
-      return {
-        ok: false,
-        error: {
-          code: 'CLIENT_SIGNIN_FAILED',
-          message: 'Unable to login. Please try again.',
-        },
-      };
+      return mapFirebaseAuthError(err);
     }
   }
 

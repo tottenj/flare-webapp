@@ -13,3 +13,10 @@ describe('Successful Flow', () => {
     cy.url().should('include', '/dashboard');
   });
 });
+
+
+describe('Unsuccessful Flow', () => {
+  beforeEach(() => {
+    cy.visit("/signin")
+  })
+})

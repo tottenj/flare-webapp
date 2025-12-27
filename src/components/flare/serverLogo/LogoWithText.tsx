@@ -4,7 +4,7 @@ interface LogoWithTextProps {
   size: 'small' | 'medium' | 'large' | "xLarge";
 }
 
-export default function ServerLogo({ size }: LogoWithTextProps) {
+export default function LogoWithText({ size }: LogoWithTextProps) {
   // Map auxSizeMain to Tailwind text size classes
   const titleSizeClass = {
     small: 'text-xl',

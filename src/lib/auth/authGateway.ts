@@ -48,4 +48,22 @@ export default class AuthGateway {
 
     return sessionCookie;
   }
+
+  static async deleteUser(uid: string) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    const res = await fetch(`${process.env.FIREBASE_FUNCTION_URL}/deleteUser`, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid }),
+    });
+
+    clearTimeout(timeout);
+
+    if (!res.ok) {
+      throw new Error(`Failed to delete Firebase user: ${res.status}`);
+    }
+  }
 }

@@ -1,5 +1,5 @@
-"use client"
-import ServerLogo from '@/components/flare/serverLogo/ServerLogo';
+'use client';
+import ServerLogo from '#src/components/flare/serverLogo/LogoWithText.js';
 import PassInModal from '../passInModal/PassInModal';
 import Link from 'next/link';
 import Image from 'next/image';
