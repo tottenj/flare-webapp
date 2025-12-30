@@ -8,8 +8,6 @@ datasource db {
 }
 
 
-
-
 model User {
   id            String   @id @default(cuid())
   firebaseUid   String   @unique
@@ -19,28 +17,66 @@ model User {
   role          UserRole   @default(USER)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  organizationProfile OrganizationProfile?
 
-  @@index([firebaseUid])
+  
+
+  @@index([role])
+  @@index([status])
+  @@index([role, status])
+}
+
+model OrganizationProfile{
+  id            String @id @default(cuid())
+  userId        String @unique
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orgName       String
+  status        OrgStatus @default(PENDING)
+  locationId    String
+  location      Location @relation(fields: [locationId], references: [id])
+  socials       OrgSocial?
+  proofs        OrgProofFile[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status])
+}
+
+model OrgSocial{
+  id                String @id @default(cuid())
+  organizationId    String @unique
+  organization      OrganizationProfile @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  instagramHandle String?
+  facebookHandle  String?
+  xHandle         String?
+  otherText       String?
+}
+
+model OrgProofFile {
+  id             String @id @default(cuid())
+  organizationId String
+  organization   OrganizationProfile @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  platform       ProofPlatform
+  storagePath    String
+  contentType    String?
+  sizeBytes      Int?
+  originalName   String?
+  createdAt      DateTime @default(now())
+
+  @@index([organizationId])
 }
 
 
+model Location{
+  id          String @id @default(cuid())
+  placeId     String @unique
+  address     String?
+  point     Unsupported("geography(Point, 4326)")
+  createdAt DateTime @default(now())
+  organizationProfiles OrganizationProfile[]
 
-/*
-model FlareOrg {
-  id          String   @id @default(cuid())
-  user_id     String   @unique
-  description String?
-  verified    Boolean  @default(false)
-  location_id String
-  events      Event[]
-  location    Location @relation(fields: [location_id], references: [id])
-  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  socials     Socials?
-
-  @@map("flare_org")
+  @@index([point], type: Gist)
 }
-
-*/
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model spatial_ref_sys {
@@ -51,54 +87,6 @@ model spatial_ref_sys {
   proj4text String? @db.VarChar(2048)
 }
 
-/*
-
-model Event {
-  id           String   @id @default(cuid())
-  flare_id     String
-  title        String
-  description  String?
-  startDate    DateTime
-  endDate      DateTime
-  price        Float?   @default(0)
-  ticketLink   String?
-  verified     Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  location_id  String
-  organization FlareOrg @relation(fields: [flare_id], references: [id], onDelete: Cascade)
-  location     Location @relation(fields: [location_id], references: [id])
-
-  @@map("event")
-}
-
-
-
-model Location {
-  id            String                   @id @default(cuid())
-  place_id      String                   @unique
-  name          String?
-  coordinates   Unsupported("geography")
-  events        Event[]
-  organizations FlareOrg[]
-
-  @@map("location")
-}
-
-model Socials {
-  id           String   @id @default(cuid())
-  flare_id     String   @unique
-  twitter      String?
-  facebook     String?
-  instagram    String?
-  other        String?
-  organization FlareOrg @relation(fields: [flare_id], references: [id], onDelete: Cascade)
-
-  @@map("socials")
-}
-
-*/
-
-
 
 enum UserStatus {
   PENDING   // Signed up but email not verified
@@ -106,7 +94,21 @@ enum UserStatus {
   SUSPENDED // Admin action later
 }
 
+enum OrgStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
 enum UserRole {
   USER
   ADMIN
+  ORG
+}
+
+enum ProofPlatform {
+  INSTAGRAM
+  FACEBOOK
+  X
+  OTHER
 }

@@ -8,7 +8,7 @@ import { AuthService } from '../services/authService/AuthService';
 import { AppError } from '../errors/AppError';
 import { logger } from '../logger';
 import { cookies } from 'next/headers';
-import { AuthTokenSchema } from '../schemas/signUpSchema';
+import { AuthTokenSchema } from '../schemas/auth/signUpSchema';
 
 export default async function signInAction(input: unknown): Promise<ActionResult<null>> {
   const data = AuthTokenSchema.safeParse(input);

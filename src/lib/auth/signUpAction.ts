@@ -3,13 +3,13 @@ import z from 'zod';
 import { AppError } from '../errors/AppError';
 import { AuthErrors } from '../errors/authError';
 import fail from '../errors/fail';
-import { AuthTokenSchema } from '../schemas/signUpSchema';
 import { ActionResult } from '../types/ActionResult';
 import { extractFieldErrors } from '../errors/extractError';
 import { logger } from '../logger';
 import { AuthService } from '../services/authService/AuthService';
 import { RequiresCleanupError } from '@/lib/errors/CleanupError';
 import AuthGateway from '@/lib/auth/authGateway';
+import { AuthTokenSchema } from '@/lib/schemas/auth/signUpSchema';
 
 export async function signUpAction(input: unknown): Promise<ActionResult<null>> {
   const data = AuthTokenSchema.safeParse(input);

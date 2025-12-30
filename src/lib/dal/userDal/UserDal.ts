@@ -5,21 +5,23 @@ import { UniqueConstraintError } from '../../errors/DalErrors';
 import { prisma } from '../../../../prisma/prismaClient';
 
 export class UserDal {
-  async findByFirebaseUid(firebaseUid: string): Promise<User | null> {
-    return await prisma.user.findUnique({
+  async findByFirebaseUid(firebaseUid: string, tx?:Prisma.TransactionClient): Promise<User | null> {
+    const client = tx ?? prisma
+    return await client.user.findUnique({
       where: { firebaseUid },
     });
   }
 
-  async create(input: Prisma.UserCreateInput): Promise<User> {
+  async create(input: Prisma.UserCreateInput, tx?:Prisma.TransactionClient): Promise<User> {
+    if(tx) return await tx.user.create({data:input})
     return await prisma.user.create({ data: input });
   }
 
-  async createIfNotExists(input: Prisma.UserCreateInput): Promise<User> {
+  async createIfNotExists(input: Prisma.UserCreateInput, tx?: Prisma.TransactionClient): Promise<User> {
     const existing = await this.findByFirebaseUid(input.firebaseUid);
     if (existing) return existing;
     try {
-      return await this.create(input);
+      return await this.create(input, tx);
     } catch (e) {
       if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
         throw new UniqueConstraintError();

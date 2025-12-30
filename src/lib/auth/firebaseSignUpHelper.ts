@@ -5,5 +5,5 @@ export default async function firebaseSignUpHelper(email: string, password: stri
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   await sendEmailVerification(cred.user);
   const idToken = await cred.user.getIdToken();
-  return idToken
+  return {idToken, uid: cred.user.uid}
 }

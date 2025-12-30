@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Autocomplete, AutocompleteItem } from '@heroui/react';
 import { useAsyncList } from '@react-stately/data';
 import flareLocation from '@/lib/types/Location';
+import { LocationInput } from '@/lib/schemas/LocationInputSchema';
 
 interface placeOption {
   label: string;
@@ -11,13 +12,14 @@ interface placeOption {
 }
 
 interface placeSearchProps {
-  lab?: string;
+  label?: string;
   required?: boolean;
   z?: string;
-  defVal?: placeOption;
+  value?: LocationInput | null
+  onChange: (location: LocationInput) => void;
 }
 
-export default function PlaceSearch({ lab, required = true, z, defVal }: placeSearchProps) {
+export default function PlaceSearch({ label, required = true, z, value, onChange }: placeSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [location, setLocation] = useState<flareLocation | null>(null);
   const [getPlaces, setGetPlaces] = useState<null | Function>(null);
@@ -76,27 +78,27 @@ export default function PlaceSearch({ lab, required = true, z, defVal }: placeSe
     const selected = list.items.find((item) => item.value === key);
     if (!selected) return;
     const place = await getPlaceDetails(selected.value);
-    console.log(place)
     if (!place || !place.place.location) return;
-    const location: flareLocation = {
-      id: place.place.id,
-      name: place.place.displayName,
-      coordinates: {lat: place.place.location.lat(), lng: place.place.location.lng()}
+    const location: LocationInput = {
+      placeId: place.place.id,
+      address: place.place.displayName,
+      lat: place.place.location.lat(),
+      lng: place.place.location.lng(),
     };
-    setLocation(location);
+    onChange(location);
   }
 
   return (
     <>
       <Autocomplete
-        label={lab ? lab : 'Select Location'}
+        label={label ? label : 'Select Location'}
         placeholder="Type to search..."
         inputValue={list.filterText}
         isLoading={list.isLoading}
         items={list.items}
         variant="flat"
         data-cy={'location-input'}
-        defaultSelectedKey={defVal?.value}
+        defaultSelectedKey={value?.placeId}
         onInputChange={list.setFilterText}
         onSelectionChange={handleSelection}
         radius="sm"
@@ -111,9 +113,6 @@ export default function PlaceSearch({ lab, required = true, z, defVal }: placeSe
           </AutocompleteItem>
         )}
       </Autocomplete>
-      {location && (
-        <input type="hidden" name="location" required={required} value={JSON.stringify(location)} />
-      )}
     </>
   );
 }
