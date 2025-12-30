@@ -1,5 +1,6 @@
+import { ProofPlatform } from "@/lib/domain/ProofPlatform";
 import { FileKey } from "@/lib/hooks/useFileChange/useFileChange";
-import { ProofPlatform } from "@prisma/client";
+
 
 export const SOCIAL_CONFIG = {
   instagram: {

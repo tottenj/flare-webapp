@@ -1,4 +1,4 @@
-import { ProofPlatform } from '@prisma/client';
+import { ProofPlatform } from '@/lib/domain/ProofPlatform';
 import { z } from 'zod';
 
 export const ProofPlatformSchema = z.enum([

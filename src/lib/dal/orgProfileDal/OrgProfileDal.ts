@@ -1,6 +1,9 @@
 import { OrgProfileDomainProps } from "@/lib/domain/orgProfileDomain/OrgProfileDomain";
-import { Prisma } from "@prisma/client";
 import { prisma } from '../../../../prisma/prismaClient';
+import { Prisma } from "@prisma/client";
+
+
+
 
 export class OrgProfileDal{
     async create(input: OrgProfileDomainProps, tx?:Prisma.TransactionClient){
