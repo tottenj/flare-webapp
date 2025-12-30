@@ -1,3 +1,4 @@
+import 'server-only'
 import { AuthService } from '@/lib/services/authService/AuthService';
 import { prisma } from '../../../prisma/prismaClient';
 import { OrgProfileService } from '@/lib/services/orgProfileService.ts/orgProfileService';

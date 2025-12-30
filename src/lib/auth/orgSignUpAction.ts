@@ -1,3 +1,4 @@
+"use server"
 import AuthGateway from '@/lib/auth/authGateway';
 import { AppError } from '@/lib/errors/AppError';
 import { AuthErrors } from '@/lib/errors/authError';
