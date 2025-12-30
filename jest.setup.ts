@@ -10,11 +10,22 @@ Object.defineProperty(global, 'crypto', {
   },
 });
 
-jest.mock('@/lib/auth/firebaseSignUpHelper', () => ({
-  __esModule: true,
-  default: jest.fn(async () => ({ idToken: 'token', uid: 'uid' })),
-}));
+jest.mock('@/lib/firebase/auth/configs/clientApp', () => {
+  return {
+    // Provide whatever your code imports from this module
+    auth: {},
+    db: {},
+    storage: {},
+    functions: {},
+    fireBaseApp: {},
+  };
+});
 
+jest.mock('firebase/auth', () => ({
+  getAuth: jest.fn(() => ({})),
+  createUserWithEmailAndPassword: jest.fn(),
+  signInWithEmailAndPassword: jest.fn(),
+}));
 
 
 jest.mock('next/headers', () => ({
