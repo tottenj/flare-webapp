@@ -6,16 +6,17 @@ import { ImageMetadata } from '@/lib/schemas/proof/ImageMetadata';
 import { resolveProofPlatform } from '@/lib/utils/socialConfig';
 import { ref, uploadBytes } from 'firebase/storage';
 
-export default async function uploadSocialFile(
+export default async function uploadFile(
   file: File,
-  uid: string,
-  key: FileKey
+  path: string,
+  key?: FileKey,
+ 
 ): Promise<ImageMetadata> {
-  const path = `org/proofs/${uid}/${key}-${crypto.randomUUID()}-${file.name}`;
+
   await uploadBytes(ref(storage, path), file);
 
   return {
-    platform: resolveProofPlatform(key),
+    platform: key ? resolveProofPlatform(key) : undefined,
     storagePath: path,
     contentType: file.type,
     sizeBytes: file.size,

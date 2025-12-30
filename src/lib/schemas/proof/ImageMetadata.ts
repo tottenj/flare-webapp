@@ -2,7 +2,7 @@ import { ProofPlatformSchema } from "@/lib/schemas/proof/ProofPlatformSchema";
 import z from "zod";
 
 export const ImageMetadataSchema= z.object({
-      platform: ProofPlatformSchema,
+      platform: ProofPlatformSchema.optional(),
       storagePath: z.string(),
       contentType: z.string().optional(),
       sizeBytes: z.number().optional(),

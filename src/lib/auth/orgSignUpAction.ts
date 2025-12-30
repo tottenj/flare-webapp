@@ -6,11 +6,9 @@ import { extractFieldErrors } from '@/lib/errors/extractError';
 import fail from '@/lib/errors/fail';
 import { logger } from '@/lib/logger';
 import { OrgSignUpInput, OrgSignUpSchema } from '@/lib/schemas/auth/orgSignUpSchema';
-import { AuthService } from '@/lib/services/authService/AuthService';
-import { OrgProfileService } from '@/lib/services/orgProfileService.ts/orgProfileService';
 import { ActionResult } from '@/lib/types/ActionResult';
 import z from 'zod';
-import {prisma} from "../../../prisma/prismaClient"
+import signUpOrgUseCase from '@/lib/useCase/signUpOrgUseCase';
 
 export async function orgSignUpAction(input: OrgSignUpInput): Promise<ActionResult<null>> {
   const data = OrgSignUpSchema.safeParse(input);
@@ -19,10 +17,7 @@ export async function orgSignUpAction(input: OrgSignUpInput): Promise<ActionResu
     return fail(AuthErrors.InvalidInput(), fieldErrors);
   }
   try {
-    await prisma.$transaction(async (tx) => {
-      await AuthService.signUp({ idToken: data.data.idToken }, tx);
-      await OrgProfileService.signup(data.data, tx);
-    });
+    await signUpOrgUseCase(data.data);
     return { ok: true, data: null };
   } catch (err) {
     if (err instanceof RequiresCleanupError) {

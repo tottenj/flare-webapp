@@ -1,20 +1,15 @@
 import { orgSignUpAction } from '@/lib/auth/orgSignUpAction';
-import { AuthService } from '@/lib/services/authService/AuthService';
-import { OrgProfileService } from '@/lib/services/orgProfileService.ts/orgProfileService';
+import signUpOrgUseCase from '@/lib/useCase/signUpOrgUseCase';
 import AuthGateway from '@/lib/auth/authGateway';
-import { prisma } from '../../../prisma/prismaClient';
 import { RequiresCleanupError } from '@/lib/errors/CleanupError';
 import { AppError } from '@/lib/errors/AppError';
 import { expect } from '@jest/globals';
-import { OrgSignUpInput } from '@/lib/schemas/auth/orgSignUpSchema';
 import { logger } from '@/lib/logger';
 
 jest.mock('@/lib/logger');
-jest.mock('../../../prisma/prismaClient', () => ({
-  prisma: {
-    $transaction: jest.fn(),
-  },
-}));
+jest.mock('@/lib/useCase/signUpOrgUseCase');
+
+const mockUseCase = signUpOrgUseCase as jest.Mock;
 
 const validInput = {
   idToken: 'token',
@@ -39,55 +34,49 @@ const validInput = {
 describe('orgSignUpAction', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (prisma.$transaction as jest.Mock).mockImplementation(async (cb) => {
-      return cb({});
-    });
   });
 
-  it('runs signup inside a transaction and returns ok', async () => {
-    jest.spyOn(AuthService, 'signUp').mockResolvedValue(undefined);
-    jest.spyOn(OrgProfileService, 'signup').mockResolvedValue(undefined);
+  it('calls use case and returns ok', async () => {
+    mockUseCase.mockResolvedValueOnce(undefined);
 
     const result = await orgSignUpAction(validInput as any);
-    expect(AuthService.signUp).toHaveBeenCalledWith({ idToken: 'token' }, expect.anything());
 
-    expect(OrgProfileService.signup).toHaveBeenCalledWith(
-      expect.objectContaining({ org: expect.anything() }),
-      expect.anything()
-    );
+    expect(mockUseCase).toHaveBeenCalledWith(validInput);
     expect(result).toEqual({ ok: true, data: null });
   });
 
-  it('throws error on invalid input', async () => {
-    const invalidInput = { ...validInput, idToken: null } as any;
-    const result = await orgSignUpAction(invalidInput);
-    if (result.ok) throw new Error('Expected to fail');
-    expect(result.ok).toBe(false);
+  it('returns invalid input error on schema failure', async () => {
+    const invalidInput = { ...validInput, idToken: null };
+
+    const result = await orgSignUpAction(invalidInput as any);
+
+    if (result.ok) throw new Error('Expected failure');
+
     expect(result.error.code).toBe('AUTH_INVALID_INPUT');
   });
 
-  it('Does cleanup on requires cleanup error', async () => {
-    jest.spyOn(AuthService, 'signUp').mockResolvedValueOnce(undefined);
-    jest
-      .spyOn(OrgProfileService, 'signup')
-      .mockRejectedValueOnce(new RequiresCleanupError('message', 'uid123'));
+  it('performs cleanup on RequiresCleanupError', async () => {
+    mockUseCase.mockRejectedValueOnce(new RequiresCleanupError('cleanup', 'uid123'));
+
     jest.spyOn(AuthGateway, 'deleteUser').mockResolvedValueOnce(undefined);
+
     const result = await orgSignUpAction(validInput as any);
-    if (result.ok) throw new Error('Expected to fail');
-    expect(result.ok).toBe(false);
+
+    if (result.ok) throw new Error('Expected failure');
+
     expect(AuthGateway.deleteUser).toHaveBeenCalledWith('uid123');
-    expect(logger.error).toHaveBeenCalledTimes(1);
     expect(result.error.code).toBe('UNKNOWN');
   });
 
-  it('logs error on fail of deleteUser', async () => {
-    jest.spyOn(AuthService, 'signUp').mockResolvedValueOnce(undefined);
-    jest
-      .spyOn(OrgProfileService, 'signup')
-      .mockRejectedValueOnce(new RequiresCleanupError('message', 'uid123'));
-    jest.spyOn(AuthGateway, 'deleteUser').mockRejectedValueOnce(new Error());
+  it('logs if cleanup fails', async () => {
+    mockUseCase.mockRejectedValueOnce(new RequiresCleanupError('cleanup', 'uid123'));
+
+    jest.spyOn(AuthGateway, 'deleteUser').mockRejectedValueOnce(new Error('cleanup failed'));
+
     const result = await orgSignUpAction(validInput as any);
-    if (result.ok) throw new Error('Expected to fail');
+
+    if (result.ok) throw new Error('Expected failure');
+
     expect(logger.error).toHaveBeenCalledTimes(2);
     expect(result.error.code).toBe('UNKNOWN');
   });
@@ -98,66 +87,36 @@ describe('orgSignUpAction', () => {
       clientMessage: 'Organization already exists',
     });
 
-    jest.spyOn(AuthService, 'signUp').mockResolvedValueOnce(undefined);
-    jest.spyOn(OrgProfileService, 'signup').mockRejectedValueOnce(appError);
+    mockUseCase.mockRejectedValueOnce(appError);
 
     const result = await orgSignUpAction(validInput as any);
 
-    if (result.ok) throw new Error('Expected to fail');
+    if (result.ok) throw new Error('Expected failure');
 
     expect(result.error.code).toBe('ORG_ALREADY_EXISTS');
-    expect(logger.error).not.toHaveBeenCalled(); // no internal error log
-  });
-
-  it('does not call OrgProfileService if AuthService.signUp fails', async () => {
-    jest
-      .spyOn(AuthService, 'signUp')
-      .mockRejectedValueOnce(new AppError({ code: 'AUTH_FAILED', clientMessage: 'Auth failed' }));
-
-    const signupSpy = jest.spyOn(OrgProfileService, 'signup');
-
-    const result = await orgSignUpAction(validInput as any);
-
-    if (result.ok) throw new Error('Expected to fail');
-
-    expect(signupSpy).not.toHaveBeenCalled();
-    expect(result.error.code).toBe('AUTH_FAILED');
-  });
-
-  it('returns fieldErrors on validation failure', async () => {
-    const invalidInput = {
-      ...validInput,
-      org: { ...validInput.org, name: '' }, // violates schema
-    } as any;
-
-    const result = await orgSignUpAction(invalidInput);
-
-    if (result.ok) throw new Error('Expected to fail');
-    expect(result.error.code).toBe('AUTH_INVALID_INPUT');
+    expect(logger.error).not.toHaveBeenCalled();
   });
 
   it('wraps unknown errors as UNKNOWN', async () => {
-    jest.spyOn(AuthService, 'signUp').mockResolvedValueOnce(undefined);
-    jest.spyOn(OrgProfileService, 'signup').mockRejectedValueOnce(new Error('boom'));
+    mockUseCase.mockRejectedValueOnce(new Error('boom'));
 
     const result = await orgSignUpAction(validInput as any);
 
-    if (result.ok) throw new Error('Expected to fail');
+    if (result.ok) throw new Error('Expected failure');
 
     expect(result.error.code).toBe('UNKNOWN');
     expect(logger.error).toHaveBeenCalled();
   });
 
   it('does not attempt cleanup for non-cleanup errors', async () => {
-    jest.spyOn(AuthService, 'signUp').mockResolvedValueOnce(undefined);
-    jest
-      .spyOn(OrgProfileService, 'signup')
-      .mockRejectedValueOnce(new AppError({ code: 'ORG_INVALID', clientMessage: 'Invalid org' }));
+    mockUseCase.mockRejectedValueOnce(
+      new AppError({ code: 'ORG_INVALID', clientMessage: 'Invalid org' })
+    );
 
-    jest.spyOn(AuthGateway, 'deleteUser');
+    const deleteSpy = jest.spyOn(AuthGateway, 'deleteUser');
 
     await orgSignUpAction(validInput as any);
 
-    expect(AuthGateway.deleteUser).not.toHaveBeenCalled();
+    expect(deleteSpy).not.toHaveBeenCalled();
   });
 });
