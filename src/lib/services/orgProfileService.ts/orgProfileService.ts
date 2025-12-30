@@ -1,3 +1,4 @@
+import 'server-only'
 import AuthGateway from "@/lib/auth/authGateway";
 import { locationDal} from "@/lib/dal/locationDal/LocationDal";
 import { orgProfileDal } from "@/lib/dal/orgProfileDal/OrgProfileDal";
