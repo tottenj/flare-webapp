@@ -1,3 +1,4 @@
+"use client"
 import OrgSignUpFormPresentational from '@/components/forms/orgSignUpForm/OrgSignUpFormPresentational';
 import { orgSignUpAction } from '@/lib/auth/orgSignUpAction';
 import { buildOrgSignUpCommand } from '@/lib/auth/utils/buildOrgSignUpCommand';
@@ -8,7 +9,7 @@ import { useFormAction } from '@/lib/hooks/useFormAction';
 import { LocationInput } from '@/lib/schemas/LocationInputSchema';
 import { ActionResult } from '@/lib/types/ActionResult';
 import { signOut } from 'firebase/auth';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -19,7 +20,7 @@ export default function OrgSignUpFormContainer() {
 
   async function submitAction(formData: FormData): Promise<ActionResult<null>> {
     try {
-      const payload = await buildOrgSignUpCommand({formData, location, validFiles})
+      const payload = await buildOrgSignUpCommand({ formData, location, validFiles });
       const result = await orgSignUpAction(payload);
       await signOut(auth);
       return result;
