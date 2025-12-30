@@ -10,6 +10,12 @@ Object.defineProperty(global, 'crypto', {
   },
 });
 
+jest.mock('@/lib/auth/firebaseSignUpHelper', () => ({
+  __esModule: true,
+  default: jest.fn(async () => ({ idToken: 'token', uid: 'uid' })),
+}));
+
+
 
 jest.mock('next/headers', () => ({
   cookies: jest.fn(),
