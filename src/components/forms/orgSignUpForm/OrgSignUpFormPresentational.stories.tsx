@@ -4,11 +4,14 @@ import OrgSignUpFormPresentational from './OrgSignUpFormPresentational';
 
 export default {
   component: OrgSignUpFormPresentational,
-  title: "Forms/Organization Sign Up Form"
+  title: "Forms/Organization Sign Up Form",
+  tags: ['autodocs']
 } satisfies Meta<typeof OrgSignUpFormPresentational>;
 
 type Story = StoryObj<typeof OrgSignUpFormPresentational>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+    hasFile: () => {}
+  },
 };
