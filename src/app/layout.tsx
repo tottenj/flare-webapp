@@ -34,7 +34,7 @@ export default async function RootLayout({
           <main className="flex min-h-dvh flex-col">
             <MainBanner />
             <div className="gradient flex min-h-0 flex-1">
-              <div className="flex flex-1 flex-col">
+              <div className="flex flex-1 flex-col mt-4 mb-4 ml-auto mr-auto webGrid">
                 {children}
                 {event}
               </div>

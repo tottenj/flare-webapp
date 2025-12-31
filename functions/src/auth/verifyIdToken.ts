@@ -24,5 +24,6 @@ export const verifyIdToken = onRequest(async (req, res) => {
     });
   } catch {
     res.status(401).json({ error: 'INVALID_TOKEN' });
+    return 
   }
 });

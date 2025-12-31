@@ -17,7 +17,7 @@ export async function proxy(request: NextRequest) {
 
   // 3. Redirect unauthenticated users from protected routes
   if (isProtectedRoute && !session) {
-    return NextResponse.redirect(new URL('/events', request.url));
+   // return NextResponse.redirect(new URL('/events', request.url));
   }
 
   // 4. Redirect authenticated users away from auth routes

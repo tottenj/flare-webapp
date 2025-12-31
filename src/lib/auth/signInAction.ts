@@ -22,7 +22,7 @@ export default async function signInAction(input: unknown): Promise<ActionResult
     const cookie = await cookies();
     cookie.set('session', sessionToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
     });

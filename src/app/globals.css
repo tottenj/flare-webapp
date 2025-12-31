@@ -2,7 +2,6 @@
 @plugin './hero.ts';
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 
-
 @theme inline {
   --color-background: var(--app-background);
   --color-foreground: #1d0b31;
@@ -24,7 +23,18 @@ body {
   margin: 0;
 }
 
-#storybook-root{
+.webGrid {
+  max-width: 1280px;
+}
+
+@media only screen and (max-width: 1280px) {
+  .webGrid {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+#storybook-root {
   width: 100%;
   height: 100%;
 }
@@ -36,14 +46,14 @@ h1 {
   font-size: 2rem;
 }
 
-h2{
+h2 {
   font-family: var(--font-nunito);
   font-weight: bold;
   color: var(--color-primary);
   font-size: 1.5rem;
 }
 
-h4{
+h4 {
   font-family: var(--font-nunito);
   font-weight: bold;
   color: var(--color-primary);
@@ -64,19 +74,19 @@ button:hover {
   cursor: pointer;
 }
 
-input{
+input {
   outline: none !important;
 }
 
-input:focus{
+input:focus {
   outline: none;
 }
 
-label{
+label {
   position: relative;
 }
 
-.secondaryHeader{
+.secondaryHeader {
   font-size: 1rem;
   font-family: var(--font-nunito);
   font-weight: bold;
@@ -87,26 +97,26 @@ label{
   background: linear-gradient(135deg, #ffa301, #ff005c);
 }
 
-.gradientBack{
+.gradientBack {
   background: linear-gradient(135deg, #ffa301, #ff005c);
   width: 100vw;
   height: 100%;
   background-repeat: no-repeat;
 }
 
-.gradientBackFull{
+.gradientBackFull {
   background: linear-gradient(135deg, #ffa301, #ff005c);
   width: 100vw;
   height: 100lvh;
   background-repeat: no-repeat;
 }
 
-.errorText{
+.errorText {
   color: var(--color-red);
   font-weight: bold;
 }
 
-.basicInteraction{
+.basicInteraction {
   background-color: var(--color-primary);
   color: white;
   border-style: solid;
@@ -114,11 +124,10 @@ label{
   border-color: var(--color-primary);
 }
 
-.basicInteraction:hover{
+.basicInteraction:hover {
   background-color: white;
   color: var(--color-primary);
 }
-
 
 .fullGradientBackground {
   position: fixed;
@@ -131,9 +140,6 @@ label{
   background-size: cover;
   z-index: -1;
 }
-
-
-
 
 /* event card */
 .eventPage {
@@ -149,7 +155,7 @@ label{
   left: 16px;
 }
 
-.eventPage .bookmarkButton{
+.eventPage .bookmarkButton {
   top: 17%;
   left: 10%;
 }
@@ -190,7 +196,7 @@ label{
   width: 100%;
 }
 
-@media (max-width: 640px) { 
+@media (max-width: 640px) {
   h2 {
     font-size: 18px;
   }
@@ -207,7 +213,7 @@ label{
   }
 }
 
-@media (max-width: 450px) { 
+@media (max-width: 450px) {
   .eventImage {
     height: auto;
   }

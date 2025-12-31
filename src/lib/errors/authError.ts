@@ -16,6 +16,13 @@ export const AuthErrors = {
       status: 401,
     }),
 
+
+  InvalidSession: () => 
+    new AppError({
+      code: "INVALID_SESSION",
+      clientMessage: "Invalid Session"
+    }),
+
   UserAlreadyExists: () =>
     new AppError({
       code: 'AUTH_USER_EXISTS',

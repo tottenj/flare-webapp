@@ -26,6 +26,30 @@ export default class AuthGateway {
     }>;
   }
 
+  static async verifySession(sessionCookie: string) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    const res = await fetch(`${process.env.FIREBASE_FUNCTION_URL}/verifySession`, {
+      signal: controller.signal,
+      method: HTTP_METHOD.POST,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionCookie }),
+    });
+
+    clearTimeout(timeout);
+
+    if (res.status === 401) throw AuthErrors.InvalidSession();
+    if (!res.ok) throw AuthErrors.SigninFailed();
+
+    return res.json() as Promise<{
+      uid: string;
+      email: string;
+      emailVerified: boolean;
+      role?: string;
+    }>;
+  }
+
   static async createSession(idToken: string): Promise<string> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
