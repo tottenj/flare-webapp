@@ -14,7 +14,6 @@ export default defineConfig({
       openMode: 0,
     },
     setupNodeEvents(on, config) {
-       
       on('task', {
         'db:resetAndSeed': () => {
           console.log('Resetting and seeding the database...');
@@ -49,8 +48,12 @@ export default defineConfig({
     baseUrl: 'http://localhost:3000',
     chromeWebSecurity: false,
   },
+  env: {
+    FIREBASE_AUTH_EMULATOR_HOST: '127.0.0.1:9099',
+    FIRESTORE_EMULATOR_HOST: '127.0.0.1:8080',
+    FIREBASE_STORAGE_EMULATOR_HOST: '127.0.0.1:9199',
+  },
   video: true,
   videosFolder: 'reports/cypress/videos',
   screenshotsFolder: 'reports/cypress/screenshots',
-
 });
