@@ -1,11 +1,13 @@
 import AuthGateway from '@/lib/auth/authGateway';
-import { locationDal, LocationDal } from '@/lib/dal/locationDal/LocationDal';
+import { locationDal } from '@/lib/dal/locationDal/LocationDal';
 import { orgProfileDal } from '@/lib/dal/orgProfileDal/OrgProfileDal';
 import { orgProofDal } from '@/lib/dal/orgProofDal/OrgProofDal';
 import { orgSocialDal } from '@/lib/dal/orgSocialDal/OrgSocialDal';
 import { userDal } from '@/lib/dal/userDal/UserDal';
+import { ProofPlatform } from '@/lib/domain/ProofPlatform';
 import { AuthErrors } from '@/lib/errors/authError';
 import { RequiresCleanupError } from '@/lib/errors/CleanupError';
+import { UniqueConstraintError } from '@/lib/errors/DalErrors';
 import { OrgSignUpInput } from '@/lib/schemas/auth/orgSignUpSchema';
 import { OrgProfileService } from '@/lib/services/orgProfileService.ts/orgProfileService';
 import { expect } from '@jest/globals';
@@ -52,7 +54,7 @@ jest.mock('@/lib/dal/orgProofDal/OrgProofDal', () => ({
   },
 }));
 
-describe('orgProfileService.signup', () => {
+describe('OrgProfileService.signup (unit)', () => {
   const mockVerify = AuthGateway.verifyIdToken as jest.Mock;
   const mockFindUser = userDal.findByFirebaseUid as jest.Mock;
   const mockCreateLocation = locationDal.create as jest.Mock;
@@ -65,55 +67,52 @@ describe('orgProfileService.signup', () => {
       email: 'example@gmail.com',
       location: { placeId: 'placeId', address: '123 St', lat: 1, lng: 2 },
     },
-    socials: [{ platform: 'INSTAGRAM', handle: '@flare' }],
-    proofs: [{ platform: 'INSTAGRAM', storagePath: 'path' }],
+    socials: [{ platform: ProofPlatform.INSTAGRAM, handle: '@flare' }],
+    proofs: [{ platform: ProofPlatform.INSTAGRAM, storagePath: 'path' }],
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('successfully calls all functions', async () => {
-    mockVerify.mockResolvedValueOnce({
+  function mockHappyPath() {
+    mockVerify.mockResolvedValue({
       uid: 'uid123',
       email: 'example@gmail.com',
-      emailVerified: false,
     });
-    mockFindUser.mockResolvedValueOnce({
-      id: 'userId',
-      org: {
-        name: 'name',
-      },
-    });
-    mockCreateLocation.mockResolvedValueOnce({
-      id: 'locationId',
-    });
-    mockCreateOrg.mockResolvedValueOnce({
-      id: 'orgId',
-    });
+    mockFindUser.mockResolvedValue({ id: 'userId' });
+    mockCreateLocation.mockResolvedValue({ id: 'locationId' });
+    mockCreateOrg.mockResolvedValue({ id: 'orgId' });
+  }
+
+  it('successfully creates org, socials, and proofs', async () => {
+    mockHappyPath();
 
     await OrgProfileService.signup(input);
-    expect(AuthGateway.verifyIdToken).toHaveBeenCalledWith('token');
+
+    expect(mockVerify).toHaveBeenCalledWith('token');
     expect(mockFindUser).toHaveBeenCalledWith('uid123', undefined);
     expect(mockCreateLocation).toHaveBeenCalledWith(input.org.location, undefined);
-    expect(orgProfileDal.create).toHaveBeenCalledTimes(1);
+    expect(mockCreateOrg).toHaveBeenCalledTimes(1);
     expect(orgSocialDal.create).toHaveBeenCalledWith('orgId', input.socials, undefined);
     expect(orgProofDal.create).toHaveBeenCalledWith('orgId', input.proofs, undefined);
   });
 
-  it('throws when email is missing', async () => {
+  it('throws AUTH_EMAIL_REQUIRED when email is missing', async () => {
     mockVerify.mockResolvedValueOnce({
       uid: 'uid123',
       email: null,
     });
-    await expect(OrgProfileService.signup(input)).rejects.toMatchObject({ code: 'AUTH_EMAIL_REQUIRED' });
+
+    await expect(OrgProfileService.signup(input)).rejects.toMatchObject({
+      code: 'AUTH_EMAIL_REQUIRED',
+    });
   });
 
-  it('throws when no user found', async () => {
+  it('throws RequiresCleanupError when user does not exist', async () => {
     mockVerify.mockResolvedValueOnce({
       uid: 'uid123',
       email: 'example@gmail.com',
-      emailVerified: false,
     });
 
     mockFindUser.mockResolvedValueOnce(null);
@@ -121,24 +120,24 @@ describe('orgProfileService.signup', () => {
     await expect(OrgProfileService.signup(input)).rejects.toBeInstanceOf(RequiresCleanupError);
   });
 
+  it('maps UniqueConstraintError to AUTH_USER_EXISTS', async () => {
+    mockHappyPath();
+    mockCreateOrg.mockRejectedValueOnce(new UniqueConstraintError());
+
+    await expect(OrgProfileService.signup(input)).rejects.toMatchObject({
+      code: 'AUTH_USER_EXISTS',
+    });
+  });
+
+  it('wraps unknown errors in RequiresCleanupError', async () => {
+    mockHappyPath();
+    mockCreateOrg.mockRejectedValueOnce(new Error('unexpected'));
+
+    await expect(OrgProfileService.signup(input)).rejects.toBeInstanceOf(RequiresCleanupError);
+  });
+
   it('does not create socials or proofs when none provided', async () => {
-    mockVerify.mockResolvedValueOnce({
-      uid: 'uid123',
-      email: 'example@gmail.com',
-      emailVerified: false,
-    });
-    mockFindUser.mockResolvedValueOnce({
-      id: 'userId',
-      org: {
-        name: 'name',
-      },
-    });
-    mockCreateLocation.mockResolvedValueOnce({
-      id: 'locationId',
-    });
-    mockCreateOrg.mockResolvedValueOnce({
-      id: 'orgId',
-    });
+    mockHappyPath();
 
     await OrgProfileService.signup({
       ...input,

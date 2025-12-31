@@ -18,7 +18,7 @@ export class AuthService {
       emailVerified: false,
     });
     try {
-      await userDal.createIfNotExists(user.props);
+      await userDal.createIfNotExists(user.props, tx);
     } catch (e) {
       if (e instanceof UniqueConstraintError) {
         throw AuthErrors.UserAlreadyExists();

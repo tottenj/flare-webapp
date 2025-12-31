@@ -33,7 +33,7 @@ describe('AuthService.signUp', () => {
         firebaseUid: 'uid123',
         email: 'test@test.com',
         emailVerified: false,
-      })
+      }), undefined
     );
     expect(userDal.createIfNotExists).toHaveBeenCalledTimes(1);
   });
