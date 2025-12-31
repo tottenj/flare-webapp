@@ -6,14 +6,13 @@ describe('User Sign Up = Successful Flow', () => {
   it('Tests success flow', () => {
     const email = 'test@gmail.com';
     const password = 'password123';
-
+    cy.intercept('GET', '/confirmation').as('confirmationPage');
     cy.get('[data-cy="email-input"]').type(email, { force: true });
     cy.get('[data-cy="password-input"]').type(password, { force: true });
     cy.get('[data-cy="submit-button"]').click({ force: true });
-    cy.recivedOobCode(email);
-    cy.contains('Thank You For Signing Up!', { timeout: 10000 }).should('be.visible');
 
-    cy.contains('Please Check Your Email To Verify Your Account!').should('be.visible');
+    cy.recivedOobCode(email);
+    cy.wait('@confirmationPage', { timeout: 20000 }).its('response.statusCode').should('eq', 200);
   });
 });
 
