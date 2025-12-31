@@ -53,9 +53,7 @@ describe('SignUpForm', () => {
       });
     });
 
-    // it("Checks if user exists", () => {
-    //   cy.userExists(createUser.email, createUser.password, false).shouldMatch(createUserResponse)
-    // })
+   
   });
 
   describe('Error Cases', () => {

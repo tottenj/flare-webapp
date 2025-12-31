@@ -19,6 +19,7 @@ describe('Org Sign Up - Successful Flow', () => {
     cy.usePlacesInput("[data-cy='location-input']");
     cy.get("[data-cy='password-input']").type(sampleOrg.password);
     cy.contains('Submit').click();
+    cy.recivedOobCode(sampleOrg.email);
     cy.url().should('include', '/confirmation');
   });
 
@@ -86,15 +87,14 @@ describe('Org Sign Up - Unsuccessful Flow', () => {
     cy.url().should('include', '/flare-signup');
   });
 
+  it('shows error if email invalid', () => {
+    cy.get("[data-cy='orgName-input']").type(sampleOrg.name);
+    cy.get("[data-cy='email-input']").type('unverifiedOrg');
+    cy.usePlacesInput("[data-cy='location-input']");
+    cy.get("[data-cy='password-input']").type(sampleOrg.password);
+    cy.contains('Submit').click();
 
-   it('shows error if email invalid', () => {
-     cy.get("[data-cy='orgName-input']").type(sampleOrg.name);
-     cy.get("[data-cy='email-input']").type('unverifiedOrg');
-     cy.usePlacesInput("[data-cy='location-input']");
-     cy.get("[data-cy='password-input']").type(sampleOrg.password);
-     cy.contains('Submit').click();
-
-     cy.contains('Please enter a valid email address.').should('be.visible');
-     cy.url().should('include', '/flare-signup');
-   });
+    cy.contains('Please enter a valid email address.').should('be.visible');
+    cy.url().should('include', '/flare-signup');
+  });
 });

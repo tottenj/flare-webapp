@@ -4,7 +4,6 @@ import { org, verifiedUser } from './constants';
 import { createOrg } from './constants/Organization';
 import { compareWithTolerance, pickShared } from './helpers';
 
-
 // Constants
 const apiKey = Cypress.env('FIREBASE_API_KEY');
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
@@ -45,6 +44,20 @@ function getOobCode(email: string) {
   });
 }
 
+function assertVerifyEmailOobSent(email: string): void {
+  const normalizedEmail = email.toLowerCase();
+
+  cy.request('GET', `${AUTH_ADMIN}/oobCodes`)
+    .its('body.oobCodes')
+    .should((oobCodes: any[]) => {
+      const code = oobCodes.find(
+        (c) => c.requestType === 'VERIFY_EMAIL' && c.email?.toLowerCase() === normalizedEmail
+      );
+
+      expect(code, `Expected VERIFY_EMAIL OOB code to be sent for ${normalizedEmail}`).to.exist;
+    });
+}
+
 function applyOobCode(oobCode: string) {
   return cy
     .request({
@@ -55,9 +68,9 @@ function applyOobCode(oobCode: string) {
     .then((response) => response.body);
 }
 
-Cypress.Commands.add('recivedOobCode', (email:string) => {
-  getOobCode(email)
-})
+Cypress.Commands.add('recivedOobCode', (email: string) => {
+  assertVerifyEmailOobSent(email);
+});
 
 Cypress.Commands.add(
   'createUser',
@@ -303,8 +316,6 @@ Cypress.Commands.add('waitForAuthEmulator', () => {
   });
 });
 
-
-
 Cypress.Commands.add('waitForEmulators', () => {
   cy.waitForAuthEmulator();
 });
@@ -399,7 +410,6 @@ Cypress.Commands.add('getStorageFile', (path: string) => {
 
   return attempt(MAX_RETRIES);
 });
-
 
 Cypress.Commands.add('waitForNextApi', (alias) => {
   return cy.wait(alias).then((interception) => {

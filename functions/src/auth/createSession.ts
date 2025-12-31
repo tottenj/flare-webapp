@@ -13,16 +13,18 @@ export const createSession = onRequest(async (req, res) => {
     return;
   }
 
-  const decoded = await auth.verifyIdToken(idToken);
-  if(!decoded.email_verified){
-    res.status(401).json({error: 'Email Unverified'})
-    return
+  try {
+    const decoded = await auth.verifyIdToken(idToken);
+    if (!decoded.email_verified) {
+      res.status(403).json({ error: 'Email Unverified' });
+      return;
+    }
+    const sessionCookie = await auth.createSessionCookie(idToken, {
+      expiresIn: 1000 * 60 * 60 * 24 * 5,
+    });
+    res.json({ sessionCookie });
+    return;
+  } catch (err) {
+    res.status(401).json({ error: 'Invalid Token' });
   }
-
-  const sessionCookie = await auth.createSessionCookie(idToken, {
-    expiresIn: 1000 * 60 * 60 * 24 * 5,
-  });
-
-  res.json({ sessionCookie });
-  return 
 });
