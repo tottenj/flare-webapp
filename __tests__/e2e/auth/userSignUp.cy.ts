@@ -22,7 +22,7 @@ describe('User Sign Up - Unsuccessful Flow', () => {
   });
 
   it('Tests email already in use flow', () => {
-    const email = 'userOne@gmail.com';
+    const email = 'user@gmail.com';
     const password = 'password123';
     cy.get('[data-cy="email-input"]').type(email, { force: true });
     cy.get('[data-cy="password-input"]').type(password, { force: true });
