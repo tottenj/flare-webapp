@@ -11,7 +11,7 @@ describe('User Sign Up = Successful Flow', () => {
     cy.get('[data-cy="password-input"]').type(password, { force: true });
     cy.get('[data-cy="submit-button"]').click({ force: true });
     cy.recivedOobCode(email);
-    cy.url().should('include', '/confirmation');
+    cy.location('pathname', { timeout: 10000 }).should('eq', '/confirmation');
   });
 });
 
