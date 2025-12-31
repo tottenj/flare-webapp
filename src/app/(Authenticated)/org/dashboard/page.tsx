@@ -7,7 +7,7 @@ export default async function page() {
 
   return (
   <div className='grid grid-cols-2 grid-rows-[1fr_3fr] w-full h-full gap-4'>
-    <OrgDashboardInfoPresentational orgName={ctx.profile.orgProfile!.orgName} email={ctx.user.email} status={ctx.profile.orgProfile!.status}/>
+    <OrgDashboardInfoPresentational profilePicPath={ctx.user.profilePic ?? undefined} orgName={ctx.profile.orgProfile!.orgName} email={ctx.user.email} status={ctx.profile.orgProfile!.status}/>
   </div>
   )
 }

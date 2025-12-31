@@ -8,7 +8,7 @@ export const GetUserContextSchema = z.object({
     email: z.email(),
     role: z.string(),
     emailVerified: z.boolean(),
-    profilePic: ImageMetadataSchema.nullable()
+    profilePic: z.string().nullable()
   }),
   profile: z.object({
     orgProfile: GetOrgProfileSchema.nullable(),

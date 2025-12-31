@@ -10,7 +10,7 @@ export interface UserProps {
 export class UserDomain {
   constructor(public readonly props: UserProps) {}
 
-  static onSignUp(input: { firebaseUid: string; email: string; emailVerified: boolean }) {    
+  static onSignUp(input: { firebaseUid: string; email: string; emailVerified: boolean }) {
     return new UserDomain({
       firebaseUid: input.firebaseUid,
       email: input.email,
@@ -20,5 +20,8 @@ export class UserDomain {
       createdAt: new Date(),
     });
   }
-  
+
+  static profilePicturePath(userId: string) {
+    return `users/${userId}/profile-pic.jpg`;
+  }
 }

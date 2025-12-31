@@ -1,5 +1,6 @@
 import getAuthenticatedUser from '@/lib/auth/utils/getAuthenticatedUser';
 import { userDal } from '@/lib/dal/userDal/UserDal';
+import { UserDomain } from '@/lib/domain/UserDomain';
 import {
   GetUserContext,
   GetUserContextSchema,
@@ -24,14 +25,7 @@ export class UserContextService {
         email: user.email,
         role: user.role,
         emailVerified: authUser.emailVerified,
-        profilePic: user.profilePic
-          ? {
-              storagePath: user.profilePic.imageAsset.storagePath,
-              sizeBytes: user.profilePic.imageAsset.sizeBytes ?? undefined,
-              originalName: user.profilePic.imageAsset.originalName ?? undefined,
-              contentType: user.profilePic.imageAsset.contentType ?? undefined,
-            }
-          : null,
+        profilePic: user.profilePic ? UserDomain.profilePicturePath(authUser.uid) : null,
       },
       profile: {
         orgProfile: user.organizationProfile
