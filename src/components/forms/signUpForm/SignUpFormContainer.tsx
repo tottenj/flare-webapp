@@ -30,7 +30,7 @@ export default function SignUpFormContainer() {
     try {
       const {idToken} = await firebaseSignUpHelper(email, password);
       const result = await signUpAction({ idToken });
-      await signOut(auth);
+      //await signOut(auth);
       return result;
     } catch (err) {
       return mapFirebaseAuthError(err);
