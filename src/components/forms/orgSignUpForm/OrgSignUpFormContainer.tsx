@@ -22,7 +22,7 @@ export default function OrgSignUpFormContainer() {
     try {
       const payload = await buildOrgSignUpCommand({ formData, location, validFiles });
       const result = await orgSignUpAction(payload);
-     // await signOut(auth);
+      await signOut(auth);
       return result;
     } catch (err) {
       return mapFirebaseAuthError(err);
