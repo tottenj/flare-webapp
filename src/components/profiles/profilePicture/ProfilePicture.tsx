@@ -7,7 +7,7 @@ interface profilePictureProps {
 }
 
 export default async function ProfilePicture({ size, src }: profilePictureProps) {
-  let retval = '/defaultProfile.svg';
+  let retval = src ?? '/defaultProfile.svg';
 
   
   return (

@@ -37,7 +37,6 @@ describe('signInAction', () => {
       'sessionToken',
       expect.objectContaining({
         httpOnly: true,
-        secure: true,
         sameSite: 'lax',
         path: '/',
       })

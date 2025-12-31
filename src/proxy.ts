@@ -22,7 +22,7 @@ export async function proxy(request: NextRequest) {
 
   // 4. Redirect authenticated users away from auth routes
   if (isAuthRoute && session) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    //return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   

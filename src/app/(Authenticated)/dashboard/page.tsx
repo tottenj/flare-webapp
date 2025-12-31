@@ -1,14 +1,16 @@
-import getAuthenticatedUser from '@/lib/auth/utils/getAuthenticatedUser';
+import { UserContextService } from '@/lib/services/userContextService/userContextService';
 import { redirect } from 'next/navigation';
 
-export default async function page() {
-  const user = await getAuthenticatedUser();
-  if(!user) redirect("/signin")
-  console.log(user);
+export default async function DashboardPage() {
+  const ctx = await UserContextService.requireUser();
 
-  return (
-    <div className="bg-blue h-full w-full">
-      <h1>Dashboard</h1>
-    </div>
-  );
+  if (ctx.flags.isAdmin) {
+    redirect('/admin/dashboard');
+  }
+
+  if (ctx.flags.isOrg) {
+    redirect('/org/dashboard');
+  }
+
+  redirect('/user/dashboard');
 }

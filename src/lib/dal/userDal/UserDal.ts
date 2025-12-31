@@ -15,6 +15,22 @@ export class UserDal {
     });
   }
 
+  async findContextByFirebaseUid(firebaseUid: string, tx?:Prisma.TransactionClient){
+    const client = tx ?? prisma;
+    return await client.user.findUnique({
+      where: {firebaseUid},
+      include:{
+        organizationProfile: true,
+        profilePic: {
+          select:{
+            id: true,
+            imageAsset: true
+          }
+        }
+      }
+    })
+  }
+
   async create(input: Prisma.UserCreateInput, tx?: Prisma.TransactionClient): Promise<User> {
     if (tx) return await tx.user.create({ data: input });
     return await prisma.user.create({ data: input });

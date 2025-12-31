@@ -18,7 +18,7 @@ model User {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   organizationProfile OrganizationProfile?
-
+  profilePic    ProfilePic?
   
 
   @@index([role])
@@ -57,15 +57,34 @@ model OrgProofFile {
   organizationId String
   organization   OrganizationProfile @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   platform       ProofPlatform
+  imageAssetId   String
+  imageAsset     ImageAsset @relation(fields: [imageAssetId], references: [id])
+
+  createdAt      DateTime @default(now())
+  @@index([organizationId])
+}
+
+model ProfilePic{
+  id            String @id @default(cuid())
+  userId        String @unique
+  user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imageAssetId  String @unique
+  imageAsset    ImageAsset @relation(fields: [imageAssetId], references: [id])
+
+  @@index([userId])
+}
+
+model ImageAsset{
+  id             String  @id @default(cuid())
   storagePath    String
   contentType    String?
   sizeBytes      Int?
   originalName   String?
   createdAt      DateTime @default(now())
 
-  @@index([organizationId])
+  orgProofFiles OrgProofFile[]
+  profilePics   ProfilePic[]
 }
-
 
 model Location{
   id          String @id @default(cuid())
