@@ -14,7 +14,10 @@ export default async function ProfilePictureContainer({
   if (profilePicPath) {
     try {
       profilePic = await ImageService.getDownloadUrl(profilePicPath);
-    } catch (err) {}
+      console.log(profilePic)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return <ProfilePicture size={size} src={profilePic} />;

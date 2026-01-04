@@ -9,9 +9,13 @@ import { GeneralErrors } from '@/lib/errors/GeneralErrors';
 import { ImageMetadata, ImageMetadataSchema } from '@/lib/schemas/proof/ImageMetadata';
 import AccountService from '@/lib/services/accountService/AccountService';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
+import { ActionResponse } from '@/lib/types/ActionResponse';
+import { ActionResult } from '@/lib/types/ActionResult';
 import z from 'zod';
 
-export default async function uploadProfilePicture(imageData: ImageMetadata) {
+export default async function uploadProfilePicture(
+  imageData: ImageMetadata
+): Promise<ActionResult<null>> {
   const ctx = await UserContextService.requireNone();
   if (!ctx) return fail(AuthErrors.InvalidSession());
   const data = ImageMetadataSchema.safeParse(imageData);
@@ -25,6 +29,7 @@ export default async function uploadProfilePicture(imageData: ImageMetadata) {
       AuthErrors.Unauthorized()
     );
     await AccountService.updateProfilePicture({ imageData: data.data, userId: ctx.user.id });
+    return { ok: true, data: null };
   } catch (error) {
     if (error instanceof AppError) {
       return fail(error);

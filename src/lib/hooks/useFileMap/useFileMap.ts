@@ -1,7 +1,5 @@
 'use client';
-
 import { useState } from 'react';
-
 export type FileMap<K extends string> = Record<K, File | null>;
 
 interface UseFileMapOptions<K extends string> {
@@ -14,10 +12,19 @@ export default function useFileMap<K extends string>({
   onFileChange,
 }: UseFileMapOptions<K>) {
   const [files, setFiles] = useState<FileMap<K>>(initial);
-
+  const [isBusy, setIsBusy] = useState(false);
   async function setFile(key: K, file: File | null) {
-    await onFileChange?.(key, file);
-    setFiles((prev) => ({ ...prev, [key]: file }));
+    if (!onFileChange) {
+      setFiles((prev) => ({ ...prev, [key]: file }));
+      return;
+    }
+    setIsBusy(true);
+    try {
+      await onFileChange(key, file);
+      setFiles((prev) => ({ ...prev, [key]: file }));
+    } finally {
+      setIsBusy(false);
+    }
   }
 
   function clear() {
@@ -30,5 +37,6 @@ export default function useFileMap<K extends string>({
     clear,
     remove: (key: K) => setFile(key, null),
     hasFile: (key: K) => Boolean(files[key]),
+    isBusy
   };
 }
