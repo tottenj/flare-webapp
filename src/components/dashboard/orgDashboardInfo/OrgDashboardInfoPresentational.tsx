@@ -1,3 +1,4 @@
+'use server'
 import EditProfilePictureButtonContainer from '@/components/buttons/editProfilePictureButton/EditProfilePictureButtonContainer';
 import ProfilePictureContainer from '@/components/profiles/profilePicture/ProfilePictureContainer';
 import ProfilePictureSkeleton from '@/components/skeletons/ProfilePictureSkeleton/ProfilePictureSkeleton';
@@ -10,7 +11,7 @@ interface Props {
   profilePicPath: string | null;
 }
 
-export default function OrgDashboardInfoPresentational({
+export default async function OrgDashboardInfoPresentational({
   email,
   orgName,
   status,

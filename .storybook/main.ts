@@ -8,5 +8,9 @@ const config: StorybookConfig = {
   typescript: {
     check: false,
   },
+  features:{
+    experimentalRSC:true
+  }
+  
 };
 export default config;
