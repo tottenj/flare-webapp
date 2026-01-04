@@ -16,7 +16,14 @@ export const StorageErrors = {
         status: 400
     }),
 
-  UnkownError: () => 
+  Timeout: () =>
+    new AppError({
+      code: "STORAGE_TIMEOUT",
+      clientMessage: "Timed out trying to access storage",
+      status: 400
+    }),
+
+  UnknownError: () => 
     new AppError({
       code: "STORAGE_UNKNOWN_ERROR",
       clientMessage: "Error fetching file please try again later",

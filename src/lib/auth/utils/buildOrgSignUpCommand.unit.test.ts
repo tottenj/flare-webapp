@@ -1,11 +1,11 @@
 import firebaseSignUpHelper from '@/lib/auth/firebaseSignUpHelper';
 import { buildOrgSignUpCommand } from '@/lib/auth/utils/buildOrgSignUpCommand';
 import { LocationInput } from '@/lib/schemas/LocationInputSchema';
-import uploadFile from '@/lib/storage/uploadFile';
+import uploadProofFile from '@/lib/storage/uploadProofFile';
 import { expect } from '@jest/globals';
 
 jest.mock('@/lib/auth/firebaseSignUpHelper');
-jest.mock('@/lib/storage/uploadFile');
+jest.mock('@/lib/storage/uploadProofFile');
 
 describe('builldOrgSignUpCommand', () => {
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('builldOrgSignUpCommand', () => {
       originalName: 'fileName',
     };
 
-    (uploadFile as jest.Mock).mockResolvedValueOnce(uploadedProof);
+    (uploadProofFile as jest.Mock).mockResolvedValueOnce(uploadedProof);
 
     const mockLocation: LocationInput = {
       placeId: 'placeId',
@@ -51,7 +51,7 @@ describe('builldOrgSignUpCommand', () => {
     });
 
     expect(firebaseSignUpHelper).toHaveBeenCalledWith('example@gmail.com', 'password');
-    expect(uploadFile).toHaveBeenCalledWith(
+    expect(uploadProofFile).toHaveBeenCalledWith(
       mockFile,
       'org/proofs/uid123/instagram-fixed-uuid-instagram.png',
       'instagram'

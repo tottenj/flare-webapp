@@ -15,20 +15,17 @@ export class UserDal {
     });
   }
 
-  async findContextByFirebaseUid(firebaseUid: string, tx?:Prisma.TransactionClient){
+  async findContextByFirebaseUid(firebaseUid: string, tx?: Prisma.TransactionClient) {
     const client = tx ?? prisma;
     return await client.user.findUnique({
-      where: {firebaseUid},
-      include:{
+      where: { firebaseUid },
+      include: {
         organizationProfile: true,
         profilePic: {
-          select:{
-            id: true,
-            imageAsset: true
-          }
-        }
-      }
-    })
+          include: { imageAsset: true },
+        },
+      },
+    });
   }
 
   async create(input: Prisma.UserCreateInput, tx?: Prisma.TransactionClient): Promise<User> {

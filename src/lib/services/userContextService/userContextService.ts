@@ -8,6 +8,8 @@ import {
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 
+
+
 export class UserContextService {
   private static resolve = cache(async (): Promise<GetUserContext | null> => {
     const authUser = await getAuthenticatedUser();
@@ -22,10 +24,11 @@ export class UserContextService {
     const ctx: GetUserContext = {
       user: {
         id: user.id,
+        firebaseUid: user.firebaseUid,
         email: user.email,
         role: user.role,
         emailVerified: authUser.emailVerified,
-        profilePic: user.profilePic ? UserDomain.profilePicturePath(authUser.uid) : null,
+        profilePic: user.profilePic?.imageAsset?.storagePath ?? null,
       },
       profile: {
         orgProfile: user.organizationProfile
@@ -48,6 +51,12 @@ export class UserContextService {
     GetUserContextSchema.parse(ctx);
     return ctx;
   });
+
+
+  static async requireNone(): Promise<GetUserContext | null>{
+    return await this.resolve();
+
+  }
 
   static async requireUser(): Promise<GetUserContext> {
     const ctx = await this.resolve();

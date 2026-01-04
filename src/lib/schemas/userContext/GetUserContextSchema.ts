@@ -1,10 +1,10 @@
-import { ImageMetadataSchema } from '@/lib/schemas/proof/ImageMetadata';
 import { GetOrgProfileSchema } from '@/lib/schemas/userContext/GetOrgProfileSchema';
 import z from 'zod';
 
 export const GetUserContextSchema = z.object({
   user: z.object({
     id: z.string(),
+    firebaseUid: z.string(),
     email: z.email(),
     role: z.string(),
     emailVerified: z.boolean(),

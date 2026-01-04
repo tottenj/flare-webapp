@@ -2,6 +2,14 @@
 import { AppError } from './AppError';
 
 export const AuthErrors = {
+  Unauthorized: () => 
+    new AppError({
+      code: "AUTH_UNAUTHORIZED",
+      clientMessage: "Sorry you are not authorized to complete this action",
+      status: 401
+    }),
+
+
   InvalidInput: () =>
     new AppError({
       code: 'AUTH_INVALID_INPUT',

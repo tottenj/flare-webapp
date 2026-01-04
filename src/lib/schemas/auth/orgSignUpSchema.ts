@@ -1,6 +1,7 @@
 import { AuthTokenSchema } from '@/lib/schemas/auth/signUpSchema';
 import { LocationInputSchema } from '@/lib/schemas/LocationInputSchema';
 import { ImageMetadataSchema } from '@/lib/schemas/proof/ImageMetadata';
+import { ProofImageMetadataSchema } from '@/lib/schemas/proof/ProofImageMetadataSchema';
 
 import { ProofPlatformSchema } from '@/lib/schemas/proof/ProofPlatformSchema';
 import z from 'zod';
@@ -19,7 +20,7 @@ export const OrgSignUpSchema = AuthTokenSchema.extend({
       })
     )
     .optional(),
-  proofs: z.array(ImageMetadataSchema).optional(),
+  proofs: z.array(ProofImageMetadataSchema).optional(),
 });
 
 export type OrgSignUpInput = z.infer<typeof OrgSignUpSchema>;

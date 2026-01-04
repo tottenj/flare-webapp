@@ -1,8 +1,8 @@
 import firebaseSignUpHelper from '@/lib/auth/firebaseSignUpHelper';
 import { OrgSignUpInput } from '@/lib/schemas/auth/orgSignUpSchema';
 import { LocationInput } from '@/lib/schemas/LocationInputSchema';
-import { ImageMetadata } from '@/lib/schemas/proof/ImageMetadata';
-import uploadFile from '@/lib/storage/uploadFile';
+import { ProofImageMetadata } from '@/lib/schemas/proof/ProofImageMetadataSchema';
+import uploadProofFile from '@/lib/storage/uploadProofFile';
 
 import { SOCIAL_CONFIG, SocialPlatform } from '@/lib/utils/socialConfig';
 
@@ -30,13 +30,13 @@ export async function buildOrgSignUpCommand({
     Object.entries(validFiles)
       .map(([key, file]) => {
         if (!file) return null;
-        return uploadFile(
+        return uploadProofFile(
           file,
           `org/proofs/${uid}/${key}-${crypto.randomUUID()}-${file.name}`,
           key as any
         );
       })
-      .filter((p): p is Promise<ImageMetadata> => p !== null)
+      .filter((p): p is Promise<ProofImageMetadata> => p !== null)
   );
 
   const socials = [...formData.entries()]

@@ -1,5 +1,4 @@
-import { ProofPlatform } from "@/lib/domain/ProofPlatform";
-import { FileKey } from "@/lib/hooks/useFileChange/useFileChange";
+import { ProofPlatform } from '@/lib/domain/ProofPlatform';
 
 
 export const SOCIAL_CONFIG = {
@@ -20,10 +19,10 @@ export const SOCIAL_CONFIG = {
   },
 } as const;
 
-
 export function resolveProofPlatform(key: FileKey): ProofPlatform {
   if (key === 'other') return ProofPlatform.OTHER;
   return SOCIAL_CONFIG[key].platform;
 }
 
 export type SocialPlatform = keyof typeof SOCIAL_CONFIG;
+export type FileKey = SocialPlatform | 'other';

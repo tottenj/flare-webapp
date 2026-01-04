@@ -20,8 +20,4 @@ export class UserDomain {
       createdAt: new Date(),
     });
   }
-
-  static profilePicturePath(userId: string) {
-    return `users/${userId}/profile-pic.jpg`;
-  }
 }

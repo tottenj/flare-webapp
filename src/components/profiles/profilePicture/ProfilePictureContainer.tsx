@@ -1,3 +1,4 @@
+'use server';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
 import ImageService from '@/lib/services/imageService/ImageService';
 
@@ -5,12 +6,15 @@ export default async function ProfilePictureContainer({
   profilePicPath,
   size,
 }: {
-  profilePicPath?: string;
+  profilePicPath: string | null;
   size: number;
 }) {
-  let profilePic = undefined;
+  let profilePic: string | undefined;
+
   if (profilePicPath) {
-    profilePic = await ImageService.getDownloadUrl(profilePicPath);
+    try {
+      profilePic = await ImageService.getDownloadUrl(profilePicPath);
+    } catch (err) {}
   }
 
   return <ProfilePicture size={size} src={profilePic} />;

@@ -4,7 +4,6 @@ import { admin } from '../bootstrap/admin';
 export const verifySession = onRequest(async (req, res) => {
   try {
     const { sessionCookie } = req.body;
-
     if (!sessionCookie) {
       res.status(401).json({ error: 'Missing session cookie' });
       return;

@@ -41,7 +41,6 @@ export default async function RootLayout({
             </div>
           </main>
         </Providers>
-
         <Analytics />
         <SpeedInsights />
         <ToastContainer position="bottom-right" />
