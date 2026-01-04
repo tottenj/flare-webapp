@@ -6,6 +6,7 @@ import { sb } from 'storybook/test';
 
 
 sb.mock(import("../src/lib/serverActions/uploadProfilePicture.ts"))
+sb.mock(import("../src/lib/firebase/auth/configs/clientApp.ts"))
 
 const withWrapper: Decorator = (Story) => (
   <div className='w-full h-full flex justify-center items-center'>
