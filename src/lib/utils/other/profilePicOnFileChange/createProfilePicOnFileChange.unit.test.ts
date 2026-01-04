@@ -6,7 +6,10 @@ import { expect } from '@jest/globals';
 import { toast } from 'react-toastify';
 
 jest.mock('@/lib/storage/uploadFile');
-jest.mock('@/lib/serverActions/uploadProfilePicture');
+jest.mock('@/lib/serverActions/uploadProfilePicture', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
 jest.mock('react-toastify', () => ({
   toast: {
     error: jest.fn(),
