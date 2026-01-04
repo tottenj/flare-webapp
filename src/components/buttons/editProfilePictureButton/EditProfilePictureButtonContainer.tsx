@@ -18,16 +18,15 @@ export default function EditProfilePictureButtonContainer() {
 
   async function onChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (file) {
-      const error = validateFileInput({ file });
-      if (error) {
-        toast.error(error);
-        e.target.value = '';
-        return;
-      }
-      setFile('avatar', file);
+    if (!file) return;
+    const error = validateFileInput({ file });
+    if (error) {
+      toast.error(error);
       e.target.value = '';
+      return;
     }
+    setFile('avatar', file);
+    e.target.value = '';
   }
 
   return <EditProfilePictureButtonPresentational onChange={onChange} isDisabled={isBusy} />;

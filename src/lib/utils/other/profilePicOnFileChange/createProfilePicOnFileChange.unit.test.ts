@@ -1,3 +1,4 @@
+import { ClientErrors } from '@/lib/errors/clientErrors/ClientErrors';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import uploadProfilePicture from '@/lib/serverActions/uploadProfilePicture';
 import uploadFile from '@/lib/storage/uploadFile';
@@ -68,22 +69,20 @@ describe('createProfilePicOnFileChange', () => {
     expect(router.refresh).not.toHaveBeenCalled();
   });
 
-  it('toasts and returns if no user found', async () => {
+  it('throws if no user found', async () => {
     Object.defineProperty(auth, 'currentUser', {
       value: null,
       configurable: true,
     });
 
     const handler = createProfilePicOnFileChange(router);
-    await handler('avatar', file);
-
-    expect(toast.error).toHaveBeenCalledWith('Session expired. Please sign in again.');
+    await expect(handler('avatar', file)).rejects.toThrow(ClientErrors.SessionExpired());
     expect(uploadFile).not.toHaveBeenCalled();
     expect(uploadProfilePicture).not.toHaveBeenCalled();
     expect(router.refresh).not.toHaveBeenCalled();
   });
 
-  it('toasts and returns if result has an error', async () => {
+  it('throws if result has an error', async () => {
     Object.defineProperty(auth, 'currentUser', {
       value: { uid: 'uid123' },
       configurable: true,
@@ -100,23 +99,22 @@ describe('createProfilePicOnFileChange', () => {
     });
 
     const handler = createProfilePicOnFileChange(router);
-    await handler('avatar', file);
-
-    expect(toast.error).toHaveBeenCalledWith('failure message');
+    await expect(handler('avatar', file)).rejects.toThrow(
+      ClientErrors.ServerRejected('failure message', 'failure')
+    );
     expect(router.refresh).not.toHaveBeenCalled();
   });
 
-  it('toasts and returns on unknown error', async () => {
+  it('throws on unknown error', async () => {
     Object.defineProperty(auth, 'currentUser', {
       value: { uid: 'uid123' },
       configurable: true,
     });
     (uploadFile as jest.Mock).mockRejectedValueOnce(new Error('Error'));
     const handler = createProfilePicOnFileChange(router);
-    await handler('avatar', file);
+    await expect(handler('avatar', file)).rejects.toThrow();
 
     expect(router.refresh).not.toHaveBeenCalled();
     expect(uploadProfilePicture).not.toHaveBeenCalled();
-    expect(toast.error).toHaveBeenCalledWith('Unknown Error Please Try Again Later');
   });
 });
