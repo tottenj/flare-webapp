@@ -2,6 +2,10 @@ import type { Preview } from '@storybook/nextjs-vite'
 import type { Decorator } from '@storybook/react';
 import '../src/app/globals.css'
 import './fonts.css';
+import { sb } from 'storybook/test';
+
+
+sb.mock(import("../src/lib/serverActions/uploadProfilePicture.ts"))
 
 const withWrapper: Decorator = (Story) => (
   <div className='w-full h-full flex justify-center items-center'>
@@ -13,6 +17,9 @@ const withWrapper: Decorator = (Story) => (
 const preview: Preview = {
   decorators: [withWrapper],
   parameters: {
+    nextjs:{
+      appDirectory:true
+    },
     controls: {
       matchers: {
        color: /(background|color)$/i,

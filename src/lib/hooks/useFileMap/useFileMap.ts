@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 export type FileMap<K extends string> = Record<K, File | null>;
 
 interface UseFileMapOptions<K extends string> {
@@ -20,8 +21,10 @@ export default function useFileMap<K extends string>({
     }
     setIsBusy(true);
     try {
+      toast.info("Uploading File")
       await onFileChange(key, file);
       setFiles((prev) => ({ ...prev, [key]: file }));
+      toast.success("Successfully Uploaded File")
     } finally {
       setIsBusy(false);
     }
