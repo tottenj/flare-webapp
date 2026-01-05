@@ -41,3 +41,12 @@ jest.mock('./src/lib/logger', () => ({
     error: jest.fn(),
   },
 }));
+
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    info: jest.fn(),
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+}));

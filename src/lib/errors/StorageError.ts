@@ -23,6 +23,20 @@ export const StorageErrors = {
       status: 400
     }),
 
+  Unauthorized: () => 
+    new AppError({
+      code: "STORAGE_UNAUTHORIZED",
+      clientMessage: "Must have higher authentication",
+      status: 401
+    }),
+
+  UnsupportedMediaType: () => 
+    new AppError({
+      code: "UNSUPPORTED_MEDIA_TYPE",
+      clientMessage: "Unsupported media type",
+      status: 415
+    }),
+
   UnknownError: () => 
     new AppError({
       code: "STORAGE_UNKNOWN_ERROR",

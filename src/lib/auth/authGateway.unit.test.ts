@@ -2,6 +2,14 @@ import { AuthErrors } from '../errors/authError';
 import AuthGateway from './authGateway';
 import { expect } from '@jest/globals';
 
+beforeAll(() => {
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+});
+
+afterAll(() => {
+  (console.error as jest.Mock).mockRestore();
+});
+
 describe('AuthGateway.verifyIdToken', () => {
   it('Returns the json fields on success', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
@@ -90,15 +98,55 @@ describe('AuthGateway.createSession', () => {
     });
   });
 
-
   it('throws error if no session cookie recieved', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       status: 200,
-      json: jest.fn().mockResolvedValue({})
+      json: jest.fn().mockResolvedValue({}),
     });
     await expect(AuthGateway.createSession('token')).rejects.toMatchObject({
       code: 'AUTH_SIGNIN_FAILED',
     });
+  });
+});
+
+describe('AuthGateway.verifySession', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+  const sessionCookie = 'mockSessionCooke';
+
+  it('successfully returns session info', async () => {
+    const returnVal = {
+      uid: 'uid123',
+      email: 'example@gmail.com',
+      emailVerified: false,
+    };
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: jest.fn().mockResolvedValue(returnVal),
+    });
+    await expect(AuthGateway.verifySession(sessionCookie)).resolves.toBe(returnVal);
+  });
+
+  it('throws correct error on 401', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 401,
+    });
+    await expect(AuthGateway.verifySession(sessionCookie)).rejects.toThrow(
+      AuthErrors.InvalidSession()
+    );
+  });
+
+  it('throws correct error on 403', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+    });
+    await expect(AuthGateway.verifySession(sessionCookie)).rejects.toThrow(
+      AuthErrors.SigninFailed()
+    );
   });
 });

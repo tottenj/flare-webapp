@@ -9,7 +9,6 @@ import { GeneralErrors } from '@/lib/errors/GeneralErrors';
 import { ImageMetadata, ImageMetadataSchema } from '@/lib/schemas/proof/ImageMetadata';
 import AccountService from '@/lib/services/accountService/AccountService';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
-import { ActionResponse } from '@/lib/types/ActionResponse';
 import { ActionResult } from '@/lib/types/ActionResult';
 import z from 'zod';
 
@@ -24,11 +23,7 @@ export default async function uploadProfilePicture(
     return fail(FileUploadErrors.InvalidMetadata(), fieldErrors);
   }
   try {
-    ensure(
-      data.data.storagePath.startsWith(`users/${ctx.user.firebaseUid}/profile-pic`),
-      AuthErrors.Unauthorized()
-    );
-    await AccountService.updateProfilePicture({ imageData: data.data, userId: ctx.user.id });
+    await AccountService.updateProfilePicture({ imageData: data.data, userId: ctx.user.id, firebaseUid: ctx.user.firebaseUid });
     return { ok: true, data: null };
   } catch (error) {
     if (error instanceof AppError) {
