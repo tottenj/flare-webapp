@@ -1,9 +1,12 @@
 import { onRequest } from 'firebase-functions/v2/https';
 import { auth } from '../bootstrap/admin';
-import { Request, Response } from 'express';
+import type { Request  } from 'firebase-functions/v2/https';
 
 
-export async function createSessionHandler(req: Request,res: Response){
+export async function createSessionHandler(
+  req: Request,
+  res: Parameters<Parameters<typeof onRequest>[0]>[1]
+) {
   if (req.method !== 'POST') {
     res.status(405).send('Method Not Allowed');
     return;
