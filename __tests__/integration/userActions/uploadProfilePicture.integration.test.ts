@@ -21,8 +21,10 @@ describe('AccountService.updateProfilePicture (integration)', () => {
 
     await AccountService.updateProfilePicture({
       imageData,
-      userId: 'user1',
-      firebaseUid: 'uid123',
+      authenticatedUser: {
+        userId: 'user1',
+        firebaseUid: 'uid123',
+      },
     });
 
     const user = await prisma.user.findUnique({
@@ -56,8 +58,7 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     await expect(
       AccountService.updateProfilePicture({
         imageData,
-        userId: 'user1',
-        firebaseUid: 'uid123',
+        authenticatedUser: { userId: 'user1', firebaseUid: 'uid123' },
       })
     ).rejects.toEqual(AuthErrors.Unauthorized());
   });
@@ -71,8 +72,10 @@ describe('AccountService.updateProfilePicture (integration)', () => {
         sizeBytes: 1,
         originalName: 'first.jpg',
       },
-      userId: 'user1',
-      firebaseUid: 'uid123',
+      authenticatedUser: {
+        userId: 'user1',
+        firebaseUid: 'uid123',
+      },
     });
 
     // Second image
@@ -83,8 +86,10 @@ describe('AccountService.updateProfilePicture (integration)', () => {
         sizeBytes: 2,
         originalName: 'second.jpg',
       },
-      userId: 'user1',
-      firebaseUid: 'uid123',
+      authenticatedUser: {
+        userId: 'user1',
+        firebaseUid: 'uid123',
+      },
     });
 
     const pics = await prisma.profilePic.findMany({

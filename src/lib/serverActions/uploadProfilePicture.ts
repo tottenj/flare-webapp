@@ -1,7 +1,6 @@
 'use server';
 import { AppError } from '@/lib/errors/AppError';
 import { AuthErrors } from '@/lib/errors/authError';
-import ensure from '@/lib/errors/ensure/ensure';
 import { extractFieldErrors } from '@/lib/errors/extractError';
 import fail from '@/lib/errors/fail';
 import { FileUploadErrors } from '@/lib/errors/fileUploadErrors';
@@ -23,7 +22,10 @@ export default async function uploadProfilePicture(
     return fail(FileUploadErrors.InvalidMetadata(), fieldErrors);
   }
   try {
-    await AccountService.updateProfilePicture({ imageData: data.data, userId: ctx.user.id, firebaseUid: ctx.user.firebaseUid });
+    await AccountService.updateProfilePicture({
+      imageData: data.data,
+      authenticatedUser: { userId: ctx.user.id, firebaseUid: ctx.user.firebaseUid },
+    });
     return { ok: true, data: null };
   } catch (error) {
     if (error instanceof AppError) {

@@ -52,8 +52,10 @@ describe('AccountService.updateProfilePicture', () => {
 
     await AccountService.updateProfilePicture({
       imageData,
-      userId: 'userId',
-      firebaseUid: 'firebaseUid',
+      authenticatedUser: {
+        userId: 'userId',
+        firebaseUid: 'firebaseUid',
+      },
     });
 
     expect(imageAssetDal.create).toHaveBeenCalledWith(imageData, expect.any(Object));
@@ -75,8 +77,10 @@ describe('AccountService.updateProfilePicture', () => {
     await expect(
       AccountService.updateProfilePicture({
         imageData,
-        userId: 'userId',
-        firebaseUid: 'firebaseUid',
+        authenticatedUser: {
+          userId: 'userId',
+          firebaseUid: 'firebaseUid',
+        },
       })
     ).rejects.toMatchObject({
       code: 'AUTH_UNAUTHORIZED',
@@ -94,8 +98,10 @@ describe('AccountService.updateProfilePicture', () => {
     await expect(
       AccountService.updateProfilePicture({
         imageData,
-        userId: 'userId',
-        firebaseUid: 'firebaseUid',
+        authenticatedUser: {
+          userId: 'userId',
+          firebaseUid: 'firebaseUid',
+        },
       })
     ).rejects.toThrow();
 

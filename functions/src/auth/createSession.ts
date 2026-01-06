@@ -1,7 +1,9 @@
 import { onRequest } from 'firebase-functions/v2/https';
 import { auth } from '../bootstrap/admin';
+import { Request, Response } from 'express';
 
-export const createSession = onRequest(async (req, res) => {
+
+export async function createSessionHandler(req: Request,res: Response){
   if (req.method !== 'POST') {
     res.status(405).send('Method Not Allowed');
     return;
@@ -27,4 +29,7 @@ export const createSession = onRequest(async (req, res) => {
   } catch (err) {
     res.status(401).json({ error: 'Invalid Token' });
   }
-});
+};
+
+
+export const createSession = onRequest(createSessionHandler);

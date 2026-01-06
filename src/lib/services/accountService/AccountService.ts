@@ -6,26 +6,25 @@ import { logger } from '@/lib/logger';
 import { ImageMetadata } from '@/lib/schemas/proof/ImageMetadata';
 import ImageService from '@/lib/services/imageService/ImageService';
 import { prisma } from '../../../../prisma/prismaClient';
+import { AuthenticatedUser } from '@/lib/types/AuthenticatedUser';
 
 export default class AccountService {
   static async updateProfilePicture({
     imageData,
-    userId,
-    firebaseUid,
+    authenticatedUser
   }: {
     imageData: ImageMetadata;
-    userId: string;
-    firebaseUid: string;
+    authenticatedUser: AuthenticatedUser
   }) {
     ensure(
-      imageData.storagePath.startsWith(`users/${firebaseUid}/profile-pic`),
+      imageData.storagePath.startsWith(`users/${authenticatedUser.firebaseUid}/profile-pic`),
       AuthErrors.Unauthorized()
     );
 
     try {
       await prisma.$transaction(async (tx) => {
         const imageAsset = await imageAssetDal.create(imageData, tx);
-        await profilePicDal.upsertForUser(userId, imageAsset.id, tx);
+        await profilePicDal.upsertForUser(authenticatedUser.userId, imageAsset.id, tx);
       });
     } catch (err) {
       await ImageService.deleteByStoragePath(imageData.storagePath).catch((err) => {

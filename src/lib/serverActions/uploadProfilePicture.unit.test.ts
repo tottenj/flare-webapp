@@ -42,8 +42,10 @@ describe('uploadProfilePicture', () => {
     await expect(uploadProfilePicture(metaData)).resolves.toEqual({ ok: true, data: null });
     expect(AccountService.updateProfilePicture).toHaveBeenCalledWith({
       imageData: metaData,
-      userId: 'userId',
-      firebaseUid: 'uid123'
+      authenticatedUser: {
+        userId: 'userId',
+        firebaseUid: 'uid123',
+      },
     });
   });
 
@@ -95,7 +97,7 @@ describe('uploadProfilePicture', () => {
       originalName: 'originalName',
     };
 
-    const error = expectFail(await uploadProfilePicture(metaData))
+    const error = expectFail(await uploadProfilePicture(metaData));
     expect(error.code).toBe('APP_ERROR');
   });
 
@@ -114,7 +116,7 @@ describe('uploadProfilePicture', () => {
       originalName: 'originalName',
     };
 
-    const error = expectFail(await uploadProfilePicture(metaData))
+    const error = expectFail(await uploadProfilePicture(metaData));
     expect(error.code).toBe('UNKNOWN');
   });
 });
