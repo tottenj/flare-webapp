@@ -42,7 +42,7 @@
     "jest.setup.integration.ts",
     "tsconfig.jest.json",
     ".next/dev/types/**/*.ts"
-  ],
+, "functions/jest.config.js"  ],
   "exclude": [
     "node_modules",
   ]
