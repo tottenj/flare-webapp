@@ -1,0 +1,6 @@
+graph TD
+  A[Nextjs client/server components]--> B[Server Actions]
+  B --> C[Services Layer]
+  C --> D[DAL / Prisma]
+  D --> E[(PostgreSQL)]
+  C --> F[(Firebase: Auth, Storage, Functions)]

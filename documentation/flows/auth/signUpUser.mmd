@@ -1,0 +1,18 @@
+flowchart TD
+    A[Sign Up Form] -->|Submit| B[submitAction]
+
+    %% Client-side Firebase
+    B --> C[Firebase Auth: createUserWithEmailAndPassword]
+    C --> D[Firebase Auth: sendEmailVerification]
+
+    %% Server-side
+    B --> E[signUpAction]
+    E -->|Validate Zod| F[AuthService.signUp]
+
+    %% Auth verification
+    F --> G[AuthGateway.verifyIdToken]
+    G --> H[Firebase Cloud Function: verifyIdToken]
+
+    %% Domain & persistence
+    F --> I[UserDomain.onSignUp]
+    I --> J[UserDAL.createIfNotExists]

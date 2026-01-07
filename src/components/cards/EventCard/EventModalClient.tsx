@@ -1,36 +1,28 @@
 'use client';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
-
-import EventInfoContainer from '@/components/events/eventInfo/EventInfoContainer';
+import {  useRouter, useSearchParams } from 'next/navigation';
+import React from 'react';
 import Modal from '@/components/modals/mainModal/MainModal';
 
 type Props = {
-  eventId: string;
-  back?: boolean; // optional, navigate back if true
+  returnTo?: string;
+  back?: boolean;
+  children: React.ReactNode;
 };
 
-export default function EventModalClient({ eventId, back }: Props) {
+export default function EventModalClient({ returnTo, back, children }: Props) {
   const router = useRouter();
-  const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(true);
+  const searchParams = useSearchParams();
+  const isOpen = searchParams.get('modal') === 'true';
 
- 
-  const returnTo = pathname || '/events';
-
+  const ret = returnTo || '/events';
   const handleClose = () => {
-    setIsOpen(false); // triggers animation
-    setTimeout(() => {
-      if (back) router.back();
-      else router.push(returnTo);
-    }, 200); // match leave animation duration
+    if (back) router.back();
+    else router.push(ret);
   };
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>
-      <div className="relative h-full">
-        <EventInfoContainer slug={eventId} />
-      </div>
+      <div className="relative h-full">{children}</div>
     </Modal>
   );
 }

@@ -2,43 +2,14 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     
-    // ORG FILES
-    match /Organizations/{orgId}/instagram {
-      allow write: if true;
-      allow read: if request.auth != null && request.auth.token.admin == true
+   match /org/proofs/{uid}/{allPaths=**} {
+      allow write: if request.auth != null && request.auth.uid == uid;
     }
 
-     match /Organizations/{orgId}/facebook {
-      allow write: if true;
-      allow read: if request.auth != null && request.auth.token.admin == true
+   match /users/{userId}/{fileName} {
+      allow write: if request.auth != null
+                   && request.auth.uid == userId
+      allow read: if true;
     }
-
-     match /Organizations/{orgId}/twitter {
-      allow write: if true;
-      allow read: if request.auth != null && request.auth.token.admin == true
-    }
-
-     match /Organizations/{orgId}/other {
-      allow write: if true;
-      allow read: if request.auth != null && request.auth.token.admin == true
-    }
-    
-    match /Organizations/{orgId}/profile {
-      allow read, write: if request.auth != null && request.auth.uid == orgId;
-    }
-
-    // USER FILES
-    match /Users/{userId}/profile{
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-
-    // EVENT FILES
-    match /Events/{eventId} {
-      allow read: if true; // All event images are public
-      allow write: if request.auth != null 
-        && request.auth.token.organization == true
-    }
-
-
   }
 }

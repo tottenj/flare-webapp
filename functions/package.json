@@ -3,6 +3,8 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
+    "test": "jest",
+    "test:ci": "jest --runInBand --ci --coverage",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
@@ -12,15 +14,20 @@
   "engines": {
     "node": "22"
   },
-  "main": "lib/functions/src/index.js",
+  "main": "lib/index.js",
   "dependencies": {
+    "cookie": "^1.0.2",
     "firebase-admin": "^13.4.0",
-    "firebase-functions": "latest"
+    "firebase-functions": "latest",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
-    "firebase-functions-test": "^3.1.0",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.6",
     "typescript": "^5.8.3"
   },
   "private": true

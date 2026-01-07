@@ -24,7 +24,7 @@ export default async function MyEvents() {
   return (
     <div className="mt-4 flex w-11/12 mr-auto ml-auto flex-col gap-4">
       {events.length > 0 ? (
-        events.map((event) => <EventCard key={event.id} event={event} />)
+        events.map((event) => <EventCard key={event.id} event={event} returnTo="/dashboard" />)
       ) : (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4 text-center text-[#b3b3b3]">
           <SVGLogo color={'#b3b3b3'} size={45} />

@@ -10,8 +10,10 @@ export interface primaryButtonProps {
   styleOver?: React.CSSProperties;
   size?: 'small' | 'medium' | 'large' | 'full';
   action?: string | ((formData: FormData) => void | Promise<void>);
-  click?: (e:any) => void | Promise<void>;
-  form?: string
+  click?: (e: any) => void | Promise<void>;
+  form?: string;
+  datacy?: string;
+  state?: 'initial' | 'hover' | 'tap';
 }
 
 export default function PrimaryButton({
@@ -22,7 +24,9 @@ export default function PrimaryButton({
   size = 'full',
   action,
   click,
-  form
+  form,
+  datacy,
+  state
 }: primaryButtonProps) {
   const sizeClass = {
     full: 'w-full',
@@ -47,6 +51,7 @@ export default function PrimaryButton({
   return (
     <motion.button
       onClick={click}
+      animate={state}
       formAction={action}
       style={styleOver}
       type={type}
@@ -57,11 +62,12 @@ export default function PrimaryButton({
       whileHover="hover"
       whileTap="tap"
       form={form}
+      data-cy={datacy}
     >
       <motion.span
         variants={gradientVariants}
         transition={{ duration: 0.2, ease: 'easeOut' }}
-        className="absolute inset-0 origin-left bg-gradient-to-r from-pink-500 via-red-500 to-orange-500"
+        className="absolute inset-0 origin-left bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 pointer-events-none"
         style={{ transformOrigin: 'left', zIndex: 20 }}
       />
       <span className="relative z-30">{disabled ? <GeneralLoader color='white' size="30px" /> : text}</span>

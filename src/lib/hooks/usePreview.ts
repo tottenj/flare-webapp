@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import useUnifiedUser from './useUnifiedUser';
 import Event, { PlainEvent } from '../classes/event/Event';
 import getFormattedDateString from '../utils/dateTime/getFormattedDateString';
+import eventType, { eventTypeKey } from '../enums/eventType';
 
 export default function usePreview() {
   const [previewData, setPreviewData] = useState<PlainEvent | null>(null);
@@ -15,6 +16,7 @@ export default function usePreview() {
   function handlePreviewClick(e: React.MouseEvent<HTMLButtonElement>): any {
     e.preventDefault();
     e.stopPropagation();
+
     const form = e.currentTarget.form;
     if (!form) return;
     const formData = new FormData(form);
@@ -23,18 +25,21 @@ export default function usePreview() {
     if (!res.success) {
       toast.error('Please Fill In All Required Fields');
       console.log(res.error);
+      return
     } else if (!user?.uid) {
       toast.error('Authentication Error');
+      return
     } else {
       const { data } = res;
-
+      const { type, ...rest } = data;
       setPreviewData(
         new Event({
           id: '123',
           flare_id: '',
           verified: false,
           createdAt: new Date(),
-          ...data,
+          type: eventType[type as eventTypeKey],
+          ...rest,
         }).toPlain()
       );
     }

@@ -1,14 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { GeoPoint } from 'firebase/firestore';
 import { Autocomplete, AutocompleteItem } from '@heroui/react';
 import { useAsyncList } from '@react-stately/data';
-
-import PrimaryLabel from '../labels/primaryLabel/PrimaryLabel';
 import flareLocation from '@/lib/types/Location';
-import getPlaces from '@/lib/utils/places/getPlaces/getPlaces';
-import { getPlaceDetails } from '@/lib/utils/places/getPlaceDetails/getPlaceDetails';
+import { LocationInput } from '@/lib/schemas/LocationInputSchema';
 
 interface placeOption {
   label: string;
@@ -16,15 +12,18 @@ interface placeOption {
 }
 
 interface placeSearchProps {
-  lab?: string;
+  label?: string;
   required?: boolean;
   z?: string;
-  defVal?: placeOption;
+  value?: LocationInput | null
+  onChange: (location: LocationInput) => void;
 }
 
-export default function PlaceSearch({ lab, required = true, z, defVal }: placeSearchProps) {
+export default function PlaceSearch({ label, required = true, z, value, onChange }: placeSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [location, setLocation] = useState<flareLocation | null>(null);
+  const [getPlaces, setGetPlaces] = useState<null | Function>(null);
+  const [getPlaceDetails, setGetPlaceDetails] = useState<null | Function>(null);
 
   // Get user location once
   useEffect(() => {
@@ -43,10 +42,26 @@ export default function PlaceSearch({ lab, required = true, z, defVal }: placeSe
     }
   }, []);
 
+  useEffect(() => {
+    const loadModules = async () => {
+      if (process.env.NEXT_PUBLIC_USE_PLACES_MOCK === 'true') {
+        const mock = await import('@/lib/utils/places/getPlaceDetails/mock/getPlaceDetailsMock');
+        setGetPlaces(() => mock.getPlaces);
+        setGetPlaceDetails(() => mock.getPlaceDetails);
+      } else {
+        const real = await import('@/lib/utils/places/getPlaces/getPlaces');
+        const details = await import('@/lib/utils/places/getPlaceDetails/getPlaceDetails');
+        setGetPlaces(() => real.default);
+        setGetPlaceDetails(() => details.getPlaceDetails);
+      }
+    };
+    loadModules();
+  }, []);
+
   // Async list for autocomplete
   let list = useAsyncList<placeOption>({
     async load({ filterText }) {
-      if (!filterText) return { items: [] };
+      if (!getPlaces || !filterText) return { items: [] };
       const suggestions = await getPlaces(
         filterText,
         Date.now(),
@@ -59,29 +74,31 @@ export default function PlaceSearch({ lab, required = true, z, defVal }: placeSe
   });
 
   async function handleSelection(key: React.Key | null) {
-    if (!key) return;
+   if (!key || !getPlaceDetails) return;
     const selected = list.items.find((item) => item.value === key);
     if (!selected) return;
     const place = await getPlaceDetails(selected.value);
     if (!place || !place.place.location) return;
-    const location: flareLocation = {
-      id: place.place.id,
-      name: place.place.displayName,
-      coordinates: new GeoPoint(place.place.location.lat(), place.place.location.lng()),
+    const location: LocationInput = {
+      placeId: place.place.id,
+      address: place.place.displayName,
+      lat: place.place.location.lat(),
+      lng: place.place.location.lng(),
     };
-    setLocation(location);
+    onChange(location);
   }
 
   return (
     <>
       <Autocomplete
-        label={lab ? lab : "Select Location"}
+        label={label ? label : 'Select Location'}
         placeholder="Type to search..."
         inputValue={list.filterText}
         isLoading={list.isLoading}
         items={list.items}
         variant="flat"
-        defaultSelectedKey={defVal?.value}
+        data-cy={'location-input'}
+        defaultSelectedKey={value?.placeId}
         onInputChange={list.setFilterText}
         onSelectionChange={handleSelection}
         radius="sm"
@@ -96,9 +113,6 @@ export default function PlaceSearch({ lab, required = true, z, defVal }: placeSe
           </AutocompleteItem>
         )}
       </Autocomplete>
-      {location && (
-        <input type="hidden" name="location" required={required} value={JSON.stringify(location)} />
-      )}
     </>
   );
 }

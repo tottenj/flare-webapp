@@ -1,33 +1,30 @@
-import type { Preview } from '@storybook/nextjs';
-import '../src/app/globals.css';
-import MockAuthProvider from './__mocks__/MockAuthProvider';
-import React from 'react';
-import { initialize, mswLoader } from 'msw-storybook-addon';
+import type { Preview } from '@storybook/nextjs-vite'
+import type { Decorator } from '@storybook/react';
+import '../src/app/globals.css'
+import './fonts.css';
+import { sb } from 'storybook/test';
 
 
-initialize();
+sb.mock(import("../src/lib/serverActions/uploadProfilePicture.ts"))
+sb.mock(import("../src/lib/firebase/auth/configs/clientApp.ts"))
+
+const withWrapper: Decorator = (Story) => (
+  <div className='w-full h-full flex justify-center items-center'>
+    <Story />
+  </div>
+);
+
 
 const preview: Preview = {
-  decorators: [
-    (Story) => (
-      <MockAuthProvider>
-        <Story/>
-      </MockAuthProvider>
-    )
-  ],
+  decorators: [withWrapper],
   parameters: {
-
-    backgrounds: {
-      values: [
-        { name: 'light', value: '#fff' },
-        { name: 'dark', value: 'oklch(16.15% 0.0828 273.4)' },
-        { name: 'grad', value: 'linear-gradient(135deg, #ffa301, #ff005c)' },
-      ],
+    nextjs:{
+      appDirectory:true
     },
     controls: {
       matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i,
+       color: /(background|color)$/i,
+       date: /Date$/i,
       },
     },
   },

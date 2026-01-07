@@ -1,6 +1,7 @@
 'use server';
 import Event from '@/lib/classes/event/Event';
 import FlareOrg from '@/lib/classes/flareOrg/FlareOrg';
+import eventType, { eventTypeKey } from '@/lib/enums/eventType';
 import { getFirestoreFromServer } from '@/lib/firebase/auth/configs/getFirestoreFromServer';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { zodFieldErrors } from '@/lib/utils/error/zodFeildErrors';
@@ -17,7 +18,7 @@ export default async function addEvent(
 
   if (!currentUser)
     return { status: 'error', message: 'Unable to find current user', eventId: null };
-  if (!res.success){
+  if (!res.success) {
     return {
       status: 'error',
       message: 'Invalid Form Data',
@@ -30,14 +31,15 @@ export default async function addEvent(
     if (!org) return { status: 'error', message: 'Authentication Error', eventId: null };
     const verified = org?.verified ?? false;
     const { data } = res;
+    const { type, ...rest } = data;
+
     const event = new Event({
       flare_id: org.id,
       verified: verified,
       createdAt: new Date(),
-      ...data,
+      type: eventType[type as eventTypeKey],
+      ...rest,
     });
-
-  
 
     await event.addEvent(fire);
     revalidatePath('/dashboard');

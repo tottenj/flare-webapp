@@ -1,0 +1,206 @@
+name: CI
+
+on:
+  push:
+    branches: [main, preProduction, prisma]
+  pull_request:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FUNCTIONS_EMULATOR: "true"
+
+jobs:
+  chromatic:
+    name: Run Chromatic
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.18.0
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Chromatic
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run test:unit -- --ci --runInBand --coverage
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: app
+          slug: tottenj/flare-webapp
+
+  firebase-functions-unit-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: functions
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+      - run: npm ci
+      - run: npm run test:ci
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: functions
+          slug: tottenj/flare-webapp
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      NODE_ENV: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: tester
+      POSTGRES_DB: flare_test
+      DATABASE_URL: postgresql://test:tester@localhost:5434/flare_test?schema=public
+
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: "flare-7091a"
+      FIREBASE_AUTH_EMULATOR_HOST: "127.0.0.1:9099"
+      FIRESTORE_EMULATOR_HOST: "127.0.0.1:8080"
+      FIREBASE_STORAGE_EMULATOR_HOST: "127.0.0.1:9199"
+      FUNCTIONS_URL: "http://127.0.0.1:5001"
+      INTERNAL_API_KEY: "4d522cbb22ae4ad19fe69211623a3a6bf8e9c098a16593b0ca0e0c0359c6f2d0"
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+
+      - name: Start Postgres
+        run: |
+          docker compose -f compose.test.yaml up -d
+          until docker exec $(docker ps -qf "name=flare-test") pg_isready -U test; do sleep 2; done
+
+      - run: npx prisma migrate deploy && npm run seed:test
+      - run: npx jest --selectProjects integration
+
+      - run: docker compose -f compose.test.yaml down -v
+        if: always()
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    env:
+      NODE_ENV: test
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: tester
+      POSTGRES_DB: flare_test
+      DATABASE_URL: postgresql://test:tester@localhost:5434/flare_test?schema=public
+      NEXT_DISABLE_SOURCEMAPS: 1
+
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      FUNCTIONS_URL: http://127.0.0.1:5001
+      FIREBASE_FUNCTION_URL: http://127.0.0.1:5001/flare-7091a/us-central1
+
+      FIREBASE_AUTH_EMULATOR_HOST: 127.0.0.1:9099
+      FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
+      FIREBASE_STORAGE_EMULATOR_HOST: 127.0.0.1:9199
+      STORAGE_EMULATOR_HOST: 127.0.0.1:9199
+
+      INTERNAL_API_KEY: 4d522cbb22ae4ad19fe69211623a3a6bf8e9c098a16593b0ca0e0c0359c6f2d0
+
+      NEXT_PUBLIC_USE_PLACES_MOCK: true
+      NEXT_DISABLE_FAST_REFRESH: true
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_TURBOPACK: 0
+      NEXT_PUBLIC_MODE: test
+      MODE: test
+
+      NEXT_PUBLIC_FIREBASE_API_KEY: "AIzaSyDj5h2HzdQYuOzV_UVTHiwx1golUW93INU"
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID: "flare-7091a"
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: "flare-7091a.firebaseapp.com"
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: "flare-7091a.firebasestorage.app"
+      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: "192465328955"
+      NEXT_PUBLIC_FIREBASE_APP_ID: "1:192465328955:web:108bbe86f58f4bbcb2f51e"
+      NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: "G-JR9NDGTPV9"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Install & build Firebase Functions
+        working-directory: functions
+        run: |
+          npm ci
+          npm run build
+
+      - name: Start Postgres (Docker)
+        run: |
+          docker compose -f compose.test.yaml up -d
+          echo "Waiting for Postgres..."
+          until docker exec $(docker ps -qf "name=flare-test") pg_isready -U test; do
+            sleep 2
+          done
+
+      - name: Apply Prisma migrations + seed DB
+        run: npm run e2e:setupci
+
+      - name: Run Full E2E (Next.js + Firebase + Cypress)
+        run: npm run test:e2e:ci
+
+      - name: Upload Cypress Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: reports/cypress/screenshots
+
+      - name: Upload Cypress Videos
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: reports/cypress/videos
+
+      - name: Teardown Docker
+        if: always()
+        run: docker compose -f compose.test.yaml down -v
+
+  

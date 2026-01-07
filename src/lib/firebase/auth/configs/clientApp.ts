@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { browserLocalPersistence, connectAuthEmulator, getAuth, setPersistence } from 'firebase/auth'; // No need for initializeAuth here unless you have specific needs
-import { connectFirestoreEmulator, getFirestore, initializeFirestore } from 'firebase/firestore'; // Import connectFirestoreEmulator
+import { connectAuthEmulator, getAuth } from 'firebase/auth'; // No need for initializeAuth here unless you have specific needs
+import { connectFirestoreEmulator, initializeFirestore } from 'firebase/firestore'; // Import connectFirestoreEmulator
 import { connectStorageEmulator, getStorage } from 'firebase/storage'; // Import connectStorageEmulator
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'; // Import connectFunctionsEmulator (if you use functions client-side)
 import firebaseConfig from '../../../../../firebaseconfig'; // Assuming this contains your production config
@@ -14,7 +14,6 @@ export const storage = getStorage(fireBaseApp);
 export const functions = getFunctions(fireBaseApp)
 
 if (process.env.NEXT_PUBLIC_MODE === 'test') {
-  console.log('Client Emulators Enabled: true');
   connectAuthEmulator(auth, `http://127.0.0.1:9099`, { disableWarnings: true });
   connectFirestoreEmulator(db, '127.0.0.1', 8080);
   connectFunctionsEmulator(functions, '127.0.0.1', 5001);

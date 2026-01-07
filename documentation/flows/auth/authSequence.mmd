@@ -1,0 +1,18 @@
+sequenceDiagram
+  participant UI as SignUp Form (UI)
+  participant Action as signUpOrg (Server Action)
+  participant Domain as FlareOrg (Domain Class)
+  participant Service as FlareOrgService
+  participant DAL as FlareOrgDAL
+  participant DB as PostgreSQL
+
+  UI->>Action: Submit OrgSignUpForm
+  Action->>Domain: FlareOrg.create(userData, orgData)
+  Domain->>Service: createOrg(orgData)
+  Service->>DAL: insertOrg(data)
+  DAL->>DB: INSERT INTO flare_orgs
+  DB-->>DAL: new Org Record
+  DAL-->>Service: Return org
+  Service-->>Domain: Return domain object
+  Domain-->>Action: Return result
+  Action-->>UI: Success / Redirect

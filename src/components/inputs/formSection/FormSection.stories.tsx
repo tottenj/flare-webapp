@@ -1,7 +1,6 @@
-import type { StoryObj, Meta } from '@storybook/nextjs';
-import FormSection from './FormSection';
+import type { StoryObj, Meta } from '@storybook/react';
 
-
+import  FormSection  from './FormSection';
 
 export default {
   component: FormSection,
@@ -12,7 +11,7 @@ type Story = StoryObj<typeof FormSection>;
 
 export const Default: Story = {
   args: {
-    text: 'Section Title',
-    blurb: 'Here is a blurb',
+    text: 'Text',
+    blurb: 'blurb',
   },
 };

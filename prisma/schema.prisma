@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id            String   @id @default(cuid())
+  firebaseUid   String   @unique
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  status        UserStatus @default(PENDING)
+  role          UserRole   @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  organizationProfile OrganizationProfile?
+  profilePic    ProfilePic?
+  
+
+  @@index([role])
+  @@index([status])
+  @@index([role, status])
+}
+
+model OrganizationProfile{
+  id            String @id @default(cuid())
+  userId        String @unique
+  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orgName       String
+  status        OrgStatus @default(PENDING)
+  locationId    String
+  location      Location @relation(fields: [locationId], references: [id])
+  socials       OrgSocial?
+  proofs        OrgProofFile[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status])
+}
+
+model OrgSocial{
+  id                String @id @default(cuid())
+  organizationId    String @unique
+  organization      OrganizationProfile @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  instagramHandle String?
+  facebookHandle  String?
+  xHandle         String?
+  otherText       String?
+}
+
+model OrgProofFile {
+  id             String @id @default(cuid())
+  organizationId String
+  organization   OrganizationProfile @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  platform       ProofPlatform
+  imageAssetId   String
+  imageAsset     ImageAsset @relation(fields: [imageAssetId], references: [id])
+
+  createdAt      DateTime @default(now())
+  @@index([organizationId])
+}
+
+model ProfilePic{
+  id            String @id @default(cuid())
+  userId        String @unique
+  user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imageAssetId  String @unique
+  imageAsset    ImageAsset @relation(fields: [imageAssetId], references: [id])
+
+  @@index([userId])
+}
+
+model ImageAsset{
+  id             String  @id @default(cuid())
+  storagePath    String
+  contentType    String?
+  sizeBytes      Int?
+  originalName   String?
+  createdAt      DateTime @default(now())
+
+  orgProofFiles OrgProofFile[]
+  profilePics   ProfilePic[]
+}
+
+model Location{
+  id          String @id @default(cuid())
+  placeId     String @unique
+  address     String?
+  point     Unsupported("geography(Point, 4326)")
+  createdAt DateTime @default(now())
+  organizationProfiles OrganizationProfile[]
+
+  @@index([point], type: Gist)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
+
+
+enum UserStatus {
+  PENDING   // Signed up but email not verified
+  ACTIVE    // Email verified, allowed to log in
+  SUSPENDED // Admin action later
+}
+
+enum OrgStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  ORG
+}
+
+enum ProofPlatform {
+  INSTAGRAM
+  FACEBOOK
+  X
+  OTHER
+}

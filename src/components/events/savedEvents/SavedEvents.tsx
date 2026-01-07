@@ -8,7 +8,7 @@ export default async function SavedEvents({ savedEvents }: { savedEvents: Event[
   return (
     <>
       <h2>Saved Events</h2>
-      <div className="mt-4 flex w-full flex-col gap-4">
+      <div className="mt-4 flex w-full h-full flex-col gap-4">
         {savedEvents.length > 0 ? (
           savedEvents.map((event) => <EventCard key={event.id} event={event.toPlain()} />)
         ) : (

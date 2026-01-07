@@ -1,9 +1,10 @@
-import SignInForm from '@/components/forms/signInForm/SignInForm';
+import SignInFormContainer from "@/components/forms/signUpForm/SignInFormContainer";
+
 
 export default async function SignIn() {
   return (
-    <div className="flex h-lvh items-start justify-center">
-      <SignInForm/>
+    <div className="flex h-full w-full items-center justify-center">
+      <SignInFormContainer />
     </div>
   );
 }

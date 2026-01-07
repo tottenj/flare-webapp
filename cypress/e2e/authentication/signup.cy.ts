@@ -1,18 +1,20 @@
 /// <reference types="cypress" />
-import { UserFixture } from '../../types/UserFixture';
+import { createUser } from '../../support/constants/User';
 
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
-const apiKey = Cypress.env('FIREBASE_API_KEY'); // Get the API Key from Cypress env
 
 describe('SignUpForm', () => {
   beforeEach(() => {
+    cy.wait(2000);
     cy.visit('/signup');
   });
 
   describe('Form Validation', () => {
     it('should show validation errors for empty form submission', () => {
-      cy.get('form').submit();
-      cy.contains('Error with email or password').should('be.visible');
+      cy.get('form').should('exist').and('be.visible');
+      cy.get('form button[type="submit"]').should('not.be.disabled');
+      cy.get('form button[type="submit"]').click();
+      cy.contains('Must have both email and password').should('be.visible');
     });
 
     it('should validate email format', () => {
@@ -25,48 +27,41 @@ describe('SignUpForm', () => {
 
   describe('Successful Sign Up', () => {
     it('should create and verify a user', () => {
-      cy.fixture('user').then((user: UserFixture) => {
-        cy.get(`input[name="email"]`).type(user.email);
-        cy.get(`input[name="password"]`).type(user.password);
-        cy.get('form').submit();
-        cy.contains('User created successfully').should('be.visible');
-      });
+      cy.intercept('/api/loginToken').as('token');
+
+      cy.get(`input[name="email"]`).type(createUser.email);
+      cy.get(`input[name="password"]`).type(createUser.password);
+      cy.get('form button[type="submit"]').click();
+      cy.wait('@token');
+      cy.url().should('include', 'confirmation');
     });
 
     it('should send an email verification code', () => {
-      cy.fixture('user').then((user: UserFixture) => {
-        cy.request({
-          method: 'GET',
-          url: `http://localhost:9099/emulator/v1/projects/${projectId}/oobCodes`,
-        }).then((response) => {
-          expect(response.body).to.have.property('oobCodes');
-          expect(response.body.oobCodes).to.be.an('array');
-          const verificationCodeSent = response.body.oobCodes.some(
-            (code: any) => code.requestType === 'VERIFY_EMAIL' && code.email === user.email
+      cy.request({
+        method: 'GET',
+        url: `http://localhost:9099/emulator/v1/projects/${projectId}/oobCodes`,
+      }).then((response) => {
+        cy.log(response.body);
+        expect(response.body).to.have.property('oobCodes');
+        expect(response.body.oobCodes).to.be.an('array');
+        const verificationCodeSent = response.body.oobCodes.some((code: any) => {
+          return (
+            code.requestType === 'VERIFY_EMAIL' && code.email === createUser.email.toLowerCase()
           );
-          expect(verificationCodeSent).to.be.true;
         });
+        expect(verificationCodeSent).to.be.true;
       });
     });
+
+   
   });
 
   describe('Error Cases', () => {
-    it('should error on email already taken', () => {
-      cy.fixture('user').then((user: UserFixture) => {
-        it('should show error for existing email', () => {
-          cy.request({
-            method: 'POST',
-            url: `https://localhost:9099/identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
-            body: {
-              email: user.email,
-              password: user.password,
-              returnSecureToken: true,
-            },
-          }).then(() => {
-            cy.contains('Email is already in use').should('be.visible');
-          });
-        });
-      });
+    it('should error if email already taken', () => {
+      cy.get(`input[name="email"]`).type(createUser.email);
+      cy.get(`input[name="password"]`).type(createUser.password);
+      cy.get('form').submit();
+      cy.checkToast('Email is already in use');
     });
   });
 

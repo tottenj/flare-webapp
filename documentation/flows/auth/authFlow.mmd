@@ -1,0 +1,52 @@
+flowchart TD
+  %% === Main Flow ===
+  %% User / Client
+  U([👤 User])
+  U --> A[Sign Up Form]
+  A --> B["newSignUp()"]
+  B --> create["createUserWithEmailAndPassword()"]
+  B --> log[api/loginToken]
+  B --> signUp[api/auth/signUp]
+  signUp --> C["handleSignUp()"]
+  C --> |account_type = user| D["signUpUser()"]
+  C --> |account_type - org| J["signUpOrg()"]
+  J --> K[flareOrg.create]
+  K --> F
+  D --> E[FlareUser.create]
+  E --> F[userService.create]
+  F --> |account_type = user| G[flareUserService.create]
+  F --> |account_type = org| L[flareOrgService.create]
+  L --> M[locationService.create]
+  M --> M1[/locationDal.create/]
+  M1 --> |1| I
+  M1 --> |2| N
+  L --> N[/flareOrgDal.create/]
+  N --> I
+  G --> H[/flareUserDal.create/]
+  H --> I[(Prisma Write to Db)]
+
+  %% === Legend ===
+  subgraph Legend [Legend]
+    direction LR
+    L1[Client / Frontend]:::client
+    L2[Service Class]:::service
+    L3[Server / Database]:::server
+    L4[DOM Service]:::domservice
+    L5[DAL / Database Layer]:::dal
+  end
+
+ 
+
+  %% === Class Assignments ===
+  class U,A,B,create,signUp client;
+  class F,G,L,M service;
+  class log,signUp,C,D,J server;
+  class E,K domservice
+  class H,I,N,M1 dal
+
+  %% === Class Definitions ===
+  classDef client fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#1e3a8a;
+  classDef service fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#14532d;
+  classDef server fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#7f1d1d;
+  classDef domservice fill:#fef9c3,stroke:#eab308,stroke-width:2px,color:#713f12;
+  classDef dal fill:#ede9fe,stroke:#7c3aed,stroke-width:2px,color:#4c1d95;

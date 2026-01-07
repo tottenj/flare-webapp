@@ -8,7 +8,7 @@ export default async function EventDetails({ eventId }: { eventId?: string }) {
   const org = await isOrganization();
 
   return (
-    <div className="hidden rounded-2xl bg-white md:block">
+    <div data-cy="eventDetails" className="hidden rounded-2xl bg-white md:block">
       {eventId ? (
         <EventInfoContainer slug={eventId} />
       ) : (

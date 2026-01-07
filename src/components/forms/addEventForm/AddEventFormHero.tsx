@@ -18,14 +18,24 @@ import ImageCropper from '@/components/inputs/image/ImageCropper';
 import useImage from '@/lib/hooks/useImage';
 import usePreview from '@/lib/hooks/usePreview';
 import EventInfo from '@/components/events/eventInfo/EventInfo';
+import { useEffect } from 'react';
+import Event from '@/lib/classes/event/Event';
+import { storage } from '@/lib/firebase/auth/configs/clientApp';
+import { useRouter } from 'next/navigation';
 
 export default function AddEventFormHero({ close }: { close?: () => void }) {
   const { action, state, pending } = useCustomUseForm(addEvent, 'Success', undefined, close);
   const { img, setImg, imgUrl, setImgUrl } = useImage(state.status, pending);
-  const { previewData, handlePreviewClick, setPreviewData} = usePreview();
-
-
-
+  const { previewData, handlePreviewClick, setPreviewData } = usePreview();
+  const router = useRouter();
+  useEffect(() => {
+    (async () => {
+      if (state.status == 'success' && state.eventId && img) {
+        Event.uploadImages(state.eventId, storage, [img]);
+        router.refresh();
+      }
+    })();
+  }, [state]);
 
   return (
     <>
@@ -38,7 +48,7 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
         id="addEvent"
       >
         <HeroInput label="Event Title" name="title" isRequired />
-        <HeroTextArea label="Event Description" name="description" />
+        <HeroTextArea label="Event Description" name="description" isRequired />
 
         <div className="flex w-full gap-4">
           <div className="w-1/2">
@@ -61,7 +71,7 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
         )}
 
         <div className="w-full">
-          <PlaceSearch z="z-50" lab="Event Location" />
+          <PlaceSearch z="z-50" lab="Event Location" required />
         </div>
 
         <PrimaryLabel label="Additional Information" />
@@ -109,11 +119,7 @@ export default function AddEventFormHero({ close }: { close?: () => void }) {
         <Modal isOpen={!!previewData} onClose={() => setPreviewData(null)}>
           {previewData && (
             <>
-              <EventInfo
-                event={previewData}
-                img={imgUrl}
-                seen={false}
-              />
+              <EventInfo event={previewData} img={imgUrl} seen={false} />
               <PrimaryButton type="submit" text="Create Event" form="addEvent" />
             </>
           )}

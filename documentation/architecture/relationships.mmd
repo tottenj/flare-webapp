@@ -1,0 +1,8 @@
+erDiagram
+  USER ||--o{ FLARE_ORG : "belongs to"
+  USER ||--o{ FLARE_USER : "belongs to"
+  FLARE_USER ||--o{ EVENT: "Saves and Attends"
+  FLARE_ORG ||--o{ EVENT : "hosts"
+  EVENT ||--o{ LOCATION: "hosted at"
+  FLARE_ORG ||--|| LOCATION : "based at"
+

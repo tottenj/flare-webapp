@@ -1,72 +1,40 @@
-import type { StoryObj, Meta } from '@storybook/nextjs';
+import type { Meta, StoryObj } from '@storybook/react';
 import PrimaryButton from './PrimaryButton';
 
-
-export default {
+const meta: Meta<typeof PrimaryButton> = {
+  title: 'Buttons/Primary Button',
   component: PrimaryButton,
-  title: "buttons/Primary Button"
-} satisfies Meta<typeof PrimaryButton>;
+};
+
+export default meta;
 
 type Story = StoryObj<typeof PrimaryButton>;
 
 export const Default: Story = {
   args: {
     text: 'Submit',
-    type: 'submit',
-    disabled: false,
-    styleOver: undefined,
-    size: 'full',
-    action: undefined,
-    click: undefined,
-  },
-};
-
-export const large: Story = {
-  args: {
-    text: 'Submit',
-    type: 'submit',
-    disabled: false,
-    styleOver: undefined,
-    size: 'large',
-    action: undefined,
-    click: undefined,
-  },
-};
-
-export const medium: Story = {
-  args: {
-    text: 'Submit',
-    type: 'submit',
-    disabled: false,
-    styleOver: undefined,
-    size: 'medium',
-    action: undefined,
-    click: undefined,
-  },
-};
-
-
-export const small: Story = {
-  args: {
-    text: 'Submit',
-    type: 'submit',
+    type: 'button',
     disabled: false,
     styleOver: undefined,
     size: 'small',
     action: undefined,
     click: undefined,
+    form: '',
+    datacy: '',
+    state: 'initial',
   },
 };
 
-
-export const disabled: Story = {
+export const Disabled: Story = {
   args: {
-    text: 'Submit',
-    type: 'submit',
+    ...Default.args,
     disabled: true,
-    styleOver: undefined,
+  },
+};
+
+export const Full: Story = {
+  args: {
+    ...Default.args,
     size: 'full',
-    action: undefined,
-    click: undefined,
   },
 };

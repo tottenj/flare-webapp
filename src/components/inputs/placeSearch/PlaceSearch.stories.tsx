@@ -1,8 +1,6 @@
-import type { StoryObj, Meta } from '@storybook/nextjs';
-import PlaceSearch from './PlaceSearch';
-import { waitFor } from '@testing-library/dom';
-import { userEvent, expect, within } from 'storybook/test';
+import type { StoryObj, Meta } from '@storybook/react';
 
+import  PlaceSearch  from './PlaceSearch';
 
 export default {
   component: PlaceSearch,
@@ -12,15 +10,10 @@ export default {
 type Story = StoryObj<typeof PlaceSearch>;
 
 export const Default: Story = {
-  
   args: {
-    lab: "Location"
+    lab: 'Location',
+    required: true,
+    z: '2',
+    defVal: undefined,
   },
-  play: async({canvasElement}) =>{
-    const canvas = within(canvasElement)
-    const locInput = canvas.getByRole('combobox');
-    await userEvent.type(locInput, "guelph", {delay: 100});
- 
-
-  }
 };

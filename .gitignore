@@ -13,6 +13,7 @@
 # testing
 /coverage
 
+
 # next.js
 /.next/
 /out/
@@ -43,3 +44,17 @@ next-env.d.ts
 *storybook.log
 
 certificates
+
+
+/reports
+
+/localTest
+/app/generated/prisma
+
+/src/generated/prisma
+
+
+
+
+reports/*
+storybook-static

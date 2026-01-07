@@ -1,16 +1,11 @@
 'use client';
-import EventCard from '@/components/cards/EventCard/EventCard';
-import Logo from '@/components/flare/logo/Logo';
-import PrimaryLink from '@/components/Links/PrimaryLink/PrimaryLink';
-import Event, { PlainEvent } from '@/lib/classes/event/Event';
 import { motion, AnimatePresence } from 'motion/react';
+import React from 'react';
 
 interface eventsList {
-  plainQueriedEvents?: PlainEvent[];
+  children: React.ReactNode;
 }
-export default function EventsList({ plainQueriedEvents }: eventsList) {
-
-
+export default function EventsList({ children }: eventsList) {
   const listContainer = {
     hidden: {},
     visible: {
@@ -27,42 +22,30 @@ export default function EventsList({ plainQueriedEvents }: eventsList) {
 
   return (
     <>
-      {plainQueriedEvents && plainQueriedEvents.length > 0 ? (
-        <motion.div
-          variants={listContainer}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col items-center gap-2"
-        >
-          <AnimatePresence>
-            {plainQueriedEvents.map((event) => (
-              <motion.div
-                key={event.id}
-                variants={listItem}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                className="w-[95%]"
-              >
-                <EventCard event={event} />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-      ) : (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4 text-center text-[#b3b3b3]">
-          <Logo size={100} />
-          <p className="text-lg">No events found.</p>
-          <p>
-            Part of a queer organization? Become a part of the FLARE community and help fill out our
-            calendar!
-          </p>
-          <div className="w-11/12">
-            <PrimaryLink link="/flare-signup" linkText="Organization Sign Up" />
-          </div>
-        </div>
-      )}
+      <motion.div
+        variants={listContainer}
+        initial="hidden"
+        animate="visible"
+        className="flex flex-col items-center gap-2"
+      >
+        <AnimatePresence>
+          {Array.isArray(children)
+            ? children.map((child, i) => (
+                <motion.div
+                  key={i}
+                  variants={listItem}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                  className="w-[95%]"
+                >
+                  {child}
+                </motion.div>
+              ))
+            : children}
+        </AnimatePresence>
+      </motion.div>
     </>
   );
 }

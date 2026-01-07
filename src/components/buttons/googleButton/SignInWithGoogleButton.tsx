@@ -1,26 +1,11 @@
 'use client';
-
-import FlareUser from '@/lib/classes/flareUser/FlareUser';
-import { auth, db } from '@/lib/firebase/auth/configs/clientApp';
-import FlareUserStart from '@/lib/types/FlareUserStart';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-
 interface googleSignInButtonProps {
   signIn: boolean;
 }
 
 export default function GoogleSignInButton({ signIn }: googleSignInButtonProps) {
   async function handleClick(e: any) {
-    e.preventDefault();
-
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-
-    } catch (error) {
-      console.log('error: ', error);
-    }
+    
   }
 
   return (
