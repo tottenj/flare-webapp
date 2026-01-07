@@ -16,7 +16,7 @@ describe('AuthGateway.verifyIdToken', () => {
       ok: true,
       status: 200,
       json: jest.fn().mockResolvedValue({
-        uid: 'uid12',
+        uid: 'uid123',
         email: 'test@test.com',
         emailVerified: false,
       }),
