@@ -1,12 +1,13 @@
-import { onRequest } from 'firebase-functions/v2/https';
+import { onRequest, Request } from 'firebase-functions/v2/https';
 import { auth } from '../bootstrap/admin';
+import { requireMethod } from '../utils/guards/requireMethod';
 
-export const verifyIdToken = onRequest(async (req, res) => {
+export async function verifyIdTokenHandler(
+  req: Request,
+  res: Parameters<Parameters<typeof onRequest>[0]>[1]
+) {
   try {
-    if (req.method !== 'POST') {
-      res.status(405).send('Method Not Allowed');
-      return;
-    }
+    if (!requireMethod(req, res, 'POST')) return;
 
     const { idToken } = req.body;
 
@@ -17,13 +18,15 @@ export const verifyIdToken = onRequest(async (req, res) => {
 
     const decoded = await auth.verifyIdToken(idToken);
 
-    res.json({
+    res.status(200).json({
       uid: decoded.uid,
       email: decoded.email,
       emailVerified: decoded.email_verified,
     });
   } catch {
     res.status(401).json({ error: 'INVALID_TOKEN' });
-    return 
+    return;
   }
-});
+}
+
+export const verifyIdToken = onRequest(verifyIdTokenHandler);

@@ -6,4 +6,8 @@ module.exports = {
   testMatch: ['<rootDir>/tests/**/*.test.ts'],
   clearMocks: true,
   restoreMocks: true,
+  collectCoverage: true,
+  coverageProvider: 'v8',
+  coverageDirectory: 'coverage',
+  reporters: ['default'],
 };
