@@ -9,5 +9,16 @@ module.exports = {
   collectCoverage: true,
   coverageProvider: 'v8',
   coverageDirectory: 'coverage',
-  reporters: ['default'],
+  reporters: [
+    'default',
+    [
+      'jest-junit',
+      {
+        outputDirectory: 'test-results',
+        outputName: 'junit.xml',
+        classNameTemplate: '{projectName}/{filepath}',
+        titleTemplate: '{title}',
+      },
+    ],
+  ],
 };
