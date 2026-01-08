@@ -1,9 +1,10 @@
 import 'server-only';
 import { StorageErrors } from '@/lib/errors/StorageError';
 import { HTTP_METHOD } from '@/lib/types/Method';
+import { cache } from 'react';
 
 export default class ImageService {
-  static async getDownloadUrl(storagePath: string) {
+  static getDownloadUrl = cache(async (storagePath: string) => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
     let res: Response;
@@ -17,6 +18,8 @@ export default class ImageService {
           'x-internal-api-key': process.env.INTERNAL_API_KEY!,
         },
         body: JSON.stringify({ storagePath }),
+        cache: 'force-cache',
+        next: { tags: [`profile-pic:${storagePath}`] },
       });
 
       let json: any;
@@ -50,7 +53,7 @@ export default class ImageService {
     } finally {
       clearTimeout(timeout);
     }
-  }
+  });
 
   static async deleteByStoragePath(storagePath: string) {
     const controller = new AbortController();

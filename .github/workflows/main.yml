@@ -212,5 +212,3 @@ jobs:
       - name: Teardown Docker
         if: always()
         run: docker compose -f compose.test.yaml down -v
-
-  
