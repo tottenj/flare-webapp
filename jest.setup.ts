@@ -1,6 +1,11 @@
 import '@testing-library/jest-dom';
 import { TextEncoder, TextDecoder } from 'util';
 
+process.env.FIREBASE_FUNCTION_URL = 'https://example.com';
+process.env.INTERNAL_API_KEY = 'test-api-key';
+
+
+
 global.TextEncoder = TextEncoder as any;
 global.TextDecoder = TextDecoder as any;
 
