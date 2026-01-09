@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 import { org, verifiedUser } from './constants';
-import { compareWithTolerance, pickShared } from './helpers';
+import { compareWithTolerance } from './helpers';
 
 // Constants
 const apiKey = Cypress.env('FIREBASE_API_KEY');
@@ -263,7 +263,25 @@ Cypress.Commands.add('clearForm', () => {
   });
 });
 
-
+Cypress.Commands.add(
+  'usePlacesInput',
+  (
+    selector: string,
+    loc: string = 'Toronto Pearson International Airport',
+    contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
+  ) => {
+    const location = cy.get(selector);
+    const newContains = 'CN Tower, Toronto';
+    //cy.intercept('POST', '**/places.googleapis.com/**').as('places');
+    location.type(loc);
+    cy.contains(newContains).should('exist');
+    //cy.wait('@places');
+    cy.get('ul[role="listbox"] li[role="option"]')
+      .contains(newContains)
+      .should('be.visible')
+      .click({ force: true });
+  }
+);
 
 Cypress.Commands.add(
   'userExists',
