@@ -1,14 +1,16 @@
 'use client';
-
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { signOutUser } from '@/lib/firebase/auth/utils/signOutUser';
 
-export default function MainBannerMenu({ children }: { children: React.ReactNode, isSignedIn?:boolean }) {
+export default function MainBannerMenu({
+  children,
+}: {
+  children: React.ReactNode;
+  isSignedIn?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-
 
   // Close on outside click
   useEffect(() => {
@@ -22,10 +24,10 @@ export default function MainBannerMenu({ children }: { children: React.ReactNode
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  let menuItems = [{title: "Sign Up", href:"/signup"}, {title: "Sign In", href:"/signin"}]
-
-
-
+  let menuItems = [
+    { title: 'Sign Up', href: '/signup' },
+    { title: 'Sign In', href: '/signin' },
+  ];
 
   return (
     <div ref={menuRef} className="relative flex flex-col items-end">
@@ -53,7 +55,6 @@ export default function MainBannerMenu({ children }: { children: React.ReactNode
                   <Link href={href}>{title}</Link>
                 </li>
               ))}
-              
             </ul>
           </motion.div>
         )}

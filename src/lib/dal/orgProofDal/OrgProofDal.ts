@@ -2,6 +2,7 @@ import { ImageMetadata } from '@/lib/schemas/proof/ImageMetadata';
 import { Prisma, ProofPlatform as PrismaProofPlatform } from '@prisma/client';
 import { prisma } from '../../../../prisma/prismaClient';
 import { ProofPlatform as DomainProofPlatform } from '@/lib/domain/ProofPlatform';
+import { ProofImageMetadata } from '@/lib/schemas/proof/ProofImageMetadataSchema';
 
 function toPrismaProofPlatform(platform?: DomainProofPlatform): PrismaProofPlatform {
   if (!platform) return 'OTHER';
@@ -9,7 +10,7 @@ function toPrismaProofPlatform(platform?: DomainProofPlatform): PrismaProofPlatf
 }
 
 export class OrgProofDal {
-  async create(orgId: string, input: ImageMetadata[], tx?: Prisma.TransactionClient) {
+  async create(orgId: string, input: ProofImageMetadata[], tx?: Prisma.TransactionClient) {
     const client = tx ?? prisma;
 
     const ops = input.map((proof) =>
