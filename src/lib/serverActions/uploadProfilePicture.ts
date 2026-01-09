@@ -9,6 +9,7 @@ import { ImageMetadata, ImageMetadataSchema } from '@/lib/schemas/proof/ImageMet
 import AccountService from '@/lib/services/accountService/AccountService';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
 import { ActionResult } from '@/lib/types/ActionResult';
+import { updateTag } from 'next/cache';
 import z from 'zod';
 
 export default async function uploadProfilePicture(
@@ -26,6 +27,7 @@ export default async function uploadProfilePicture(
       imageData: data.data,
       authenticatedUser: { userId: ctx.user.id, firebaseUid: ctx.user.firebaseUid },
     });
+    updateTag(`profile-pic:${data.data.storagePath}`)
     return { ok: true, data: null };
   } catch (error) {
     if (error instanceof AppError) {

@@ -14,7 +14,6 @@ export default async function ProfilePictureContainer({
   if (profilePicPath) {
     try {
       profilePic = await ImageService.getDownloadUrl(profilePicPath);
-      console.log(profilePic)
     } catch (err) {
       console.log(err)
     }

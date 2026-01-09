@@ -1,9 +1,11 @@
 import 'server-only';
 import { StorageErrors } from '@/lib/errors/StorageError';
 import { HTTP_METHOD } from '@/lib/types/Method';
+import { cache } from 'react';
+import { AppError } from '@/lib/errors/AppError';
 
 export default class ImageService {
-  static async getDownloadUrl(storagePath: string) {
+  static getDownloadUrl = cache(async (storagePath: string) => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
     let res: Response;
@@ -17,6 +19,8 @@ export default class ImageService {
           'x-internal-api-key': process.env.INTERNAL_API_KEY!,
         },
         body: JSON.stringify({ storagePath }),
+        cache: 'force-cache',
+        next: { tags: [`profile-pic:${storagePath}`] },
       });
 
       let json: any;
@@ -46,11 +50,14 @@ export default class ImageService {
       if (err instanceof DOMException && err.name === 'AbortError') {
         throw StorageErrors.Timeout();
       }
+      if (err instanceof AppError) {
+        throw err;
+      }
       throw StorageErrors.UnknownError();
     } finally {
       clearTimeout(timeout);
     }
-  }
+  });
 
   static async deleteByStoragePath(storagePath: string) {
     const controller = new AbortController();
@@ -77,21 +84,22 @@ export default class ImageService {
         throw StorageErrors.UnknownError();
       }
 
-      if (!res.ok) {
-        switch (json?.code) {
-          case 'UNSUPPORTED_MEDIA_TYPE':
-            throw StorageErrors.UnsupportedMediaType();
-          case 'STORAGE_MISSING_PATH':
-            throw StorageErrors.MissingPath();
-          case 'UNAUTHORIZED':
-            throw StorageErrors.Unauthorized();
-          default:
-            throw StorageErrors.UnknownError();
-        }
+      switch (json?.code) {
+        case 'UNSUPPORTED_MEDIA_TYPE':
+          throw StorageErrors.UnsupportedMediaType();
+        case 'STORAGE_MISSING_PATH':
+          throw StorageErrors.MissingPath();
+        case 'UNAUTHORIZED':
+          throw StorageErrors.Unauthorized();
+        default:
+          throw StorageErrors.UnknownError();
       }
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') {
         throw StorageErrors.Timeout();
+      }
+      if (err instanceof AppError) {
+        throw err;
       }
       throw StorageErrors.UnknownError();
     } finally {
