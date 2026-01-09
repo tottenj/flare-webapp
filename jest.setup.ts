@@ -1,25 +1,38 @@
 import '@testing-library/jest-dom';
+import { TextEncoder, TextDecoder } from 'util';
 
+global.TextEncoder = TextEncoder as any;
+global.TextDecoder = TextDecoder as any;
 
 global.fetch = jest.fn();
-const mockFetchResponse = { ok: true, json: jest.fn(), text: jest.fn() };
+
+global.Request = class {} as any;
+global.Response = class {} as any;
+global.Headers = class {} as any;
+
+const mockFetchResponse = {
+  ok: true,
+  json: jest.fn(),
+  text: jest.fn(),
+};
+
 (global.fetch as jest.Mock).mockResolvedValue(mockFetchResponse);
+
 Object.defineProperty(global, 'crypto', {
   value: {
     randomUUID: jest.fn(() => 'fixed-uuid'),
   },
 });
 
-jest.mock('@/lib/firebase/auth/configs/clientApp', () => {
-  return {
-    // Provide whatever your code imports from this module
-    auth: {},
-    db: {},
-    storage: {},
-    functions: {},
-    fireBaseApp: {},
-  };
-});
+// ---- mocks ----
+
+jest.mock('@/lib/firebase/auth/configs/clientApp', () => ({
+  auth: {},
+  db: {},
+  storage: {},
+  functions: {},
+  fireBaseApp: {},
+}));
 
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn(() => ({})),
@@ -27,11 +40,9 @@ jest.mock('firebase/auth', () => ({
   signInWithEmailAndPassword: jest.fn(),
 }));
 
-
 jest.mock('next/headers', () => ({
   cookies: jest.fn(),
 }));
-
 
 jest.mock('./src/lib/logger', () => ({
   logger: {
@@ -42,7 +53,6 @@ jest.mock('./src/lib/logger', () => ({
   },
 }));
 
-
 jest.mock('react-toastify', () => ({
   toast: {
     info: jest.fn(),
@@ -50,3 +60,8 @@ jest.mock('react-toastify', () => ({
     error: jest.fn(),
   },
 }));
+
+jest.mock('next/cache', () => ({
+  updateTag: jest.fn(),
+}));
+
