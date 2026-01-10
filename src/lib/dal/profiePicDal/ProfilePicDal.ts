@@ -14,6 +14,16 @@ export default class ProfilePicDal {
       },
     });
   }
+
+  async getByUserId(userId:string, tx?:Prisma.TransactionClient){
+    const client = tx ?? prisma
+    return await client.profilePic.findUnique({
+      where:{userId: userId},
+      include:{
+        imageAsset: true
+      }
+    })
+  }
 }
 
 export const profilePicDal = new ProfilePicDal();

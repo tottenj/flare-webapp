@@ -4,6 +4,15 @@ import { expect } from '@jest/globals';
 import { prisma } from '../../../prisma/prismaClient';
 import { AuthErrors } from '@/lib/errors/authError';
 import { resetTestDb } from '../../utils/restTestDb';
+import ImageService from '@/lib/services/imageService/ImageService';
+import { imageAssetDal } from '@/lib/dal/imageAssetDal/ImageAssetDal';
+
+jest.mock('@/lib/services/imageService/ImageService', () => ({
+  __esModule: true,
+  default: {
+    deleteByStoragePath: jest.fn(),
+  },
+}));
 
 describe('AccountService.updateProfilePicture (integration)', () => {
   beforeEach(() => {
@@ -64,6 +73,8 @@ describe('AccountService.updateProfilePicture (integration)', () => {
   });
 
   it('replaces existing profile picture for the user', async () => {
+    (ImageService.deleteByStoragePath as jest.Mock).mockResolvedValue(undefined);
+
     // First image
     await AccountService.updateProfilePicture({
       imageData: {
@@ -78,7 +89,15 @@ describe('AccountService.updateProfilePicture (integration)', () => {
       },
     });
 
-    // Second image
+    const oldImageId = await prisma.profilePic.findUnique({
+      where: { userId: 'user1' },
+      include: {
+        imageAsset: true,
+      },
+    });
+
+    if (!oldImageId) throw new Error('Expected Image Id');
+
     await AccountService.updateProfilePicture({
       imageData: {
         storagePath: 'users/uid123/profile-pic-2',
@@ -92,14 +111,46 @@ describe('AccountService.updateProfilePicture (integration)', () => {
       },
     });
 
-    const pics = await prisma.profilePic.findMany({
+    const pics = await prisma.profilePic.findUnique({
       where: { userId: 'user1' },
       include: {
         imageAsset: true,
       },
     });
 
-    expect(pics).toHaveLength(1);
-    expect(pics[0].imageAsset.storagePath).toBe('users/uid123/profile-pic-2');
+    const deletedOldImage = await prisma.imageAsset.findUnique({
+      where: { id: oldImageId.imageAssetId },
+    });
+
+    expect(deletedOldImage).toBeNull();
+    expect(pics).toBeTruthy();
+    if (!pics) throw new Error('Expcted picture');
+    expect(pics.imageAsset.storagePath).toBe('users/uid123/profile-pic-2');
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid123/profile-pic-1');
+  });
+
+  it('does cleanup logic on error', async () => {
+    (ImageService.deleteByStoragePath as jest.Mock).mockResolvedValue(undefined);
+
+    jest.spyOn(imageAssetDal, 'create').mockImplementationOnce(() => {
+      throw new Error('DB exploded');
+    });
+
+    await expect(
+      AccountService.updateProfilePicture({
+        imageData: {
+          storagePath: 'users/uid123/profile-pic-1',
+          contentType: 'jpg',
+          sizeBytes: 1,
+          originalName: 'first.jpg',
+        },
+        authenticatedUser: {
+          userId: 'user1',
+          firebaseUid: 'uid123',
+        },
+      })
+    ).rejects.toThrow('DB exploded');
+
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid123/profile-pic-1');
   });
 });
