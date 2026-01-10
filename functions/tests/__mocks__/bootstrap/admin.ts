@@ -6,7 +6,8 @@ export const auth = {
   verifySessionCookie: jest.fn()
 };
 
-export const deleteMock = jest.fn();
+export const deleteMock = jest.fn(() => Promise.resolve());
+
 
 export const fileMock = jest.fn(() => ({
   delete: deleteMock,

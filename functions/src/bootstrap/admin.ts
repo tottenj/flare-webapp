@@ -15,4 +15,5 @@ export const storage = admin.storage();
 export const firestore = admin.firestore();
 firestore.settings({ ignoreUndefinedProperties: true });
 
+
 export { admin };

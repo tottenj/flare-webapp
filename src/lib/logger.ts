@@ -1,6 +1,4 @@
 // src/lib/logger.ts
-type LogLevel = 'debug' | 'info' | 'warn' | 'error';
-
 export const logger = {
   debug: (msg: string, meta?: unknown) => {
     if (process.env.NODE_ENV !== 'production') {

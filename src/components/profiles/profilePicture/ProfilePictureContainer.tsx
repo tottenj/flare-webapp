@@ -1,5 +1,6 @@
 'use server';
 import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
+import { logger } from '@/lib/logger';
 import ImageService from '@/lib/services/imageService/ImageService';
 
 export default async function ProfilePictureContainer({
@@ -15,7 +16,8 @@ export default async function ProfilePictureContainer({
     try {
       profilePic = await ImageService.getDownloadUrl(profilePicPath);
     } catch (err) {
-      console.log(err)
+      if (err instanceof Error) logger.error(err.message);
+      else logger.error("Image Service Unable To Get Download Url")
     }
   }
 
