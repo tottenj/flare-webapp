@@ -20,7 +20,7 @@ jest.mock('@/lib/dal/imageAssetDal/ImageAssetDal', () => ({
   __esModule: true,
   imageAssetDal: {
     create: jest.fn(),
-    delete: jest.fn()
+    delete: jest.fn(),
   },
 }));
 
@@ -28,7 +28,7 @@ jest.mock('@/lib/dal/profiePicDal/ProfilePicDal', () => ({
   __esModule: true,
   profilePicDal: {
     upsertForUser: jest.fn(),
-    getByUserId: jest.fn()
+    getByUserId: jest.fn(),
   },
 }));
 
@@ -68,10 +68,9 @@ describe('AccountService.updateProfilePicture', () => {
       'imageId',
       expect.any(Object)
     );
-    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled()
-    expect(imageAssetDal.delete).not.toHaveBeenCalled()
+    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+    expect(imageAssetDal.delete).not.toHaveBeenCalled();
   });
-
 
   it('creates image asset and upserts profile pic, 1 previous profile pic', async () => {
     (imageAssetDal.create as jest.Mock).mockResolvedValueOnce({
@@ -80,8 +79,8 @@ describe('AccountService.updateProfilePicture', () => {
     (imageAssetDal.delete as jest.Mock).mockResolvedValueOnce(undefined);
     (profilePicDal.getByUserId as jest.Mock).mockResolvedValueOnce({
       imageAssetId: 1000,
-      imageAsset: { 
-        storagePath: 'users/firebaseUid/profile-pic1' 
+      imageAsset: {
+        storagePath: 'users/firebaseUid/profile-pic1',
       },
     });
 
@@ -102,7 +101,7 @@ describe('AccountService.updateProfilePicture', () => {
       'imageId',
       expect.any(Object)
     );
-    expect(imageAssetDal.delete).toHaveBeenCalledWith(1000, expect.any(Object))
+    expect(imageAssetDal.delete).toHaveBeenCalledWith(1000, expect.any(Object));
     expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/firebaseUid/profile-pic1');
   });
 

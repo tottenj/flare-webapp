@@ -1,8 +1,5 @@
 /// <reference types="cypress" />
 
-import { org, verifiedUser } from './constants';
-import { compareWithTolerance } from './helpers';
-
 // Constants
 const apiKey = Cypress.env('FIREBASE_API_KEY');
 const projectId = Cypress.env('FIREBASE_PROJECT_ID');
@@ -147,49 +144,6 @@ Cypress.Commands.add('logoutUser', (): Cypress.Chainable => {
   });
 });
 
-Cypress.Commands.add('createAndLoginUser', (email?: string, password?: string, name?: string) => {
-  let trueName: string;
-  let truePass: string;
-  let trueEmail: string;
-
-  if (!email || !password || !name) {
-    trueName = verifiedUser.name;
-    truePass = verifiedUser.password;
-    trueEmail = verifiedUser.email;
-  } else {
-    trueName = name;
-    truePass = password;
-    trueEmail = email;
-  }
-
-  cy.createUser(trueEmail, truePass, trueName, true, false).then(() => {
-    cy.loginUser(trueEmail, truePass);
-  });
-});
-
-Cypress.Commands.add(
-  'createAndLoginOrganization',
-  (email?: string, password?: string, name?: string) => {
-    let trueName: string;
-    let truePass: string;
-    let trueEmail: string;
-
-    if (!email || !password || !name) {
-      trueName = org.name;
-      truePass = org.password;
-      trueEmail = org.email;
-    } else {
-      trueName = name;
-      truePass = password;
-      trueEmail = email;
-    }
-
-    cy.createUser(trueEmail, truePass, trueName, true, true).then(() => {
-      cy.loginUser(trueEmail, truePass);
-    });
-  }
-);
-
 Cypress.Commands.add('loginTestUser', () => {
   cy.loginUser('userOne@gmail.com', 'password');
 });
@@ -200,10 +154,6 @@ Cypress.Commands.add('loginTestOrg', () => {
 
 Cypress.Commands.add('loginVerifiedOrg', () => {
   cy.loginUser('verifiedOrg@gmail.com', 'password');
-});
-
-Cypress.Commands.add('checkToast', (message: string) => {
-  cy.contains('.Toastify__toast', message).should('be.visible');
 });
 
 Cypress.Commands.add('clearAllEmulators', () => {
@@ -251,18 +201,6 @@ Cypress.Commands.add('seedDb', (maxRetries = 5) => {
   return attemptSeed();
 });
 
-Cypress.Commands.add('checkExistance', (funcs: Record<string, () => Cypress.Chainable>) => {
-  Object.values(funcs).forEach((fn) => {
-    fn().should('exist');
-  });
-});
-
-Cypress.Commands.add('clearForm', () => {
-  cy.get('form input:visible').each(($input) => {
-    cy.wrap($input).clear({ force: true });
-  });
-});
-
 Cypress.Commands.add(
   'usePlacesInput',
   (
@@ -299,69 +237,6 @@ Cypress.Commands.add(
   }
 );
 
-Cypress.Commands.add('waitForAuthEmulator', () => {
-  const AUTH_ADMIN = `http://localhost:9099/emulator/v1/projects/${Cypress.env('FIREBASE_PROJECT_ID')}`;
-
-  cy.request({
-    method: 'GET',
-    url: `${AUTH_ADMIN}/accounts`,
-    failOnStatusCode: false,
-  }).then((resp) => {
-    if (resp.status !== 200) {
-      // retry after 500ms until ready
-      cy.wait(500);
-      cy.waitForAuthEmulator();
-    }
-  });
-});
-
-Cypress.Commands.add('waitForEmulators', () => {
-  cy.waitForAuthEmulator();
-});
-
-Cypress.Commands.add(
-  'shouldMatch',
-  { prevSubject: true },
-  (subject: any, reference: any, numberTolerance = 0.01) => {
-    compareWithTolerance(subject, reference, numberTolerance);
-  }
-);
-
-Cypress.Commands.add('fillSelect', (label: string, option: string) => {
-  // Find button by label
-  cy.contains('label', label)
-    .invoke('attr', 'id')
-    .then((labelId) => {
-      cy.get(`button[aria-labelledby*="${labelId}"]`).click();
-    });
-
-  // Select option from listbox
-  cy.get('[role="listbox"]')
-    .contains('[role="option"]', option, { matchCase: false })
-    .should('be.visible')
-    .click();
-});
-
-Cypress.Commands.add('fillTypedSelect', (label: string, option: string) => {
-  // Open dropdown
-  cy.contains('label', label)
-    .invoke('attr', 'id')
-    .then((labelId) => {
-      cy.get(`button[aria-labelledby*="${labelId}"]`).click();
-    });
-
-  // Type into searchbox if it exists
-  cy.get('[role="listbox"]').within(() => {
-    cy.get('input[type="text"]').type(option, { delay: 150 });
-  });
-
-  // Pick matching option
-  cy.get('[role="listbox"]')
-    .contains('[role="option"]', option, { matchCase: false })
-    .should('be.visible')
-    .click();
-});
-
 Cypress.Commands.add('resetAndSeed', () => {
   cy.task('db:resetAndSeed');
 });
@@ -375,10 +250,6 @@ Cypress.Commands.add('seedAuthEmulator', () => {
     expect(response.status).to.eq(200);
     expect(response.body).to.have.property('success', true);
   });
-});
-
-Cypress.Commands.add('prismaFind', (table, where) => {
-  return cy.task('prismaFind', { table, where });
 });
 
 Cypress.Commands.add('getStorageFile', (path: string) => {
@@ -408,13 +279,4 @@ Cypress.Commands.add('getStorageFile', (path: string) => {
   };
 
   return attempt(MAX_RETRIES);
-});
-
-Cypress.Commands.add('waitForNextApi', (alias) => {
-  return cy.wait(alias).then((interception) => {
-    if (!interception.response) {
-      throw new Error(`No response for ${alias}`);
-    }
-    return interception;
-  });
 });
