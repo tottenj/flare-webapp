@@ -6,8 +6,10 @@ type FirebaseResponse = Parameters<Parameters<typeof onRequest>[0]>[1];
 
 export function mockRequest(overrides: Partial<Request> = {}): Request {
   return {
+    headers: {},
     method: 'POST',
     body: {},
+    is: jest.fn().mockReturnValue(true),
     rawBody: Buffer.from(''), // required by Firebase
     ...overrides,
   } as Request;

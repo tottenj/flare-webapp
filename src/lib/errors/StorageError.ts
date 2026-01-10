@@ -5,42 +5,49 @@ export const StorageErrors = {
   MissingPath: () =>
     new AppError({
       code: 'STORAGE_MISSING_PATH',
-      clientMessage: "No File Exists",
-      status: 400
+      clientMessage: 'No File Exists',
+      status: 400,
     }),
 
- InvalidPath: () => 
+  InvalidPath: () =>
     new AppError({
-        code: "STORAGE_INVALID_PATH",
-        clientMessage: "No File Exists",
-        status: 400
+      code: 'STORAGE_INVALID_PATH',
+      clientMessage: 'No File Exists',
+      status: 400,
+    }),
+
+  ForbiddenPath: () =>
+    new AppError({
+      code: 'STORAGE_PATH_FORBIDDEN',
+      clientMessage: "Unable to delete at this path",
+      status: 403
     }),
 
   Timeout: () =>
     new AppError({
-      code: "STORAGE_TIMEOUT",
-      clientMessage: "Timed out trying to access storage",
-      status: 400
+      code: 'STORAGE_TIMEOUT',
+      clientMessage: 'Timed out trying to access storage',
+      status: 400,
     }),
 
-  Unauthorized: () => 
+  Unauthorized: () =>
     new AppError({
-      code: "STORAGE_UNAUTHORIZED",
-      clientMessage: "Must have higher authentication",
-      status: 401
+      code: 'STORAGE_UNAUTHORIZED',
+      clientMessage: 'Must have higher authentication',
+      status: 401,
     }),
 
-  UnsupportedMediaType: () => 
+  UnsupportedMediaType: () =>
     new AppError({
-      code: "UNSUPPORTED_MEDIA_TYPE",
-      clientMessage: "Unsupported media type",
-      status: 415
+      code: 'UNSUPPORTED_MEDIA_TYPE',
+      clientMessage: 'Unsupported media type',
+      status: 415,
     }),
 
-  UnknownError: () => 
+  UnknownError: () =>
     new AppError({
-      code: "STORAGE_UNKNOWN_ERROR",
-      clientMessage: "Error fetching file please try again later",
-      status: 400
-    })
+      code: 'STORAGE_UNKNOWN_ERROR',
+      clientMessage: 'Error fetching file please try again later',
+      status: 400,
+    }),
 };
