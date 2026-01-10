@@ -14,7 +14,7 @@ declare namespace Cypress {
       name: string;
       [key: string]: any;
     }>;
-    loginUser(email: string, password: string): Chainable<Response<any>>;
+    loginUser(email: string, password: string): Chainable<any>;
     clearFirestore(): Chainable<Cypress.Response<any>>;
     clearAuth(): Chainable<Cypress.Response<any>>;
     clearAllEmulators(): Chainable<Cypress.Response<any>>;
