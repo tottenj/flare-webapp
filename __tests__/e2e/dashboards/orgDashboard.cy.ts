@@ -11,10 +11,10 @@ describe('Success Flow', () => {
     cy.get('[data-cy=profile-pic-input]').selectFile('cypress/fixtures/avatar.webp', {
       force: true,
     });
-    cy.get('[data-cy=profile-picture]', { timeout: 10000 })
-      .invoke('attr', 'src')
-      .should('not.eq', '@oldSrc')
-      .and('contain', 'http://');
+   cy.get('[data-cy=profile-picture]', { timeout: 10000 })
+     .invoke('attr', 'src')
+     .should('not.eq', '@oldSrc')
+     .and('match', /^https?:\/\//);
   });
 
   it('Persists profile picture after reload', () => {
