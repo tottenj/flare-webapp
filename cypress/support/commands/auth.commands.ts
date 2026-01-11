@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
-
-import { apiKey, AUTH_ADMIN, AUTH_EMULATOR } from "./env";
-
+import { apiKey, AUTH_ADMIN, AUTH_EMULATOR } from './env';
 
 function signUpUser(email: string, password: string, name: string, isOrg: boolean = false) {
   return cy
@@ -95,23 +93,26 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add('loginUser', (email: string, password: string) => {
-  const doLoginUser = (finalEmail: string, finalPassword: string) => {
-    return cy.session([finalEmail, finalPassword], () => {
-      cy.request({
-        method: 'POST',
-        url: `${AUTH_EMULATOR}/accounts:signInWithPassword?key=${apiKey}`,
-        body: {
-          email: finalEmail,
-          password: finalPassword,
-          returnSecureToken: true,
-        },
-      }).then((response) => {
-        const { idToken } = response.body;
-        return cy.request('POST', '/api/test/testLogin', { idToken });
-      });
+  return cy.session([email, password], () => {
+    cy.request({
+      method: 'POST',
+      url: `${AUTH_EMULATOR}/accounts:signInWithPassword?key=${apiKey}`,
+      body: { email, password, returnSecureToken: true },
+    }).then((signInResponse) => {
+      const idToken = signInResponse.body.idToken;
+      cy.request('POST', '/api/test/testLogin', { idToken });
     });
-  };
-  return doLoginUser(email, password);
+  });
+});
+
+Cypress.Commands.add('clientLogin', (email: string, password: string) => {
+  cy.window().its('auth', { timeout: 10000 }).should('exist');
+  cy.window().its('signInWithEmailAndPassword').should('exist');
+  cy.window().then((win) => {
+    const w = win as any;
+    return cy.wrap(w.signInWithEmailAndPassword(w.auth, email, password));
+  });
+  cy.window().its('auth.currentUser', { timeout: 10000 }).should('not.be.null');
 });
 
 Cypress.Commands.add('logoutUser', (): Cypress.Chainable => {

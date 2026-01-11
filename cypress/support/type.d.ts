@@ -34,6 +34,8 @@ declare namespace Cypress {
     seedAuthEmulator(): Chainable<void>;
     getStorageFile(path: string): Chainable<any>;
     recivedOobCode(email: string): Chainable<void>;
+    clientLogin(email: string, password: string): Chainable<void>;
+    loginTestOrgClient(): Chainable<void>
   }
 
   interface cypressUser {

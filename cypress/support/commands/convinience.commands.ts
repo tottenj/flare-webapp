@@ -8,6 +8,10 @@ Cypress.Commands.add('loginTestOrg', () => {
   cy.loginUser('unverifiedOrg@gmail.com', 'password123');
 });
 
+Cypress.Commands.add('loginTestOrgClient', () => {
+  cy.clientLogin('unverifiedOrg@gmail.com', 'password123');
+})
+
 Cypress.Commands.add('loginVerifiedOrg', () => {
   cy.loginUser('verifiedOrg@gmail.com', 'password123');
 });

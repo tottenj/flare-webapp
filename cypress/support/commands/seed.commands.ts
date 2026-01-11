@@ -3,6 +3,7 @@
 import { AUTH_ADMIN } from "./env";
 
 
+
 Cypress.Commands.add('clearAllEmulators', () => {
   cy.clearAuth();
 });
