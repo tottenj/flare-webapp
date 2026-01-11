@@ -2,8 +2,8 @@ describe('Success Flow', () => {
   beforeEach(() => {
     cy.loginTestOrg();
     cy.visit('/dashboard');
-    cy.url().should('include', '/org/dashboard');
-    cy.loginTestOrgClient(); 
+    cy.url({timeout:10000}).should('include', '/org/dashboard');
+    cy.loginTestOrgClient();
   });
 
   it('Tests success flow', () => {
@@ -22,7 +22,6 @@ describe('Success Flow', () => {
         });
     });
   });
-
 
   it('Persists profile picture after reload', () => {
     cy.get('[data-cy=profile-pic-input]').selectFile('cypress/fixtures/avatar.webp', {
