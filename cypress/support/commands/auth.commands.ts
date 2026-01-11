@@ -113,7 +113,11 @@ Cypress.Commands.add('clientLogin', (email: string, password: string) => {
     await win.signInWithEmailAndPassword(win.auth, email, password);
   });
 
-  cy.window().its('auth.currentUser', { timeout: 10000 }).should('not.be.null');
+ cy.window({ timeout: 10000 }).then((win: any) => {
+   const user = win.auth?.currentUser;
+   expect(user).to.not.be.null;
+   cy.log(`UID: ${user.uid}`);
+ });
 });
 
 Cypress.Commands.add('logoutUser', (): Cypress.Chainable => {
