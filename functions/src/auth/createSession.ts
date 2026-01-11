@@ -25,7 +25,7 @@ export async function createSessionHandler(
     const sessionCookie = await auth.createSessionCookie(idToken, {
       expiresIn: 1000 * 60 * 60 * 24 * 5,
     });
-    res.status(200).json({ sessionCookie });
+    res.status(200).json({ sessionCookie, uid: decoded.uid });
     return;
   } catch (err) {
     res.status(401).json({ error: 'Invalid Token' });

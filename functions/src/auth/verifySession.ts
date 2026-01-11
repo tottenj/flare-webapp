@@ -16,7 +16,6 @@ export async function verifySessionHandler(
 
   try {
     const decoded = await auth.verifySessionCookie(sessionCookie, true);
-
     res.status(200).json({
       uid: decoded.uid,
       email: decoded.email,

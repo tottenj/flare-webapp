@@ -9,6 +9,7 @@ import { AppError } from '../errors/AppError';
 import { logger } from '../logger';
 import { cookies } from 'next/headers';
 import { AuthTokenSchema } from '../schemas/auth/signUpSchema';
+import { UserLifecycleService } from '@/lib/services/userLifecycleService/userLifecycleService';
 
 export default async function signInAction(input: unknown): Promise<ActionResult<null>> {
   const data = AuthTokenSchema.safeParse(input);
@@ -16,9 +17,9 @@ export default async function signInAction(input: unknown): Promise<ActionResult
     const fieldErrors = extractFieldErrors(z.treeifyError(data.error));
     return fail(AuthErrors.InvalidInput(), fieldErrors);
   }
-
   try {
-    const { sessionToken } = await AuthService.signIn(data.data);
+    const { sessionToken, uid } = await AuthService.signIn(data.data);
+    await UserLifecycleService.onVerifiedSignIn(uid);
     const cookie = await cookies();
     cookie.set('session', sessionToken, {
       httpOnly: true,
@@ -35,7 +36,6 @@ export default async function signInAction(input: unknown): Promise<ActionResult
       err,
       input: { email: data.data.idToken },
     });
-
     return fail(
       new AppError({
         code: 'UNKNOWN',

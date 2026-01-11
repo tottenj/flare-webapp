@@ -1,6 +1,5 @@
 import getAuthenticatedUser from '@/lib/auth/utils/getAuthenticatedUser';
 import { userDal } from '@/lib/dal/userDal/UserDal';
-import { UserDomain } from '@/lib/domain/UserDomain';
 import {
   GetUserContext,
   GetUserContextSchema,

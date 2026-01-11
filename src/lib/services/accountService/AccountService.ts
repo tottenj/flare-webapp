@@ -31,8 +31,6 @@ export default class AccountService {
         if (oldProfilePic) await imageAssetDal.delete(oldProfilePic.imageAssetId, tx);
       });
       if (oldStoragePath) {
-        // Best-effort cleanup of previous profile picture after DB commit
-        //Purposefully not awaited
         ImageService.deleteByStoragePath(oldStoragePath).catch((err) => {
           logger.error('Failed to cleanup old profile picture from storage', {
             oldStoragePath,
@@ -41,7 +39,6 @@ export default class AccountService {
         });
       }
     } catch (err) {
-      // Best-effort cleanup of newly uploaded file if DB write fails
       await ImageService.deleteByStoragePath(imageData.storagePath).catch((err) => {
         logger.error('Failed to cleanup profile picture from storage', {
           storagePath: imageData.storagePath,

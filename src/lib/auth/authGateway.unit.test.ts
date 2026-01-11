@@ -60,12 +60,16 @@ describe('AuthGateway.createSession', () => {
 
   it('Return session cookie on success', async () => {
     const sessionCookie = 'mockSessionCooke';
+    const uid = 'uid123';
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       status: 200,
-      json: jest.fn().mockResolvedValue({ sessionCookie }),
+      json: jest.fn().mockResolvedValue({ sessionCookie, uid }),
     });
-    await expect(AuthGateway.createSession('fakeToken')).resolves.toBe(sessionCookie);
+    await expect(AuthGateway.createSession('fakeToken')).resolves.toStrictEqual({
+      sessionCookie,
+      uid,
+    });
   });
 
   it('returns invalid token error on 401', async () => {

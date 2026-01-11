@@ -7,14 +7,12 @@ describe('UserDomain.onSignUp', () => {
     const user = UserDomain.onSignUp({
       firebaseUid: 'uid123',
       email: 'test@test.com',
-      emailVerified: false,
     });
 
     expect(user.props).toEqual(
       expect.objectContaining({
         firebaseUid: 'uid123',
         email: 'test@test.com',
-        emailVerified: false,
         status: 'PENDING',
         role: 'USER',
       })
