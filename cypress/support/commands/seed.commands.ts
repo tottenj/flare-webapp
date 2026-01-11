@@ -1,11 +1,10 @@
 /// <reference types="cypress" />
 
-import { AUTH_ADMIN } from "./env";
-
-
+import { AUTH_ADMIN } from './env';
 
 Cypress.Commands.add('clearAllEmulators', () => {
   cy.clearAuth();
+  //cy.clearStorage()
 });
 
 Cypress.Commands.add('clearAuth', () => {
@@ -13,6 +12,9 @@ Cypress.Commands.add('clearAuth', () => {
     expect(response.status).to.eq(200);
   });
 });
+
+
+
 
 Cypress.Commands.add('seedDb', (maxRetries = 5) => {
   const attemptSeed = (retryCount = 0): Cypress.Chainable<any> => {

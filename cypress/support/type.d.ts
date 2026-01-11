@@ -36,6 +36,7 @@ declare namespace Cypress {
     recivedOobCode(email: string): Chainable<void>;
     clientLogin(email: string, password: string): Chainable<void>;
     loginTestOrgClient(): Chainable<void>
+    clearStorage(): Chainable<void>
   }
 
   interface cypressUser {

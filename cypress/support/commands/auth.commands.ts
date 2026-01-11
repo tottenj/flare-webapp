@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import { login } from '../firebase';
 import { apiKey, AUTH_ADMIN, AUTH_EMULATOR } from './env';
 
 function signUpUser(email: string, password: string, name: string, isOrg: boolean = false) {
@@ -106,12 +107,12 @@ Cypress.Commands.add('loginUser', (email: string, password: string) => {
 });
 
 Cypress.Commands.add('clientLogin', (email: string, password: string) => {
-  cy.window().its('auth', { timeout: 10000 }).should('exist');
-  cy.window().its('signInWithEmailAndPassword').should('exist');
-  cy.window().then((win) => {
-    const w = win as any;
-    return cy.wrap(w.signInWithEmailAndPassword(w.auth, email, password));
+  cy.window().its('auth').should('exist');
+
+  cy.window().then(async (win: any) => {
+    await win.signInWithEmailAndPassword(win.auth, email, password);
   });
+
   cy.window().its('auth.currentUser', { timeout: 10000 }).should('not.be.null');
 });
 

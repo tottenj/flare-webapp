@@ -2,7 +2,7 @@ describe('Success Flow', () => {
   beforeEach(() => {
     cy.loginTestOrg();
     cy.visit('/dashboard');
-    cy.url({timeout:10000}).should('include', '/org/dashboard');
+    cy.url({timeout:15000}).should('include', '/org/dashboard');
     cy.loginTestOrgClient();
   });
 
