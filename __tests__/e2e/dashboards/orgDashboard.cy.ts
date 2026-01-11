@@ -1,9 +1,9 @@
 describe('Success Flow', () => {
   beforeEach(() => {
     cy.loginTestOrg();
-    cy.loginTestOrgClient(); // ensure window auth ready
     cy.visit('/dashboard');
     cy.url().should('include', '/org/dashboard');
+    cy.loginTestOrgClient(); 
   });
 
   it('Tests success flow', () => {
