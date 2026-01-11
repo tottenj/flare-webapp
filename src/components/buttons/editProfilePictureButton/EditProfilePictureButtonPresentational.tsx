@@ -17,6 +17,7 @@ export default function EditProfilePictureButtonPresentational({
     >
       <FontAwesomeIcon className="text-primary p-2 text-lg" icon={faPenToSquare} />
       <input
+        data-cy="profile-pic-input"
         disabled={isDisabled}
         onChange={onChange}
         id="profile-pic-upload"

@@ -9,7 +9,14 @@ export default function ProfilePicture({ size, src }: profilePictureProps) {
 
   return (
     <div className="relative overflow-hidden rounded-full" style={{ width: size, height: size }}>
-      <Image unoptimized src={retval} alt="profile" fill className="object-cover" />
+      <Image
+        data-cy="profile-picture"
+        unoptimized
+        src={retval}
+        alt="profile"
+        fill
+        className="object-cover"
+      />
     </div>
   );
 }

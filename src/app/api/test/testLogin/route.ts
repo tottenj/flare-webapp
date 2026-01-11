@@ -12,9 +12,12 @@ export async function POST(req: NextRequest) {
 
   const sesionCookie = await AuthGateway.createSession(idToken);
 
+
+  console.log(sesionCookie.sessionCookie);
+
   (await cookies()).set({
     name: 'session',
-    value: sesionCookie,
+    value: sesionCookie.sessionCookie,
     httpOnly: true,
     secure: !isLocal,
     sameSite: 'lax',

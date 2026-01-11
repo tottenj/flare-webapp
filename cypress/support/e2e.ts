@@ -23,3 +23,10 @@ before(() => {
   cy.resetAndSeed();
   cy.seedAuthEmulator();
 });
+
+
+Cypress.on('uncaught:exception', (err) => {
+  if (err.message.includes('Performance') || err.message.includes('negative time stamp')) {
+    return false;
+  }
+});
