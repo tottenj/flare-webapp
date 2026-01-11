@@ -22,7 +22,7 @@ describe('AccountService.updateProfilePicture (integration)', () => {
 
   it('successfully uploads image data and links it to profile pictrue', async () => {
     const imageData: ImageMetadata = {
-      storagePath: 'users/uid123/profile-pic',
+      storagePath: 'users/uid1/profile-pic',
       contentType: 'jpg',
       sizeBytes: 2,
       originalName: 'original name',
@@ -31,13 +31,13 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     await AccountService.updateProfilePicture({
       imageData,
       authenticatedUser: {
-        userId: 'user1',
-        firebaseUid: 'uid123',
+        userId: '1',
+        firebaseUid: 'uid1',
       },
     });
 
     const user = await prisma.user.findUnique({
-      where: { id: 'user1' },
+      where: { id: '1' },
       include: {
         profilePic: {
           include: {
@@ -67,7 +67,7 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     await expect(
       AccountService.updateProfilePicture({
         imageData,
-        authenticatedUser: { userId: 'user1', firebaseUid: 'uid123' },
+        authenticatedUser: { userId: '1', firebaseUid: 'uid1' },
       })
     ).rejects.toEqual(AuthErrors.Unauthorized());
   });
@@ -78,19 +78,19 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     // First image
     await AccountService.updateProfilePicture({
       imageData: {
-        storagePath: 'users/uid123/profile-pic-1',
+        storagePath: 'users/uid1/profile-pic-1',
         contentType: 'jpg',
         sizeBytes: 1,
         originalName: 'first.jpg',
       },
       authenticatedUser: {
-        userId: 'user1',
-        firebaseUid: 'uid123',
+        userId: '1',
+        firebaseUid: 'uid1',
       },
     });
 
     const oldImageId = await prisma.profilePic.findUnique({
-      where: { userId: 'user1' },
+      where: { userId: '1' },
       include: {
         imageAsset: true,
       },
@@ -100,19 +100,19 @@ describe('AccountService.updateProfilePicture (integration)', () => {
 
     await AccountService.updateProfilePicture({
       imageData: {
-        storagePath: 'users/uid123/profile-pic-2',
+        storagePath: 'users/uid1/profile-pic-2',
         contentType: 'jpg',
         sizeBytes: 2,
         originalName: 'second.jpg',
       },
       authenticatedUser: {
-        userId: 'user1',
-        firebaseUid: 'uid123',
+        userId: '1',
+        firebaseUid: 'uid1',
       },
     });
 
     const pics = await prisma.profilePic.findUnique({
-      where: { userId: 'user1' },
+      where: { userId: '1' },
       include: {
         imageAsset: true,
       },
@@ -125,8 +125,8 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     expect(deletedOldImage).toBeNull();
     expect(pics).toBeTruthy();
     if (!pics) throw new Error('Expcted picture');
-    expect(pics.imageAsset.storagePath).toBe('users/uid123/profile-pic-2');
-    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid123/profile-pic-1');
+    expect(pics.imageAsset.storagePath).toBe('users/uid1/profile-pic-2');
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid1/profile-pic-1');
   });
 
   it('does cleanup logic on error', async () => {
@@ -139,18 +139,18 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     await expect(
       AccountService.updateProfilePicture({
         imageData: {
-          storagePath: 'users/uid123/profile-pic-1',
+          storagePath: 'users/uid1/profile-pic-1',
           contentType: 'jpg',
           sizeBytes: 1,
           originalName: 'first.jpg',
         },
         authenticatedUser: {
-          userId: 'user1',
-          firebaseUid: 'uid123',
+          userId: '1',
+          firebaseUid: 'uid1',
         },
       })
     ).rejects.toThrow('DB exploded');
 
-    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid123/profile-pic-1');
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid1/profile-pic-1');
   });
 });

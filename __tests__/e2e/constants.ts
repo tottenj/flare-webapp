@@ -5,25 +5,25 @@ export interface basicUser {
 }
 
 export const userEmailVerified: basicUser = {
-  uid: 'user1',
+  uid: 'uid1',
   email: 'user@gmail.com',
   password: 'password123',
 };
 
 export const userNotEmailVerified: basicUser = {
-  uid: 'user2',
+  uid: 'uid2',
   email: 'unverifiedUser@gmail.com',
   password: 'password123',
 };
 
 export const pendingOrg: basicUser = {
-  uid: 'org1',
+  uid: 'uid3',
   email: 'unverifiedOrg@gmail.com',
   password: 'password123',
 };
 
 export const nonPendingOrg: basicUser = {
-  uid: 'org2',
+  uid: 'uid4',
   email: 'verifiedOrg@gmail.com',
   password: 'password123',
 };

@@ -11,11 +11,24 @@ async function main() {
     update: {},
     create: {
       id: '1',
-      firebaseUid: 'user1',
+      firebaseUid: 'uid1',
       email: 'user@gmail.com',
-      emailVerified: true
+      status: "ACTIVE"
     },
   });
+
+  const userEmailVerified2Pending = await prisma.user.upsert({
+    where: { email: 'userEmailVerified2@gmail.com' },
+    update: {},
+    create: {
+      id: '1.5',
+      firebaseUid: 'uid1.5',
+      email: 'userEmailVerified2@gmail.com',
+      status: "PENDING"
+    },
+  });
+
+
 }
 
 main()

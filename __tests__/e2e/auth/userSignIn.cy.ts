@@ -12,6 +12,17 @@ describe('User Sign In - Successful Flow', () => {
     cy.get('[data-cy="submit-button"]').click({ force: true });
     cy.url().should('include', '/dashboard');
   });
+
+  it("Tests first time success flow", () => {
+    //This user is curretnly set to pending
+    const email = 'userEmailVerified2@gmail.com';
+    const password = "password123"
+
+    cy.get('[data-cy="email-input"]').type(email, { force: true });
+    cy.get('[data-cy="password-input"]').type(password, { force: true });
+    cy.get('[data-cy="submit-button"]').click({ force: true });
+    cy.url().should('include', '/dashboard');
+  })
 });
 
 describe('User Sign In - Unsuccessful Flow', () => {
