@@ -26,11 +26,10 @@ describe('userLifecycleService', () => {
     await expect(UserLifecycleService.onVerifiedSignIn('uid123')).rejects.toMatchObject({
       code: 'AUTH_SIGNIN_FAILED',
     });
-
-    it('does no call mark active if user is not pending', async () => {
-      (userDal.findByFirebaseUid as jest.Mock).mockResolvedValueOnce({ status: 'ACTIVE' });
-      await UserLifecycleService.onVerifiedSignIn('uid123');
-      expect(userDal.markActive).not.toHaveBeenCalled()
-    });
+  });
+  it('does not call mark active if user is not pending', async () => {
+    (userDal.findByFirebaseUid as jest.Mock).mockResolvedValueOnce({ status: 'ACTIVE' });
+    await UserLifecycleService.onVerifiedSignIn('uid123');
+    expect(userDal.markActive).not.toHaveBeenCalled();
   });
 });
