@@ -6,20 +6,17 @@ describe('Success Flow', () => {
   });
 
   it('Tests success flow', () => {
-    cy.get('[data-cy=profile-picture]').invoke('attr', 'src').as('oldSrc');
+    cy.intercept('GET', '/org/dashboard?_rsc=*').as('rsc');
 
     cy.get('[data-cy=profile-pic-input]').selectFile('cypress/fixtures/avatar.webp', {
       force: true,
     });
 
-    cy.get('@oldSrc').then((oldSrc) => {
-      cy.get('[data-cy=profile-picture]', { timeout: 10000 })
-        .invoke('attr', 'src')
-        .should((newSrc) => {
-          //expect(newSrc).to.not.eq(oldSrc);
-          expect(newSrc).to.match(/^https?:\/\//);
-        });
-    });
+    cy.wait('@rsc');
+
+    cy.get('[data-cy=profile-picture]', { timeout: 10000 })
+      .invoke('attr', 'src')
+      .should('match', /^https?:\/\//);
   });
 
   it('Persists profile picture after reload', () => {
