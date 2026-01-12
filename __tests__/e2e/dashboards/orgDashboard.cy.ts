@@ -16,6 +16,8 @@ describe('Success Flow', () => {
     cy.contains('.Toastify__toast', 'Successfully Uploaded File', {
       timeout: 10000,
     }).should('be.visible');
+
+    cy.reload()
   });
 
   it('Persists profile picture after reload', () => {
