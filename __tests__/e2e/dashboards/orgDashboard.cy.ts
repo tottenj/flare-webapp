@@ -1,6 +1,13 @@
 import { pendingOrg } from "../constants";
 
 describe("General", () => {
+   beforeEach(() => {
+     cy.loginTestOrg();
+     cy.reload();
+     cy.visit('/dashboard');
+     cy.loginTestOrgClient();
+   });
+   
   it("Successfully Loads Org Dashboard", () => {
     cy.contains(pendingOrg.orgName).should("be.visible")
     cy.contains(pendingOrg.email).should("be.visible")
