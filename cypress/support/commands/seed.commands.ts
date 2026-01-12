@@ -4,7 +4,7 @@ import { AUTH_ADMIN } from './env';
 
 Cypress.Commands.add('clearAllEmulators', () => {
   cy.clearAuth();
-  //cy.clearStorage()
+  cy.clearStorage()
 });
 
 Cypress.Commands.add('clearAuth', () => {
@@ -12,6 +12,48 @@ Cypress.Commands.add('clearAuth', () => {
     expect(response.status).to.eq(200);
   });
 });
+
+
+
+// cypress/support/commands.ts
+Cypress.Commands.add('clearStorage', () => {
+  const bucket = 'flare-7091a.firebasestorage.app';
+  const baseUrl = `http://127.0.0.1:9199/v0/b/${bucket}/o`;
+
+  // 1️⃣ List all objects (with owner auth)
+  cy.request({
+    method: 'GET',
+    url: baseUrl,
+    headers: {
+      Authorization: 'Bearer owner',
+    },
+    failOnStatusCode: false,
+  }).then((res) => {
+    expect(res.status).to.eq(200);
+
+    const items = res.body?.items ?? [];
+
+    if (!items.length) {
+      return;
+    }
+
+    // 2️⃣ Delete each object
+    items.forEach((item: { name: string }) => {
+      cy.request({
+        method: 'DELETE',
+        url: `${baseUrl}/${encodeURIComponent(item.name)}`,
+        headers: {
+          Authorization: 'Bearer owner',
+        },
+        failOnStatusCode: false,
+      }).then((deleteRes) => {
+        expect([200, 204]).to.include(deleteRes.status);
+      });
+    });
+  });
+});
+
+
 
 
 
