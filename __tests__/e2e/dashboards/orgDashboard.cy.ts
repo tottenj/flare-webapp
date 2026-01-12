@@ -16,11 +16,6 @@ describe('Success Flow', () => {
     cy.contains('.Toastify__toast', 'Successfully Uploaded File', {
       timeout: 10000,
     }).should('be.visible');
-    cy.reload()
-
-    cy.get('[data-cy=profile-picture]', { timeout: 10000 })
-      .invoke('attr', 'src')
-      .should('match', /^https?:\/\//);
   });
 
   it('Persists profile picture after reload', () => {
