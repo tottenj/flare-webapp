@@ -28,7 +28,7 @@ describe('useFileMap', () => {
     expect(onFileChange).toHaveBeenCalledWith('avatar', file);
     expect(result.current.files.avatar).toBe(file);
     expect(result.current.isBusy).toBe(false);
-    expect(toast.success).toHaveBeenCalledWith('Successfully Uploaded File');
+    expect(toast.success).toHaveBeenCalledWith('Successfully Uploaded File', expect.any(Object));
   });
 
   it('returns early if no file', async () => {
