@@ -1,8 +1,8 @@
-import useFileMap from '@/lib/hooks/useFileMap/useFileMap';
 import { renderHook, act } from '@testing-library/react';
 import { expect } from '@jest/globals';
 import { toast } from 'react-toastify';
 import { ClientError } from '@/lib/errors/clientErrors/ClientError';
+import useFileMap from '@/lib/hooks/useFileMap/useFileMap';
 
 const file = new File(['img'], 'avatar.jpg', { type: 'image/jpeg' });
 

@@ -13,7 +13,9 @@ describe('Success Flow', () => {
     });
 
     cy.wait('@rsc');
-    cy.get('[data-cy=toast-upload-success]', { timeout: 10000 }).should('be.visible');
+    cy.contains('.Toastify__toast', 'Successfully Uploaded File', {
+      timeout: 10000,
+    }).should('be.visible');
     cy.reload()
 
     cy.get('[data-cy=profile-picture]', { timeout: 10000 })
