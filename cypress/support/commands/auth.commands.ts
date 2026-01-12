@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-import { login } from '../firebase';
 import { apiKey, AUTH_ADMIN, AUTH_EMULATOR } from './env';
 
 function signUpUser(email: string, password: string, name: string, isOrg: boolean = false) {

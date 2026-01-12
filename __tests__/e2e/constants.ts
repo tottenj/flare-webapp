@@ -16,10 +16,12 @@ export const userNotEmailVerified: basicUser = {
   password: 'password123',
 };
 
-export const pendingOrg: basicUser = {
+export const pendingOrg = {
   uid: 'uid3',
   email: 'unverifiedOrg@gmail.com',
   password: 'password123',
+  orgName: 'unverifiedOrg',
+  status: "PENDING"
 };
 
 export const nonPendingOrg: basicUser = {

@@ -1,4 +1,13 @@
-describe('Success Flow', () => {
+import { pendingOrg } from "../constants";
+
+describe("General", () => {
+  it("Successfully Loads Org Dashboard", () => {
+    cy.contains(pendingOrg.orgName).should("be.visible")
+    cy.contains(pendingOrg.email).should("be.visible")
+  })
+})
+
+describe('Profile Picture - Success Flow', () => {
   beforeEach(() => {
     cy.loginTestOrg();
     cy.reload()
@@ -29,7 +38,7 @@ describe('Success Flow', () => {
   });
 });
 
-describe("Unsuccessful Flow", () => {
+describe("Profile Picture - Unsuccessful Flow", () => {
   beforeEach(() => {
     cy.clearStorage()
     cy.loginTestOrg();
