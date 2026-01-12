@@ -1,7 +1,8 @@
 describe('Success Flow', () => {
   beforeEach(() => {
     cy.loginTestOrg();
-    cy.visit('/org/dashboard');
+    cy.reload()
+    cy.visit('/dashboard');
     cy.loginTestOrgClient();
   });
 
@@ -32,7 +33,8 @@ describe("Unsuccessful Flow", () => {
   beforeEach(() => {
     cy.clearStorage()
     cy.loginTestOrg();
-    cy.visit('/org/dashboard');
+    cy.reload()
+    cy.visit('/dashboard');
     cy.loginTestOrgClient();
   });
 
