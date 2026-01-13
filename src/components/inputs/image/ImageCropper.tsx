@@ -2,7 +2,7 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import Cropper from 'react-easy-crop';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
-import Modal from '@/components/modals/mainModal/MainModal';
+
 import useImageCrop from '@/lib/hooks/useImageCrop';
 import { getCroppedImg } from '@/lib/utils/cropping/getCroppedImage';
 
@@ -69,7 +69,7 @@ export default function ImageCropper({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+    <>
       <div className="relative min-h-[500px]">
         <Cropper
           image={imageUrl}
@@ -83,7 +83,7 @@ export default function ImageCropper({
           onCropComplete={(_, croppedAreaPixels) => setCroppedAreaPixels(croppedAreaPixels)}
         />
       </div>
-        <PrimaryButton datacy="imageCropperButton" text="Save" type="button" click={handleSave} />
-    </Modal>
+      <PrimaryButton datacy="imageCropperButton" text="Save" type="button" click={handleSave} />
+    </>
   );
 }
