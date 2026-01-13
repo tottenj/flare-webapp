@@ -13,7 +13,7 @@ describe('createSessionHandler', () => {
   });
 
   it('successfullly returns session cookie', async () => {
-    (auth.verifyIdToken as jest.Mock).mockResolvedValueOnce({ email_verified: true });
+    (auth.verifyIdToken as jest.Mock).mockResolvedValueOnce({ email_verified: true, uid: "uid123" });
     (auth.createSessionCookie as jest.Mock).mockResolvedValueOnce('session');
     (requireMethod as jest.Mock).mockReturnValueOnce(true);
     const req = mockRequest({ body: { idToken: 'idToken' } });
@@ -27,7 +27,7 @@ describe('createSessionHandler', () => {
       expect.objectContaining({ expiresIn: expect.any(Number) })
     );
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith({ sessionCookie: 'session' });
+    expect(res.json).toHaveBeenCalledWith({ sessionCookie: 'session', uid: "uid123" });
   });
 
   it('throws if method not POST', async () => {

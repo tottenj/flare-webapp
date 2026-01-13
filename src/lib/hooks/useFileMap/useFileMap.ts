@@ -31,10 +31,12 @@ export default function useFileMap<K extends string>({
       toast.info('Uploading File');
       await onFileChange(key, file);
       setFiles((prev) => ({ ...prev, [key]: file }));
-      toast.success('Successfully Uploaded File');
+      toast.success('Successfully Uploaded File', {
+        toastId: 'upload-success',
+      });
     } catch (error) {
       if (error instanceof ClientError) {
-        logger.error(error.message, error.code)
+        logger.error(error.message, error.code);
         toast.error(error.message);
       } else {
         toast.error('Sorry Something Went Wrong Please Try Again Later');

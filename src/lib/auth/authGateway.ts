@@ -50,7 +50,7 @@ export default class AuthGateway {
     }>;
   }
 
-  static async createSession(idToken: string): Promise<string> {
+  static async createSession(idToken: string): Promise<{sessionCookie: string, uid: string}> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
 
@@ -67,10 +67,10 @@ export default class AuthGateway {
     if (res.status === 403) throw AuthErrors.EmailUnverified();
     if (!res.ok) throw AuthErrors.SigninFailed();
 
-    const { sessionCookie } = await res.json();
-    if (!sessionCookie) throw AuthErrors.SigninFailed();
+    const { sessionCookie, uid } = await res.json();
+    if (!sessionCookie || !uid) throw AuthErrors.SigninFailed();
 
-    return sessionCookie;
+    return {sessionCookie, uid};
   }
 
   static async deleteUser(uid: string) {

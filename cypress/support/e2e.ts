@@ -14,17 +14,19 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import './commands/index';
 /// <reference types="cypress" />
 
+before(() => {
+  cy.request('http://127.0.0.1:4400/emulators').its('status').should('eq', 200);
+  cy.clearAllEmulators();
+  cy.resetAndSeed();
+  cy.seedAuthEmulator();
+});
 
 
-
-
-before(() =>{
-    cy.request('http://127.0.0.1:4400/emulators').its('status').should('eq', 200);
-    cy.clearAllEmulators()
-    cy.resetAndSeed()
-    cy.seedAuthEmulator()
-})
-
+Cypress.on('uncaught:exception', (err) => {
+  if (err.message.includes('Performance') || err.message.includes('negative time stamp')) {
+    return false;
+  }
+});

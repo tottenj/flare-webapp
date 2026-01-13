@@ -15,8 +15,7 @@ import z from 'zod';
 export default async function uploadProfilePicture(
   imageData: ImageMetadata
 ): Promise<ActionResult<null>> {
-  const ctx = await UserContextService.requireNone();
-  if (!ctx) return fail(AuthErrors.InvalidSession());
+  const ctx = await UserContextService.requireUser();
   const data = ImageMetadataSchema.safeParse(imageData);
   if (!data.success) {
     const fieldErrors = extractFieldErrors(z.treeifyError(data.error));

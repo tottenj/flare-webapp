@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "composite": true,
     "allowJs": false,
     "skipLibCheck": true,
@@ -18,32 +14,29 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "types": [
-      "node", "jest"
-    ],
+    "types": ["node", "jest"],
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     }
   },
- 
+
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "cypress/support/commands.ts",
+    "cypress/support/commands/commands.ts",
     "cypress/support/e2e.ts",
     "jest.setup.ts",
     "jest.setup.integration.ts",
     "tsconfig.jest.json",
-    ".next/dev/types/**/*.ts"
-, "functions/jest.config.js"  ],
-  "exclude": [
-    "node_modules",
-  ]
+    ".next/dev/types/**/*.ts",
+    "functions/jest.config.js"
+  ],
+  "exclude": ["node_modules"]
 }

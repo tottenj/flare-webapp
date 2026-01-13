@@ -11,8 +11,9 @@ export default class ImageAssetDal {
   }
 
 
-  async delete(imageAssetId: string){
-    await prisma.imageAsset.delete({
+  async delete(imageAssetId: string, tx?: Prisma.TransactionClient){
+    const client = tx ?? prisma
+    await client.imageAsset.delete({
       where:{id: imageAssetId}
     })
   }

@@ -12,6 +12,14 @@ jest.mock('@/lib/dal/userDal/UserDal', () => ({
   },
 }));
 
+jest.mock('@/lib/auth/authGateway', () => ({
+  __esModule: true,
+  default: {
+    createSession: jest.fn(),
+    verifyIdToken: jest.fn()
+  },
+}));
+
 describe('AuthService.signUp', () => {
   const mockToken = 'token';
 
@@ -32,7 +40,7 @@ describe('AuthService.signUp', () => {
       expect.objectContaining({
         firebaseUid: 'uid123',
         email: 'test@test.com',
-        emailVerified: false,
+        status: "PENDING"
       }), undefined
     );
     expect(userDal.createIfNotExists).toHaveBeenCalledTimes(1);
@@ -84,3 +92,20 @@ describe('AuthService.signUp', () => {
     await expect(AuthService.signUp({ idToken: mockToken })).rejects.toBeInstanceOf(RequiresCleanupError);
   });
 });
+
+
+
+describe('AuthService.signIn', () => {
+    it('returns session token on success', async () => {
+      (AuthGateway.createSession as jest.Mock).mockResolvedValue({sessionCookie: 'cookie', uid: "uid123"});
+      const result = await AuthService.signIn({ idToken: 'token' });
+      expect(result).toEqual({ sessionToken: 'cookie', uid: "uid123" });
+    });
+
+    it('propagates EmailUnverified error', async () => {
+      (AuthGateway.createSession as jest.Mock).mockRejectedValue(AuthErrors.EmailUnverified());
+      await expect(AuthService.signIn({ idToken: 'token' })).rejects.toMatchObject({
+        code: 'UNVERIFIED_EMAIL',
+      });
+    });
+})

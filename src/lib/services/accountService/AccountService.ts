@@ -11,21 +11,33 @@ import { AuthenticatedUser } from '@/lib/types/AuthenticatedUser';
 export default class AccountService {
   static async updateProfilePicture({
     imageData,
-    authenticatedUser
+    authenticatedUser,
   }: {
     imageData: ImageMetadata;
-    authenticatedUser: AuthenticatedUser
+    authenticatedUser: AuthenticatedUser;
   }) {
     ensure(
       imageData.storagePath.startsWith(`users/${authenticatedUser.firebaseUid}/profile-pic`),
       AuthErrors.Unauthorized()
     );
 
+    let oldStoragePath: string | null = null;
     try {
       await prisma.$transaction(async (tx) => {
         const imageAsset = await imageAssetDal.create(imageData, tx);
+        const oldProfilePic = await profilePicDal.getByUserId(authenticatedUser.userId, tx);
+        oldStoragePath = oldProfilePic?.imageAsset.storagePath ?? null;
         await profilePicDal.upsertForUser(authenticatedUser.userId, imageAsset.id, tx);
+        if (oldProfilePic) await imageAssetDal.delete(oldProfilePic.imageAssetId, tx);
       });
+      if (oldStoragePath) {
+        ImageService.deleteByStoragePath(oldStoragePath).catch((err) => {
+          logger.error('Failed to cleanup old profile picture from storage', {
+            oldStoragePath,
+            err,
+          });
+        });
+      }
     } catch (err) {
       await ImageService.deleteByStoragePath(imageData.storagePath).catch((err) => {
         logger.error('Failed to cleanup profile picture from storage', {

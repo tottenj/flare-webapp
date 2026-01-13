@@ -52,11 +52,10 @@ export class UserDal {
     }
   }
 
-  async markEmailVerified(firebaseUid: string): Promise<User> {
+  async markActive(firebaseUid: string): Promise<User> {
     return await prisma.user.update({
       where: { firebaseUid },
       data: {
-        emailVerified: true,
         status: 'ACTIVE',
       },
     });

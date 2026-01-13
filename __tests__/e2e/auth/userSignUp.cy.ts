@@ -11,7 +11,6 @@ describe('User Sign Up = Successful Flow', () => {
     cy.get('[data-cy="password-input"]').type(password, { force: true });
     cy.get('[data-cy="submit-button"]').click({ force: true });
     cy.recivedOobCode(email);
-    //cy.contains('Thank You For Signing Up!', { timeout: 20000 }).should('be.visible');
   });
 });
 

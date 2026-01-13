@@ -10,6 +10,7 @@ export function createProfilePicOnFileChange(router: AppRouterInstance) {
     if (!file) return;
     const extension = file.type.split('/')[1]?.split('+')[0] ?? 'jpg';
     const user = auth.currentUser;
+
     if (!user) throw ClientErrors.SessionExpired();
     const filePath = `users/${user.uid}/profile-pic.${extension}`;
     const metadata = await uploadFile(file, filePath);

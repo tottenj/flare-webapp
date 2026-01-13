@@ -1,8 +1,8 @@
-import useFileMap from '@/lib/hooks/useFileMap/useFileMap';
 import { renderHook, act } from '@testing-library/react';
 import { expect } from '@jest/globals';
 import { toast } from 'react-toastify';
 import { ClientError } from '@/lib/errors/clientErrors/ClientError';
+import useFileMap from '@/lib/hooks/useFileMap/useFileMap';
 
 const file = new File(['img'], 'avatar.jpg', { type: 'image/jpeg' });
 
@@ -28,7 +28,7 @@ describe('useFileMap', () => {
     expect(onFileChange).toHaveBeenCalledWith('avatar', file);
     expect(result.current.files.avatar).toBe(file);
     expect(result.current.isBusy).toBe(false);
-    expect(toast.success).toHaveBeenCalledWith('Successfully Uploaded File');
+    expect(toast.success).toHaveBeenCalledWith('Successfully Uploaded File', expect.any(Object));
   });
 
   it('returns early if no file', async () => {

@@ -16,7 +16,7 @@ jest.mock('@/lib/services/accountService/AccountService', () => ({
 jest.mock('@/lib/services/userContextService/userContextService', () => ({
   __esModule: true,
   UserContextService: {
-    requireNone: jest.fn(),
+    requireUser: jest.fn(),
   },
 }));
 
@@ -26,7 +26,7 @@ describe('uploadProfilePicture', () => {
   });
 
   it('successfully uploads profile picture', async () => {
-    (UserContextService.requireNone as jest.Mock).mockResolvedValueOnce({
+    (UserContextService.requireUser as jest.Mock).mockResolvedValueOnce({
       user: {
         id: 'userId',
         firebaseUid: 'uid123',
@@ -49,21 +49,10 @@ describe('uploadProfilePicture', () => {
     });
   });
 
-  it('throws correct error on missing user', async () => {
-    (UserContextService.requireNone as jest.Mock).mockResolvedValueOnce(null);
-    const metaData: ImageMetadata = {
-      storagePath: 'users/uid123/profile-pic',
-      contentType: 'json',
-      sizeBytes: 22,
-      originalName: 'originalName',
-    };
-
-    const error = expectFail(await uploadProfilePicture(metaData));
-    expect(error.code).toBe('INVALID_SESSION');
-  });
+ 
 
   it('throws on incorrect input', async () => {
-    (UserContextService.requireNone as jest.Mock).mockResolvedValueOnce({
+    (UserContextService.requireUser as jest.Mock).mockResolvedValueOnce({
       user: {
         id: 'userId',
         firebaseUid: 'uid123',
@@ -81,7 +70,7 @@ describe('uploadProfilePicture', () => {
   });
 
   it('returns app error correctly', async () => {
-    (UserContextService.requireNone as jest.Mock).mockResolvedValueOnce({
+    (UserContextService.requireUser as jest.Mock).mockResolvedValueOnce({
       user: {
         id: 'userId',
         firebaseUid: 'uid123',
@@ -102,7 +91,7 @@ describe('uploadProfilePicture', () => {
   });
 
   it('returns general error correctly', async () => {
-    (UserContextService.requireNone as jest.Mock).mockResolvedValueOnce({
+    (UserContextService.requireUser as jest.Mock).mockResolvedValueOnce({
       user: {
         id: 'userId',
         firebaseUid: 'uid123',

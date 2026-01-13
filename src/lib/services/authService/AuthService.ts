@@ -15,7 +15,6 @@ export class AuthService {
     const user = UserDomain.onSignUp({
       firebaseUid: auth.uid,
       email: auth.email,
-      emailVerified: false,
     });
     try {
       await userDal.createIfNotExists(user.props, tx);
@@ -29,8 +28,8 @@ export class AuthService {
     }
   }
 
-  static async signIn(input: AuthTokenInput): Promise<{ sessionToken: string }> {
-    const sessionToken = await AuthGateway.createSession(input.idToken);
-    return { sessionToken };
+  static async signIn(input: AuthTokenInput): Promise<{ sessionToken: string, uid: string }> {
+    const {sessionCookie, uid} = await AuthGateway.createSession(input.idToken);
+    return { sessionToken: sessionCookie, uid };
   }
 }

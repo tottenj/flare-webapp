@@ -39,10 +39,7 @@ export default defineConfig({
           return null;
         },
 
-        async prismaFind({ table, where }) {
-          //@ts-ignore
-          return prisma[table].findFirst({ where });
-        },
+       
       });
     },
     baseUrl: 'http://localhost:3000',
