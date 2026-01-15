@@ -7,7 +7,7 @@ async function main() {
   // --- Seed Location ---
   const locationRows = await prisma.$queryRaw(
     Prisma.sql`
-    INSERT INTO "Location" ("placeId", "point")
+    INSERT INTO "Location" ("id", "placeId", "point")
     VALUES (
       gen_random_uuid(),
       'test-place-id-1',
@@ -16,9 +16,6 @@ async function main() {
     RETURNING "id";
   `
   );
-
-
-  
 
   if (!locationRows.length) {
     //throw new Error('Failed to seed Location');
