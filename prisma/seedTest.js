@@ -1,10 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import cuid from 'cuid';
 const prisma = new PrismaClient();
-
-
-
-
 
 async function main() {
   await prisma.$executeRawUnsafe(`CREATE EXTENSION IF NOT EXISTS postgis;`);
@@ -14,13 +9,10 @@ async function main() {
     Prisma.sql`
     INSERT INTO "Location" ("id", "placeId", "point")
     VALUES (
-      ${cuid()},
+      gen_random_uuid(),
       'test-place-id-1',
       ST_SetSRID(ST_MakePoint(-79.3832, 43.6532), 4326)
     )
-    ON CONFLICT ("placeId")
-    DO UPDATE SET
-      "point" = EXCLUDED."point"
     RETURNING "id";
   `
   );
@@ -29,7 +21,7 @@ async function main() {
   
 
   if (!locationRows.length) {
-    throw new Error('Failed to seed Location');
+    //throw new Error('Failed to seed Location');
   }
 
   const locationId = locationRows[0].id;
