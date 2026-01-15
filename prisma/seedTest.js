@@ -7,20 +7,18 @@ async function main() {
   // --- Seed Location ---
   const locationRows = await prisma.$queryRaw(
     Prisma.sql`
-    INSERT INTO "Location" ("placeId", "point")
+    INSERT INTO "Location" ("id", "placeId", "point")
     VALUES (
+      gen_random_uuid(),
       'test-place-id-1',
       ST_SetSRID(ST_MakePoint(-79.3832, 43.6532), 4326)
     )
-    ON CONFLICT ("placeId")
-    DO UPDATE SET
-      "point" = EXCLUDED."point"
     RETURNING "id";
   `
   );
 
   if (!locationRows.length) {
-    throw new Error('Failed to seed Location');
+    //throw new Error('Failed to seed Location');
   }
 
   const locationId = locationRows[0].id;

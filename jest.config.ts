@@ -44,6 +44,7 @@ export default async (): Promise<Config> => {
   return {
     // ✅ top-level only
     collectCoverage: true,
+    maxWorkers: 1,
     coverageProvider: 'v8',
     coverageDirectory: 'coverage',
     reporters: [
