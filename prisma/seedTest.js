@@ -17,6 +17,9 @@ async function main() {
   `
   );
 
+
+  
+
   if (!locationRows.length) {
     throw new Error('Failed to seed Location');
   }
