@@ -12,7 +12,7 @@ async function main() {
   // --- Seed Location ---
   const locationRows = await prisma.$queryRaw(
     Prisma.sql`
-    INSERT INTO "Location" ("id", "placeId", "point")
+    INSERT INTO "Location" ("placeId", "point")
     VALUES (
       ${cuid()},
       'test-place-id-1',
