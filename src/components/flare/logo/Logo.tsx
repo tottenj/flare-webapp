@@ -1,4 +1,3 @@
-import Image from "next/image";
 import SVGLogo from "../svglogo/SVGLogo";
 
 interface logoProps{
