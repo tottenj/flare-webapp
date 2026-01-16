@@ -20,7 +20,7 @@ interface MainModalProps {
   children: ReactNode | ModalRenderFn;
   footer?: ReactNode | ModalRenderFn;
   modalProps?: ForwardedModalProps;
-  defaultOpen: boolean 
+  defaultOpen?: boolean 
 }
 
 export default function MainModal({
