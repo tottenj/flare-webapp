@@ -41,7 +41,15 @@ export default function MainModal({
     <>
       {Trigger}
 
-      <Modal {...modalProps} isOpen={isOpen} onClose={onClose} className="rounded-lg">
+      <Modal
+        {...modalProps}
+        isOpen={isOpen}
+        onClose={onClose}
+        classNames={{
+          base: 'bg-content1 rounded-lg',
+        }}
+        className="rounded-lg"
+      >
         <ModalContent>
           {(onClose) => {
             const render = (node: ReactNode | ModalRenderFn) =>
