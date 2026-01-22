@@ -1,8 +1,8 @@
 import { OrgProfileDomainProps } from '@/lib/domain/orgProfileDomain/OrgProfileDomain';
 import { prisma } from '../../../../prisma/prismaClient';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../../../../prisma/generated/prisma/client';
 import { UniqueConstraintError } from '@/lib/errors/DalErrors';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { PrismaClientKnownRequestError } from "../../../../prisma/generated/prisma/internal/prismaNamespace"
 
 export class OrgProfileDal {
   async create(input: OrgProfileDomainProps, tx?: Prisma.TransactionClient) {

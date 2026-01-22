@@ -1,5 +1,5 @@
-import { Prisma, PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { Prisma } from "./generated/prisma/client";
+import {prisma} from "./prismaClient"
 
 async function main() {
   await prisma.$executeRawUnsafe(`CREATE EXTENSION IF NOT EXISTS postgis;`);
@@ -15,12 +15,9 @@ async function main() {
     )
     RETURNING "id";
   `
-  );
+  ) as any;
 
-  if (!locationRows.length) {
-    //throw new Error('Failed to seed Location');
-  }
-
+ 
   const locationId = locationRows[0].id;
 
   // --- Seed Users ---

@@ -6,7 +6,7 @@ import { AuthErrors } from '../../errors/authError';
 import { UniqueConstraintError } from '../../errors/DalErrors';
 import { AuthTokenInput } from '@/lib/schemas/auth/signUpSchema';
 import { RequiresCleanupError } from '@/lib/errors/CleanupError';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../../../../prisma/generated/prisma/client';
 
 export class AuthService {
   static async signUp(input: AuthTokenInput, tx?: Prisma.TransactionClient) {

@@ -1,6 +1,6 @@
 import 'server-only';
-import { Prisma, User } from '@prisma/client';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Prisma, User } from '../../../../prisma/generated/prisma/client';
+import { PrismaClientKnownRequestError } from '../../../../prisma/generated/prisma/internal/prismaNamespace'; 
 import { UniqueConstraintError } from '../../errors/DalErrors';
 import { prisma } from '../../../../prisma/prismaClient';
 

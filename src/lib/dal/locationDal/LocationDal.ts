@@ -1,6 +1,6 @@
 import 'server-only';
 import { LocationInput } from '@/lib/schemas/LocationInputSchema';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../../../../prisma/generated/prisma/client';
 import { prisma } from '../../../../prisma/prismaClient';
 
 export class LocationDal {

@@ -9,7 +9,7 @@ import { OrgProfileDomain } from '@/lib/domain/orgProfileDomain/OrgProfileDomain
 import { AuthErrors } from '@/lib/errors/authError';
 import { RequiresCleanupError } from '@/lib/errors/CleanupError';
 import { OrgSignUpInput } from '@/lib/schemas/auth/orgSignUpSchema';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../../../../prisma/generated/prisma/client';
 import { UniqueConstraintError } from '@/lib/errors/DalErrors';
 
 export class OrgProfileService {

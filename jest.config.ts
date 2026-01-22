@@ -38,6 +38,15 @@ export default async (): Promise<Config> => {
     displayName: 'integration',
     testMatch: ['<rootDir>/**/*.integration.test.[jt]s?(x)'],
     testEnvironment: 'node',
+    moduleNameMapper: {
+      // ✅ keep shared alias
+      '^@/(.*)$': '<rootDir>/src/$1',
+
+      // ✅ Prisma 7 ESM fix
+      '^(\\.{1,2}/.*)\\.js$': '$1',
+    },
+    transformIgnorePatterns: ['/node_modules/(?!@prisma/client)'],
+
     setupFilesAfterEnv: ['<rootDir>/jest.setup.integration.ts'],
   })();
 

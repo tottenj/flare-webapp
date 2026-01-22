@@ -1,5 +1,5 @@
 import { ProofPlatformType } from '@/lib/schemas/proof/ProofPlatformSchema';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../../../../prisma/generated/prisma/client';
 import { prisma } from '../../../../prisma/prismaClient';
 
 type OrgSocialInput = {

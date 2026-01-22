@@ -1,8 +1,10 @@
-import { expect } from '@jest/globals';
-import { userDal } from './UserDal';
-import { prisma } from '../../../../prisma/prismaClient';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { expect} from '@jest/globals';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { UniqueConstraintError } from '@/lib/errors/DalErrors';
+import { prisma } from '../../../../prisma/prismaClient';
+import { userDal } from '@/lib/dal/userDal/UserDal';
+
+
 
 jest.mock('../../../../prisma/prismaClient', () => ({
   prisma: {
@@ -14,14 +16,17 @@ jest.mock('../../../../prisma/prismaClient', () => ({
 }));
 
 describe('UserDal.createIfNotExists', () => {
-  beforeEach(() => {
+
+
+  beforeEach(async () => {
     jest.clearAllMocks();
+  
   });
   const createdUser = { firebaseUid: 'uid123' };
 
   it('successfully creates user if one does not exist', async () => {
-    (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null);
-    (prisma.user.create as jest.Mock).mockResolvedValueOnce(createdUser);
+    (prisma.user.findUnique as any).mockResolvedValueOnce(null);
+    (prisma.user.create as any).mockResolvedValueOnce(createdUser);
     const result = await userDal.createIfNotExists({
       firebaseUid: 'uid123',
     } as any);
