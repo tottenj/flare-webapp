@@ -27,7 +27,6 @@ export default function PlaceSearch({
   onChange,
 }: placeSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [location, setLocation] = useState<flareLocation | null>(null);
   const [getPlaces, setGetPlaces] = useState<null | Function>(null);
   const [getPlaceDetails, setGetPlaceDetails] = useState<null | Function>(null);
 
