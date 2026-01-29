@@ -15,6 +15,7 @@ type Props = {
   validationErrors?: Record<string, string[]>;
   onSubmit: (formData: FormData) => void;
   signUp?: boolean;
+  googleButton?: React.ReactNode;
 };
 
 export default function SignUpFormPresentational({
@@ -23,6 +24,7 @@ export default function SignUpFormPresentational({
   validationErrors,
   onSubmit,
   signUp = true,
+  googleButton,
 }: Props) {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4 rounded-2xl bg-white p-4 shadow-2xl md:w-1/2 lg:w-2/5">
@@ -48,7 +50,7 @@ export default function SignUpFormPresentational({
         />
       </Form>
 
-      <GoogleSignInButton signIn={!signUp} />
+      {googleButton}
 
       <Link
         className="font-nunito mt-4 text-center font-bold text-balance underline"

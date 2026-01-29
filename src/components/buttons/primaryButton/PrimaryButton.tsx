@@ -56,7 +56,7 @@ export default function PrimaryButton({
       style={styleOver}
       type={type}
       disabled={disabled}
-      className={`relative overflow-hidden ${sizeClass} font-nunito bg-primary mt-4 cursor-pointer rounded-full px-6 py-3 font-bold text-white`}
+      className={`relative overflow-hidden ${sizeClass} font-nunito bg-primary mt-4 cursor-pointer rounded-full px-6 py-3 font-bold text-white max-w-11/12`}
       variants={buttonVariants}
       initial="initial"
       whileHover="hover"

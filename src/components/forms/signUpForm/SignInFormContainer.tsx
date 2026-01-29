@@ -7,6 +7,7 @@ import { useFormAction } from '@/lib/hooks/useFormAction';
 import { ActionResult } from '@/lib/types/ActionResult';
 import signInAction from '@/lib/auth/signInAction';
 import mapFirebaseAuthError from '@/lib/errors/firebaseErrors/mapFirebaseAuthError';
+import GoogleSignInButton from '@/components/buttons/googleButton/SignInWithGoogleButton';
 
 export default function SignInFormContainer() {
   const router = useRouter();
@@ -14,7 +15,6 @@ export default function SignInFormContainer() {
   async function submitAction(formData: FormData): Promise<ActionResult<null>> {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
-
     if (!email || !password) {
       return {
         ok: false,
@@ -31,13 +31,15 @@ export default function SignInFormContainer() {
       const result = await signInAction({ idToken });
       if (!result.ok && result.error.code == 'UNVERIFIED_EMAIL') {
         await sendEmailVerification(user.user);
-        await signOut(auth)
+        await signOut(auth);
       }
       return result;
     } catch (err) {
       return mapFirebaseAuthError(err);
     }
   }
+
+
 
   const { action, pending, error, validationErrors } = useFormAction(submitAction, {
     onSuccess: () => {
@@ -52,6 +54,7 @@ export default function SignInFormContainer() {
       validationErrors={validationErrors}
       error={error?.message}
       signUp={false}
+      googleButton={<GoogleSignInButton signIn={true} />}
     />
   );
 }

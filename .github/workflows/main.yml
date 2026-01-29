@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, preProduction, prisma]
+    branches: [main, preProduction]
   pull_request:
 
 concurrency:

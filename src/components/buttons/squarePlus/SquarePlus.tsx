@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusCircle, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import {  faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 
 
 export default function SquarePlus() {
