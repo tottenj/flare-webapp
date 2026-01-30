@@ -1,6 +1,6 @@
 'use client';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
-import TagAutoCompleteContainer from '@/components/inputs/autocomplete/tagAutocomplete/TagAutoCompleteContainer';
+import TagAutoCompleteContainer from '@/components/inputs/autocomplete/AutocompleteContainer';
 import HeroInput from '@/components/inputs/hero/input/HeroInput';
 import HeroTextArea from '@/components/inputs/hero/textArea/HeroTextArea';
 import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';

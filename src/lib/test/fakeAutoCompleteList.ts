@@ -1,6 +1,6 @@
 // stories/mocks/fakeAutoCompleteList.ts
 import type { AsyncListData } from '@react-stately/data';
-import type { AutoCompleteItem } from '@/components/inputs/autocomplete/tagAutocomplete/TagAutoCompleteContainer';
+import type { AutoCompleteItem } from '@/components/inputs/autocomplete/AutocompleteContainer';
 
 export function createFakeAsyncList(items: AutoCompleteItem[]): AsyncListData<AutoCompleteItem> {
   return {
@@ -15,4 +15,3 @@ export function createFakeAsyncList(items: AutoCompleteItem[]): AsyncListData<Au
     setSelectedKeys: () => {},
   } as unknown as AsyncListData<AutoCompleteItem>;
 }
-

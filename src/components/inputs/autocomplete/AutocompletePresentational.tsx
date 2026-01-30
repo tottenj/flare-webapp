@@ -1,25 +1,24 @@
-import { AutoCompleteItem } from '@/components/inputs/autocomplete/tagAutocomplete/TagAutoCompleteContainer';
 import { Autocomplete, AutocompleteItem, AutocompleteProps } from '@heroui/react';
 import { AsyncListData } from '@react-stately/data';
+import { AutoCompleteItem } from './AutocompleteContainer';
 
-interface AutocompletePresentationalProps
-  extends Omit<AutocompleteProps<AutoCompleteItem>, 'items' | 'children' | 'inputValue' | 'list'> {
+interface AutoCompletePresentationalProps
+  extends Omit<AutocompleteProps<AutoCompleteItem>, 'items' | 'children' | 'list'> {
   list: AsyncListData<AutoCompleteItem>;
 }
 
 export default function AutoCompletePresentational({
   list,
-  ...autocompleteProps
-}: AutocompletePresentationalProps) {
+  ...props
+}: AutoCompletePresentationalProps) {
   return (
     <Autocomplete
-      allowsCustomValue
-      multiple
-      {...autocompleteProps}
+      {...props}
       items={list.items}
       inputValue={list.filterText}
       onInputChange={list.setFilterText}
       isLoading={list.isLoading}
+      errorMessage={list.error?.message}
       classNames={{
         base: 'rounded-none',
         popoverContent: 'rounded-sm',
@@ -28,7 +27,12 @@ export default function AutoCompletePresentational({
       }}
     >
       {(item) => (
-        <AutocompleteItem className="capitalize" description={item.description} key={item.key}>
+        <AutocompleteItem
+          key={item.key}
+          textValue={item.label}
+          className="capitalize"
+          description={item.description}
+        >
           {item.label}
         </AutocompleteItem>
       )}
