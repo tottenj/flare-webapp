@@ -19,11 +19,9 @@ export default function AutoCompletePresentational({
       onInputChange={list.setFilterText}
       isLoading={list.isLoading}
       errorMessage={list.error?.message}
+      inputProps={{ classNames: { inputWrapper: 'rounded-2xl' } }}
       classNames={{
-        base: 'rounded-none',
-        popoverContent: 'rounded-sm',
-        listboxWrapper: 'rounded-none',
-        listbox: 'rounded-none',
+        popoverContent: 'rounded-medium',
       }}
     >
       {(item) => (

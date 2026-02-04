@@ -2,9 +2,46 @@
 @plugin './hero.ts';
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 
+:root {
+  --app-tag-pink: var(--app-secondary-50);
+  --app-tag-pink-fg: #7a1231;
+
+  --app-tag-purple: var(--app-secondary-100);
+  --app-tag-purple-fg: #3b1d6f;
+
+  --app-tag-blue: var(--app-secondary-200);
+  --app-tag-blue-fg: #1e3a8a;
+
+  --app-tag-teal: var(--app-secondary-300);
+  --app-tag-teal-fg: #065f46;
+
+  --app-tag-yellow: var(--app-secondary-400);
+  --app-tag-yellow-fg: #854d0e;
+
+  --app-tag-orange: var(--app-secondary-500);
+  --app-tag-orange-fg: #7c2d12;
+}
+
 @theme inline {
   --app-gradient-bg: linear-gradient(135deg, #ffa301, #ff005c);
   --app-foreground: var(--app-foreground);
+  --app-tag-pink: var(--app-secondary-50);
+  --app-tag-pink-fg: #7a1231;
+
+  --app-tag-purple: var(--app-secondary-100);
+  --app-tag-purple-fg: #3b1d6f;
+
+  --app-tag-blue: var(--app-secondary-200);
+  --app-tag-blue-fg: #1e3a8a;
+
+  --app-tag-teal: var(--app-secondary-300);
+  --app-tag-teal-fg: #065f46;
+
+  --app-tag-yellow: var(--app-secondary-400);
+  --app-tag-yellow-fg: #854d0e;
+
+  --app-tag-orange: var(--app-secondary-500);
+  --app-tag-orange-fg: #7c2d12;
   --font-nunito: var(--font-nunito);
   --font-pt_sans: var(--font-pt_sans);
 }
@@ -49,8 +86,6 @@ body {
   color: var(--foreground);
   font-family: var(--font-pt_sans);
 }
-
-
 
 input {
   outline: none !important;

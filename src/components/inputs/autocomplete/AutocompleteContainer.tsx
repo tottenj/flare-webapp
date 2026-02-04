@@ -5,6 +5,9 @@ import { useMemo, useState } from 'react';
 import { AutocompleteProps, Button, Chip } from '@heroui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { tagClasses } from '@/lib/types/TagColour';
+import { getTagColor } from '@/lib/utils/ui/getTagColour';
+
 
 export type AutoCompleteItem = {
   key: string;
@@ -32,7 +35,6 @@ export default function AutoCompleteContainer({
 }: TagAutoCompleteContainerProps) {
   const [selectedTags, setSelectedTags] = useState<Map<string, string>>(new Map());
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
-  const [inputValue, setInputValue] = useState('');
 
   const list = useAsyncList<AutoCompleteItem>({
     async load({ filterText }) {
@@ -50,12 +52,8 @@ export default function AutoCompleteContainer({
     if (!key) return;
     const strKey = String(key);
     const label = labelByKey.get(strKey) ?? strKey;
-
     setSelectedKey(strKey);
     addTag(strKey);
-    if (!withChips) {
-      setInputValue(label);
-    }
   };
 
   const onClose = (key: string) => {
@@ -80,14 +78,13 @@ export default function AutoCompleteContainer({
 
     if (withChips) {
       setSelectedKey(null);
-      setInputValue('');
       list.setFilterText('');
     }
   };
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         <AutoCompletePresentational
           {...props}
           disabled={Boolean(maxNum && selectedTags.size >= maxNum)}
@@ -107,7 +104,7 @@ export default function AutoCompleteContainer({
       {withChips && (
         <div className="flex gap-4">
           {[...selectedTags.entries()].map(([key, label]) => (
-            <Chip onClose={() => onClose(key)} className="capitalize" key={key}>
+            <Chip onClose={() => onClose(key)} className={`capitalize ${tagClasses(getTagColor(label))}`} key={key}>
               {label}
             </Chip>
           ))}

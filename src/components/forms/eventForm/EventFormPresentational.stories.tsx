@@ -17,5 +17,7 @@ export const Default: Story = {
       </div>
     ),
   ],
-  args: {},
+  args: {
+    hasFile: () => false
+  },
 };

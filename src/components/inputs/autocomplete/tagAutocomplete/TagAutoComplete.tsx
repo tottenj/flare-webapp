@@ -2,5 +2,5 @@ import AutoCompleteContainer from '@/components/inputs/autocomplete/Autocomplete
 import getAutoCompleteTags from '@/lib/serverActions/getAutocompleteTags/getAutoCompleteTags';
 
 export default function TagAutoComplete() {
-  return <AutoCompleteContainer name="tags" loadFunc={getAutoCompleteTags} />;
+  return <AutoCompleteContainer label="Add Tags" name="tags" loadFunc={getAutoCompleteTags} allowsCustomValue />;
 }

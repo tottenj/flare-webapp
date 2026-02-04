@@ -12,7 +12,6 @@ type ImageCropperProps = {
   aspect?: number;
   outputWidth?: number;
   setImg: React.Dispatch<SetStateAction<File | null>>;
-  imgURL?: string;
   setImgURL: React.Dispatch<SetStateAction<string | null>>;
 };
 

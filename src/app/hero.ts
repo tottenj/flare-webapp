@@ -34,12 +34,12 @@ export default heroui({
           DEFAULT: '#1d0b31',
         },
         secondary: {
-          50: '#f5f3ff',
-          100: '#ede9fe',
-          200: '#ddd6fe',
-          300: '#c4b5fd',
-          400: '#a78bfa',
-          500: '#8b5cf6',
+          50: '#fde2ea', // pink
+          100: '#eee6ff', // purple
+          200: '#e6f0ff', // blue
+          300: '#e6faf7', // teal
+          400: '#fff6db', // yellow
+          500: '#ffe9dc', // orange
           foreground: '#1d0b31',
           DEFAULT: '#8b5cf6',
         },

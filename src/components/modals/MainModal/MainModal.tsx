@@ -15,7 +15,7 @@ type ModalRenderFn = (onClose?: () => void) => ReactNode;
 type ForwardedModalProps = Omit<ModalProps, 'isOpen' | 'onClose' | 'children'>;
 
 interface MainModalProps {
-  trigger: ReactNode;
+  trigger?: ReactNode;
   header?: ReactNode;
   children: ReactNode | ModalRenderFn;
   footer?: ReactNode | ModalRenderFn;
