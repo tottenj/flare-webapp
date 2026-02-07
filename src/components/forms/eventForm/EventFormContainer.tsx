@@ -16,8 +16,10 @@ export default function EventFormContainer() {
       eventImg: null,
     },
   });
-  
+  const [eventImgPreview, setEventImgPreview] = useState<string | null>(null);
+
   async function submitAction(formData: FormData): Promise<ActionResult<null>> {
+    const eventImg = files.eventImg;
     return { ok: true, data: null };
   }
 
@@ -27,41 +29,31 @@ export default function EventFormContainer() {
     },
   });
 
-  const [cropImageUrl, setCropImageUrl] = useState<string | null>(null);
-  const [isCropOpen, setIsCropOpen] = useState(false);
-
-  function onRawFileSelected(file: File) {
-    const url = URL.createObjectURL(file);
-    setCropImageUrl(url);
-    setIsCropOpen(true);
-  }
-
-  function onCropped(file: File, previewUrl: string) {
-    setFile('eventImg', file);
-    setCropImageUrl(null);
-    setIsCropOpen(false);
-  }
-
   function onFileChange(key: EventFileKey, file: File) {
     setFile(key, file);
   }
 
- 
+  function handleCropped(file: File, previewUrl: string) {
+    if (eventImgPreview) {
+      URL.revokeObjectURL(eventImgPreview);
+    }
+
+    setFile('eventImg', file);
+    setEventImgPreview(previewUrl);
+  }
 
   return (
     <EventFormPresentational
       changeLocVal={setLocation}
       locVal={location}
       hasFile={hasFile}
-      onRawFileSelected={onRawFileSelected}
-      cropImageUrl={cropImageUrl}
-      isCropOpen={isCropOpen}
-      onCropped={onCropped}
-      onSubmit={submitAction}
+      onSubmit={action}
       handleFileChange={onFileChange}
       pending={pending}
       error={error?.message}
       validationErrors={validationErrors}
+      eventImgPreview={eventImgPreview}
+      onImageCropped={handleCropped}
     />
   );
 }

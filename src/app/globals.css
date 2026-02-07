@@ -115,3 +115,17 @@ label {
     font-size: 18px;
   }
 }
+
+
+@keyframes spinOnce {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(90deg);
+  }
+}
+
+.hover\:animate-spinOnce:hover {
+  animation: spinOnce 0.3s forwards;
+}

@@ -6,12 +6,13 @@ import ImageService from '@/lib/services/imageService/ImageService';
 export default async function ProfilePictureContainer({
   profilePicPath,
   size,
+  priority
 }: {
   profilePicPath: string | null;
   size: number;
+  priority?: boolean
 }) {
   let profilePic: string | undefined;
-
   if (profilePicPath) {
     try {
       profilePic = await ImageService.getDownloadUrl(profilePicPath);
@@ -21,5 +22,5 @@ export default async function ProfilePictureContainer({
     }
   }
 
-  return <ProfilePicture size={size} src={profilePic} />;
+  return <ProfilePicture priority={priority} size={size} src={profilePic} />;
 }
