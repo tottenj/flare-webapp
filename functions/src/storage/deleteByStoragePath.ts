@@ -2,6 +2,7 @@ import { onRequest, Request } from 'firebase-functions/v2/https';
 import { storage } from '../bootstrap/admin';
 import { requireMethod } from '../utils/guards/requireMethod';
 import { requireInternalApiKey } from '../utils/guards/requireInternalApiKey';
+import { INTERNAL_API_KEY } from '../secrets';
 
 const ALLOWED_PREFIXES = ['users/', 'org/proofs/'];
 
@@ -10,7 +11,7 @@ export async function deleteByStoragePathHandler(
   res: Parameters<Parameters<typeof onRequest>[0]>[1]
 ) {
   if (!requireMethod(req, res, 'POST')) return;
-  if (!requireInternalApiKey(req, res)) return;
+  if (!requireInternalApiKey(req, res, INTERNAL_API_KEY.value())) return;
 
   if (!req.is('application/json')) {
     res.status(415).json({ code: 'UNSUPPORTED_MEDIA_TYPE' });
@@ -36,4 +37,4 @@ export async function deleteByStoragePathHandler(
   }
 }
 
-export const deleteByStoragePath = onRequest(deleteByStoragePathHandler);
+export const deleteByStoragePath = onRequest({secrets: [INTERNAL_API_KEY]}, deleteByStoragePathHandler);
