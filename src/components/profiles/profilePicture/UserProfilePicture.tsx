@@ -8,5 +8,5 @@ export default async function UserProfilePicture({size}: {size:number}) {
   const profilePic = ctx?.user.profilePic ?? null;
 
 
-  return <ProfilePictureContainer profilePicPath={profilePic} size={size} />;
+  return <ProfilePictureContainer priority profilePicPath={profilePic} size={size} />;
 }

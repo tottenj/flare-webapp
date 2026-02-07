@@ -2,6 +2,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -35,6 +36,7 @@ model OrganizationProfile{
   location      Location @relation(fields: [locationId], references: [id])
   socials       OrgSocial?
   proofs        OrgProofFile[]
+  events        Event[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -73,6 +75,51 @@ model ProfilePic{
   @@index([userId])
 }
 
+
+model Event{
+  id                String @id @default(cuid())
+  organizationId    String 
+  organization      OrganizationProfile @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  status            EventStatus @default(DRAFT)
+  publishedAt       DateTime?
+  title             String
+  description       String
+  ageRestriction    AgeRestriction @default(ALL_AGES)
+
+  imageId           String?
+  image             ImageAsset? @relation(fields: [imageId], references: [id])
+
+  startsAtUTC       DateTime
+  endsAtUTC         DateTime?
+  timezone          String
+
+  locationId        String?
+  location          Location? @relation(fields: [locationId], references: [id])
+
+  pricingType       EventPricingType
+  minPriceCents     Int?
+  maxPriceCents     Int?
+  currency          String @default("CAD")
+
+  tags              String[]
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([startsAtUTC])
+  @@index([organizationId])
+  @@index([tags], type: Gin)
+}
+
+
+model Tag{
+  id          String @id @default(cuid())
+  label       String @unique
+  usageCount  Int @default(0)
+  createdAt   DateTime @default(now())
+}
+
+
 model ImageAsset{
   id             String  @id @default(cuid())
   storagePath    String
@@ -83,6 +130,7 @@ model ImageAsset{
 
   orgProofFiles OrgProofFile[]
   profilePics   ProfilePic[]
+  events        Event[]
 }
 
 model Location{
@@ -92,6 +140,7 @@ model Location{
   point     Unsupported("geography(Point, 4326)")
   createdAt DateTime @default(now())
   organizationProfiles OrganizationProfile[]
+  events  Event[]
 
   @@index([point], type: Gist)
 }
@@ -105,6 +154,25 @@ model spatial_ref_sys {
   proj4text String? @db.VarChar(2048)
 }
 
+
+enum AgeRestriction {
+  ALL_AGES
+  AGE_18_PLUS
+  AGE_19_PLUS
+  AGE_21_PLUS
+  AGE_65_PLUS
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum EventPricingType {
+  FREE
+  FIXED
+  RANGE
+}
 
 enum UserStatus {
   PENDING   // Signed up but email not verified

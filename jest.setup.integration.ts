@@ -32,3 +32,9 @@ jest.mock('@/lib/auth/authGateway', () => ({
 (AuthGateway.createSession as jest.Mock).mockResolvedValue({
   sessionCookie: "sessionCookie"
 });
+
+Object.defineProperty(global, 'crypto', {
+  value: {
+    randomUUID: jest.fn(() => 'fixed-uuid'),
+  },
+});

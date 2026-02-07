@@ -5,10 +5,11 @@ import { Suspense } from 'react';
 import MainBannerMenu from './MainBannerMenu';
 import GradientLink from '@/components/Links/GradientLink/GradientLink';
 import LogoWithText from '@/components/flare/logoWithText/LogoWithText';
-import UserProfilePicture from '@/components/profiles/profilePicture/UserProfilePicture';
+import { UserContextService } from '@/lib/services/userContextService/userContextService';
+import ProfilePictureContainer from '@/components/profiles/profilePicture/ProfilePictureContainer';
+import MainBannerMenuContainer from '@/components/banners/mainBanner/MainBannerMenuContainer';
 
 export default async function MainBanner() {
- 
   return (
     <div className="flex justify-between p-4">
       <Link href={'/'}>
@@ -17,11 +18,9 @@ export default async function MainBanner() {
 
       <div className="flex items-center justify-center gap-4">
         <GradientLink link="flare-signup" linkText="Become a Flare" />
-        <MainBannerMenu>
-          <Suspense fallback={<ProfilePictureSkeleton size={45} />}>
-           <UserProfilePicture size={45} />
-          </Suspense>
-        </MainBannerMenu>
+        <Suspense fallback={<ProfilePictureSkeleton size={45} />}>
+          <MainBannerMenuContainer />
+        </Suspense>
       </div>
     </div>
   );

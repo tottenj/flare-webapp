@@ -15,13 +15,18 @@ interface placeSearchProps {
   label?: string;
   required?: boolean;
   z?: string;
-  value?: LocationInput | null
+  value?: LocationInput | null;
   onChange: (location: LocationInput) => void;
 }
 
-export default function PlaceSearch({ label, required = true, z, value, onChange }: placeSearchProps) {
+export default function PlaceSearch({
+  label,
+  required = true,
+  z,
+  value,
+  onChange,
+}: placeSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [location, setLocation] = useState<flareLocation | null>(null);
   const [getPlaces, setGetPlaces] = useState<null | Function>(null);
   const [getPlaceDetails, setGetPlaceDetails] = useState<null | Function>(null);
 
@@ -74,7 +79,7 @@ export default function PlaceSearch({ label, required = true, z, value, onChange
   });
 
   async function handleSelection(key: React.Key | null) {
-   if (!key || !getPlaceDetails) return;
+    if (!key || !getPlaceDetails) return;
     const selected = list.items.find((item) => item.value === key);
     if (!selected) return;
     const place = await getPlaceDetails(selected.value);
@@ -91,6 +96,7 @@ export default function PlaceSearch({ label, required = true, z, value, onChange
   return (
     <>
       <Autocomplete
+        required={required}
         label={label ? label : 'Select Location'}
         placeholder="Type to search..."
         inputValue={list.filterText}

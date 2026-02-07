@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 export default function MainBannerMenu({
   children,
+  isSignedIn,
 }: {
   children: React.ReactNode;
   isSignedIn?: boolean;
@@ -24,10 +25,17 @@ export default function MainBannerMenu({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  let menuItems = [
-    { title: 'Sign Up', href: '/signup' },
-    { title: 'Sign In', href: '/signin' },
-  ];
+  const menuItems = isSignedIn
+    ? [
+        {
+          title: 'Dashboard',
+          href: '/dashboard',
+        },
+      ]
+    : [
+        { title: 'Sign Up', href: '/signup' },
+        { title: 'Sign In', href: '/signin' },
+      ];
 
   return (
     <div ref={menuRef} className="relative flex flex-col items-end">
@@ -52,7 +60,7 @@ export default function MainBannerMenu({
             <ul className="py-1 text-sm text-gray-700">
               {menuItems.map(({ title, href }) => (
                 <li key={title} className="w-full px-4 py-2 hover:bg-gray-100">
-                  <Link href={href}>{title}</Link>
+                  <Link onClick={() => setOpen(false)} href={href}>{title}</Link>
                 </li>
               ))}
             </ul>

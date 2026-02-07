@@ -52,7 +52,7 @@ describe('AccountService.updateProfilePicture', () => {
     (profilePicDal.getByUserId as jest.Mock).mockResolvedValueOnce(null);
 
     const imageData: ImageMetadata = {
-      storagePath: 'users/firebaseUid/profile-pic',
+      storagePath: 'users/firebaseUid/profile-pic/kalsdj',
     };
 
     await AccountService.updateProfilePicture({
@@ -80,12 +80,12 @@ describe('AccountService.updateProfilePicture', () => {
     (profilePicDal.getByUserId as jest.Mock).mockResolvedValueOnce({
       imageAssetId: 1000,
       imageAsset: {
-        storagePath: 'users/firebaseUid/profile-pic1',
+        storagePath: 'users/firebaseUid/profile-pic1/cryptoId',
       },
     });
 
     const imageData: ImageMetadata = {
-      storagePath: 'users/firebaseUid/profile-pic',
+      storagePath: 'users/firebaseUid/profile-pic/lskdjfkj',
     };
 
     await AccountService.updateProfilePicture({
@@ -102,7 +102,7 @@ describe('AccountService.updateProfilePicture', () => {
       expect.any(Object)
     );
     expect(imageAssetDal.delete).toHaveBeenCalledWith(1000, expect.any(Object));
-    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/firebaseUid/profile-pic1');
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/firebaseUid/profile-pic1/cryptoId');
   });
 
   it('throws correct error on wrong image path', async () => {
@@ -110,7 +110,7 @@ describe('AccountService.updateProfilePicture', () => {
       id: 'imageId',
     });
     const imageData: ImageMetadata = {
-      storagePath: 'users/firebaseUid1/profile-pic',
+      storagePath: 'users/firebaseUid1/profile-pic/lksjdf',
     };
 
     await expect(
@@ -129,7 +129,7 @@ describe('AccountService.updateProfilePicture', () => {
   it('successfully catches error from transaction', async () => {
     (ImageService.deleteByStoragePath as jest.Mock).mockResolvedValueOnce(undefined);
     const imageData: ImageMetadata = {
-      storagePath: 'users/firebaseUid/profile-pic',
+      storagePath: 'users/firebaseUid/profile-pic/sldjf',
     };
     (prisma.$transaction as jest.Mock).mockRejectedValueOnce(new Error('Error'));
 

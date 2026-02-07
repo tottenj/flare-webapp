@@ -54,7 +54,7 @@ describe('createProfilePicOnFileChange', () => {
     const handler = createProfilePicOnFileChange(router);
     await handler('avatar', file);
 
-    expect(uploadFile).toHaveBeenCalledWith(file, `users/uid123/profile-pic.jpeg`);
+    expect(uploadFile).toHaveBeenCalledWith(file, `users/uid123/profile-pic/fixed-uuid.jpeg`);
     expect(uploadProfilePicture).toHaveBeenCalled();
     expect(toast.error).not.toHaveBeenCalled();
     expect(router.refresh).toHaveBeenCalled();
