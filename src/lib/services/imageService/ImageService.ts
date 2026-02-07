@@ -75,6 +75,7 @@ export default class ImageService {
         body: JSON.stringify({ storagePath }),
       });
 
+
       if (res.ok) return;
 
       let json: any = null;

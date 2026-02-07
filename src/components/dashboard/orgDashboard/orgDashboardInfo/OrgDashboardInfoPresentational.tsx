@@ -24,8 +24,12 @@ export default async function OrgDashboardInfoPresentational({
       <div className="flex h-full items-center gap-8">
         <div className="relative">
           <EditProfilePictureButtonContainer />
-          <Suspense fallback={<ProfilePictureSkeleton size={profilePicSize} />}>
-            <ProfilePictureContainer profilePicPath={profilePicPath} size={profilePicSize} />
+          <Suspense fallback={<ProfilePictureSkeleton size={profilePicSize}/>}>
+            <ProfilePictureContainer
+              priority
+              profilePicPath={profilePicPath}
+              size={profilePicSize}
+            />
           </Suspense>
         </div>
         <div className="flex flex-col">

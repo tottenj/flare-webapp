@@ -17,34 +17,42 @@ export default class AccountService {
     authenticatedUser: AuthenticatedUser;
   }) {
     ensure(
-      imageData.storagePath.startsWith(`users/${authenticatedUser.firebaseUid}/profile-pic`),
+      imageData.storagePath.startsWith(`users/${authenticatedUser.firebaseUid}/profile-pic/`),
       AuthErrors.Unauthorized()
     );
 
     let oldStoragePath: string | null = null;
+    let transactionSucceeded = false;
+
     try {
       await prisma.$transaction(async (tx) => {
         const imageAsset = await imageAssetDal.create(imageData, tx);
+
         const oldProfilePic = await profilePicDal.getByUserId(authenticatedUser.userId, tx);
+
         oldStoragePath = oldProfilePic?.imageAsset.storagePath ?? null;
+
         await profilePicDal.upsertForUser(authenticatedUser.userId, imageAsset.id, tx);
-        if (oldProfilePic) await imageAssetDal.delete(oldProfilePic.imageAssetId, tx);
+
+        if (oldProfilePic) {
+          await imageAssetDal.delete(oldProfilePic.imageAssetId, tx);
+        }
       });
-      if (oldStoragePath) {
-        ImageService.deleteByStoragePath(oldStoragePath).catch((err) => {
-          logger.error('Failed to cleanup old profile picture from storage', {
+
+      transactionSucceeded = true;
+
+      if (oldStoragePath && oldStoragePath !== imageData.storagePath) {
+        await ImageService.deleteByStoragePath(oldStoragePath).catch((err) => {
+          logger.error('Failed to cleanup old profile picture', {
             oldStoragePath,
             err,
           });
         });
       }
     } catch (err) {
-      await ImageService.deleteByStoragePath(imageData.storagePath).catch((err) => {
-        logger.error('Failed to cleanup profile picture from storage', {
-          storagePath: imageData.storagePath,
-          err,
-        });
-      });
+      if (!transactionSucceeded) {
+        await ImageService.deleteByStoragePath(imageData.storagePath).catch(() => {});
+      }
       throw err;
     }
   }

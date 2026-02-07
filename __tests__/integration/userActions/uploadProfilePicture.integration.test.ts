@@ -20,9 +20,9 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     resetTestDb();
   });
 
-  it('successfully uploads image data and links it to profile pictrue', async () => {
+  it('successfully uploads image data and links it to profile picture', async () => {
     const imageData: ImageMetadata = {
-      storagePath: 'users/uid1/profile-pic',
+      storagePath: 'users/uid1/profile-pic/fixed-uuid',
       contentType: 'jpg',
       sizeBytes: 2,
       originalName: 'original name',
@@ -58,7 +58,7 @@ describe('AccountService.updateProfilePicture (integration)', () => {
 
   it('throws Unauthorized if storagePath does not match firebaseUid', async () => {
     const imageData: ImageMetadata = {
-      storagePath: 'users/evilUid/profile-pic',
+      storagePath: 'users/evilUid/profile-pic/fixed-uuid',
       contentType: 'jpg',
       sizeBytes: 2,
       originalName: 'evil.jpg',
@@ -78,7 +78,7 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     // First image
     await AccountService.updateProfilePicture({
       imageData: {
-        storagePath: 'users/uid1/profile-pic-1',
+        storagePath: 'users/uid1/profile-pic/fixed-uuid',
         contentType: 'jpg',
         sizeBytes: 1,
         originalName: 'first.jpg',
@@ -100,7 +100,7 @@ describe('AccountService.updateProfilePicture (integration)', () => {
 
     await AccountService.updateProfilePicture({
       imageData: {
-        storagePath: 'users/uid1/profile-pic-2',
+        storagePath: 'users/uid1/profile-pic/fixed-uuid2',
         contentType: 'jpg',
         sizeBytes: 2,
         originalName: 'second.jpg',
@@ -125,8 +125,8 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     expect(deletedOldImage).toBeNull();
     expect(pics).toBeTruthy();
     if (!pics) throw new Error('Expcted picture');
-    expect(pics.imageAsset.storagePath).toBe('users/uid1/profile-pic-2');
-    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid1/profile-pic-1');
+    expect(pics.imageAsset.storagePath).toBe('users/uid1/profile-pic/fixed-uuid2');
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid1/profile-pic/fixed-uuid');
   });
 
   it('does cleanup logic on error', async () => {
@@ -139,7 +139,7 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     await expect(
       AccountService.updateProfilePicture({
         imageData: {
-          storagePath: 'users/uid1/profile-pic-1',
+          storagePath: 'users/uid1/profile-pic/fixed-uuid',
           contentType: 'jpg',
           sizeBytes: 1,
           originalName: 'first.jpg',
@@ -151,6 +151,6 @@ describe('AccountService.updateProfilePicture (integration)', () => {
       })
     ).rejects.toThrow('DB exploded');
 
-    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid1/profile-pic-1');
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid1/profile-pic/fixed-uuid');
   });
 });

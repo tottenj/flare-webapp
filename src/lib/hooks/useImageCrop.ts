@@ -1,13 +1,17 @@
-"use client"
-// lib/hooks/useImageCrop.ts
+'use client';
 // lib/hooks/useImageCrop.ts
 import { useState } from 'react';
 
-export default function useImageCrop(aspect = 3 / 4) {
+export default function useImageCrop() {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<null | { x: number; y: number; width: number; height: number }>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<null | {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }>(null);
 
   return {
     crop,
@@ -18,6 +22,5 @@ export default function useImageCrop(aspect = 3 / 4) {
     setRotation,
     croppedAreaPixels,
     setCroppedAreaPixels,
-    aspect,
   };
 }
