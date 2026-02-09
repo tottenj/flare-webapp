@@ -1,7 +1,6 @@
 'use server';
 
-import { AutoCompleteItem } from '@/components/inputs/autocomplete/AutocompleteContainer';
-import { ActionResult } from '@/lib/types/ActionResult';
+import { AutoCompleteItem } from '@/components/inputs/hero/autocomplete/AutocompleteContainer';
 import z from 'zod';
 
 export default async function getAutoCompleteTags(query: string): Promise<AutoCompleteItem[]> {
