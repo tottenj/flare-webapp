@@ -4,6 +4,7 @@ import { getDownloadUrlHandler } from '../../src';
 import { getDownloadURL } from 'firebase-admin/storage';
 import { requireMethod } from '../../src/utils/guards/requireMethod';
 import { requireInternalApiKey } from '../../src/utils/guards/requireInternalApiKey';
+import { getInternalApiKey } from '../../src/utils/guards/getInternalApiKey';
 
 var bucketMock: jest.Mock;
 var fileMock: jest.Mock;
@@ -25,12 +26,14 @@ jest.mock('firebase-admin/storage', () => ({
   getDownloadURL: jest.fn(),
 }));
 
+jest.mock('../../src/utils/guards/getInternalApiKey');
 jest.mock('../../src/utils/guards/requireInternalApiKey');
 jest.mock('../../src/utils/guards/requireMethod');
 
 describe('getDownloadUrlHandler', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (getInternalApiKey as jest.Mock).mockReturnValue("apiKey")
     (requireMethod as jest.Mock).mockReturnValue(true);
     (requireInternalApiKey as jest.Mock).mockReturnValue(true);
   });

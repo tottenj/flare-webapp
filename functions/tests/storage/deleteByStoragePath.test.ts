@@ -1,4 +1,5 @@
 import { deleteByStoragePathHandler } from '../../src';
+import { getInternalApiKey } from '../../src/utils/guards/getInternalApiKey';
 import { requireInternalApiKey } from '../../src/utils/guards/requireInternalApiKey';
 import { requireMethod } from '../../src/utils/guards/requireMethod';
 import { mockRequest, mockResponse } from '../utils/mockHttp';
@@ -28,12 +29,15 @@ jest.mock('../../src/bootstrap/admin', () => {
 });
 
 
+
+jest.mock('../../src/utils/guards/getInternalApiKey');
 jest.mock('../../src/utils/guards/requireInternalApiKey');
 jest.mock('../../src/utils/guards/requireMethod');
 
 describe('deleteByStoragePath', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    (getInternalApiKey as jest.Mock).mockReturnValue("apiKey")
     (requireMethod as jest.Mock).mockReturnValue(true);
     (requireInternalApiKey as jest.Mock).mockReturnValue(true);
   });
