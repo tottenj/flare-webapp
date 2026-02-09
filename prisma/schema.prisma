@@ -172,6 +172,7 @@ enum EventPricingType {
   FREE
   FIXED
   RANGE
+  PWYC
 }
 
 enum UserStatus {

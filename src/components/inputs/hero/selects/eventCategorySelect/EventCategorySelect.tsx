@@ -1,9 +1,9 @@
 import HeroSelect from '@/components/inputs/hero/selects/HeroSelect';
-import EventCategorySelectItem from '@/components/inputs/hero/selects/Items/EventCategorySelectItem';
+import EventCategorySelectItem from '@/components/inputs/hero/selects/Items/eventCategorySelectItem/EventCategorySelectItem';
 import { EVENT_CATEGORIES, EventCategory } from '@/lib/types/EventCategory';
 import { SelectedItems } from '@heroui/react';
 
-export default function EventCategorySelect({required}: {required?:boolean}) {
+export default function EventCategorySelect({ required }: { required?: boolean }) {
   type EventCategoryItem = (typeof EVENT_CATEGORIES)[number];
 
   return (
