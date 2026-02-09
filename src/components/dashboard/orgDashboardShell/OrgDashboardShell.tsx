@@ -21,7 +21,7 @@ export default async function OrgDashboardShell() {
       <div className="row-span-2 h-full w-full rounded-2xl bg-white p-8 shadow-2xl">
         <div className="flex items-center justify-between pb-4">
           <h2>My Events</h2>
-          <MainModal trigger={<SquarePlus />} header={<h2 className='text-center w-full'>Create New Event</h2>} modalProps={{size: '3xl'}}>
+          <MainModal trigger={<SquarePlus />} header={<h2 className='text-center w-full'>Create New Event</h2>} modalProps={{size: '3xl', isDismissable:false}}>
             <EventFormContainer />
           </MainModal>
         </div>

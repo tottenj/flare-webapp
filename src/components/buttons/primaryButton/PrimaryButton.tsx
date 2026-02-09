@@ -14,6 +14,7 @@ export interface primaryButtonProps {
   form?: string;
   datacy?: string;
   state?: 'initial' | 'hover' | 'tap';
+  centered?:boolean
 }
 
 export default function PrimaryButton({
@@ -26,7 +27,8 @@ export default function PrimaryButton({
   click,
   form,
   datacy,
-  state
+  state,
+  centered
 }: primaryButtonProps) {
   const sizeClass = {
     full: 'w-full',
@@ -56,7 +58,7 @@ export default function PrimaryButton({
       style={styleOver}
       type={type}
       disabled={disabled}
-      className={`relative overflow-hidden ${sizeClass} font-nunito bg-primary mt-4 cursor-pointer rounded-full px-6 py-3 font-bold text-white max-w-11/12`}
+      className={`relative overflow-hidden ${sizeClass} ${centered ? "ml-auto mr-auto" : ""} font-nunito bg-primary mt-4 cursor-pointer rounded-full px-6 py-3 font-bold text-white max-w-11/12`}
       variants={buttonVariants}
       initial="initial"
       whileHover="hover"

@@ -198,3 +198,12 @@ enum ProofPlatform {
   X
   OTHER
 }
+
+enum EventCategory {
+  SOCIAL
+  NIGHTLIFE
+  CULTURE_ARTS
+  WELLNESS
+  ADVOCACY_EDUCATION
+  OTHER
+}

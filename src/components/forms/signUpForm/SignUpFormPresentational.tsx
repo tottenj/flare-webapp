@@ -42,6 +42,7 @@ export default function SignUpFormPresentational({
         <HeroInput label="Password" name="password" placeholder="*******" type="password" />
 
         <PrimaryButton
+          centered
           disabled={pending}
           text={pending ? 'Creating account…' : 'Submit'}
           type="submit"
