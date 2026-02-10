@@ -1,7 +1,7 @@
-import HeroBasicSelect from '@/components/inputs/hero/selects/basicSelect/HeroBasicSelect';
+import HeroBasicSelect, { BasicSelectExtender } from '@/components/inputs/hero/selects/basicSelect/HeroBasicSelect';
 import { AGE_RANGE_OPTIONS } from '@/lib/types/AgeRange';
 
-export default function AgeRestrictionSelect({ required }: { required?: boolean }) {
+export default function AgeRestrictionSelect({ required }: BasicSelectExtender<any>) {
   return (
     <HeroBasicSelect
       items={AGE_RANGE_OPTIONS}

@@ -7,7 +7,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { tagClasses } from '@/lib/types/TagColour';
 import { getTagColor } from '@/lib/utils/ui/getTagColour';
 import AutoCompletePresentational from '@/components/inputs/hero/autocomplete/AutocompletePresentational';
-
+import TagChip from '@/components/ui/TagChip/TagChip';
 
 export type AutoCompleteItem = {
   key: string;
@@ -93,7 +93,11 @@ export default function AutoCompleteContainer({
           list={list}
         />
         {name && (
-          <input type="hidden" name={name} value={JSON.stringify([...selectedTags.keys()])}></input>
+          <input
+            type="hidden"
+            name={name}
+            value={JSON.stringify([...selectedTags.values()])}
+          ></input>
         )}
         {props.allowsCustomValue && (
           <Button className="hover:bg-success" onPress={() => addTag(list.filterText)}>
@@ -104,9 +108,7 @@ export default function AutoCompleteContainer({
       {withChips && (
         <div className="flex gap-4">
           {[...selectedTags.entries()].map(([key, label]) => (
-            <Chip onClose={() => onClose(key)} className={`capitalize ${tagClasses(getTagColor(label))}`} key={key}>
-              {label}
-            </Chip>
+            <TagChip onClose={() => onClose(key)} key={key} label={label} />
           ))}
         </div>
       )}

@@ -12,7 +12,7 @@ type Story = StoryObj<typeof EventCardPresentational>;
 export const Default: Story = {
   decorators: [
     (Story: Story) => (
-      <div className="w-5xl rounded-2xl border-2 border-gray-300 p-4">
+      <div className="w-5xl">
         <Story />
       </div>
     ),
@@ -21,7 +21,7 @@ export const Default: Story = {
     title: 'Sample Event Title',
     image: 'stockEvent.jpg',
     organizer: 'Sample Organizer',
-    tags: ['Drag', '19+'],
+    tags: ['Drag', 'Community'],
     dateLabel: 'Saturday, Mar. 12',
     timeLabel: '7:00 – 11:00 PM',
     timeZoneLabel: 'EST',
@@ -36,7 +36,7 @@ export const Default: Story = {
 export const RealFlyer: Story = {
   decorators: [
     (Story: Story) => (
-      <div className="w-5xl rounded-2xl border-2 border-gray-300 p-4">
+      <div className="w-5xl">
         <Story />
       </div>
     ),

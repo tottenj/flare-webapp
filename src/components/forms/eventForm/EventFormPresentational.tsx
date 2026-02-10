@@ -14,8 +14,10 @@ import TagAutoComplete from '@/components/inputs/hero/autocomplete/tagAutocomple
 import HeroCheckBox from '@/components/inputs/hero/checkbox/HeroCheckBox';
 import HeroDateInput from '@/components/inputs/hero/date/HeroDateInput';
 import HeroTimeInput from '@/components/inputs/hero/time/HeroTimeInput';
-import HeroSelect from '@/components/inputs/hero/selects/HeroSelect';
 import AgeRestrictionSelect from '@/components/inputs/hero/selects/ageRestrictionSelect/AgeRestrictionSelect';
+import { PriceTypeValue } from '@/lib/types/PriceType';
+import PriceTypeSelect from '@/components/inputs/hero/selects/priceTypeSelect/PriceTypeSelect';
+import PriceInput from '@/components/inputs/hero/number/priceInput/PriceInput';
 
 interface EventFormPresentationalProps extends LocationFormProps, FileFormProps<EventFileKey> {
   eventImgPreview: string | null;
@@ -24,6 +26,13 @@ interface EventFormPresentationalProps extends LocationFormProps, FileFormProps<
   setIsMultiDay: (isMulti: boolean) => void;
   hasEndTime: boolean;
   setHasEndTime: (endTime: boolean) => void;
+  priceType: PriceTypeValue;
+  setPriceType: (price: PriceTypeValue) => void;
+  handlePreview: (fd: FormData) => void;
+  minPrice: number;
+  maxPrice: number;
+  setMinPrice: (min: number) => void;
+  setMaxPrice: (max: number) => void;
 }
 
 export default function EventFormPresentational({
@@ -38,49 +47,83 @@ export default function EventFormPresentational({
   setIsMultiDay,
   hasEndTime,
   setHasEndTime,
+  setPriceType,
+  priceType,
+  handlePreview,
+  setMaxPrice,
+  setMinPrice,
+  minPrice,
+  maxPrice,
 }: EventFormPresentationalProps) {
   return (
-    <Form
-      action={onSubmit}
-      validationErrors={validationErrors}
-      className="flex flex-col items-center gap-4 p-4"
-    >
-      {eventImgPreview && <img src={eventImgPreview} className="w-full max-w-3xs rounded-xl" />}
-      <FormError error={error} />
+    <>
+      <Form
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log(e.currentTarget);
+          const fd = new FormData(e.currentTarget);
+          handlePreview(fd);
+        }}
+        validationErrors={validationErrors}
+        className="flex flex-col items-center gap-4 p-4"
+      >
+        {eventImgPreview && <img src={eventImgPreview} className="w-full max-w-3xs rounded-xl" />}
+        <FormError error={error} />
 
-      <ImageCropperInput required label="Event Image" aspect={2 / 3} onCropped={onImageCropped} />
+        <ImageCropperInput required label="Event Image" aspect={2 / 3} onCropped={onImageCropped} />
 
-      <HeroInput label="Event Name" name="eventName" placeholder="Enter event name" required />
-      <HeroTextArea
-        label="Event Description"
-        name="eventDescription"
-        placeholder="Enter event description"
-        required
-      />
-      <PlaceSearch label="Event Location" onChange={changeLocVal} required />
-      <TagAutoComplete />
+        <HeroInput label="Event Name" name="eventName" placeholder="Enter event name" required />
+        <HeroTextArea
+          label="Event Description"
+          name="eventDescription"
+          placeholder="Enter event description"
+          required
+        />
+        <PlaceSearch label="Event Location" onChange={changeLocVal} required />
+        <TagAutoComplete />
 
-      <div className="flex w-full gap-8">
-        <HeroDateInput isRequired label="Date" name="startDateTime" withTime />
-        {hasEndTime && <HeroTimeInput label="End Time" name="endTime" />}
-        {isMultiDay && <HeroDateInput label="End Date" name="endDate" />}
-      </div>
-      <div className="flex gap-8">
-        <HeroCheckBox isSelected={hasEndTime} onValueChange={setHasEndTime}>
-          Has End Time
-        </HeroCheckBox>
-        <HeroCheckBox isSelected={isMultiDay} onValueChange={setIsMultiDay}>
-          Is Multi-Day
-        </HeroCheckBox>
-      </div>
+        <div className="flex w-full gap-8">
+          <HeroDateInput isRequired label="Date" name="startDateTime" withTime />
+          {hasEndTime && <HeroTimeInput label="End Time" name="endTime" />}
+          {isMultiDay && <HeroDateInput label="End Date" name="endDate" />}
+        </div>
+        <div className="flex gap-8">
+          <HeroCheckBox isSelected={hasEndTime} onValueChange={setHasEndTime}>
+            Has End Time
+          </HeroCheckBox>
+          <HeroCheckBox isSelected={isMultiDay} onValueChange={setIsMultiDay}>
+            Is Multi-Day
+          </HeroCheckBox>
+        </div>
 
-      <EventCategorySelect required />
+        <EventCategorySelect required />
 
-      <div className="flex w-full gap-4">
-        <AgeRestrictionSelect required />
-      </div>
-
-      <PrimaryButton type="submit" disabled={pending} />
-    </Form>
+        <div className="flex w-full gap-4">
+          <AgeRestrictionSelect required />
+        </div>
+        <PriceTypeSelect onChange={setPriceType} value={priceType} />
+        {priceType === 'FIXED' && <PriceInput required description="Price" name="price" />}
+        {priceType === 'RANGE' && (
+          <div className="flex w-full gap-8">
+            <PriceInput
+              onValueChange={setMinPrice}
+              value={minPrice}
+              required
+              description="Min Price"
+              name="minPrice"
+            />
+            <PriceInput
+              minValue={minPrice}
+              onValueChange={setMaxPrice}
+              value={maxPrice}
+              required
+              description="Max Price"
+              name="maxPrice"
+            />
+          </div>
+        )}
+        <PrimaryButton type="submit" disabled={pending} />
+      </Form>
+    </>
   );
 }

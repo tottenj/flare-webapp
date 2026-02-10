@@ -1,6 +1,9 @@
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import IconText from '@/components/misc/iconText/IconText';
 import MainModal from '@/components/modals/MainModal/MainModal';
+import TagChip from '@/components/ui/TagChip/TagChip';
+import { tagClasses } from '@/lib/types/TagColour';
+import { getTagColor } from '@/lib/utils/ui/getTagColour';
 import {
   faBan,
   faCalendar,
@@ -41,7 +44,7 @@ export default function EventCardPresentational({
   ticketLink,
 }: EventCardProps) {
   return (
-    <div className="grid gap-6 pt-2 pb-2 md:grid-cols-[2.5fr_3fr]">
+    <div className="grid gap-6 rounded-2xl border-2 border-gray-300 p-4 pt-2 pb-2 md:grid-cols-[2.5fr_3fr]">
       <div className="group relative mx-auto aspect-[2/3] w-3/4 overflow-hidden rounded-md shadow-md md:w-full">
         <MainModal
           modalProps={{ size: '3xl', backdrop: 'blur' }}
@@ -81,16 +84,10 @@ export default function EventCardPresentational({
           <p className="text-lg">{organizer}</p>
         </div>
         <div className="flex flex-wrap gap-4">
-          {tags?.map((tag) => (
-            <Chip
-              color="secondary"
-              variant="bordered"
-              className="hover:bg-secondary-100 pr-2 pl-2"
-              key={tag}
-            >
-              {tag}
-            </Chip>
-          ))}
+          <Chip className="capitalize" color="secondary" variant="bordered">
+            {ageRestriction}
+          </Chip>
+          {tags?.map((tag) => <TagChip label={tag} variant="bordered" key={tag} />)}
         </div>
         <div className="flex flex-col gap-2">
           {dateLabel && <IconText text={dateLabel} icon={faCalendar} />}
