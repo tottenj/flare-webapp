@@ -1,20 +1,18 @@
 import { deleteUserHandler } from '../../src';
 import { auth } from '../../src/bootstrap/admin';
-import { getInternalApiKey } from '../../src/utils/guards/getInternalApiKey';
 import { requireInternalApiKey } from '../../src/utils/guards/requireInternalApiKey';
 import { requireMethod } from '../../src/utils/guards/requireMethod';
 import { mockRequest, mockResponse } from '../utils/mockHttp';
 import { expect } from '@jest/globals';
 
-jest.mock('../../src/utils/guards/getInternalApiKey');
+
 jest.mock('../../src/utils/guards/requireMethod');
 jest.mock('../../src/bootstrap/admin');
 jest.mock('../../src/utils/guards/requireInternalApiKey');
 
 describe('delete User', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
-    (getInternalApiKey as jest.Mock).mockReturnValue("apikey")
+    jest.clearAllMocks();
     (requireMethod as jest.Mock).mockReturnValue(true);
     (requireInternalApiKey as jest.Mock).mockReturnValue(true);
   });

@@ -30,14 +30,13 @@ jest.mock('../../src/bootstrap/admin', () => {
 
 
 
-jest.mock('../../src/utils/guards/getInternalApiKey');
+
 jest.mock('../../src/utils/guards/requireInternalApiKey');
 jest.mock('../../src/utils/guards/requireMethod');
 
 describe('deleteByStoragePath', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (getInternalApiKey as jest.Mock).mockReturnValue("apiKey")
     (requireMethod as jest.Mock).mockReturnValue(true);
     (requireInternalApiKey as jest.Mock).mockReturnValue(true);
   });
