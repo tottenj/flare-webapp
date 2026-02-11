@@ -39,10 +39,8 @@ export default function EventFormPresentational({
   changeLocVal,
   eventImgPreview,
   onImageCropped,
-  onSubmit,
   validationErrors,
   error,
-  pending,
   isMultiDay,
   setIsMultiDay,
   hasEndTime,
@@ -60,7 +58,7 @@ export default function EventFormPresentational({
       <Form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(e.currentTarget);
+
           const fd = new FormData(e.currentTarget);
           handlePreview(fd);
         }}
@@ -122,7 +120,7 @@ export default function EventFormPresentational({
             />
           </div>
         )}
-        <PrimaryButton type="submit" disabled={pending} />
+        <PrimaryButton type="submit" />
       </Form>
     </>
   );

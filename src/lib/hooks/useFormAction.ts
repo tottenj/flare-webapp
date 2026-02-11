@@ -14,9 +14,9 @@ type UseFormActionOptions<T> = {
   onError?: (error: ActionError) => void;
 };
 
-export function useFormAction<T>(
-  actionFn: (formData: FormData) => Promise<ActionResult<T>>,
-  options?: UseFormActionOptions<T>
+export function useFormAction<TInput, TOutput>(
+  actionFn: (input: TInput) => Promise<ActionResult<TOutput>>,
+  options?: UseFormActionOptions<TOutput>
 ) {
   const onSuccess = options?.onSuccess;
   const onError = options?.onError;
@@ -29,7 +29,7 @@ export function useFormAction<T>(
   const toastId = useRef<Id | undefined>(undefined);
 
   const action = useCallback(
-    async (formData: FormData) => {
+    async (input: TInput) => {
       setError(null);
       setPending(true);
       if (loadingMsg) {
@@ -37,7 +37,7 @@ export function useFormAction<T>(
       }
 
       try {
-        const result = await actionFn(formData);
+        const result = await actionFn(input);
 
         if (!result.ok) {
           setError(result.error);
