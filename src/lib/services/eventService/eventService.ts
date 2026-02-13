@@ -7,6 +7,7 @@ import ensure from '@/lib/errors/ensure/ensure';
 import { CreateEvent } from '@/lib/schemas/event/createEventFormSchema';
 import ImageService from '@/lib/services/imageService/ImageService';
 import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
+import { prisma } from '../../../../prisma/prismaClient';
 
 export class EventService {
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
