@@ -1,5 +1,6 @@
 import { EventDomainProps } from '@/lib/domain/eventDomain/EventDomain';
 import { Prisma } from '@prisma/client';
+import { prisma } from '../../../../prisma/prismaClient';
 
 export class EventDal {
   async create(input: EventDomainProps, tx?: Prisma.TransactionClient) {
