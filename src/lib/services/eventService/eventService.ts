@@ -1,3 +1,4 @@
+import 'server-only'
 import { eventDal } from '@/lib/dal/eventDal/EventDal';
 import { imageAssetDal } from '@/lib/dal/imageAssetDal/ImageAssetDal';
 import { locationDal } from '@/lib/dal/locationDal/LocationDal';
