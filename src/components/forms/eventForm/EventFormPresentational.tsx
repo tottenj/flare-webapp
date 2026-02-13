@@ -22,8 +22,6 @@ import PriceInput from '@/components/inputs/hero/number/priceInput/PriceInput';
 interface EventFormPresentationalProps extends LocationFormProps, FileFormProps<EventFileKey> {
   eventImgPreview: string | null;
   onImageCropped: (file: File, previewUrl: string) => void;
-  isMultiDay: boolean;
-  setIsMultiDay: (isMulti: boolean) => void;
   hasEndTime: boolean;
   setHasEndTime: (endTime: boolean) => void;
   priceType: PriceTypeValue;
@@ -41,8 +39,6 @@ export default function EventFormPresentational({
   onImageCropped,
   validationErrors,
   error,
-  isMultiDay,
-  setIsMultiDay,
   hasEndTime,
   setHasEndTime,
   setPriceType,
@@ -58,7 +54,6 @@ export default function EventFormPresentational({
       <Form
         onSubmit={(e) => {
           e.preventDefault();
-
           const fd = new FormData(e.currentTarget);
           handlePreview(fd);
         }}
@@ -82,15 +77,11 @@ export default function EventFormPresentational({
 
         <div className="flex w-full gap-8">
           <HeroDateInput isRequired label="Date" name="startDateTime" withTime />
-          {hasEndTime && <HeroTimeInput label="End Time" name="endTime" />}
-          {isMultiDay && <HeroDateInput label="End Date" name="endDate" />}
+          {hasEndTime && <HeroDateInput label="End Date / Time" name="endDateTime" withTime/>}
         </div>
         <div className="flex gap-8">
           <HeroCheckBox isSelected={hasEndTime} onValueChange={setHasEndTime}>
-            Has End Time
-          </HeroCheckBox>
-          <HeroCheckBox isSelected={isMultiDay} onValueChange={setIsMultiDay}>
-            Is Multi-Day
+            Set end date / time
           </HeroCheckBox>
         </div>
 

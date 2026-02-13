@@ -16,7 +16,6 @@ import { LocationInput } from '@/lib/schemas/LocationInputSchema';
 import { ImageMetadata } from '@/lib/schemas/proof/ImageMetadata';
 import validateFileInput from '@/lib/schemas/validateFileInput';
 import createEvent from '@/lib/serverActions/events/createEvent/createEvent';
-import uploadFile from '@/lib/storage/uploadFile';
 import { PriceTypeValue } from '@/lib/types/PriceType';
 import { basicFileUpload } from '@/lib/utils/other/basicFileUpload';
 import { useState } from 'react';
@@ -24,7 +23,13 @@ import { toast } from 'react-toastify';
 import z from 'zod';
 export type EventFileKey = 'eventImg';
 
-export default function EventFormContainer({ orgName }: { orgName?: string }) {
+export default function EventFormContainer({
+  orgName,
+  onCloseModal,
+}: {
+  orgName?: string;
+  onCloseModal?: () => void;
+}) {
   const [location, setLocation] = useState<LocationInput | null>(null);
   const { files, setFile } = useFileMap<EventFileKey>({
     initial: {
@@ -32,12 +37,11 @@ export default function EventFormContainer({ orgName }: { orgName?: string }) {
     },
   });
   const [eventImgPreview, setEventImgPreview] = useState<string | null>('/imagePlaceholder.png');
-  const [isMultiDay, setIsMultiDay] = useState(false);
   const [hasEndTime, setHasEndTime] = useState(false);
   const [priceType, setPriceType] = useState<PriceTypeValue>('FREE');
   const [previewOpen, setPreviewOpen] = useState(false);
   const [pendingFormData, setPendingFormData] = useState<CreateEventPreviewForm | null>(null);
-  const [minPrice, setMinPrice] = useState<number>(10);
+  const [minPrice, setMinPrice] = useState<number>(5);
   const [maxPrice, setMaxPrice] = useState<number>(20);
 
   function handlePreview(formData: FormData) {
@@ -76,6 +80,7 @@ export default function EventFormContainer({ orgName }: { orgName?: string }) {
     },
     onSuccess: () => {
       setPreviewOpen(false);
+      onCloseModal?.()
     },
   });
 
@@ -102,8 +107,6 @@ export default function EventFormContainer({ orgName }: { orgName?: string }) {
         locVal={location}
         eventImgPreview={eventImgPreview}
         onImageCropped={handleCropped}
-        isMultiDay={isMultiDay}
-        setIsMultiDay={setIsMultiDay}
         hasEndTime={hasEndTime}
         setHasEndTime={setHasEndTime}
         setPriceType={setPriceType}

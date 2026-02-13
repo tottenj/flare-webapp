@@ -11,6 +11,9 @@ export const AGE_RANGE_LABEL = Object.fromEntries(
   Object.entries(AGE_RANGE).map(([label, value]) => [value, label])
 ) as Record<(typeof AGE_RANGE)[keyof typeof AGE_RANGE], string>;
 
+export const AGE_RANGE_VALUES = Object.values(AGE_RANGE) as [AgeRangeValue, ...AgeRangeValue[]];
+
+
 export const AGE_RANGE_OPTIONS = Object.entries(AGE_RANGE).map(([label, value]) => ({
   label,
   value,

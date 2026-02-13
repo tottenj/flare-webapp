@@ -1,6 +1,8 @@
-import { LocationInputSchema } from "@/lib/schemas/LocationInputSchema";
-import { parseZonedDateTime } from "@internationalized/date";
-import z from "zod";
+import { LocationInputSchema } from '@/lib/schemas/LocationInputSchema';
+import { ZonedDateTimeString } from '@/lib/schemas/zodSchemaAdditions';
+import { AGE_RANGE_VALUES } from '@/lib/types/AgeRange';
+import { PRICE_TYPE_VALUES } from '@/lib/types/PriceType';
+import z from 'zod';
 
 export const CreateEventBaseSchema = z.object({
   eventName: z.string().min(1),
@@ -9,18 +11,11 @@ export const CreateEventBaseSchema = z.object({
   location: LocationInputSchema,
   tags: z.array(z.string()),
 
-  startDateTime: z.string().refine((val) => {
-    try {
-      parseZonedDateTime(val);
-      return true;
-    } catch {
-      return false;
-    }
-  }),
+  startDateTime: ZonedDateTimeString,
+  endDateTime: ZonedDateTimeString.optional(),
 
-  ageRestriction: z.string(),
-  priceType: z.string(),
-
+  ageRestriction: z.enum(AGE_RANGE_VALUES),
+  priceType: z.enum(PRICE_TYPE_VALUES),
   minPrice: z.number().optional(),
   maxPrice: z.number().optional(),
 });

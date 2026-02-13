@@ -5,6 +5,7 @@ import EventCardPresentational from './EventCardPresentational';
 import { AGE_RANGE_LABEL, AgeRangeValue } from '@/lib/types/AgeRange';
 import { CreateEventPreviewForm } from '@/lib/schemas/event/createEventPreviewFormSchema';
 import { parseZonedDateTime } from '@internationalized/date';
+import formatEventPrice from '@/lib/utils/ui/formatEventPrice/formatEventPrice';
 
 interface EventCardPreviewWrapperProps {
   preview: CreateEventPreviewForm;
@@ -23,6 +24,7 @@ export default function EventCardPreviewWrapper({
      hour: '2-digit',
      minute: '2-digit',
    });
+   const price = formatEventPrice({priceType: preview.priceType as PriceTypeValue, minPrice: preview.minPrice, maxPrice: preview.maxPrice})
 
   return (
     <div className="p-4">
@@ -35,7 +37,7 @@ export default function EventCardPreviewWrapper({
         timeLabel={timeLabel}
         timezoneLabel={dt.timeZone}
         location={preview.location.address}
-        price={PRICE_TYPE_LABEL[preview.priceType as PriceTypeValue]}
+        price={price}
         ageRestriction={AGE_RANGE_LABEL[preview.ageRestriction as AgeRangeValue]}
         description={preview.eventDescription}
       />

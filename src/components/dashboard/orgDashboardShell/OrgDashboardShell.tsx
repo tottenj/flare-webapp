@@ -11,7 +11,7 @@ export default async function OrgDashboardShell() {
   const ctx = await UserContextService.requireOrg();
 
   return (
-    <div className="grid h-full w-full grid-cols-1 md:grid-cols-2 grid-rows-[1fr_3fr] gap-4">
+    <div className="grid h-full w-full grid-cols-1 grid-rows-[1fr_3fr] gap-4 md:grid-cols-2">
       <OrgDashboardInfoPresentational
         profilePicPath={ctx.user.profilePic}
         orgName={ctx.profile.orgProfile!.orgName}
@@ -21,8 +21,14 @@ export default async function OrgDashboardShell() {
       <div className="row-span-2 h-full w-full rounded-2xl bg-white p-8 shadow-2xl">
         <div className="flex items-center justify-between pb-4">
           <h2>My Events</h2>
-          <MainModal trigger={<SquarePlus />} header={<h2 className='text-center w-full'>Create New Event</h2>} modalProps={{size: '3xl', isDismissable:false}}>
-            <EventFormContainer orgName={ctx.profile.orgProfile?.orgName} />
+          <MainModal
+            trigger={<SquarePlus />}
+            header={<h2 className="w-full text-center">Create New Event</h2>}
+            modalProps={{ size: '3xl', isDismissable: false }}
+          >
+            {(close) => (
+              <EventFormContainer orgName={ctx.profile.orgProfile?.orgName} onCloseModal={close} />
+            )}
           </MainModal>
         </div>
         <EventList />
