@@ -18,6 +18,7 @@ import validateFileInput from '@/lib/schemas/validateFileInput';
 import createEvent from '@/lib/serverActions/events/createEvent/createEvent';
 import { PriceTypeValue } from '@/lib/types/PriceType';
 import { basicFileUpload } from '@/lib/utils/other/basicFileUpload';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import z from 'zod';
@@ -43,6 +44,7 @@ export default function EventFormContainer({
   const [pendingFormData, setPendingFormData] = useState<CreateEventPreviewForm | null>(null);
   const [minPrice, setMinPrice] = useState<number>(5);
   const [maxPrice, setMaxPrice] = useState<number>(20);
+  const router = useRouter()
 
   function handlePreview(formData: FormData) {
     const result = parsePreviewFormData(formData);
@@ -81,6 +83,7 @@ export default function EventFormContainer({
     onSuccess: () => {
       setPreviewOpen(false);
       onCloseModal?.()
+      router.refresh()
     },
   });
 

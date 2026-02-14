@@ -1,4 +1,4 @@
-import 'server-only'
+import 'server-only';
 import { eventDal } from '@/lib/dal/eventDal/EventDal';
 import { imageAssetDal } from '@/lib/dal/imageAssetDal/ImageAssetDal';
 import { locationDal } from '@/lib/dal/locationDal/LocationDal';
@@ -9,6 +9,9 @@ import { CreateEvent } from '@/lib/schemas/event/createEventFormSchema';
 import ImageService from '@/lib/services/imageService/ImageService';
 import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
 import { prisma } from '../../../../prisma/prismaClient';
+import { OrgEventFilter, OrgEventFilterSchema } from '@/lib/types/OrgEventFilter';
+import { mapEventRowToDto } from '@/lib/types/dto/EventDto';
+import { EventErrors } from '@/lib/errors/eventErrors/EventErrors';
 
 export class EventService {
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
@@ -33,5 +36,12 @@ export class EventService {
       await ImageService.deleteByStoragePath(eventData.image.storagePath);
       throw error;
     }
+  }
+
+  static async listEventsOrg(orgId: string, filters?: OrgEventFilter) {
+    const sanitized = OrgEventFilterSchema.safeParse(filters ?? {});
+    const { data } = sanitized;
+    const events = await eventDal.listEventsOrg(orgId, data);
+    return events.map((event) => mapEventRowToDto(event));
   }
 }

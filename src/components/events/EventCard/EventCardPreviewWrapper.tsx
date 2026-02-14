@@ -6,6 +6,7 @@ import { AGE_RANGE_LABEL, AgeRangeValue } from '@/lib/types/AgeRange';
 import { CreateEventPreviewForm } from '@/lib/schemas/event/createEventPreviewFormSchema';
 import { parseZonedDateTime } from '@internationalized/date';
 import formatEventPrice from '@/lib/utils/ui/formatEventPrice/formatEventPrice';
+import { parseZonedToISO } from '@/lib/utils/dateTime/dateTimeHelpers';
 
 interface EventCardPreviewWrapperProps {
   preview: CreateEventPreviewForm;
@@ -18,12 +19,7 @@ export default function EventCardPreviewWrapper({
   imgUrl,
   orgName,
 }: EventCardPreviewWrapperProps) {
-   const dt = parseZonedDateTime(preview.startDateTime);
-   const dateLabel = dt.toDate().toLocaleDateString();
-   const timeLabel = dt.toDate().toLocaleTimeString([], {
-     hour: '2-digit',
-     minute: '2-digit',
-   });
+   const start = parseZonedToISO(preview.startDateTime)
    const price = formatEventPrice({priceType: preview.priceType as PriceTypeValue, minPrice: preview.minPrice, maxPrice: preview.maxPrice})
 
   return (
@@ -33,9 +29,9 @@ export default function EventCardPreviewWrapper({
         organizer={orgName ?? 'Your Organization'}
         image={imgUrl ?? '/placeholder-event.png'}
         tags={preview.tags}
-        dateLabel={dateLabel}
-        timeLabel={timeLabel}
-        timezoneLabel={dt.timeZone}
+        dateLabel={start.isoDate}
+        timeLabel={start.timeString}
+        timezoneLabel={start.timeZone}
         location={preview.location.address}
         price={price}
         ageRestriction={AGE_RANGE_LABEL[preview.ageRestriction as AgeRangeValue]}

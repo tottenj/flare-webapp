@@ -8,6 +8,7 @@ export default function EventCategorySelect({ required }: { required?: boolean }
 
   return (
     <HeroSelect<EventCategoryItem>
+      name="category"
       items={EVENT_CATEGORIES}
       defaultSelectedKeys={[EVENT_CATEGORIES[0].key]}
       required={required}

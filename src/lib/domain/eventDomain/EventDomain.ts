@@ -2,11 +2,15 @@ import { EventPriceDomain } from '@/lib/domain/eventPriceDomain/EventPriceDomain
 import { EventErrors } from '@/lib/errors/eventErrors/EventErrors';
 import { CreateEvent } from '@/lib/schemas/event/createEventFormSchema';
 import { AgeRangeValue } from '@/lib/types/AgeRange';
+import { EventCategory } from '@/lib/types/EventCategory';
+
 import { PriceTypeValue } from '@/lib/types/PriceType';
 import { parseZonedToUTC } from '@/lib/utils/dateTime/dateTimeHelpers';
+import { FlareEvent } from '@prisma/client';
 
 export type EventDomainProps = {
   organizationId: string;
+  category: EventCategory;
   title: string;
   description: string;
   ageRestriction: AgeRangeValue;
@@ -20,6 +24,7 @@ export type EventDomainProps = {
   maxPriceCents?: number | null;
   tags: string[];
 };
+
 
 export type CreateEventResolved = Omit<CreateEvent, 'image' | 'location'> & {
   imageId: string;
@@ -38,6 +43,7 @@ export class EventDomain {
     if (tags.length > 5) throw EventErrors.InvalidTagNumber();
     return new EventDomain({
       title: input.eventName,
+      category: input.category,
       description: input.eventDescription,
       startsAtUTC: start.utcDate,
       endsAtUTC: end?.utcDate,
@@ -52,4 +58,27 @@ export class EventDomain {
       tags,
     });
   }
+
+  static fromRow(row: FlareEvent) {
+    return new EventDomain({
+      organizationId: row.organizationId,
+      title: row.title,
+      category: row.category,
+      description: row.description,
+      startsAtUTC: row.startsAtUTC,
+      endsAtUTC: row.endsAtUTC,
+      timezone: row.timezone,
+      pricingType: row.pricingType,
+      minPriceCents: row.minPriceCents,
+      maxPriceCents: row.maxPriceCents,
+      ageRestriction: row.ageRestriction,
+      imageId: row.imageId,
+      locationId: row.locationId,
+      tags: row.tags,
+    });
+  }
+
+
+
+ 
 }

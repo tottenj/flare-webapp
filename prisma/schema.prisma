@@ -85,6 +85,7 @@ model FlareEvent{
   title             String
   description       String
   ageRestriction    AgeRestriction @default(ALL_AGES)
+  category          EventCategory @default(OTHER)
 
   imageId           String?
   image             ImageAsset? @relation(fields: [imageId], references: [id])

@@ -85,7 +85,7 @@ export default function EventFormPresentational({
           </HeroCheckBox>
         </div>
 
-        <EventCategorySelect required />
+        <EventCategorySelect  required />
 
         <div className="flex w-full gap-4">
           <AgeRestrictionSelect required />

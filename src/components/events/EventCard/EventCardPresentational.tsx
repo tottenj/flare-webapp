@@ -49,20 +49,13 @@ export default function EventCardPresentational({
         <MainModal
           modalProps={{ size: '3xl', backdrop: 'blur' }}
           trigger={
-            <button
-              type="button"
-              className="relative h-full w-full cursor-pointer focus:outline-none"
-              aria-label={`View larger image for ${title}`}
-              aria-haspopup="dialog"
-            >
-              <Image
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                src={image}
-                alt={title}
-                fill
-                sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 90vw"
-              />
-            </button>
+            <Image
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              src={image}
+              alt={title}
+              fill
+              sizes="(min-width: 1024px) 40vw, (min-width: 768px) 45vw, 90vw"
+            />
           }
         >
           <div className="relative aspect-[2/3] max-h-[90vh] w-full">

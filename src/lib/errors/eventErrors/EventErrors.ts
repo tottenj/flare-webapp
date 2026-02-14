@@ -32,5 +32,12 @@ export const EventErrors = {
             code: "INVALID_TAG_NUMBER",
             clientMessage: "Cannot Add More Than 5 Tags To an Event",
             status: 400
+        }),
+
+    UnableToFetchEvents:() =>
+        new AppError({
+            code: "UNABLE_TO_FETCH_EVENTS",
+            clientMessage: "Unable to fetch events please try again later",
+            status: 500
         })
 }
