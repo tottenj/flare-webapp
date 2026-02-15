@@ -11,6 +11,11 @@ type Story = StoryObj<typeof EventListCardPresentational>;
 
 export const Default: Story = {
   args: {
-    color: "SOCIAL"
+    eventId: 'event-123',
+    title: 'Queer Trivia Night',
+    category: 'SOCIAL',
+    description: 'Join us for games, laughs, and community vibes.',
+    ageRestriction: 'ALL_AGES',
+    startDate: 'Feb 15, 2026',
   },
 };
