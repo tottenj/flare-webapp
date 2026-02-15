@@ -10,7 +10,7 @@ export const CreateEventBaseSchema = z.object({
   eventDescription: z.string().min(1),
   category: z.enum(EventCategory),
 
-  location: LocationInputSchema,
+  location: LocationInputSchema.optional().nullable(),
   tags: z.array(z.string()),
 
   startDateTime: ZonedDateTimeString,

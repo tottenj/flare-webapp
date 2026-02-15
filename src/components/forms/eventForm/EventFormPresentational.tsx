@@ -13,7 +13,6 @@ import { Form } from '@heroui/react';
 import TagAutoComplete from '@/components/inputs/hero/autocomplete/tagAutocomplete/TagAutoComplete';
 import HeroCheckBox from '@/components/inputs/hero/checkbox/HeroCheckBox';
 import HeroDateInput from '@/components/inputs/hero/date/HeroDateInput';
-import HeroTimeInput from '@/components/inputs/hero/time/HeroTimeInput';
 import AgeRestrictionSelect from '@/components/inputs/hero/selects/ageRestrictionSelect/AgeRestrictionSelect';
 import { PriceTypeValue } from '@/lib/types/PriceType';
 import PriceTypeSelect from '@/components/inputs/hero/selects/priceTypeSelect/PriceTypeSelect';
@@ -72,7 +71,7 @@ export default function EventFormPresentational({
           placeholder="Enter event description"
           required
         />
-        <PlaceSearch label="Event Location" onChange={changeLocVal} required />
+        <PlaceSearch label="Event Location" onChange={changeLocVal} />
         <TagAutoComplete />
 
         <div className="flex w-full gap-8">

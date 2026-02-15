@@ -26,7 +26,7 @@ export class EventPriceDomain {
       if (!maxRaw || maxRaw === '') throw EventErrors.MaxPriceRequired();
       const min = Money.fromDollars(minRaw);
       const max = Money.fromDollars(maxRaw);
-      if (min.cents <= max.cents) throw EventErrors.InvalidPriceRange();
+      if (min.cents >= max.cents) throw EventErrors.InvalidPriceRange();
       return new EventPriceDomain(type, min, max);
     }
     return new EventPriceDomain(type, null, null);

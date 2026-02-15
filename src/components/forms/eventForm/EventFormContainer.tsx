@@ -18,6 +18,7 @@ import validateFileInput from '@/lib/schemas/validateFileInput';
 import createEvent from '@/lib/serverActions/events/createEvent/createEvent';
 import { PriceTypeValue } from '@/lib/types/PriceType';
 import { basicFileUpload } from '@/lib/utils/other/basicFileUpload';
+import { Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -44,7 +45,7 @@ export default function EventFormContainer({
   const [pendingFormData, setPendingFormData] = useState<CreateEventPreviewForm | null>(null);
   const [minPrice, setMinPrice] = useState<number>(5);
   const [maxPrice, setMaxPrice] = useState<number>(20);
-  const router = useRouter()
+  const router = useRouter();
 
   function handlePreview(formData: FormData) {
     const result = parsePreviewFormData(formData);
@@ -56,7 +57,7 @@ export default function EventFormContainer({
     setPreviewOpen(true);
   }
 
-  async function confirmSubmit() {
+  async function confirmSubmit(isDraft = false) {
     if (!pendingFormData) return;
     const eventImg = files.eventImg;
     if (!eventImg) return;
@@ -71,7 +72,7 @@ export default function EventFormContainer({
       }
       return;
     }
-    await action({ image: metadata, ...pendingFormData });
+    await action({ image: metadata, status: isDraft ? 'DRAFT' : 'PUBLISHED', ...pendingFormData });
   }
 
   const { action, pending, validationErrors, error } = useFormAction(createEvent, {
@@ -82,8 +83,8 @@ export default function EventFormContainer({
     },
     onSuccess: () => {
       setPreviewOpen(false);
-      onCloseModal?.()
-      router.refresh()
+      onCloseModal?.();
+      router.refresh();
     },
   });
 
@@ -127,7 +128,22 @@ export default function EventFormContainer({
             imgUrl={eventImgPreview}
             orgName={orgName}
           />
-          <PrimaryButton centered text="Publish Event" click={confirmSubmit} />
+          <div className="mr-auto ml-auto flex h-full w-full flex-col items-center justify-center md:w-3/4 md:flex-row md:gap-8">
+            <Button
+              onPress={() => confirmSubmit(true)}
+              className="bg-secondary mt-4 w-full p-6 text-white md:w-1/2"
+            >
+              Save as Draft
+            </Button>
+            <div className="w-full md:w-1/2">
+              <PrimaryButton
+                centered
+                styleOver={{ width: 'full' }}
+                text="Publish Event"
+                click={() => confirmSubmit(false)}
+              />
+            </div>
+          </div>
         </MainModal>
       )}
     </>

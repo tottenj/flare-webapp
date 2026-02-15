@@ -11,23 +11,24 @@ import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization
 import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter, OrgEventFilterSchema } from '@/lib/types/OrgEventFilter';
 import { mapEventRowToDto } from '@/lib/types/dto/EventDto';
-import { EventErrors } from '@/lib/errors/eventErrors/EventErrors';
 
 export class EventService {
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
+    ensure(
+      eventData.image.storagePath.startsWith(`events/${authenticatedUser.firebaseUid}`),
+      AuthErrors.Unauthorized()
+    );
     try {
-      ensure(
-        eventData.image.storagePath.startsWith(`events/${authenticatedUser.firebaseUid}`),
-        AuthErrors.Unauthorized()
-      );
-
       await prisma.$transaction(async (tx) => {
         const imageAsset = await imageAssetDal.create(eventData.image, tx);
-        const location = await locationDal.create(eventData.location, tx);
+        let location = null;
+        if (eventData.location) {
+          location = await locationDal.create(eventData.location, tx);
+        }
         const resolved: CreateEventResolved = {
           ...eventData,
           imageId: imageAsset.id,
-          locationId: location.id,
+          locationId: location?.id,
         };
         const eventCreateInput = EventDomain.onCreate(resolved, authenticatedUser.orgId);
         await eventDal.create(eventCreateInput.props, tx);

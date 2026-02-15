@@ -2,8 +2,6 @@ import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import IconText from '@/components/misc/iconText/IconText';
 import MainModal from '@/components/modals/MainModal/MainModal';
 import TagChip from '@/components/ui/TagChip/TagChip';
-import { tagClasses } from '@/lib/types/TagColour';
-import { getTagColor } from '@/lib/utils/ui/getTagColour';
 import {
   faBan,
   faCalendar,
@@ -22,7 +20,7 @@ interface EventCardProps {
   dateLabel: string;
   timeLabel: string;
   timezoneLabel?: string;
-  location: string;
+  location: string | null;
   price: string;
   ageRestriction: string;
   description: string;
@@ -85,7 +83,7 @@ export default function EventCardPresentational({
         <div className="flex flex-col gap-2">
           {dateLabel && <IconText text={dateLabel} icon={faCalendar} />}
           {timeLabel && <IconText text={timeLabel + ' ' + timezoneLabel} icon={faClock} />}
-          <IconText text={location} icon={faLocationArrow} />
+          {location && <IconText text={location} icon={faLocationArrow} /> }
           <IconText text={price} icon={faDollarSign} />
           <IconText text={ageRestriction} icon={faBan} />
         </div>
@@ -97,7 +95,7 @@ export default function EventCardPresentational({
         </div>
         {ticketLink && (
           <div className="mt-auto flex justify-center">
-            <PrimaryButton text="Purchase Tickets" />
+            <PrimaryButton text="Get Tickets" />
           </div>
         )}
       </div>

@@ -70,3 +70,11 @@ jest.mock('next/cache', () => ({
   updateTag: jest.fn(),
 }));
 
+
+jest.mock('./prisma/prismaClient', () => ({
+  prisma: {
+    $transaction: jest.fn().mockImplementation(async (callback) => {
+      return callback({});
+    }),
+  },
+}));

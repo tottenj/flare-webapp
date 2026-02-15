@@ -32,6 +32,7 @@ export type EventDto = {
   description: string;
   category: EventCategory;
   ageRestriction: AgeRangeValue;
+  status: "DRAFT" | "PUBLISHED";
   imagePath: string | null;
   startsAt: string;
   endsAt: string | null;
@@ -58,6 +59,7 @@ export function mapEventRowToDto(row: EventRow): EventDto {
     category: row.category,
     description: row.description,
     startsAt: row.startsAtUTC.toISOString(),
+    status: row.status,
     endsAt: row.endsAtUTC?.toISOString() ?? null,
     timezone: row.timezone,
     ageRestriction: row.ageRestriction,
