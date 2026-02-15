@@ -16,30 +16,22 @@ export default class AccountService {
     imageData: ImageMetadata;
     authenticatedUser: AuthenticatedUser;
   }) {
-    ensure(
-      imageData.storagePath.startsWith(`users/${authenticatedUser.firebaseUid}/profile-pic/`),
-      AuthErrors.Unauthorized()
-    );
-
     let oldStoragePath: string | null = null;
-    let transactionSucceeded = false;
 
     try {
+      ensure(
+        imageData.storagePath.startsWith(`users/${authenticatedUser.firebaseUid}/profile-pic/`),
+        AuthErrors.Unauthorized()
+      );
       await prisma.$transaction(async (tx) => {
         const imageAsset = await imageAssetDal.create(imageData, tx);
-
         const oldProfilePic = await profilePicDal.getByUserId(authenticatedUser.userId, tx);
-
         oldStoragePath = oldProfilePic?.imageAsset.storagePath ?? null;
-
         await profilePicDal.upsertForUser(authenticatedUser.userId, imageAsset.id, tx);
-
         if (oldProfilePic) {
           await imageAssetDal.delete(oldProfilePic.imageAssetId, tx);
         }
       });
-
-      transactionSucceeded = true;
 
       if (oldStoragePath && oldStoragePath !== imageData.storagePath) {
         await ImageService.deleteByStoragePath(oldStoragePath).catch((err) => {
@@ -50,9 +42,7 @@ export default class AccountService {
         });
       }
     } catch (err) {
-      if (!transactionSucceeded) {
-        await ImageService.deleteByStoragePath(imageData.storagePath).catch(() => {});
-      }
+      await ImageService.deleteByStoragePath(imageData.storagePath).catch(() => {});
       throw err;
     }
   }

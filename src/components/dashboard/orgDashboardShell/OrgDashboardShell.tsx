@@ -1,17 +1,15 @@
-'use server';
-
-import SquarePlus from '@/components/buttons/squarePlus/SquarePlus';
 import OrgDashboardInfoPresentational from '@/components/dashboard/orgDashboard/orgDashboardInfo/OrgDashboardInfoPresentational';
-import EventList from '@/components/events/EventList/EventList';
-import EventFormContainer from '@/components/forms/eventForm/EventFormContainer';
-import MainModal from '@/components/modals/MainModal/MainModal';
+import EventListContainerOrg from '@/components/events/EventList/EventListContainerOrg';
+
+import CreateEventModalWrapper from '@/components/wrappers/CreateEventModalWrapper';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
+import { Suspense } from 'react';
 
 export default async function OrgDashboardShell() {
   const ctx = await UserContextService.requireOrg();
 
   return (
-    <div className="grid h-full w-full grid-cols-1 md:grid-cols-2 grid-rows-[1fr_3fr] gap-4">
+    <div className="grid h-full w-full grid-cols-1 grid-rows-[1fr_3fr] gap-4 md:grid-cols-2">
       <OrgDashboardInfoPresentational
         profilePicPath={ctx.user.profilePic}
         orgName={ctx.profile.orgProfile!.orgName}
@@ -21,11 +19,11 @@ export default async function OrgDashboardShell() {
       <div className="row-span-2 h-full w-full rounded-2xl bg-white p-8 shadow-2xl">
         <div className="flex items-center justify-between pb-4">
           <h2>My Events</h2>
-          <MainModal trigger={<SquarePlus />} header={<h2 className='text-center w-full'>Create New Event</h2>} modalProps={{size: '3xl'}}>
-            <EventFormContainer />
-          </MainModal>
+          <CreateEventModalWrapper orgName={ctx.profile.orgProfile.orgName} />
         </div>
-        <EventList />
+        <Suspense>
+          <EventListContainerOrg orgId={ctx.profile.orgProfile.id} />
+        </Suspense>
       </div>
     </div>
   );

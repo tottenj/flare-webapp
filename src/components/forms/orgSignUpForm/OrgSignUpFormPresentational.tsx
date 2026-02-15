@@ -93,7 +93,7 @@ export default function OrgSignUpFormPresentational({
             />
           </div>
         </FormSection>
-        <PrimaryButton disabled={pending} type="submit" />
+        <PrimaryButton disabled={pending} type="submit" centered />
       </Form>
     </div>
   );

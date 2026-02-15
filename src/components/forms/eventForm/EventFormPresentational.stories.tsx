@@ -17,7 +17,19 @@ export const Default: Story = {
       </div>
     ),
   ],
-  args: {
-    hasFile: () => false
-  },
 };
+
+export const WithMultiDay: Story = {
+  decorators: [
+    (Story: Story) => (
+      <div className="w-5xl rounded-2xl border-2 border-gray-300 p-4">
+        <Story />
+      </div>
+    ),
+  ],
+
+  args:{
+    isMultiDay: true
+  }
+};
+

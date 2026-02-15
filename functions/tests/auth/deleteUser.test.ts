@@ -5,13 +5,14 @@ import { requireMethod } from '../../src/utils/guards/requireMethod';
 import { mockRequest, mockResponse } from '../utils/mockHttp';
 import { expect } from '@jest/globals';
 
+
 jest.mock('../../src/utils/guards/requireMethod');
 jest.mock('../../src/bootstrap/admin');
 jest.mock('../../src/utils/guards/requireInternalApiKey');
 
 describe('delete User', () => {
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
     (requireMethod as jest.Mock).mockReturnValue(true);
     (requireInternalApiKey as jest.Mock).mockReturnValue(true);
   });

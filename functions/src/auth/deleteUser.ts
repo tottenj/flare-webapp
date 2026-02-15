@@ -3,13 +3,15 @@ import { auth } from '../bootstrap/admin';
 import type { Request } from 'firebase-functions/v2/https';
 import { requireMethod } from '../utils/guards/requireMethod';
 import { requireInternalApiKey } from '../utils/guards/requireInternalApiKey';
+import { INTERNAL_API_KEY } from '../secrets';
+import { getInternalApiKey } from '../utils/guards/getInternalApiKey';
 
 export async function deleteUserHandler(
   req: Request,
   res: Parameters<Parameters<typeof onRequest>[0]>[1]
 ) {
   if (!requireMethod(req, res, 'POST')) return;
-  if (!requireInternalApiKey(req, res)) return;
+  if (!requireInternalApiKey(req, res, getInternalApiKey())) return;
 
   const { uid } = req.body;
   if (!uid) {
@@ -27,4 +29,4 @@ export async function deleteUserHandler(
   }
 }
 
-export const deleteUser = onRequest(deleteUserHandler);
+export const deleteUser = onRequest({secrets: [INTERNAL_API_KEY]},deleteUserHandler);

@@ -19,7 +19,7 @@ describe('Require Internal Api Key', () => {
     const req = mockRequest({ headers: { 'x-internal-api-key': 'apiKey' } });
     const res = mockResponse();
     process.env.INTERNAL_API_KEY = "apiKey"
-    expect(requireInternalApiKey(req, res)).toBe(true)
+    expect(requireInternalApiKey(req, res, 'apiKey')).toBe(true)
     expect(res.json).not.toHaveBeenCalled();
   });
 
@@ -27,7 +27,7 @@ describe('Require Internal Api Key', () => {
     const req = mockRequest({ headers: { 'x-internal-api-key': 'apiKey' } });
     const res = mockResponse();
     process.env.INTERNAL_API_KEY = 'apikey';
-    expect(requireInternalApiKey(req, res)).toBe(false)
+    expect(requireInternalApiKey(req, res, 'apiKey2')).toBe(false)
     expect(res.status).toHaveBeenCalledWith(401)
     expect(res.json).toHaveBeenCalledWith({code: "UNAUTHORIZED"})
 
