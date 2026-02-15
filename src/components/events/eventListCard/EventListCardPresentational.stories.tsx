@@ -10,5 +10,7 @@ export default {
 type Story = StoryObj<typeof EventListCardPresentational>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+    color: "SOCIAL"
+  },
 };
