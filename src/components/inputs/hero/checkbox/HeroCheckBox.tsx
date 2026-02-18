@@ -4,7 +4,7 @@ interface heroCheckBoxProps extends CheckboxProps {}
 
 export default function HeroCheckBox({ children, ...props }: heroCheckBoxProps) {
   return (
-    <Checkbox {...props}>
+    <Checkbox data-cy={`${props.name ?? "checkbox"}-input`} {...props}>
       {children}
     </Checkbox>
   );

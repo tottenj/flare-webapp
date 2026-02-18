@@ -30,6 +30,8 @@ interface EventFormPresentationalProps extends LocationFormProps, FileFormProps<
   maxPrice: number;
   setMinPrice: (min: number) => void;
   setMaxPrice: (max: number) => void;
+  imgError: string | null;
+  setImgError: (error: string | null) => void;
 }
 
 export default function EventFormPresentational({
@@ -47,22 +49,33 @@ export default function EventFormPresentational({
   setMinPrice,
   minPrice,
   maxPrice,
+  imgError,
+  setImgError,
 }: EventFormPresentationalProps) {
   return (
     <>
       <Form
         onSubmit={(e) => {
           e.preventDefault();
+          if (!eventImgPreview) {
+            setImgError('Event image is required');
+            return;
+          } else {
+            setImgError(null);
+          }
           const fd = new FormData(e.currentTarget);
           handlePreview(fd);
         }}
         validationErrors={validationErrors}
         className="flex flex-col items-center gap-4 p-4"
       >
-        {eventImgPreview && <img src={eventImgPreview} className="w-full max-w-3xs rounded-xl" />}
+        <img
+          src={eventImgPreview || '/imagePlaceholder.png'}
+          className="w-full max-w-3xs rounded-xl"
+        />
         <FormError error={error} />
-
-        <ImageCropperInput required label="Event Image" aspect={2 / 3} onCropped={onImageCropped} />
+        {imgError && <FormError error={imgError} />}
+        <ImageCropperInput label="Event Image" aspect={2 / 3} onCropped={onImageCropped} />
 
         <HeroInput label="Event Name" name="eventName" placeholder="Enter event name" required />
         <HeroTextArea
@@ -76,15 +89,22 @@ export default function EventFormPresentational({
 
         <div className="flex w-full gap-8">
           <HeroDateInput isRequired label="Date" name="startDateTime" withTime />
-          {hasEndTime && <HeroDateInput label="End Date / Time" name="endDateTime" withTime/>}
+          {hasEndTime && (
+            <HeroDateInput
+              label="End Date / Time"
+              name="endDateTime"
+              error={validationErrors?.endDateTime?.[0]}
+              withTime
+            />
+          )}
         </div>
         <div className="flex gap-8">
-          <HeroCheckBox isSelected={hasEndTime} onValueChange={setHasEndTime}>
+          <HeroCheckBox name="endTime" isSelected={hasEndTime} onValueChange={setHasEndTime}>
             Set end date / time
           </HeroCheckBox>
         </div>
 
-        <EventCategorySelect  required />
+        <EventCategorySelect required />
 
         <div className="flex w-full gap-4">
           <AgeRestrictionSelect required />

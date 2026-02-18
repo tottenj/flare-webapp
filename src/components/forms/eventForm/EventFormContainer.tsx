@@ -38,21 +38,25 @@ export default function EventFormContainer({
       eventImg: null,
     },
   });
-  const [eventImgPreview, setEventImgPreview] = useState<string | null>('/imagePlaceholder.png');
+  const [eventImgPreview, setEventImgPreview] = useState<string | null>(null);
   const [hasEndTime, setHasEndTime] = useState(false);
   const [priceType, setPriceType] = useState<PriceTypeValue>('FREE');
   const [previewOpen, setPreviewOpen] = useState(false);
   const [pendingFormData, setPendingFormData] = useState<CreateEventPreviewForm | null>(null);
   const [minPrice, setMinPrice] = useState<number>(5);
   const [maxPrice, setMaxPrice] = useState<number>(20);
+  const [imgError, setImgError] = useState<string | null>(null);
   const router = useRouter();
+  const [previewErrors, setPreviewErrors] = useState<Record<string, string[]>>({});
 
   function handlePreview(formData: FormData) {
     const result = parsePreviewFormData(formData);
     if (!result.success) {
-      console.log(extractFieldErrors(z.treeifyError(result.error)));
+      const fieldErrors = extractFieldErrors(z.treeifyError(result.error));
+      setPreviewErrors(fieldErrors);
       return;
     }
+    setPreviewErrors({});
     setPendingFormData(result.data);
     setPreviewOpen(true);
   }
@@ -86,6 +90,9 @@ export default function EventFormContainer({
       onCloseModal?.();
       router.refresh();
     },
+    onError: (error) => {
+      console.log(error.message);
+    },
   });
 
   function handleCropped(file: File, previewUrl: string) {
@@ -98,15 +105,23 @@ export default function EventFormContainer({
       return;
     }
     setFile('eventImg', file);
+    setImgError(null);
     setEventImgPreview(previewUrl);
   }
+
+  const mergedValidationErrors = {
+    ...validationErrors,
+    ...previewErrors,
+  };
 
   return (
     <>
       <EventFormPresentational
+        imgError={imgError}
+        setImgError={setImgError}
         pending={pending}
         error={error?.message}
-        validationErrors={validationErrors}
+        validationErrors={mergedValidationErrors}
         changeLocVal={setLocation}
         locVal={location}
         eventImgPreview={eventImgPreview}

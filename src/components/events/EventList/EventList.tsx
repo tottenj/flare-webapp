@@ -3,7 +3,7 @@ import { EventDto } from '@/lib/types/dto/EventDto';
 
 export default async function EventList({ events }: { events: EventDto[] }) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-4">
       {events.map((event) => (
         <EventListCardPresentational
           eventId={event.id}

@@ -1,7 +1,7 @@
 import SVGLogo from '@/components/flare/svglogo/SVGLogo';
 import { AGE_RANGE_LABEL, AgeRangeValue } from '@/lib/types/AgeRange';
 import { EVENT_CATEGORY_META, EventCategory } from '@/lib/types/EventCategory';
-import { getTagColor } from '@/lib/utils/ui/getTagColour';
+import { tagColorValue } from '@/lib/types/TagColour';
 
 interface eventListCardPresentationalProps {
   eventId:string;
@@ -20,13 +20,14 @@ export default function EventListCardPresentational({
   ageRestriction,
   startDate
 }: eventListCardPresentationalProps) {
+  console.log(category)
   const { color } = EVENT_CATEGORY_META[category];
 
   return (
     <div className="group w-full border-primary hover:bg-primary flex gap-4 rounded-2xl border-2 p-4 transition-all ease-in-out hover:text-white">
       <div className="relative">
         <div className="group-hover:hidden">
-          <SVGLogo size={45} color={getTagColor(color)} />
+          <SVGLogo size={45} color={tagColorValue(color)} />
         </div>
 
         <div className="hidden group-hover:block">

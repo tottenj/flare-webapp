@@ -34,7 +34,9 @@ export class EventService {
         await eventDal.create(eventCreateInput.props, tx);
       });
     } catch (error) {
-      await ImageService.deleteByStoragePath(eventData.image.storagePath);
+      await ImageService.deleteByStoragePath(eventData.image.storagePath).catch((error) => {
+        console.log(error)
+      });
       throw error;
     }
   }

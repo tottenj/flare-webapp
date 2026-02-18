@@ -35,8 +35,9 @@ declare namespace Cypress {
     getStorageFile(path: string): Chainable<any>;
     recivedOobCode(email: string): Chainable<void>;
     clientLogin(email: string, password: string): Chainable<void>;
-    loginTestOrgClient(): Chainable<void>
-    clearStorage(): Chainable<void>
+    loginTestOrgClient(): Chainable<void>;
+    clearStorage(): Chainable<void>;
+    fillHeroDateTime(selector: string, { month, day, year, hour, minute, period }): Chainable<void>;
   }
 
   interface cypressUser {
