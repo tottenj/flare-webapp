@@ -30,6 +30,8 @@ export default class ImageService {
         throw StorageErrors.UnknownError();
       }
 
+     
+
       if (!res.ok) {
         switch (json?.code) {
           case 'STORAGE_MISSING_PATH':

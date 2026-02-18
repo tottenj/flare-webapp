@@ -5,12 +5,12 @@ import { ref, uploadBytes } from 'firebase/storage';
 
 export default async function uploadFile(file: File, path: string): Promise<ImageMetadata> {
   const res = await uploadBytes(ref(storage, path), file);
-  console.log(res)
-
+  const {metadata} = res
+  
   return {
-    storagePath: path,
-    contentType: file.type,
-    sizeBytes: file.size,
+    storagePath: metadata.fullPath,
+    contentType: metadata.contentType,
+    sizeBytes: metadata.size,
     originalName: file.name,
   };
 }

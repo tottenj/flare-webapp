@@ -36,7 +36,7 @@ model OrganizationProfile{
   location      Location @relation(fields: [locationId], references: [id])
   socials       OrgSocial?
   proofs        OrgProofFile[]
-  events        Event[]
+  events        FlareEvent[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -76,7 +76,7 @@ model ProfilePic{
 }
 
 
-model Event{
+model FlareEvent{
   id                String @id @default(cuid())
   organizationId    String 
   organization      OrganizationProfile @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -85,6 +85,7 @@ model Event{
   title             String
   description       String
   ageRestriction    AgeRestriction @default(ALL_AGES)
+  category          EventCategory @default(OTHER)
 
   imageId           String?
   image             ImageAsset? @relation(fields: [imageId], references: [id])
@@ -130,7 +131,7 @@ model ImageAsset{
 
   orgProofFiles OrgProofFile[]
   profilePics   ProfilePic[]
-  events        Event[]
+  events        FlareEvent[]
 }
 
 model Location{
@@ -140,7 +141,7 @@ model Location{
   point     Unsupported("geography(Point, 4326)")
   createdAt DateTime @default(now())
   organizationProfiles OrganizationProfile[]
-  events  Event[]
+  events  FlareEvent[]
 
   @@index([point], type: Gist)
 }
@@ -172,6 +173,7 @@ enum EventPricingType {
   FREE
   FIXED
   RANGE
+  PWYC
 }
 
 enum UserStatus {
@@ -196,5 +198,14 @@ enum ProofPlatform {
   INSTAGRAM
   FACEBOOK
   X
+  OTHER
+}
+
+enum EventCategory {
+  SOCIAL
+  NIGHTLIFE
+  CULTURE_ARTS
+  WELLNESS
+  ADVOCACY_EDUCATION
   OTHER
 }

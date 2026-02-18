@@ -20,7 +20,7 @@ export default heroui({
           DEFAULT: '#dddada',
         },
         primary: {
-          '50': '#f3f1f6',
+          '50': '#e9e4f0',
           '100': '#ddd7e6',
           '200': '#c6bddd',
           '300': '#afa3d3',
@@ -34,12 +34,12 @@ export default heroui({
           DEFAULT: '#1d0b31',
         },
         secondary: {
-          50: '#fde2ea', // pink
-          100: '#eee6ff', // purple
-          200: '#e6f0ff', // blue
-          300: '#e6faf7', // teal
-          400: '#fff6db', // yellow
-          500: '#ffe9dc', // orange
+          '50': '#fde2ea', // pink
+          '100': '#eee6ff', // purple
+          '200': '#e6f0ff', // blue
+          '300': '#e6faf7', // teal
+          '400': '#fff6db', // yellow
+          '500': '#ffe9dc', // orange
           foreground: '#1d0b31',
           DEFAULT: '#8b5cf6',
         },

@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "EventCategory" AS ENUM ('SOCIAL', 'NIGHTLIFE', 'CULTURE_ARTS', 'WELLNESS', 'ADVOCACY_EDUCATION', 'OTHER');
+
+-- AlterEnum
+ALTER TYPE "EventPricingType" ADD VALUE 'PWYC';

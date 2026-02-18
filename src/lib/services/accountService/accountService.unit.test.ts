@@ -102,7 +102,9 @@ describe('AccountService.updateProfilePicture', () => {
       expect.any(Object)
     );
     expect(imageAssetDal.delete).toHaveBeenCalledWith(1000, expect.any(Object));
-    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/firebaseUid/profile-pic1/cryptoId');
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith(
+      'users/firebaseUid/profile-pic1/cryptoId'
+    );
   });
 
   it('throws correct error on wrong image path', async () => {
@@ -124,6 +126,8 @@ describe('AccountService.updateProfilePicture', () => {
     ).rejects.toMatchObject({
       code: 'AUTH_UNAUTHORIZED',
     });
+
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith(imageData.storagePath);
   });
 
   it('successfully catches error from transaction', async () => {

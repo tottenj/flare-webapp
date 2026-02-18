@@ -5,21 +5,27 @@
 :root {
   --app-tag-pink: var(--app-secondary-50);
   --app-tag-pink-fg: #7a1231;
+  --app-tag-pink-accent: #ff005c;
 
   --app-tag-purple: var(--app-secondary-100);
   --app-tag-purple-fg: #3b1d6f;
+  --app-tag-purple-accent: #a855f7;
 
   --app-tag-blue: var(--app-secondary-200);
   --app-tag-blue-fg: #1e3a8a;
+  --app-tag-blue-accent: #0ea5e9;
 
   --app-tag-teal: var(--app-secondary-300);
   --app-tag-teal-fg: #065f46;
+  --app-tag-teal-accent: #14b8a6;
 
   --app-tag-yellow: var(--app-secondary-400);
   --app-tag-yellow-fg: #854d0e;
+  --app-tag-yellow-accent: #facc15;
 
   --app-tag-orange: var(--app-secondary-500);
   --app-tag-orange-fg: #7c2d12;
+  --app-tag-orange-accent: #f97316;
 }
 
 @theme inline {
@@ -115,7 +121,6 @@ label {
     font-size: 18px;
   }
 }
-
 
 @keyframes spinOnce {
   from {

@@ -1,5 +1,5 @@
 export default interface BaseFormProps {
-  pending: boolean;
+  pending?: boolean;
   error?: string;
   validationErrors?: Record<string, string[]>;
 }

@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { Autocomplete, AutocompleteItem } from '@heroui/react';
 import { useAsyncList } from '@react-stately/data';
-import flareLocation from '@/lib/types/Location';
 import { LocationInput } from '@/lib/schemas/LocationInputSchema';
 
 interface placeOption {
@@ -29,6 +28,7 @@ export default function PlaceSearch({
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [getPlaces, setGetPlaces] = useState<null | Function>(null);
   const [getPlaceDetails, setGetPlaceDetails] = useState<null | Function>(null);
+  const [locationSelect, setLocationSelect] = useState<null | LocationInput>(null)
 
   // Get user location once
   useEffect(() => {
@@ -90,6 +90,7 @@ export default function PlaceSearch({
       lat: place.place.location.lat(),
       lng: place.place.location.lng(),
     };
+    setLocationSelect(location)
     onChange(location);
   }
 
@@ -119,6 +120,7 @@ export default function PlaceSearch({
           </AutocompleteItem>
         )}
       </Autocomplete>
+      <input type="hidden" name='location' value={JSON.stringify(locationSelect)} />
     </>
   );
 }

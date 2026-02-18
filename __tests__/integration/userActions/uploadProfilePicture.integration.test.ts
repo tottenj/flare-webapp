@@ -57,6 +57,7 @@ describe('AccountService.updateProfilePicture (integration)', () => {
   });
 
   it('throws Unauthorized if storagePath does not match firebaseUid', async () => {
+    (ImageService.deleteByStoragePath as jest.Mock).mockResolvedValue(undefined);
     const imageData: ImageMetadata = {
       storagePath: 'users/evilUid/profile-pic/fixed-uuid',
       contentType: 'jpg',
@@ -126,7 +127,9 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     expect(pics).toBeTruthy();
     if (!pics) throw new Error('Expcted picture');
     expect(pics.imageAsset.storagePath).toBe('users/uid1/profile-pic/fixed-uuid2');
-    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid1/profile-pic/fixed-uuid');
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith(
+      'users/uid1/profile-pic/fixed-uuid'
+    );
   });
 
   it('does cleanup logic on error', async () => {
@@ -151,6 +154,8 @@ describe('AccountService.updateProfilePicture (integration)', () => {
       })
     ).rejects.toThrow('DB exploded');
 
-    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('users/uid1/profile-pic/fixed-uuid');
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith(
+      'users/uid1/profile-pic/fixed-uuid'
+    );
   });
 });
