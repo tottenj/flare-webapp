@@ -57,6 +57,7 @@ async function main() {
 
       organizationProfile: {
         create: {
+          id: 'org1',
           orgName: 'unverifiedOrg',
           status: 'PENDING',
           location: {

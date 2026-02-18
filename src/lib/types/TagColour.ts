@@ -30,7 +30,10 @@ const TAG_CLASS_MAP: Record<TagColor, string> = {
   `,
 };
 
-
 export function tagClasses(color: TagColor) {
   return TAG_CLASS_MAP[color];
+}
+
+export function tagColorValue(color: TagColor, variant: 'bg' | 'fg' | 'accent' = 'accent') {
+  return `var(--app-tag-${color}-${variant})`;
 }

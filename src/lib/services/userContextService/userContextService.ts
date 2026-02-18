@@ -7,6 +7,14 @@ import {
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 
+export type OrgUserContext = GetUserContext & {
+  profile: {
+    orgProfile: NonNullable<GetUserContext['profile']['orgProfile']>;
+  };
+  flags: {
+    isOrg: true;
+  };
+};
 
 
 export class UserContextService {
@@ -51,10 +59,8 @@ export class UserContextService {
     return ctx;
   });
 
-
-  static async requireNone(): Promise<GetUserContext | null>{
+  static async requireNone(): Promise<GetUserContext | null> {
     return await this.resolve();
-
   }
 
   static async requireUser(): Promise<GetUserContext> {
@@ -63,10 +69,10 @@ export class UserContextService {
     return ctx;
   }
 
-  static async requireOrg(): Promise<GetUserContext> {
+  static async requireOrg(): Promise<OrgUserContext> {
     const ctx = await this.requireUser();
-    if (!ctx.flags.isOrg) redirect('/dashboard');
-    return ctx;
+    if (!ctx.flags.isOrg || !ctx.profile.orgProfile) redirect('/dashboard');
+    return ctx as OrgUserContext;
   }
 
   static async requireVerifiedOrg(): Promise<GetUserContext> {

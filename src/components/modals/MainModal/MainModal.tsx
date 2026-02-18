@@ -32,7 +32,6 @@ export default function MainModal({
   footer,
   modalProps,
   defaultOpen = false,
-
   isOpen: controlledOpen,
   onClose: controlledClose,
 }: MainModalProps) {
@@ -44,9 +43,22 @@ export default function MainModal({
   const onOpen = disclosure.onOpen;
   const onClose = isControlled ? controlledClose : disclosure.onClose;
 
-  const Trigger = isValidElement(trigger)
-    ? cloneElement(trigger as any, { onClick: onOpen })
-    : trigger;
+  const Trigger = trigger ? (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={onOpen}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onOpen();
+        }
+      }}
+      className="inline-flex cursor-pointer items-center justify-center"
+    >
+      {trigger}
+    </div>
+  ) : null;
 
   return (
     <>
@@ -59,7 +71,6 @@ export default function MainModal({
         }}
         isOpen={isOpen}
         onClose={onClose}
-      
       >
         <ModalContent className="max-h-[90vh] overflow-hidden">
           {(close) => {

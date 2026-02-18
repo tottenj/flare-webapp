@@ -1,6 +1,5 @@
 'use server';
 import { AppError } from '@/lib/errors/AppError';
-import { AuthErrors } from '@/lib/errors/authError';
 import { extractFieldErrors } from '@/lib/errors/extractError';
 import fail from '@/lib/errors/fail';
 import { FileUploadErrors } from '@/lib/errors/fileUploadErrors';

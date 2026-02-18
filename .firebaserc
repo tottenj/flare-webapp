@@ -1,5 +1,11 @@
 {
   "projects": {
     "default": "flare-7091a"
+  },
+  "targets": {},
+  "etags": {
+    "flare-7091a": {
+      "extensionInstances": {}
+    }
   }
 }

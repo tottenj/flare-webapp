@@ -1,6 +1,7 @@
 // stories/mocks/fakeAutoCompleteList.ts
+import { AutoCompleteItem } from '@/components/inputs/hero/autocomplete/AutocompleteContainer';
 import type { AsyncListData } from '@react-stately/data';
-import type { AutoCompleteItem } from '@/components/inputs/autocomplete/AutocompleteContainer';
+
 
 export function createFakeAsyncList(items: AutoCompleteItem[]): AsyncListData<AutoCompleteItem> {
   return {

@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { storageEms } from "./env";
+import { storageEms } from './env';
 
 Cypress.Commands.add(
   'usePlacesInput',
@@ -23,6 +23,35 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add(
+  'fillHeroDateTime',
+  (selector: string, { month, day, year, hour, minute, period }) => {
+    cy.get(`${selector} [data-type="month"]`)
+      .click()
+      .type('{selectall}' + month);
+
+    cy.get(`${selector} [data-type="day"]`)
+      .click()
+      .type('{selectall}' + day);
+
+    cy.get(`${selector} [data-type="year"]`)
+      .click()
+      .type('{selectall}' + year);
+
+    cy.get(`${selector} [data-type="hour"]`)
+      .click()
+      .type('{selectall}' + hour);
+
+    cy.get(`${selector} [data-type="minute"]`)
+      .click()
+      .type('{selectall}' + minute);
+
+    cy.get(`${selector} [data-type="dayPeriod"]`)
+      .click()
+      .type('{selectall}' + period);
+  }
+);
+
+Cypress.Commands.add(
   'userExists',
   (email: string, password: string, shouldExist: boolean = true) => {
     return cy.loginUser(email, password).then((resp) => {
@@ -37,8 +66,6 @@ Cypress.Commands.add(
     });
   }
 );
-
-
 
 Cypress.Commands.add('getStorageFile', (path: string) => {
   const encodedPath = encodeURIComponent(path);

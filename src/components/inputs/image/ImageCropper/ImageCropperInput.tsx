@@ -9,11 +9,13 @@ interface ImageCropperInputProps {
   label: string;
   aspect?: number;
   onCropped: (file: File, previewUrl: string) => void;
+  required?: boolean
 }
 export default function ImageCropperInput({
   label,
   aspect = 1,
   onCropped,
+  required
 }: ImageCropperInputProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [tempUrl, setTempUrl] = useState<string | null>(null);
@@ -39,7 +41,7 @@ export default function ImageCropperInput({
 
   return (
     <>
-      <FileInput buttonText={label} fileAdded={false} name="image" onChange={handleFileSelect} />
+      <FileInput required={required} buttonText={label} fileAdded={false} name="image" onChange={handleFileSelect} />
 
       <MainModal isOpen={modalOpen} onClose={handleClose}>
         {tempUrl && (

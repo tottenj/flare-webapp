@@ -33,8 +33,8 @@ export default function MainBannerMenu({
         },
       ]
     : [
-        { title: 'Sign Up', href: '/signup' },
         { title: 'Sign In', href: '/signin' },
+        { title: 'Sign Up', href: '/signup' },
       ];
 
   return (
