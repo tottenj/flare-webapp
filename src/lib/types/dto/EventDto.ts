@@ -1,3 +1,4 @@
+import { EventCardDto } from '@/components/events/EventCard/EventCardPresentational';
 import { AgeRangeValue } from '@/lib/types/AgeRange';
 import { EventCategory } from '@/lib/types/EventCategory';
 import { PriceTypeValue } from '@/lib/types/PriceType';
@@ -79,3 +80,6 @@ export function mapEventRowToDto(row: EventRow): EventDto {
     tags: row.tags,
   };
 }
+
+
+

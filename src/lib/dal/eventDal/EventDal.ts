@@ -11,7 +11,66 @@ export class EventDal {
     await client.flareEvent.create({ data: input });
   }
 
-  async listEventsOrg(orgId: string, filters?: OrgEventFilter, tx?: Prisma.TransactionClient): Promise<EventRow[]> {
+  async getEvent(eventId: string, tx?: Prisma.TransactionClient): Promise<EventRow | null> {
+    const client = tx ?? prisma;
+    return await client.flareEvent.findUnique({
+      where: { id: eventId },
+      include: {
+        location: {
+          select: {
+            address: true,
+            placeId: true,
+          },
+        },
+        image: {
+          select: {
+            storagePath: true,
+          },
+        },
+        organization: {
+          select: {
+            orgName: true,
+          },
+        },
+      },
+    });
+  }
+
+  async getUpcomingOrgEvent(
+    orgId: string,
+    tx?: Prisma.TransactionClient
+  ){
+    const client = tx ?? prisma;
+
+    return await client.flareEvent.findFirst({
+      where: {
+        organizationId: orgId,
+        status: 'PUBLISHED',
+        startsAtUTC: {
+          gt: new Date(),
+        },
+      },
+      orderBy: {
+        startsAtUTC: 'asc',
+      },
+      include: {
+        location: { select: { address: true, placeId: true } },
+        image: { select: { storagePath: true } },
+        organization: {
+          select: {
+            orgName: true,
+            status: true, 
+          },
+        },
+      },
+    });
+  }
+
+  async listEventsOrg(
+    orgId: string,
+    filters?: OrgEventFilter,
+    tx?: Prisma.TransactionClient
+  ): Promise<EventRow[]> {
     const client = tx ?? prisma;
     return await client.flareEvent.findMany({
       where: {
@@ -21,24 +80,24 @@ export class EventDal {
       orderBy: {
         startsAtUTC: 'asc',
       },
-      include:{
-        location:{
-          select:{
-            address:true,
-            placeId:true
-          }
-        },
-        image:{
-          select:{
-            storagePath: true
-          }
-        },
-        organization:{
+      include: {
+        location: {
           select: {
-            orgName: true
-          }
-        }
-      }
+            address: true,
+            placeId: true,
+          },
+        },
+        image: {
+          select: {
+            storagePath: true,
+          },
+        },
+        organization: {
+          select: {
+            orgName: true,
+          },
+        },
+      },
     });
   }
 }

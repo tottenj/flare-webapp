@@ -1,4 +1,5 @@
 import OrgDashboardInfoPresentational from '@/components/dashboard/orgDashboard/orgDashboardInfo/OrgDashboardInfoPresentational';
+import EventCardOrgRecentContainer from '@/components/events/EventCard/EventCardOrgUpcomingContainer';
 import EventListContainerOrg from '@/components/events/EventList/EventListContainerOrg';
 
 import CreateEventModalWrapper from '@/components/wrappers/CreateEventModalWrapper';
@@ -23,6 +24,12 @@ export default async function OrgDashboardShell() {
         </div>
         <Suspense>
           <EventListContainerOrg orgId={ctx.profile.orgProfile.id} />
+        </Suspense>
+      </div>
+      <div className='bg-white w-full h-fit pb-4 rounded-2xl flex flex-col pt-4'>
+        <h2 className='text-center pb-8'>Next Upcoming Event</h2>
+        <Suspense>
+          <EventCardOrgRecentContainer orgId={ctx.profile.orgProfile.id} />
         </Suspense>
       </div>
     </div>

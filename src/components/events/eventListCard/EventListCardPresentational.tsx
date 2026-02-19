@@ -20,7 +20,6 @@ export default function EventListCardPresentational({
   ageRestriction,
   startDate
 }: eventListCardPresentationalProps) {
-  console.log(category)
   const { color } = EVENT_CATEGORY_META[category];
 
   return (

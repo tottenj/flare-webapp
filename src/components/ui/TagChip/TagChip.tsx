@@ -1,3 +1,4 @@
+"use client"
 import { tagClasses } from '@/lib/types/TagColour';
 import { getTagColor } from '@/lib/utils/ui/getTagColour';
 import { Chip, ChipProps } from '@heroui/react';

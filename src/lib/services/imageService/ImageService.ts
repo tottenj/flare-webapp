@@ -6,6 +6,7 @@ import { AppError } from '@/lib/errors/AppError';
 
 export default class ImageService {
   static getDownloadUrl = cache(async (storagePath: string) => {
+    console.log(storagePath)
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
     let res: Response;
@@ -30,7 +31,7 @@ export default class ImageService {
         throw StorageErrors.UnknownError();
       }
 
-     
+   
 
       if (!res.ok) {
         switch (json?.code) {
