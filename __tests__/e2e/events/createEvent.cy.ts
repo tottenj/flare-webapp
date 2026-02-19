@@ -58,6 +58,49 @@ describe('Create Event', () => {
     cy.contains('Created Event').should('be.visible');
     cy.contains('Test Event2').should('be.visible');
   });
+
+  it('successfully creates event with fixed price', () => {
+    cy.get("[data-cy='eventName-input']").type('Test Event');
+    cy.get("[data-cy='eventDescription-input']").type('This is a test event');
+    cy.usePlacesInput("[data-cy='location-input']");
+
+    cy.get("[data-cy='image-input']").selectFile('cypress/fixtures/stockEvent.jpg', {
+      force: true,
+    });
+    cy.contains('Confirm Crop').should('be.visible').click();
+    cy.contains('Confirm Crop').should('not.exist');
+
+    cy.get("[data-cy='priceType-input']").click({ force: true });
+
+    cy.get('body').find("[role='listbox']").should('exist').contains('Fixed').click();
+    cy.get("[data-cy='minPrice-input']").type('20');
+    cy.contains('Submit').click();
+    cy.contains('Publish Event').should('exist').click();
+    cy.contains('Created Event').should('be.visible');
+    cy.contains('Test Event').should('be.visible');
+  });
+
+  it('successfully creates event with range price', () => {
+    cy.get("[data-cy='eventName-input']").type('Test Event');
+    cy.get("[data-cy='eventDescription-input']").type('This is a test event');
+    cy.usePlacesInput("[data-cy='location-input']");
+
+    cy.get("[data-cy='image-input']").selectFile('cypress/fixtures/stockEvent.jpg', {
+      force: true,
+    });
+    cy.contains('Confirm Crop').should('be.visible').click();
+    cy.contains('Confirm Crop').should('not.exist');
+
+    cy.get("[data-cy='priceType-input']").click({ force: true });
+
+    cy.get('body').find("[role='listbox']").should('exist').contains('Range').click();
+    cy.get("[data-cy='minPrice-input']").type('20');
+    cy.get("[data-cy='maxPrice-input']").type('40');
+    cy.contains('Submit').click();
+    cy.contains('Publish Event').should('exist').click();
+    cy.contains('Created Event').should('be.visible');
+    cy.contains('Test Event').should('be.visible');
+  });
 });
 
 describe('Create Event - Unsuccessful Flows', () => {
@@ -68,6 +111,28 @@ describe('Create Event - Unsuccessful Flows', () => {
     cy.loginTestOrgClient();
     cy.get('[data-cy="square-plus-button"]').click();
     cy.contains('Create New Event').should('be.visible');
+  });
+
+  it('shows validation error when min price greater than max price', () => {
+    cy.get("[data-cy='eventName-input']").type('Test Event');
+    cy.get("[data-cy='eventDescription-input']").type('This is a test event');
+    cy.usePlacesInput("[data-cy='location-input']");
+
+    cy.get("[data-cy='image-input']").selectFile('cypress/fixtures/stockEvent.jpg', {
+      force: true,
+    });
+    cy.contains('Confirm Crop').should('be.visible').click();
+    cy.contains('Confirm Crop').should('not.exist');
+
+    cy.get("[data-cy='priceType-input']").click({ force: true });
+
+    cy.get('body').find("[role='listbox']").should('exist').contains('Range').click();
+    cy.get("[data-cy='minPrice-input']").clear().type('20');
+    cy.get("[data-cy='maxPrice-input']").clear().type('18');
+    cy.contains('Submit').click();
+    cy.contains('Maximum price must be greater than or equal to minimum price').should(
+      'be.visible'
+    );
   });
 
   it('shows validation error when required fields are missing', () => {
