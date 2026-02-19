@@ -27,6 +27,27 @@ export type EventRow = Prisma.FlareEventGetPayload<{
   };
 }>;
 
+export const eventRowInclude = Prisma.validator<Prisma.FlareEventInclude>()({
+  location: {
+    select: {
+      address: true,
+      placeId: true,
+    },
+  },
+  image: {
+    select: {
+      storagePath: true,
+    },
+  },
+  organization: {
+    select: {
+      orgName: true,
+      status: true,
+    },
+  },
+});
+
+
 export type EventDto = {
   id: string;
   title: string;

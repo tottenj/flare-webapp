@@ -1,7 +1,6 @@
 import OrgDashboardInfoPresentational from '@/components/dashboard/orgDashboard/orgDashboardInfo/OrgDashboardInfoPresentational';
 import EventCardOrgRecentContainer from '@/components/events/EventCard/EventCardOrgUpcomingContainer';
 import EventListContainerOrg from '@/components/events/EventList/EventListContainerOrg';
-
 import CreateEventModalWrapper from '@/components/wrappers/CreateEventModalWrapper';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
 import { Suspense } from 'react';

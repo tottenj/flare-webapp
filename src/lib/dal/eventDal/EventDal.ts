@@ -3,7 +3,8 @@ import { EventDomainProps } from '@/lib/domain/eventDomain/EventDomain';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
-import { EventRow } from '@/lib/types/dto/EventDto';
+import { EventRow, eventRowInclude } from '@/lib/types/dto/EventDto';
+import { UserEventFilter } from '@/lib/types/UserEventFilter';
 
 export class EventDal {
   async create(input: EventDomainProps, tx?: Prisma.TransactionClient) {
@@ -15,31 +16,11 @@ export class EventDal {
     const client = tx ?? prisma;
     return await client.flareEvent.findUnique({
       where: { id: eventId },
-      include: {
-        location: {
-          select: {
-            address: true,
-            placeId: true,
-          },
-        },
-        image: {
-          select: {
-            storagePath: true,
-          },
-        },
-        organization: {
-          select: {
-            orgName: true,
-          },
-        },
-      },
+      include: eventRowInclude,
     });
   }
 
-  async getUpcomingOrgEvent(
-    orgId: string,
-    tx?: Prisma.TransactionClient
-  ){
+  async getUpcomingOrgEvent(orgId: string, tx?: Prisma.TransactionClient) {
     const client = tx ?? prisma;
 
     return await client.flareEvent.findFirst({
@@ -59,10 +40,28 @@ export class EventDal {
         organization: {
           select: {
             orgName: true,
-            status: true, 
+            status: true,
           },
         },
       },
+    });
+  }
+
+  async listEventsUser(filters?: UserEventFilter, tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    return await client.flareEvent.findMany({
+      where: {
+        organization: { status: 'VERIFIED' },
+        ...(filters?.placeId && {
+          location: {
+            placeId: filters.placeId,
+          },
+        }),
+      },
+      orderBy: {
+        startsAtUTC: 'asc',
+      },
+      include: eventRowInclude,
     });
   }
 
@@ -80,24 +79,7 @@ export class EventDal {
       orderBy: {
         startsAtUTC: 'asc',
       },
-      include: {
-        location: {
-          select: {
-            address: true,
-            placeId: true,
-          },
-        },
-        image: {
-          select: {
-            storagePath: true,
-          },
-        },
-        organization: {
-          select: {
-            orgName: true,
-          },
-        },
-      },
+      include: eventRowInclude,
     });
   }
 }
