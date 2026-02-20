@@ -15,6 +15,7 @@ export type EventRow = Prisma.FlareEventGetPayload<{
     organization: {
       select: {
         orgName: true;
+        status:true;
       };
     };
 

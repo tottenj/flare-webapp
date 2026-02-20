@@ -6,7 +6,7 @@ export default function SquarePlus() {
     <FontAwesomeIcon
       icon={faPlusSquare}
       data-cy="square-plus-button"
-      className="text-primary hover:animate-spinOnce hover:text-success cursor-pointer text-4xl"
+      className="text-primary hover:animate-spinOnce hover:text-success cursor-pointer text-4xl transition-all duration-200 ease-in-out hover:scale-115"
     />
   );
 }

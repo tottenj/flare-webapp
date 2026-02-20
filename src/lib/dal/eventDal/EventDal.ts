@@ -12,18 +12,15 @@ export class EventDal {
     await client.flareEvent.create({ data: input });
   }
 
-  async getEvent(eventId: string, tx?: Prisma.TransactionClient): Promise<EventRow | null> {
-    const client = tx ?? prisma;
-    return await client.flareEvent.findUnique({
+  async getEvent(eventId: string): Promise<EventRow | null> {
+    return await prisma.flareEvent.findUnique({
       where: { id: eventId },
       include: eventRowInclude,
     });
   }
 
-  async getUpcomingOrgEvent(orgId: string, tx?: Prisma.TransactionClient) {
-    const client = tx ?? prisma;
-
-    return await client.flareEvent.findFirst({
+  async getUpcomingOrgEvent(orgId: string) {
+    return await prisma.flareEvent.findFirst({
       where: {
         organizationId: orgId,
         status: 'PUBLISHED',
@@ -34,16 +31,7 @@ export class EventDal {
       orderBy: {
         startsAtUTC: 'asc',
       },
-      include: {
-        location: { select: { address: true, placeId: true } },
-        image: { select: { storagePath: true } },
-        organization: {
-          select: {
-            orgName: true,
-            status: true,
-          },
-        },
-      },
+      include: eventRowInclude
     });
   }
 
@@ -52,6 +40,7 @@ export class EventDal {
     return await client.flareEvent.findMany({
       where: {
         organization: { status: 'VERIFIED' },
+        status: "PUBLISHED",
         ...(filters?.placeId && {
           location: {
             placeId: filters.placeId,

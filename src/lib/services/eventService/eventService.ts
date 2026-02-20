@@ -42,10 +42,10 @@ export class EventService {
     }
   }
 
-  static async listEventsOrg(orgId: string, filters?: OrgEventFilter) {
+  static async listEventsOrg( actor: AuthenticatedOrganization, filters?: OrgEventFilter) {
     const sanitized = OrgEventFilterSchema.safeParse(filters ?? {});
     const { data } = sanitized;
-    const events = await eventDal.listEventsOrg(orgId, data);
+    const events = await eventDal.listEventsOrg(actor.orgId, data);
     return events.map((event) => mapEventRowToDto(event));
   }
 
@@ -56,21 +56,33 @@ export class EventService {
     return events.map((event) => mapEventRowToDto(event));
   }
 
-  static async getEvent(eventId: string): Promise<EventDto | null> {
+  static async getEventById(
+    eventId: string,
+    actor?: AuthenticatedOrganization
+  ): Promise<EventDto | null> {
     const event = await eventDal.getEvent(eventId);
     if (!event) return null;
-    return mapEventRowToDto(event);
+    const isOwner = actor?.orgId === event.organizationId;
+    const isPublished = event.status === 'PUBLISHED';
+    const isOrgVerified = event.organization.status === 'VERIFIED';
+    if (isOwner) {
+      return mapEventRowToDto(event);
+    }
+    if (isPublished && isOrgVerified) {
+      return mapEventRowToDto(event);
+    }
+    return null;
   }
 
   static async getOrgUpcomingEvent(
     orgId: string,
-    authenticatedUser?: AuthenticatedOrganization
+    actor?: AuthenticatedOrganization
   ): Promise<EventDto | null> {
     const event = await eventDal.getUpcomingOrgEvent(orgId);
     if (!event) return null;
-    const isSameOrg = authenticatedUser?.orgId === event.organizationId;
-    const isVerified = event.organization.status === 'VERIFIED';
-    if (isSameOrg || isVerified) {
+    const isOwner = actor?.orgId === event.organizationId;
+    const isOrgVerified = event.organization.status === 'VERIFIED';
+    if (isOwner || isOrgVerified) {
       return mapEventRowToDto(event);
     }
     return null;

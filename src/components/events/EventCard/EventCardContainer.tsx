@@ -6,7 +6,7 @@ import mapEventDtoToCardDto from '@/lib/types/dto/mapEventDtoToEventCard';
 
 export default async function EventCardContainer({ eventId }: { eventId: string }) {
   let event: EventCardDto | null;
-  const eventDto = await EventService.getEvent(eventId);
+  const eventDto = await EventService.getEventById(eventId);
   if (!eventDto) return null;
   event = await mapEventDtoToCardDto(eventDto);
   if (!event) return null;

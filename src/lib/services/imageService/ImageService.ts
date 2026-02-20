@@ -1,12 +1,11 @@
 import 'server-only';
 import { StorageErrors } from '@/lib/errors/StorageError';
 import { HTTP_METHOD } from '@/lib/types/Method';
-import { cache } from 'react';
 import { AppError } from '@/lib/errors/AppError';
 
 export default class ImageService {
-  static getDownloadUrl = cache(async (storagePath: string) => {
-    console.log(storagePath)
+  static getDownloadUrl = async (storagePath: string) => {
+    console.log(storagePath);
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
     let res: Response;
@@ -21,7 +20,7 @@ export default class ImageService {
         },
         body: JSON.stringify({ storagePath }),
         cache: 'force-cache',
-        next: { tags: [`profile-pic:${storagePath}`] },
+        next: { tags: [`image:${storagePath}`] },
       });
 
       let json: any;
@@ -30,8 +29,6 @@ export default class ImageService {
       } catch {
         throw StorageErrors.UnknownError();
       }
-
-   
 
       if (!res.ok) {
         switch (json?.code) {
@@ -60,7 +57,7 @@ export default class ImageService {
     } finally {
       clearTimeout(timeout);
     }
-  });
+  };
 
   static async deleteByStoragePath(storagePath: string) {
     const controller = new AbortController();
@@ -77,7 +74,6 @@ export default class ImageService {
         },
         body: JSON.stringify({ storagePath }),
       });
-
 
       if (res.ok) return;
 
