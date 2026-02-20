@@ -9,10 +9,14 @@ sb.mock(import("../src/lib/serverActions/uploadProfilePicture.ts"))
 sb.mock(import("../src/lib/firebase/auth/configs/clientApp.ts"))
 
 const withWrapper: Decorator = (Story) => (
-  <div className='w-full h-full flex justify-center items-center'>
-    <Story />
+  <div className="bg-background flex min-h-screen w-full justify-center">
+    <div className="w-full max-w-6xl px-6 py-10">
+      <Story />
+    </div>
   </div>
 );
+
+
 
 
 const preview: Preview = {

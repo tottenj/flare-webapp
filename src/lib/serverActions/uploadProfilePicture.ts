@@ -25,7 +25,7 @@ export default async function uploadProfilePicture(
       imageData: data.data,
       authenticatedUser: { userId: ctx.user.id, firebaseUid: ctx.user.firebaseUid },
     });
-    updateTag(`profile-pic:${data.data.storagePath}`)
+    updateTag(`image:${data.data.storagePath}`)
     return { ok: true, data: null };
   } catch (error) {
     if (error instanceof AppError) {

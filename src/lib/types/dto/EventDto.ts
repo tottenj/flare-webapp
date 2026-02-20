@@ -1,3 +1,4 @@
+import { EventCardDto } from '@/components/events/EventCard/EventCardPresentational';
 import { AgeRangeValue } from '@/lib/types/AgeRange';
 import { EventCategory } from '@/lib/types/EventCategory';
 import { PriceTypeValue } from '@/lib/types/PriceType';
@@ -14,6 +15,7 @@ export type EventRow = Prisma.FlareEventGetPayload<{
     organization: {
       select: {
         orgName: true;
+        status:true;
       };
     };
 
@@ -25,6 +27,27 @@ export type EventRow = Prisma.FlareEventGetPayload<{
     };
   };
 }>;
+
+export const eventRowInclude = Prisma.validator<Prisma.FlareEventInclude>()({
+  location: {
+    select: {
+      address: true,
+      placeId: true,
+    },
+  },
+  image: {
+    select: {
+      storagePath: true,
+    },
+  },
+  organization: {
+    select: {
+      orgName: true,
+      status: true,
+    },
+  },
+});
+
 
 export type EventDto = {
   id: string;
@@ -79,3 +102,6 @@ export function mapEventRowToDto(row: EventRow): EventDto {
     tags: row.tags,
   };
 }
+
+
+

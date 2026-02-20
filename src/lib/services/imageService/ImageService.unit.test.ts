@@ -44,7 +44,7 @@ describe('ImageService.getDownloadUrl', () => {
         }),
         body: JSON.stringify({ storagePath: 'storagePath' }),
         next: expect.objectContaining({
-          tags: [`profile-pic:storagePath`],
+          tags: [`image:storagePath`],
         }),
       })
     );
