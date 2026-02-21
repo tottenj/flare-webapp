@@ -4,7 +4,7 @@ import { AUTH_ADMIN } from './env';
 
 Cypress.Commands.add('clearAllEmulators', () => {
   cy.clearAuth();
-  cy.clearStorage()
+  cy.clearStorage();
 });
 
 Cypress.Commands.add('clearAuth', () => {
@@ -12,8 +12,6 @@ Cypress.Commands.add('clearAuth', () => {
     expect(response.status).to.eq(200);
   });
 });
-
-
 
 // cypress/support/commands.ts
 Cypress.Commands.add('clearStorage', () => {
@@ -52,11 +50,6 @@ Cypress.Commands.add('clearStorage', () => {
     });
   });
 });
-
-
-
-
-
 
 Cypress.Commands.add('seedDb', (maxRetries = 5) => {
   const attemptSeed = (retryCount = 0): Cypress.Chainable<any> => {
@@ -100,6 +93,16 @@ Cypress.Commands.add('resetAndSeed', () => {
 Cypress.Commands.add('seedAuthEmulator', () => {
   const functionsUrl = `${Cypress.env('FUNCTIONS_URL')}/${Cypress.env('NEXT_PUBLIC_FIREBASE_PROJECT_ID')}/us-central1/seedAuthEmulator`;
 
+  cy.request('POST', functionsUrl).then((response) => {
+    cy.log(functionsUrl);
+    cy.log(JSON.stringify(response.body));
+    expect(response.status).to.eq(200);
+    expect(response.body).to.have.property('success', true);
+  });
+});
+
+Cypress.Commands.add('seedStorageEmulator', () => {
+  const functionsUrl = `${Cypress.env('FUNCTIONS_URL')}/${Cypress.env('NEXT_PUBLIC_FIREBASE_PROJECT_ID')}/us-central1/seedStorageEmulator`;
   cy.request('POST', functionsUrl).then((response) => {
     cy.log(functionsUrl);
     cy.log(JSON.stringify(response.body));

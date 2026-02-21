@@ -5,7 +5,6 @@ import { AppError } from '@/lib/errors/AppError';
 
 export default class ImageService {
   static getDownloadUrl = async (storagePath: string) => {
-    console.log(storagePath);
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
     let res: Response;

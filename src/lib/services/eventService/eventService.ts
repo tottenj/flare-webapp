@@ -12,6 +12,8 @@ import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter, OrgEventFilterSchema } from '@/lib/types/OrgEventFilter';
 import { EventDto, mapEventRowToDto } from '@/lib/types/dto/EventDto';
 import { UserEventFilter, userEventFilterSchema } from '@/lib/types/UserEventFilter';
+import { normalizeTag } from '@/lib/utils/normalize/normalizeTag/normalizeTag';
+import { tagDal } from '@/lib/dal/tagDal/TagDal';
 
 export class EventService {
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
@@ -26,8 +28,16 @@ export class EventService {
         if (eventData.location) {
           location = await locationDal.create(eventData.location, tx);
         }
+        const normalizedTags = [...new Set(eventData.tags.map((tag) => normalizeTag(tag)))];
+        const tags = await Promise.all(
+          normalizedTags.map(async (label) => {
+            const res = await tagDal.upsertAndIncrement(label, tx);
+            return res.label;
+          })
+        );
         const resolved: CreateEventResolved = {
           ...eventData,
+          tags,
           imageId: imageAsset.id,
           locationId: location?.id,
         };
