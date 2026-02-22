@@ -1,6 +1,7 @@
 import { onRequest } from 'firebase-functions/v2/https';
 import { auth, storage } from '../bootstrap/admin';
 import { CreateRequest } from 'firebase-admin/auth';
+import path from 'path';
 
 export const seedAuthEmulator = onRequest(async (req: any, res: any) => {
   try {
@@ -53,9 +54,11 @@ export const seedStorageEmulator = onRequest(async (req: any, res: any) => {
     if (process.env.FUNCTIONS_EMULATOR !== 'true') {
       return res.status(403).send('Forbidden outside emulator');
     }
+
+    const filePath = path.join(process.cwd(), 'src', 'testAssets', 'stockEvent.jpg');
     const bucket = storage.bucket();
-    bucket.deleteFiles({ force: true });
-    await bucket.upload('../testAssets/stockEvent.jpg', {
+    await bucket.deleteFiles({ force: true });
+    await bucket.upload(filePath, {
       destination: 'events/uid3/randoCrypto/stockEvent.jpg',
       metadata: { contentType: 'image/jpeg' },
     });
