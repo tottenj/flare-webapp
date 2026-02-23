@@ -17,7 +17,7 @@ export function buildEventRow(overrides?: Partial<EventRow>): EventRow {
     pricingType: 'FIXED' as any,
     minPriceCents: 2500,
     maxPriceCents: null,
-    tags: ['drag', 'community'],
+    tags: [{tag:{id: "id1", label: 'drag'}}, {tag:{id: "id2", label: 'community'}}],
     imageId: 'image-id',
     locationId: 'location-id',
     organizationId: 'org-id',
