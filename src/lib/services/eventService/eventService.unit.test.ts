@@ -9,6 +9,10 @@ import ImageService from '@/lib/services/imageService/ImageService';
 import { tagDal } from '@/lib/dal/tagDal/TagDal';
 import { mapEventRowToDto } from '@/lib/types/dto/EventDto';
 import { buildEventRow } from '@/lib/utils/tests/factories/eventRowFactory';
+import tagService from '@/lib/services/tagService/tagService';
+import { CreateEvent } from '@/lib/schemas/event/createEventFormSchema';
+import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
+import { authOrgFactory } from '@/lib/utils/tests/factories/authOrgFactory';
 
 jest.mock('@/lib/dal/imageAssetDal/ImageAssetDal', () => ({
   imageAssetDal: {
@@ -30,9 +34,10 @@ jest.mock('@/lib/dal/eventDal/EventDal', () => ({
   },
 }));
 
-jest.mock('@/lib/dal/tagDal/TagDal', () => ({
-  tagDal: {
-    upsertAndIncrement: jest.fn().mockResolvedValue({ label: 'label' }),
+jest.mock('@/lib/services/tagService/tagService', () => ({
+  __esModule: true,
+  default: {
+    createAndIncrementMany: jest.fn(),
   },
 }));
 
@@ -45,6 +50,34 @@ jest.mock('@/lib/services/imageService/ImageService', () => ({
 
 jest.mock('@/lib/types/dto/EventDto');
 
+function eventServiceCreateFactory(overrides?: Partial<CreateEvent>): CreateEvent {
+  const base: CreateEvent = {
+    eventName: 'Test Event',
+    eventDescription: 'This is a test event',
+    startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
+    status: 'PUBLISHED' as const,
+    ageRestriction: AgeRestriction.ALL_AGES,
+    image: {
+      storagePath: 'events/firebaseUid/image.jpg',
+      contentType: 'image/jpeg',
+      sizeBytes: 1024,
+      originalName: 'image.jpg',
+    },
+    category: EventCategory.SOCIAL,
+    priceType: PRICE_TYPE.Free,
+    tags: [],
+  };
+
+  return {
+    ...base,
+    ...overrides,
+    image: {
+      ...base.image,
+      ...overrides?.image,
+    },
+  };
+}
+
 describe('EventService.createEvent', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -55,33 +88,8 @@ describe('EventService.createEvent', () => {
   });
 
   it('should create event with location', async () => {
-    const authUser = {
-      userId: 'userId',
-      orgId: 'orgId',
-      firebaseUid: 'firebaseUid',
-    };
-    const input = {
-      eventName: 'Test Event',
-      eventDescription: 'This is a test event',
-      startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
-      status: 'PUBLISHED' as 'DRAFT' | 'PUBLISHED',
-      ageRestriction: AgeRestriction.ALL_AGES,
-      location: {
-        placeId: 'placeId',
-        address: '123 Test St',
-        lat: 23.456,
-        lng: 45.678,
-      },
-      image: {
-        storagePath: 'events/firebaseUid/image.jpg',
-        contentType: 'image/jpeg',
-        sizeBytes: 1024,
-        originalName: 'image.jpg',
-      },
-      category: EventCategory.SOCIAL,
-      priceType: PRICE_TYPE.Free,
-      tags: [],
-    };
+    const authUser = authOrgFactory();
+    const input = eventServiceCreateFactory({"location":{placeId: "abc134", address:"address", lat:232, lng: 3232}});
 
     await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
     expect(eventDal.create).toHaveBeenCalledWith(
@@ -91,35 +99,15 @@ describe('EventService.createEvent', () => {
       }),
       expect.anything()
     );
-    expect(tagDal.upsertAndIncrement).not.toHaveBeenCalled();
+    expect(tagService.createAndIncrementMany).not.toHaveBeenCalled();
     expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
     expect(imageAssetDal.create).toHaveBeenCalledWith(input.image, expect.anything());
     expect(locationDal.create).toHaveBeenCalledWith(input.location, expect.anything());
   });
 
   it('should create event without location', async () => {
-    const authUser = {
-      userId: 'userId',
-      orgId: 'orgId',
-      firebaseUid: 'firebaseUid',
-    };
-    const input = {
-      eventName: 'Test Event',
-      eventDescription: 'This is a test event',
-      startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
-      status: 'PUBLISHED' as 'DRAFT' | 'PUBLISHED',
-      ageRestriction: AgeRestriction.ALL_AGES,
-      image: {
-        storagePath: 'events/firebaseUid/image.jpg',
-        contentType: 'image/jpeg',
-        sizeBytes: 1024,
-        originalName: 'image.jpg',
-      },
-      category: EventCategory.SOCIAL,
-      priceType: PRICE_TYPE.Free,
-      tags: [],
-    };
-
+    const authUser = authOrgFactory();
+    const input = eventServiceCreateFactory({ location: undefined });
     await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
     expect(eventDal.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -128,131 +116,39 @@ describe('EventService.createEvent', () => {
       }),
       expect.anything()
     );
+    expect(locationDal.create).not.toHaveBeenCalled();
     expect(imageAssetDal.create).toHaveBeenCalledWith(input.image, expect.anything());
     expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
   });
 
   it('adds x number of tags to db', async () => {
-    const authUser = {
-      userId: 'userId',
-      orgId: 'orgId',
-      firebaseUid: 'firebaseUid',
-    };
-    const input = {
-      eventName: 'Test Event',
-      eventDescription: 'This is a test event',
-      startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
-      status: 'PUBLISHED' as 'DRAFT' | 'PUBLISHED',
-      ageRestriction: AgeRestriction.ALL_AGES,
-      image: {
-        storagePath: 'events/firebaseUid/image.jpg',
-        contentType: 'image/jpeg',
-        sizeBytes: 1024,
-        originalName: 'image.jpg',
-      },
-      category: EventCategory.SOCIAL,
-      priceType: PRICE_TYPE.Free,
-      tags: ['tagOne', 'tagTwo', 'tagThree'],
-    };
+    const authUser = authOrgFactory();
+    const input = eventServiceCreateFactory({ tags: ['tagOne', 'tagTwo', 'tagThree'] });
+    (tagService.createAndIncrementMany as jest.Mock).mockResolvedValueOnce(['id1', 'id2', 'id3']);
     await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
     expect(eventDal.create).toHaveBeenCalledWith(
       expect.objectContaining({
         imageId: 'imageId',
         locationId: undefined,
-        tags: ['label', 'label', 'label'],
+        tags: ['id1', 'id2', 'id3'],
       }),
       expect.anything()
     );
-    expect(tagDal.upsertAndIncrement).toHaveBeenCalledTimes(3);
-    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
-  });
-
-  it('dedupes duplicate tags', async () => {
-    const authUser = {
-      userId: 'userId',
-      orgId: 'orgId',
-      firebaseUid: 'firebaseUid',
-    };
-    const input = {
-      eventName: 'Test Event',
-      eventDescription: 'This is a test event',
-      startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
-      status: 'PUBLISHED' as 'DRAFT' | 'PUBLISHED',
-      ageRestriction: AgeRestriction.ALL_AGES,
-      image: {
-        storagePath: 'events/firebaseUid/image.jpg',
-        contentType: 'image/jpeg',
-        sizeBytes: 1024,
-        originalName: 'image.jpg',
-      },
-      category: EventCategory.SOCIAL,
-      priceType: PRICE_TYPE.Free,
-      tags: ['tagOne', 'tagOne', 'tagOne'],
-    };
-    await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
-    expect(eventDal.create).toHaveBeenCalledWith(
-      expect.objectContaining({
-        imageId: 'imageId',
-        locationId: undefined,
-        tags: ['label'],
-      }),
-      expect.anything()
-    );
-    expect(tagDal.upsertAndIncrement).toHaveBeenCalledTimes(1);
+    expect(tagService.createAndIncrementMany).toHaveBeenCalled();
     expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
   });
 
   it('deletes image if event creation fails', async () => {
-    const authUser = {
-      userId: 'userId',
-      orgId: 'orgId',
-      firebaseUid: 'firebaseUid',
-    };
-    const input = {
-      eventName: 'Test Event',
-      eventDescription: 'This is a test event',
-      startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
-      status: 'PUBLISHED' as 'DRAFT' | 'PUBLISHED',
-      ageRestriction: AgeRestriction.ALL_AGES,
-      image: {
-        storagePath: 'events/firebaseUid/image.jpg',
-        contentType: 'image/jpeg',
-        sizeBytes: 1024,
-        originalName: 'image.jpg',
-      },
-      category: EventCategory.SOCIAL,
-      priceType: PRICE_TYPE.Free,
-      tags: [],
-    };
-
+    const authUser = authOrgFactory();
+    const input = eventServiceCreateFactory();
     (eventDal.create as jest.Mock).mockRejectedValueOnce(new Error('DB error'));
-
     await expect(EventService.createEvent(authUser, input)).rejects.toThrow('DB error');
     expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('events/firebaseUid/image.jpg');
   });
 
   it('errors on unauthenticated storage path', async () => {
-    const authUser = {
-      userId: 'userId',
-      orgId: 'orgId',
-      firebaseUid: 'firebaseUid',
-    };
-    const input = {
-      eventName: 'Test Event',
-      eventDescription: 'This is a test event',
-      startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
-      status: 'PUBLISHED' as 'DRAFT' | 'PUBLISHED',
-      ageRestriction: AgeRestriction.ALL_AGES,
-      image: {
-        storagePath: 'events/otherUser/image.jpg', // Invalid path
-        contentType: 'image/jpeg',
-        sizeBytes: 1024,
-        originalName: 'image.jpg',
-      },
-      category: EventCategory.SOCIAL,
-      priceType: PRICE_TYPE.Free,
-      tags: [],
-    };
+    const authUser = authOrgFactory()
+    const input = eventServiceCreateFactory({image:{storagePath:"events/otherUser/randoId/stock.jpeg"}})
 
     await expect(EventService.createEvent(authUser, input)).rejects.toThrow('AUTH_UNAUTHORIZED');
     expect(eventDal.create).not.toHaveBeenCalled();
@@ -412,74 +308,73 @@ describe('EventService.getOrgUpcomingEvent', () => {
     expect(res).toEqual(mappedDto);
   });
 
-  it("returns null if no event found", async  () =>{
-      (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(null);
-      const res = await EventService.getOrgUpcomingEvent(orgId);
-      expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId)
-      expect(mapEventRowToDto).not.toHaveBeenCalled()
-      expect(res).toBeNull()
-  })
+  it('returns null if no event found', async () => {
+    (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(null);
+    const res = await EventService.getOrgUpcomingEvent(orgId);
+    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
+    expect(mapEventRowToDto).not.toHaveBeenCalled();
+    expect(res).toBeNull();
+  });
 
-  it("returns unverified orgs event if org is the actor", async () => {
-      const mockRow = buildEventRow({
-        organizationId: 'orgId',
-        organization: {
-          status: 'PENDING',
-          orgName: 'name',
-        },
-      });
-      const actor = {
-        userId: "userId",
-        orgId: "orgId",
-        firebaseUid: "uid"
-      };
+  it('returns unverified orgs event if org is the actor', async () => {
+    const mockRow = buildEventRow({
+      organizationId: 'orgId',
+      organization: {
+        status: 'PENDING',
+        orgName: 'name',
+      },
+    });
+    const actor = {
+      userId: 'userId',
+      orgId: 'orgId',
+      firebaseUid: 'uid',
+    };
 
-      (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(mockRow);
-      (mapEventRowToDto as jest.Mock).mockReturnValue(mappedDto);
-      const res = await EventService.getOrgUpcomingEvent(orgId, actor);
-      expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
-      expect(mapEventRowToDto).toHaveBeenCalledWith(mockRow);
-      expect(res).toEqual(mappedDto);
-  })
+    (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(mockRow);
+    (mapEventRowToDto as jest.Mock).mockReturnValue(mappedDto);
+    const res = await EventService.getOrgUpcomingEvent(orgId, actor);
+    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
+    expect(mapEventRowToDto).toHaveBeenCalledWith(mockRow);
+    expect(res).toEqual(mappedDto);
+  });
 
-    it('returns null if org is unverified and no actor', async () => {
-      const mockRow = buildEventRow({
-        organizationId: 'orgId',
-        organization: {
-          status: 'PENDING',
-          orgName: 'name',
-        },
-      });
-     
-
-      (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(mockRow);
-      (mapEventRowToDto as jest.Mock).mockReturnValue(mappedDto);
-      const res = await EventService.getOrgUpcomingEvent(orgId);
-      expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
-      expect(mapEventRowToDto).not.toHaveBeenCalled()
-      expect(res).toBeNull()
+  it('returns null if org is unverified and no actor', async () => {
+    const mockRow = buildEventRow({
+      organizationId: 'orgId',
+      organization: {
+        status: 'PENDING',
+        orgName: 'name',
+      },
     });
 
-     it('returns null if org is unverified and actor org id does not match', async () => {
-       const mockRow = buildEventRow({
-         organizationId: 'orgId',
-         organization: {
-           status: 'PENDING',
-           orgName: 'name',
-         },
-       });
+    (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(mockRow);
+    (mapEventRowToDto as jest.Mock).mockReturnValue(mappedDto);
+    const res = await EventService.getOrgUpcomingEvent(orgId);
+    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
+    expect(mapEventRowToDto).not.toHaveBeenCalled();
+    expect(res).toBeNull();
+  });
 
-        const actor = {
-          userId: 'userId',
-          orgId: 'orgId2',
-          firebaseUid: 'uid',
-        };
+  it('returns null if org is unverified and actor org id does not match', async () => {
+    const mockRow = buildEventRow({
+      organizationId: 'orgId',
+      organization: {
+        status: 'PENDING',
+        orgName: 'name',
+      },
+    });
 
-       (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(mockRow);
-       (mapEventRowToDto as jest.Mock).mockReturnValue(mappedDto);
-       const res = await EventService.getOrgUpcomingEvent(orgId, actor);
-       expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
-       expect(mapEventRowToDto).not.toHaveBeenCalled();
-       expect(res).toBeNull();
-     });
+    const actor = {
+      userId: 'userId',
+      orgId: 'orgId2',
+      firebaseUid: 'uid',
+    };
+
+    (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(mockRow);
+    (mapEventRowToDto as jest.Mock).mockReturnValue(mappedDto);
+    const res = await EventService.getOrgUpcomingEvent(orgId, actor);
+    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
+    expect(mapEventRowToDto).not.toHaveBeenCalled();
+    expect(res).toBeNull();
+  });
 });

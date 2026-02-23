@@ -79,26 +79,6 @@ async function main() {
     },
   });
 
-  //Events
-  const eventOne = await prisma.flareEvent.upsert({
-    where: { id: 'eventOne' },
-    update: {},
-    create: {
-      id: 'eventOne',
-      organizationId: unverifiedOrgProfileId.id,
-      status: 'PUBLISHED',
-      title: 'Event One',
-      description: 'Event One Description',
-      imageId: stockEvent.id,
-      startsAtUTC: new Date(),
-      timezone: '[America/Toronto]',
-      locationId: locationId,
-      pricingType: 'FREE',
-      tags: ['tag1', 'tag2', 'tag3'],
-    },
-  });
-
-  //Tags
   const tag1 = await prisma.tag.upsert({
     where: { id: 'tag1' },
     update: {},
@@ -126,6 +106,31 @@ async function main() {
       id: 'tag3',
       label: 'tag3',
       usageCount: 1,
+    },
+  });
+
+  //Events
+  const eventOne = await prisma.flareEvent.upsert({
+    where: { id: 'eventOne' },
+    update: {},
+    create: {
+      id: 'eventOne',
+      organizationId: unverifiedOrgProfileId.id,
+      status: 'PUBLISHED',
+      title: 'Event One',
+      description: 'Event One Description',
+      imageId: stockEvent.id,
+      startsAtUTC: new Date(),
+      timezone: 'America/Toronto',
+      locationId: locationId,
+      pricingType: 'FREE',
+      tags: {
+        create: [
+          { tag: { connect: { id: tag1.id } } },
+          { tag: { connect: { id: tag2.id } } },
+          { tag: { connect: { id: tag3.id } } },
+        ],
+      },
     },
   });
 }

@@ -3,10 +3,8 @@ import { EventErrors } from '@/lib/errors/eventErrors/EventErrors';
 import { CreateEvent } from '@/lib/schemas/event/createEventFormSchema';
 import { AgeRangeValue } from '@/lib/types/AgeRange';
 import { EventCategory } from '@/lib/types/EventCategory';
-
 import { PriceTypeValue } from '@/lib/types/PriceType';
 import { parseZonedToUTC } from '@/lib/utils/dateTime/dateTimeHelpers';
-import { FlareEvent } from '@prisma/client';
 
 export type EventDomainProps = {
   organizationId: string;
@@ -27,7 +25,6 @@ export type EventDomainProps = {
   tags: string[];
 };
 
-
 export type CreateEventResolved = Omit<CreateEvent, 'image' | 'location'> & {
   imageId: string;
   locationId?: string | null;
@@ -35,14 +32,12 @@ export type CreateEventResolved = Omit<CreateEvent, 'image' | 'location'> & {
 
 export class EventDomain {
   private constructor(public readonly props: EventDomainProps) {}
-
   static onCreate(input: CreateEventResolved, organizationId: string) {
     const pricing = EventPriceDomain.fromInput(input.priceType, input.minPrice, input.maxPrice);
     const start = parseZonedToUTC(input.startDateTime);
     const end = input.endDateTime ? parseZonedToUTC(input.endDateTime) : null;
     if (end && end.utcDate <= start.utcDate) throw EventErrors.InvalidTimeRange();
-    const tags = input.tags.map((t) => t.trim().toLowerCase());
-    if (tags.length > 5) throw EventErrors.InvalidTagNumber();
+    if (input.tags.length > 5) throw EventErrors.InvalidTagNumber();
     return new EventDomain({
       status: input.status,
       title: input.eventName,
@@ -50,7 +45,7 @@ export class EventDomain {
       publishedAt: input.status === 'PUBLISHED' ? new Date() : null,
       description: input.eventDescription,
       startsAtUTC: start.utcDate,
-      endsAtUTC: end?.utcDate,
+      endsAtUTC: end ? end.utcDate : null,
       timezone: start.timeZone,
       organizationId,
       imageId: input.imageId,
@@ -59,27 +54,7 @@ export class EventDomain {
       maxPriceCents: pricing?.max?.cents,
       pricingType: pricing.type,
       ageRestriction: input.ageRestriction,
-      tags,
-    });
-  }
-
-  static fromRow(row: FlareEvent) {
-    return new EventDomain({
-      organizationId: row.organizationId,
-      status: row.status,
-      title: row.title,
-      category: row.category,
-      description: row.description,
-      startsAtUTC: row.startsAtUTC,
-      endsAtUTC: row.endsAtUTC,
-      timezone: row.timezone,
-      pricingType: row.pricingType,
-      minPriceCents: row.minPriceCents,
-      maxPriceCents: row.maxPriceCents,
-      ageRestriction: row.ageRestriction,
-      imageId: row.imageId,
-      locationId: row.locationId,
-      tags: row.tags,
+      tags: input.tags,
     });
   }
 }

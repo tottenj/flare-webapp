@@ -9,7 +9,17 @@ import { UserEventFilter } from '@/lib/types/UserEventFilter';
 export class EventDal {
   async create(input: EventDomainProps, tx?: Prisma.TransactionClient) {
     const client = tx ?? prisma;
-    await client.flareEvent.create({ data: input });
+    const { tags, ...rest } = input;
+    await client.flareEvent.create({
+      data: {
+        ...rest,
+        tags: {
+          create: tags.map((tagId) => ({
+            tag: { connect: { id: tagId } },
+          })),
+        },
+      },
+    });
   }
 
   async getEvent(eventId: string): Promise<EventRow | null> {
@@ -31,7 +41,7 @@ export class EventDal {
       orderBy: {
         startsAtUTC: 'asc',
       },
-      include: eventRowInclude
+      include: eventRowInclude,
     });
   }
 
@@ -40,7 +50,7 @@ export class EventDal {
     return await client.flareEvent.findMany({
       where: {
         organization: { status: 'VERIFIED' },
-        status: "PUBLISHED",
+        status: 'PUBLISHED',
         ...(filters?.placeId && {
           location: {
             placeId: filters.placeId,
