@@ -4,27 +4,38 @@ import { PriceTypeValue } from '@/lib/types/PriceType';
 import { Prisma } from '@prisma/client';
 
 export type EventRow = Prisma.FlareEventGetPayload<{
-  include: {
-    image: {
-      select: {
-        storagePath: true;
-      };
-    };
-
-    organization: {
-      select: {
-        orgName: true;
-      };
-    };
-
-    location: {
-      select: {
-        address: true;
-        placeId: true;
-      };
-    };
-  };
+  include: typeof eventRowInclude;
 }>;
+
+export const eventRowInclude = Prisma.validator<Prisma.FlareEventInclude>()({
+  location: {
+    select: {
+      address: true,
+      placeId: true,
+    },
+  },
+  image: {
+    select: {
+      storagePath: true,
+    },
+  },
+  tags: {
+    select: {
+      tag: {
+        select: {
+          label: true,
+          id: true,
+        },
+      },
+    },
+  },
+  organization: {
+    select: {
+      orgName: true,
+      status: true,
+    },
+  },
+});
 
 export type EventDto = {
   id: string;
@@ -32,7 +43,7 @@ export type EventDto = {
   description: string;
   category: EventCategory;
   ageRestriction: AgeRangeValue;
-  status: "DRAFT" | "PUBLISHED";
+  status: 'DRAFT' | 'PUBLISHED';
   imagePath: string | null;
   startsAt: string;
   endsAt: string | null;
@@ -49,7 +60,10 @@ export type EventDto = {
     minCents: number | null;
     maxCents: number | null;
   };
-  tags: string[];
+  tags: {
+    id: string;
+    label: string;
+  }[];
 };
 
 export function mapEventRowToDto(row: EventRow): EventDto {
@@ -76,6 +90,6 @@ export function mapEventRowToDto(row: EventRow): EventDto {
       minCents: row.minPriceCents ?? null,
       maxCents: row.maxPriceCents ?? null,
     },
-    tags: row.tags,
+    tags: row.tags.map((eventTag) => ({ id: eventTag.tag.id, label: eventTag.tag.label })),
   };
 }

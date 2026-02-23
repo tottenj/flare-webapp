@@ -19,7 +19,7 @@ export default async (): Promise<Config> => {
     testMatch: ['<rootDir>/**/*.unit.test.[jt]s?(x)'],
     testEnvironment: 'jsdom',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-    coveragePathIgnorePatterns: ['node_modules','/src/app/generated/prisma/'],
+    coveragePathIgnorePatterns: ['node_modules', '/src/app/generated/prisma/', '/src/lib/dal/'],
     testPathIgnorePatterns: ['/node_modules/', '/app/generated/prisma/'],
   })();
 

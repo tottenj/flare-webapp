@@ -20,6 +20,7 @@ declare namespace Cypress {
     clearAllEmulators(): Chainable<Cypress.Response<any>>;
     logoutUser(): Chainable<Cypress.Response<any>>;
     seedDb(maxRetries: number = 1): Chainable<Cypress.Response<any>>;
+    seedStorageEmulator(): Chainable<void>;
     loginTestUser(): Chainable<void>;
     loginTestOrg(): Chainable<void>;
     loginVerifiedOrg(): Chainable<void>;

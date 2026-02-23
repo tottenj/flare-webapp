@@ -34,6 +34,7 @@ export default function HeroBasicSelect<T>({
       items={items}
       name={name}
       label={label}
+      data-cy={`${name}-input`}
       required={required}
       selectedKeys={value ? [String(value)] : undefined}
       defaultSelectedKeys={!value ? [String(defaultValue ?? items[0].value)] : undefined}

@@ -10,7 +10,9 @@ import ImageService from '@/lib/services/imageService/ImageService';
 import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
 import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter, OrgEventFilterSchema } from '@/lib/types/OrgEventFilter';
-import { mapEventRowToDto } from '@/lib/types/dto/EventDto';
+import { EventDto, mapEventRowToDto } from '@/lib/types/dto/EventDto';
+import { UserEventFilter, userEventFilterSchema } from '@/lib/types/UserEventFilter';
+import tagService from '@/lib/services/tagService/tagService';
 
 export class EventService {
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
@@ -25,8 +27,13 @@ export class EventService {
         if (eventData.location) {
           location = await locationDal.create(eventData.location, tx);
         }
+        let tagIds: string[] = [];
+        if (eventData.tags && eventData.tags.length > 0) {
+          tagIds = await tagService.createAndIncrementMany(eventData.tags, tx);
+        }
         const resolved: CreateEventResolved = {
           ...eventData,
+          tags: tagIds,
           imageId: imageAsset.id,
           locationId: location?.id,
         };
@@ -35,16 +42,55 @@ export class EventService {
       });
     } catch (error) {
       await ImageService.deleteByStoragePath(eventData.image.storagePath).catch((error) => {
-        console.log(error)
+        console.log(error);
       });
       throw error;
     }
   }
 
-  static async listEventsOrg(orgId: string, filters?: OrgEventFilter) {
+  static async listEventsOrg(actor: AuthenticatedOrganization, filters?: OrgEventFilter) {
     const sanitized = OrgEventFilterSchema.safeParse(filters ?? {});
     const { data } = sanitized;
-    const events = await eventDal.listEventsOrg(orgId, data);
+    const events = await eventDal.listEventsOrg(actor.orgId, data);
     return events.map((event) => mapEventRowToDto(event));
+  }
+
+  static async listEventsUser(filters?: UserEventFilter) {
+    const sanitzed = userEventFilterSchema.safeParse(filters ?? {});
+    const { data } = sanitzed;
+    const events = await eventDal.listEventsUser(data);
+    return events.map((event) => mapEventRowToDto(event));
+  }
+
+  static async getEventById(
+    eventId: string,
+    actor?: AuthenticatedOrganization
+  ): Promise<EventDto | null> {
+    const event = await eventDal.getEvent(eventId);
+    if (!event) return null;
+    const isOwner = actor?.orgId === event.organizationId;
+    const isPublished = event.status === 'PUBLISHED';
+    const isOrgVerified = event.organization.status === 'VERIFIED';
+    if (isOwner) {
+      return mapEventRowToDto(event);
+    }
+    if (isPublished && isOrgVerified) {
+      return mapEventRowToDto(event);
+    }
+    return null;
+  }
+
+  static async getOrgUpcomingEvent(
+    orgId: string,
+    actor?: AuthenticatedOrganization
+  ): Promise<EventDto | null> {
+    const event = await eventDal.getUpcomingOrgEvent(orgId);
+    if (!event) return null;
+    const isOwner = actor?.orgId === event.organizationId;
+    const isOrgVerified = event.organization.status === 'VERIFIED';
+    if (isOwner || isOrgVerified) {
+      return mapEventRowToDto(event);
+    }
+    return null;
   }
 }

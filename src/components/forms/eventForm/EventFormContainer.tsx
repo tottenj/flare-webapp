@@ -43,8 +43,6 @@ export default function EventFormContainer({
   const [priceType, setPriceType] = useState<PriceTypeValue>('FREE');
   const [previewOpen, setPreviewOpen] = useState(false);
   const [pendingFormData, setPendingFormData] = useState<CreateEventPreviewForm | null>(null);
-  const [minPrice, setMinPrice] = useState<number>(5);
-  const [maxPrice, setMaxPrice] = useState<number>(20);
   const [imgError, setImgError] = useState<string | null>(null);
   const router = useRouter();
   const [previewErrors, setPreviewErrors] = useState<Record<string, string[]>>({});
@@ -131,10 +129,6 @@ export default function EventFormContainer({
         setPriceType={setPriceType}
         priceType={priceType}
         handlePreview={handlePreview}
-        minPrice={minPrice}
-        maxPrice={maxPrice}
-        setMaxPrice={setMaxPrice}
-        setMinPrice={setMinPrice}
       />
       {previewOpen && pendingFormData && (
         <MainModal modalProps={{ size: '5xl' }} isOpen onClose={() => setPreviewOpen(false)}>

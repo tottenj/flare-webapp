@@ -3,15 +3,72 @@ import { EventDomainProps } from '@/lib/domain/eventDomain/EventDomain';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
-import { EventRow } from '@/lib/types/dto/EventDto';
+import { EventRow, eventRowInclude } from '@/lib/types/dto/EventDto';
+import { UserEventFilter } from '@/lib/types/UserEventFilter';
 
 export class EventDal {
   async create(input: EventDomainProps, tx?: Prisma.TransactionClient) {
     const client = tx ?? prisma;
-    await client.flareEvent.create({ data: input });
+    const { tags, ...rest } = input;
+    await client.flareEvent.create({
+      data: {
+        ...rest,
+        tags: {
+          create: tags.map((tagId) => ({
+            tag: { connect: { id: tagId } },
+          })),
+        },
+      },
+    });
   }
 
-  async listEventsOrg(orgId: string, filters?: OrgEventFilter, tx?: Prisma.TransactionClient): Promise<EventRow[]> {
+  async getEvent(eventId: string): Promise<EventRow | null> {
+    return await prisma.flareEvent.findUnique({
+      where: { id: eventId },
+      include: eventRowInclude,
+    });
+  }
+
+  async getUpcomingOrgEvent(orgId: string) {
+    return await prisma.flareEvent.findFirst({
+      where: {
+        organizationId: orgId,
+        status: 'PUBLISHED',
+        startsAtUTC: {
+          gt: new Date(),
+        },
+      },
+      orderBy: {
+        startsAtUTC: 'asc',
+      },
+      include: eventRowInclude,
+    });
+  }
+
+  async listEventsUser(filters?: UserEventFilter, tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    return await client.flareEvent.findMany({
+      where: {
+        organization: { status: 'VERIFIED' },
+        status: 'PUBLISHED',
+        ...(filters?.placeId && {
+          location: {
+            placeId: filters.placeId,
+          },
+        }),
+      },
+      orderBy: {
+        startsAtUTC: 'asc',
+      },
+      include: eventRowInclude,
+    });
+  }
+
+  async listEventsOrg(
+    orgId: string,
+    filters?: OrgEventFilter,
+    tx?: Prisma.TransactionClient
+  ): Promise<EventRow[]> {
     const client = tx ?? prisma;
     return await client.flareEvent.findMany({
       where: {
@@ -21,24 +78,7 @@ export class EventDal {
       orderBy: {
         startsAtUTC: 'asc',
       },
-      include:{
-        location:{
-          select:{
-            address:true,
-            placeId:true
-          }
-        },
-        image:{
-          select:{
-            storagePath: true
-          }
-        },
-        organization:{
-          select: {
-            orgName: true
-          }
-        }
-      }
+      include: eventRowInclude,
     });
   }
 }

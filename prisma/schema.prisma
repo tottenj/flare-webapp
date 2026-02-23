@@ -102,14 +102,13 @@ model FlareEvent{
   maxPriceCents     Int?
   currency          String @default("CAD")
 
-  tags              String[]
-
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+  tags EventTag[]
+
   @@index([startsAtUTC])
   @@index([organizationId])
-  @@index([tags], type: Gin)
 }
 
 
@@ -118,6 +117,19 @@ model Tag{
   label       String @unique
   usageCount  Int @default(0)
   createdAt   DateTime @default(now())
+  events EventTag[]
+
+}
+
+model EventTag {
+  eventId String
+  tagId   String
+
+  event   FlareEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  tag     Tag        @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, tagId])
+  @@index([tagId])
 }
 
 

@@ -26,10 +26,6 @@ interface EventFormPresentationalProps extends LocationFormProps, FileFormProps<
   priceType: PriceTypeValue;
   setPriceType: (price: PriceTypeValue) => void;
   handlePreview: (fd: FormData) => void;
-  minPrice: number;
-  maxPrice: number;
-  setMinPrice: (min: number) => void;
-  setMaxPrice: (max: number) => void;
   imgError: string | null;
   setImgError: (error: string | null) => void;
 }
@@ -45,10 +41,6 @@ export default function EventFormPresentational({
   setPriceType,
   priceType,
   handlePreview,
-  setMaxPrice,
-  setMinPrice,
-  minPrice,
-  maxPrice,
   imgError,
   setImgError,
 }: EventFormPresentationalProps) {
@@ -110,20 +102,15 @@ export default function EventFormPresentational({
           <AgeRestrictionSelect required />
         </div>
         <PriceTypeSelect onChange={setPriceType} value={priceType} />
-        {priceType === 'FIXED' && <PriceInput required description="Price" name="price" />}
+        {priceType === 'FIXED' && <PriceInput required description="Price" name="minPrice" />}
         {priceType === 'RANGE' && (
           <div className="flex w-full gap-8">
             <PriceInput
-              onValueChange={setMinPrice}
-              value={minPrice}
               required
               description="Min Price"
               name="minPrice"
             />
             <PriceInput
-              minValue={minPrice}
-              onValueChange={setMaxPrice}
-              value={maxPrice}
               required
               description="Max Price"
               name="maxPrice"

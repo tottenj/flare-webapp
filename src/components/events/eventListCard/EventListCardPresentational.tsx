@@ -2,14 +2,16 @@ import SVGLogo from '@/components/flare/svglogo/SVGLogo';
 import { AGE_RANGE_LABEL, AgeRangeValue } from '@/lib/types/AgeRange';
 import { EVENT_CATEGORY_META, EventCategory } from '@/lib/types/EventCategory';
 import { tagColorValue } from '@/lib/types/TagColour';
+import formatAgeRange from '@/lib/utils/ui/formatAgeRange/formatAgeRange';
+import { formatDateTime } from '@/lib/utils/ui/formatDateTime/formatDateTime';
 
 interface eventListCardPresentationalProps {
-  eventId:string;
+  eventId: string;
   title: string;
   category: EventCategory;
   description: string;
   ageRestriction: AgeRangeValue;
-  startDate:string
+  startDate: string;
 }
 
 export default function EventListCardPresentational({
@@ -18,13 +20,14 @@ export default function EventListCardPresentational({
   category,
   description,
   ageRestriction,
-  startDate
+  startDate,
 }: eventListCardPresentationalProps) {
-  console.log(category)
   const { color } = EVENT_CATEGORY_META[category];
+  const ageRestrictionLabel = formatAgeRange(ageRestriction);
+  const { dateLabel } = formatDateTime(startDate);
 
   return (
-    <div className="group w-full border-primary hover:bg-primary flex gap-4 rounded-2xl border-2 p-4 transition-all ease-in-out hover:text-white">
+    <div className="group border-primary hover:bg-primary flex w-full gap-4 rounded-2xl border-2 p-4 transition-all duration-200 ease-in-out hover:-translate-y-1 hover:text-white hover:shadow-lg">
       <div className="relative">
         <div className="group-hover:hidden">
           <SVGLogo size={45} color={tagColorValue(color)} />
@@ -35,14 +38,14 @@ export default function EventListCardPresentational({
         </div>
       </div>
 
-      <div className="flex justify-between w-full">
+      <div className="flex w-full justify-between">
         <div className="flex flex-col">
           <h3 className="font-nunito font-bold capitalize">{title}</h3>
           <p>{description}</p>
         </div>
         <div className="flex flex-col">
-          <p>{AGE_RANGE_LABEL[ageRestriction]}</p>
-          <p>{startDate}</p>
+          <p>{ageRestrictionLabel}</p>
+          <p>{dateLabel}</p>
         </div>
       </div>
     </div>
