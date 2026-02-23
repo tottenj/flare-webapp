@@ -22,6 +22,7 @@ before(() => {
   cy.clearAllEmulators();
   cy.resetAndSeed();
   cy.seedAuthEmulator();
+  cy.seedStorageEmulator();
 });
 
 

@@ -1,31 +1,10 @@
-import { EventCardDto } from '@/components/events/EventCard/EventCardPresentational';
 import { AgeRangeValue } from '@/lib/types/AgeRange';
 import { EventCategory } from '@/lib/types/EventCategory';
 import { PriceTypeValue } from '@/lib/types/PriceType';
 import { Prisma } from '@prisma/client';
 
 export type EventRow = Prisma.FlareEventGetPayload<{
-  include: {
-    image: {
-      select: {
-        storagePath: true;
-      };
-    };
-
-    organization: {
-      select: {
-        orgName: true;
-        status:true;
-      };
-    };
-
-    location: {
-      select: {
-        address: true;
-        placeId: true;
-      };
-    };
-  };
+  include: typeof eventRowInclude;
 }>;
 
 export const eventRowInclude = Prisma.validator<Prisma.FlareEventInclude>()({
@@ -40,6 +19,16 @@ export const eventRowInclude = Prisma.validator<Prisma.FlareEventInclude>()({
       storagePath: true,
     },
   },
+  tags: {
+    select: {
+      tag: {
+        select: {
+          label: true,
+          id: true,
+        },
+      },
+    },
+  },
   organization: {
     select: {
       orgName: true,
@@ -48,14 +37,13 @@ export const eventRowInclude = Prisma.validator<Prisma.FlareEventInclude>()({
   },
 });
 
-
 export type EventDto = {
   id: string;
   title: string;
   description: string;
   category: EventCategory;
   ageRestriction: AgeRangeValue;
-  status: "DRAFT" | "PUBLISHED";
+  status: 'DRAFT' | 'PUBLISHED';
   imagePath: string | null;
   startsAt: string;
   endsAt: string | null;
@@ -72,7 +60,10 @@ export type EventDto = {
     minCents: number | null;
     maxCents: number | null;
   };
-  tags: string[];
+  tags: {
+    id: string;
+    label: string;
+  }[];
 };
 
 export function mapEventRowToDto(row: EventRow): EventDto {
@@ -99,9 +90,6 @@ export function mapEventRowToDto(row: EventRow): EventDto {
       minCents: row.minPriceCents ?? null,
       maxCents: row.maxPriceCents ?? null,
     },
-    tags: row.tags,
+    tags: row.tags.map((eventTag) => ({ id: eventTag.tag.id, label: eventTag.tag.label })),
   };
 }
-
-
-

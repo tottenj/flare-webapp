@@ -17,10 +17,6 @@ async function main() {
   `
   );
 
-  if (!locationRows.length) {
-    //throw new Error('Failed to seed Location');
-  }
-
   const locationId = locationRows[0].id;
 
   // --- Seed Users ---
@@ -64,6 +60,76 @@ async function main() {
             connect: { id: locationId }, // ✅ correct
           },
         },
+      },
+    },
+  });
+
+  const unverifiedOrgProfileId = await prisma.organizationProfile.findUnique({
+    where: { id: 'org1' },
+    select: { id: true },
+  });
+
+  //Image Assets
+  const stockEvent = await prisma.imageAsset.upsert({
+    where: { id: 'stockEvent' },
+    update: {},
+    create: {
+      id: 'stockEvent',
+      storagePath: 'events/uid3/randoCrypto/stockEvent.jpg',
+    },
+  });
+
+  const tag1 = await prisma.tag.upsert({
+    where: { id: 'tag1' },
+    update: {},
+    create: {
+      id: 'tag1',
+      label: 'tag1',
+      usageCount: 1,
+    },
+  });
+
+  const tag2 = await prisma.tag.upsert({
+    where: { id: 'tag2' },
+    update: {},
+    create: {
+      id: 'tag2',
+      label: 'tag2',
+      usageCount: 1,
+    },
+  });
+
+  const tag3 = await prisma.tag.upsert({
+    where: { id: 'tag3' },
+    update: {},
+    create: {
+      id: 'tag3',
+      label: 'tag3',
+      usageCount: 1,
+    },
+  });
+
+  //Events
+  const eventOne = await prisma.flareEvent.upsert({
+    where: { id: 'eventOne' },
+    update: {},
+    create: {
+      id: 'eventOne',
+      organizationId: unverifiedOrgProfileId.id,
+      status: 'PUBLISHED',
+      title: 'Event One',
+      description: 'Event One Description',
+      imageId: stockEvent.id,
+      startsAtUTC: new Date(),
+      timezone: 'America/Toronto',
+      locationId: locationId,
+      pricingType: 'FREE',
+      tags: {
+        create: [
+          { tag: { connect: { id: tag1.id } } },
+          { tag: { connect: { id: tag2.id } } },
+          { tag: { connect: { id: tag3.id } } },
+        ],
       },
     },
   });

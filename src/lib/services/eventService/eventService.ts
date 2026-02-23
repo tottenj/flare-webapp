@@ -12,6 +12,7 @@ import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter, OrgEventFilterSchema } from '@/lib/types/OrgEventFilter';
 import { EventDto, mapEventRowToDto } from '@/lib/types/dto/EventDto';
 import { UserEventFilter, userEventFilterSchema } from '@/lib/types/UserEventFilter';
+import tagService from '@/lib/services/tagService/tagService';
 
 export class EventService {
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
@@ -26,8 +27,13 @@ export class EventService {
         if (eventData.location) {
           location = await locationDal.create(eventData.location, tx);
         }
+        let tagIds: string[] = [];
+        if (eventData.tags && eventData.tags.length > 0) {
+          tagIds = await tagService.createAndIncrementMany(eventData.tags, tx);
+        }
         const resolved: CreateEventResolved = {
           ...eventData,
+          tags: tagIds,
           imageId: imageAsset.id,
           locationId: location?.id,
         };
@@ -42,7 +48,7 @@ export class EventService {
     }
   }
 
-  static async listEventsOrg( actor: AuthenticatedOrganization, filters?: OrgEventFilter) {
+  static async listEventsOrg(actor: AuthenticatedOrganization, filters?: OrgEventFilter) {
     const sanitized = OrgEventFilterSchema.safeParse(filters ?? {});
     const { data } = sanitized;
     const events = await eventDal.listEventsOrg(actor.orgId, data);

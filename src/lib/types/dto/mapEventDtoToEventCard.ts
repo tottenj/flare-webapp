@@ -1,4 +1,4 @@
-"use server"
+'use server';
 import { EventCardDto } from '@/components/events/EventCard/EventCardPresentational';
 import ImageService from '@/lib/services/imageService/ImageService';
 import { EventDto } from '@/lib/types/dto/EventDto';
@@ -11,7 +11,6 @@ export default async function mapEventDtoToCardDto(event: EventDto): Promise<Eve
   if (event.imagePath) {
     try {
       imgUrl = await ImageService.getDownloadUrl(event.imagePath);
-   
     } catch (error) {
       imgUrl = null;
     }
@@ -21,12 +20,20 @@ export default async function mapEventDtoToCardDto(event: EventDto): Promise<Eve
   if (event.endsAt) {
     endDateTimeLabels = formatDateTime(event.endsAt);
   }
+
+  let tags: string[] = [];
+  if (event.tags.length > 0) {
+    tags = event.tags.map((tag) => {
+      return tag.label;
+    });
+  }
+
   return {
     id: event.id,
     title: event.title,
     organizerName: event.organization.name,
     imageUrl: imgUrl,
-    tags: event.tags,
+    tags: tags,
     startDateLabel: startDateTimeLabels.dateLabel,
     startTimeLabel: startDateTimeLabels.timeLabel,
     endDateLabel: endDateTimeLabels?.dateLabel,
@@ -42,4 +49,3 @@ export default async function mapEventDtoToCardDto(event: EventDto): Promise<Eve
     description: event.description,
   };
 }
-
