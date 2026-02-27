@@ -8,14 +8,17 @@ export function parseZonedToUTC(input: string):{utcDate:Date, timeZone:string}{
     }
 }
 
-export function parseZonedToISO(input: string): {isoDate:string, timeString:string, timeZone:string}{
-    const dt = parseZonedDateTime(input)
-    return{
-        isoDate: dt.toDate().toISOString(),
-        timeString: dt.toDate().toLocaleTimeString([],{
-            hour: "2-digit",
-            minute: "2-digit"
-        }),
-        timeZone: dt.timeZone
-    }
+export function parseZonedToISO(
+  input: string,
+  locale: Intl.LocalesArgument = 'en-CA'
+): { isoDate: string; timeString: string; timeZone: string } {
+  const dt = parseZonedDateTime(input);
+  return {
+    isoDate: dt.toDate().toISOString(),
+    timeString: dt.toDate().toLocaleTimeString(locale, {
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+    timeZone: dt.timeZone,
+  };
 }

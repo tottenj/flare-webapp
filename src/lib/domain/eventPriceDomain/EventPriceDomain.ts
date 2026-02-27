@@ -18,12 +18,17 @@ export class EventPriceDomain {
       return new EventPriceDomain(type, null, null);
     }
     if (type === 'FIXED') {
-      if (!minRaw) throw EventErrors.MinPriceRequired();
+      if (minRaw === null || minRaw === undefined || minRaw === '')
+        throw EventErrors.MinPriceRequired();
       return new EventPriceDomain(type, Money.fromDollars(minRaw), null);
     }
     if (type === 'RANGE') {
-      if (!minRaw || minRaw === '') throw EventErrors.MinPriceRequired();
-      if (!maxRaw || maxRaw === '') throw EventErrors.MaxPriceRequired();
+      if (minRaw === null || minRaw === undefined || minRaw === '')
+        throw EventErrors.MinPriceRequired();
+
+      if (maxRaw === null || maxRaw === undefined || maxRaw === '')
+        throw EventErrors.MaxPriceRequired();
+
       const min = Money.fromDollars(minRaw);
       const max = Money.fromDollars(maxRaw);
       if (min.cents >= max.cents) throw EventErrors.InvalidPriceRange();
