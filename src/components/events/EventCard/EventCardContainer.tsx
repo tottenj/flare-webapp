@@ -1,11 +1,11 @@
 import EventCardPresentational, {
-  EventCardDto,
+  EventCardViewModel,
 } from '@/components/events/EventCard/EventCardPresentational';
 import { EventService } from '@/lib/services/eventService/eventService';
 import mapEventDtoToCardDto from '@/lib/types/dto/mapEventDtoToEventCard';
 
 export default async function EventCardContainer({ eventId }: { eventId: string }) {
-  let event: EventCardDto | null;
+  let event: EventCardViewModel | null;
   const eventDto = await EventService.getEventById(eventId);
   if (!eventDto) return null;
   event = await mapEventDtoToCardDto(eventDto);
