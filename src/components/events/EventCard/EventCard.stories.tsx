@@ -1,7 +1,5 @@
 import type { StoryObj, Meta } from '@storybook/react';
-import EventCardPresentational, {
-  EventCardDto,
-} from '@/components/events/EventCard/EventCardPresentational';
+import EventCardPresentational, { EventCardViewModel } from '@/components/events/EventCard/EventCardPresentational';
 
 export default {
   component: EventCardPresentational,
@@ -11,7 +9,7 @@ export default {
 
 type Story = StoryObj<typeof EventCardPresentational>;
 
-const sampleEvent: EventCardDto = {
+const sampleEvent: EventCardViewModel = {
   id: 'event1',
   title: 'Sample Event Title',
   organizerName: 'Sample Organizer',

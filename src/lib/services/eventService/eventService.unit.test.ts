@@ -1,18 +1,14 @@
 import { eventDal } from '@/lib/dal/eventDal/EventDal';
 import { imageAssetDal } from '@/lib/dal/imageAssetDal/ImageAssetDal';
 import { locationDal } from '@/lib/dal/locationDal/LocationDal';
-import { PRICE_TYPE } from '@/lib/types/PriceType';
-import { AgeRestriction, EventCategory } from '@prisma/client';
 import { expect } from '@jest/globals';
 import { EventService } from '@/lib/services/eventService/eventService';
 import ImageService from '@/lib/services/imageService/ImageService';
-import { tagDal } from '@/lib/dal/tagDal/TagDal';
 import { mapEventRowToDto } from '@/lib/types/dto/EventDto';
-import { buildEventRow } from '@/lib/utils/tests/factories/eventRowFactory';
+import { buildEventRow } from '../../../../__tests__/factories/dal/eventRow.builder';
 import tagService from '@/lib/services/tagService/tagService';
-import { CreateEvent } from '@/lib/schemas/event/createEventFormSchema';
-import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
-import { authOrgFactory } from '@/lib/utils/tests/factories/authOrgFactory';
+import { eventInputFactory } from '../../../../__tests__/factories/service/eventInput.factory';
+import { authOrgFactory } from '../../../../__tests__/factories/auth/authOrg.factory';
 
 jest.mock('@/lib/dal/imageAssetDal/ImageAssetDal', () => ({
   imageAssetDal: {
@@ -50,34 +46,6 @@ jest.mock('@/lib/services/imageService/ImageService', () => ({
 
 jest.mock('@/lib/types/dto/EventDto');
 
-function eventServiceCreateFactory(overrides?: Partial<CreateEvent>): CreateEvent {
-  const base: CreateEvent = {
-    eventName: 'Test Event',
-    eventDescription: 'This is a test event',
-    startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
-    status: 'PUBLISHED' as const,
-    ageRestriction: AgeRestriction.ALL_AGES,
-    image: {
-      storagePath: 'events/firebaseUid/image.jpg',
-      contentType: 'image/jpeg',
-      sizeBytes: 1024,
-      originalName: 'image.jpg',
-    },
-    category: EventCategory.SOCIAL,
-    priceType: PRICE_TYPE.Free,
-    tags: [],
-  };
-
-  return {
-    ...base,
-    ...overrides,
-    image: {
-      ...base.image,
-      ...overrides?.image,
-    },
-  };
-}
-
 describe('EventService.createEvent', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -89,7 +57,9 @@ describe('EventService.createEvent', () => {
 
   it('should create event with location', async () => {
     const authUser = authOrgFactory();
-    const input = eventServiceCreateFactory({"location":{placeId: "abc134", address:"address", lat:232, lng: 3232}});
+    const input = eventInputFactory({
+      location: { placeId: 'abc134', address: 'address', lat: 232, lng: 3232 },
+    });
 
     await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
     expect(eventDal.create).toHaveBeenCalledWith(
@@ -107,7 +77,7 @@ describe('EventService.createEvent', () => {
 
   it('should create event without location', async () => {
     const authUser = authOrgFactory();
-    const input = eventServiceCreateFactory({ location: undefined });
+    const input = eventInputFactory({ location: undefined });
     await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
     expect(eventDal.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -123,7 +93,7 @@ describe('EventService.createEvent', () => {
 
   it('adds x number of tags to db', async () => {
     const authUser = authOrgFactory();
-    const input = eventServiceCreateFactory({ tags: ['tagOne', 'tagTwo', 'tagThree'] });
+    const input = eventInputFactory({ tags: ['tagOne', 'tagTwo', 'tagThree'] });
     (tagService.createAndIncrementMany as jest.Mock).mockResolvedValueOnce(['id1', 'id2', 'id3']);
     await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
     expect(eventDal.create).toHaveBeenCalledWith(
@@ -139,16 +109,18 @@ describe('EventService.createEvent', () => {
   });
 
   it('deletes image if event creation fails', async () => {
-    const authUser = authOrgFactory();
-    const input = eventServiceCreateFactory();
+    const authUser = authOrgFactory({ firebaseUid: 'firebaseUid' });
+    const input = eventInputFactory({ image: { storagePath: 'events/firebaseUid/image.jpg' } });
     (eventDal.create as jest.Mock).mockRejectedValueOnce(new Error('DB error'));
     await expect(EventService.createEvent(authUser, input)).rejects.toThrow('DB error');
     expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('events/firebaseUid/image.jpg');
   });
 
   it('errors on unauthenticated storage path', async () => {
-    const authUser = authOrgFactory()
-    const input = eventServiceCreateFactory({image:{storagePath:"events/otherUser/randoId/stock.jpeg"}})
+    const authUser = authOrgFactory();
+    const input = eventInputFactory({
+      image: { storagePath: 'events/otherUser/randoId/stock.jpeg' },
+    });
 
     await expect(EventService.createEvent(authUser, input)).rejects.toThrow('AUTH_UNAUTHORIZED');
     expect(eventDal.create).not.toHaveBeenCalled();

@@ -1,23 +1,44 @@
-import { pendingOrg } from "../constants";
+import { pendingOrg } from '../constants';
 
-describe("General", () => {
-   beforeEach(() => {
-     cy.loginTestOrg();
-     cy.reload();
-     cy.visit('/dashboard');
-     cy.loginTestOrgClient();
-   });
-   
-  it("Successfully Loads Org Dashboard", () => {
-    cy.contains(pendingOrg.orgName).should("be.visible")
-    cy.contains(pendingOrg.email).should("be.visible")
-  })
-})
+describe('General', () => {
+  beforeEach(() => {
+    cy.loginTestOrg();
+    cy.reload();
+    cy.visit('/dashboard');
+    cy.loginTestOrgClient();
+  });
+
+  it('Successfully Loads Org Dashboard', () => {
+    cy.contains(pendingOrg.orgName).should('be.visible');
+    cy.contains(pendingOrg.email).should('be.visible');
+    cy.get('[data-cy="upcoming-container"]').should('exist').and('be.visible');
+    cy.get('[data-cy="my-events-container"]').should('exist').and('be.visible');
+    cy.contains('Next Upcoming Event').should('be.visible');
+    cy.contains('My Events').should('be.visible');
+  });
+
+  it('Successfully Loads Next Upcoming Event', () => {
+    cy.get('[data-cy="upcoming-container"]').within(() => {
+      cy.contains('Upcoming Event').should('be.visible');
+      cy.contains('Free').should('be.visible');
+      cy.contains('Mar').should('be.visible');
+      cy.contains('unverifiedOrg').should('be.visible');
+    });
+  });
+
+  it('Successfully loads upcoming event in my events list', () => {
+    cy.get('[data-cy="my-events-container"]').within(() => {
+      cy.contains('Upcoming Event').should('be.visible');
+      cy.contains('Mar').should('be.visible');
+      cy.contains('All Ages').should('be.visible');
+    });
+  });
+});
 
 describe('Profile Picture - Success Flow', () => {
   beforeEach(() => {
     cy.loginTestOrg();
-    cy.reload()
+    cy.reload();
     cy.visit('/dashboard');
     cy.loginTestOrgClient();
   });
@@ -45,26 +66,28 @@ describe('Profile Picture - Success Flow', () => {
   });
 });
 
-describe("Profile Picture - Unsuccessful Flow", () => {
+describe('Profile Picture - Unsuccessful Flow', () => {
   beforeEach(() => {
-    cy.clearStorage()
+    cy.clearStorage();
     cy.loginTestOrg();
-    cy.reload()
+    cy.reload();
     cy.visit('/dashboard');
     cy.loginTestOrgClient();
   });
 
-
-  it("fails on file too large", () => {
-    cy.get('[data-cy=profile-pic-input]').selectFile({
-      contents: Cypress.Buffer.alloc(10 * 1024 * 1024), // 10MB
-      fileName: 'big-image.jpg',
-      mimeType: 'image/jpeg',
-      lastModified: Date.now(),
-    }, {force:true});
+  it('fails on file too large', () => {
+    cy.get('[data-cy=profile-pic-input]').selectFile(
+      {
+        contents: Cypress.Buffer.alloc(10 * 1024 * 1024), // 10MB
+        fileName: 'big-image.jpg',
+        mimeType: 'image/jpeg',
+        lastModified: Date.now(),
+      },
+      { force: true }
+    );
 
     cy.contains('.Toastify__toast', 'Image must be under 5MB', {
       timeout: 10000,
     }).should('be.visible');
-  })
-})
+  });
+});

@@ -13,7 +13,7 @@ export default async function getPlaces(
   lat?: number,
   long?: number
 ) {
-  const placesLib = (await loader.importLibrary('places')) as google.maps.PlacesLibrary;
+  const placesLib = (await loader.importLibrary('places'))
   
   try {
     const autosug = placesLib.AutocompleteSuggestion;
@@ -22,7 +22,7 @@ export default async function getPlaces(
       locationBias: { center: { lat: lat || 43.5448, lng: long || -80.2482 }, radius: 50000 },
     });
     if (requestId !== newestRequestId) return [];
-    return response.suggestions.map((suggestion) => ({
+    return response.suggestions.map((suggestion:any) => ({
       label: suggestion.placePrediction?.text.text || '', // safely convert to string
       value: suggestion.placePrediction?.placeId || '', // fallback to empty string
     }));

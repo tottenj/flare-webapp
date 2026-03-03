@@ -3,9 +3,10 @@ import AccountService from '@/lib/services/accountService/AccountService';
 import { expect } from '@jest/globals';
 import { prisma } from '../../../prisma/prismaClient';
 import { AuthErrors } from '@/lib/errors/authError';
-import { resetTestDb } from '../../utils/restTestDb';
 import ImageService from '@/lib/services/imageService/ImageService';
 import { imageAssetDal } from '@/lib/dal/imageAssetDal/ImageAssetDal';
+import { createUserIntegration } from '../../factories/integration/user.factory';
+
 
 jest.mock('@/lib/services/imageService/ImageService', () => ({
   __esModule: true,
@@ -17,12 +18,13 @@ jest.mock('@/lib/services/imageService/ImageService', () => ({
 describe('AccountService.updateProfilePicture (integration)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    resetTestDb();
   });
 
   it('successfully uploads image data and links it to profile picture', async () => {
+    const fakeUser = await createUserIntegration();
+
     const imageData: ImageMetadata = {
-      storagePath: 'users/uid1/profile-pic/fixed-uuid',
+      storagePath: `users/${fakeUser.firebaseUid}/profile-pic/fixed-uuid`,
       contentType: 'jpg',
       sizeBytes: 2,
       originalName: 'original name',
@@ -31,13 +33,13 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     await AccountService.updateProfilePicture({
       imageData,
       authenticatedUser: {
-        userId: '1',
-        firebaseUid: 'uid1',
+        userId: fakeUser.id,
+        firebaseUid: fakeUser.firebaseUid,
       },
     });
 
     const user = await prisma.user.findUnique({
-      where: { id: '1' },
+      where: { id: fakeUser.id },
       include: {
         profilePic: {
           include: {
@@ -75,23 +77,24 @@ describe('AccountService.updateProfilePicture (integration)', () => {
 
   it('replaces existing profile picture for the user', async () => {
     (ImageService.deleteByStoragePath as jest.Mock).mockResolvedValue(undefined);
+    const fakeUser = await createUserIntegration();
 
     // First image
     await AccountService.updateProfilePicture({
       imageData: {
-        storagePath: 'users/uid1/profile-pic/fixed-uuid',
+        storagePath: `users/${fakeUser.firebaseUid}/profile-pic/fixed-uuid`,
         contentType: 'jpg',
         sizeBytes: 1,
         originalName: 'first.jpg',
       },
       authenticatedUser: {
-        userId: '1',
-        firebaseUid: 'uid1',
+        userId: fakeUser.id,
+        firebaseUid: fakeUser.firebaseUid,
       },
     });
 
     const oldImageId = await prisma.profilePic.findUnique({
-      where: { userId: '1' },
+      where: { userId: fakeUser.id },
       include: {
         imageAsset: true,
       },
@@ -101,19 +104,19 @@ describe('AccountService.updateProfilePicture (integration)', () => {
 
     await AccountService.updateProfilePicture({
       imageData: {
-        storagePath: 'users/uid1/profile-pic/fixed-uuid2',
+        storagePath: `users/${fakeUser.firebaseUid}/profile-pic/fixed-uuid2`,
         contentType: 'jpg',
         sizeBytes: 2,
         originalName: 'second.jpg',
       },
       authenticatedUser: {
-        userId: '1',
-        firebaseUid: 'uid1',
+        userId: fakeUser.id,
+        firebaseUid: fakeUser.firebaseUid,
       },
     });
 
     const pics = await prisma.profilePic.findUnique({
-      where: { userId: '1' },
+      where: { userId: fakeUser.id },
       include: {
         imageAsset: true,
       },
@@ -126,9 +129,11 @@ describe('AccountService.updateProfilePicture (integration)', () => {
     expect(deletedOldImage).toBeNull();
     expect(pics).toBeTruthy();
     if (!pics) throw new Error('Expcted picture');
-    expect(pics.imageAsset.storagePath).toBe('users/uid1/profile-pic/fixed-uuid2');
+    expect(pics.imageAsset.storagePath).toBe(
+      `users/${fakeUser.firebaseUid}/profile-pic/fixed-uuid2`
+    );
     expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith(
-      'users/uid1/profile-pic/fixed-uuid'
+      `users/${fakeUser.firebaseUid}/profile-pic/fixed-uuid`
     );
   });
 

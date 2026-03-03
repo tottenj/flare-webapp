@@ -21,7 +21,7 @@ export default async function OrgDashboardShell() {
         email={ctx.user.email}
         status={ctx.profile.orgProfile!.status}
       />
-      <div className="row-span-2 h-full w-full rounded-2xl bg-white p-8 shadow-2xl">
+      <div data-cy="my-events-container" className="row-span-2 h-full w-full rounded-2xl bg-white p-8 shadow-2xl">
         <div className="flex items-center justify-between pb-4">
           <h2>My Events</h2>
           <CreateEventModalWrapper orgName={ctx.profile.orgProfile.orgName} />
@@ -30,7 +30,7 @@ export default async function OrgDashboardShell() {
           <EventListContainerOrg actor={actor} />
         </Suspense>
       </div>
-      <div className="flex h-full w-full flex-col rounded-2xl bg-white pt-4 pb-4">
+      <div data-cy="upcoming-container" className="flex h-full w-full flex-col rounded-2xl bg-white pt-4 pb-4">
         <h2 className="pb-8 text-center">Next Upcoming Event</h2>
         <Suspense>
           <EventCardOrgRecentContainer
