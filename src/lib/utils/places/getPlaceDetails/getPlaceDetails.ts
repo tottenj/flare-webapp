@@ -6,7 +6,7 @@ const loader = new Loader({
 });
 
 export async function getPlaceDetails(placeId: string) {
-  const placesLib = (await loader.importLibrary('places')) as google.maps.PlacesLibrary;
+  const placesLib = (await loader.importLibrary('places'))
 
   const place = new placesLib.Place({ id: placeId});
   

@@ -1,10 +1,13 @@
 import ImageService from '@/lib/services/imageService/ImageService';
 import { resetTestDb } from '../../utils/restTestDb';
-import { AgeRestriction, EventCategory } from '@prisma/client';
-import { PRICE_TYPE } from '@/lib/types/PriceType';
 import { EventService } from '@/lib/services/eventService/eventService';
 import { expect } from '@jest/globals';
 import { imageAssetDal } from '@/lib/dal/imageAssetDal/ImageAssetDal';
+import { eventRowInclude } from '@/lib/types/dto/EventDto';
+import { authOrgFactory } from '../../factories/auth/authOrg.factory';
+import { eventInputFactory } from '../../factories/service/eventInput.factory';
+import { createOrgIntegration } from '../../factories/integration/org.factory';
+import { createAuthOrgIntegration } from '../../factories/integration/helpers/createAuthOrgIntegration';
 
 jest.mock('@/lib/services/imageService/ImageService', () => ({
   __esModule: true,
@@ -17,84 +20,57 @@ describe('Create Event Integration Tests', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     (ImageService.deleteByStoragePath as jest.Mock).mockResolvedValue(undefined);
-    await resetTestDb();
   });
 
   it('successfully creates event with valid data', async () => {
-    const authUser = {
-      orgId: 'org1',
-      firebaseUid: 'uid3',
-      userId: '3',
-    };
-    const input = {
-      eventName: 'Test Event',
-      eventDescription: 'This is a test event',
-      startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
-      status: 'PUBLISHED' as 'DRAFT' | 'PUBLISHED',
-      ageRestriction: AgeRestriction.ALL_AGES,
-      location: {
-        placeId: 'placeId',
-        address: '123 Test St',
-        lat: 23.456,
-        lng: 45.678,
-      },
-      image: {
-        storagePath: 'events/uid3/image.jpg',
-        contentType: 'image/jpeg',
-        sizeBytes: 1024,
-        originalName: 'image.jpg',
-      },
-      category: EventCategory.SOCIAL,
-      priceType: PRICE_TYPE.Free,
-      tags: [],
-    };
-
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const input = eventInputFactory({}, authUser.firebaseUid);
     await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
     const event = await prisma.flareEvent.findFirst({
-      where: { organizationId: 'org1', title: 'Test Event' },
-      include: {
-        image: true,
-        location: true,
-      },
+      where: { organizationId: fakeOrg.org.id, title: input.eventName },
+      include: eventRowInclude,
     });
     expect(event).toBeTruthy();
     expect(event?.title).toBe(input.eventName);
-    expect(event?.location?.address).toBe(input.location.address);
+    expect(event?.location?.address).toBe(input.location?.address);
     expect(event?.image?.storagePath).toBe(input.image.storagePath);
+    expect(event?.tags.length).toBe(0);
     expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
   });
 
-  it('successfully creates event without location', async () => {
-    const authUser = {
-      orgId: 'org1',
-      firebaseUid: 'uid3',
-      userId: '3',
-    };
-    const input = {
-      eventName: 'Test Event No Location',
-      eventDescription: 'This is a test event without location',
-      startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
-      status: 'PUBLISHED' as 'DRAFT' | 'PUBLISHED',
-      ageRestriction: AgeRestriction.ALL_AGES,
-      image: {
-        storagePath: 'events/uid3/image2.jpg',
-        contentType: 'image/jpeg',
-        sizeBytes: 1024,
-        originalName: 'image2.jpg',
+  it('successfully creates event with tags and adds tags to relation', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const input = eventInputFactory(
+      {
+        tags: ['tag1', 'tag2', 'tag3'],
+        eventName: 'event with tags',
       },
-      category: EventCategory.SOCIAL,
-      priceType: PRICE_TYPE.Free,
-      tags: [],
-    };
-
+      authUser.firebaseUid
+    );
     await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
-
     const event = await prisma.flareEvent.findFirst({
-      where: { organizationId: 'org1', title: 'Test Event No Location' },
-      include: {
-        image: true,
-        location: true,
+      where: { organizationId: fakeOrg.org.id, title: input.eventName },
+      include: eventRowInclude,
+    });
+    expect(event).toBeTruthy();
+    expect(event?.title).toBe(input.eventName);
+    expect(event?.tags.length).toBe(3);
+    expect(event?.tags.map((t) => t.tag.label).sort()).toEqual(['tag1', 'tag2', 'tag3']);
+  });
+
+  it('successfully creates event without location', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const input = eventInputFactory(
+      {
+        location: undefined,
+        eventName: 'Test Event No Location',
       },
+      authUser.firebaseUid
+    );
+    await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
+    const event = await prisma.flareEvent.findFirst({
+      where: { organizationId: fakeOrg.org.id, title: input.eventName },
+      include: eventRowInclude,
     });
     expect(event).toBeTruthy();
     expect(event?.title).toBe(input.eventName);
@@ -103,79 +79,95 @@ describe('Create Event Integration Tests', () => {
     expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
   });
 
-  it('throws error and deletes image if event creation fails', async () => {
-    const authUser = {
-      orgId: 'org1',
-      firebaseUid: 'uid3',
-      userId: '3',
-    };
-    const input = {
-      eventName: 'Test Event Error',
-      eventDescription: 'This event will fail to create',
-      startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
-      status: 'PUBLISHED' as 'DRAFT' | 'PUBLISHED',
-      ageRestriction: AgeRestriction.ALL_AGES,
-      location: {
-        placeId: 'placeId',
-        address: '123 Test St',
-        lat: 23.456,
-        lng: 45.678,
+  it('correctly stores and formats range money', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const input = eventInputFactory(
+      {
+        priceType: 'RANGE',
+        minPrice: 10,
+        maxPrice: 20,
+        eventName: 'range price type',
       },
-      image: {
-        storagePath: 'events/uid3/image-error.jpg',
-        contentType: 'image/jpeg',
-        sizeBytes: 1024,
-        originalName: 'image-error.jpg',
-      },
-      category: EventCategory.SOCIAL,
-      priceType: PRICE_TYPE.Free,
-      tags: [],
-    };
+      authUser.firebaseUid
+    );
 
+    await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
+    const event = await prisma.flareEvent.findFirst({
+      where: { organizationId: fakeOrg.org.id, title: input.eventName },
+      include: eventRowInclude,
+    });
+    expect(event).toBeTruthy();
+    expect(event?.title).toBe(input.eventName);
+    expect(event?.pricingType).toBe(input.priceType);
+    expect(event?.minPriceCents).toBe(1000);
+    expect(event?.maxPriceCents).toBe(2000);
+  });
+
+  it('correctly stores and formats fixed money', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const input = eventInputFactory(
+      {
+        priceType: 'FIXED',
+        minPrice: 10,
+        eventName: 'fixed price type',
+      },
+      authUser.firebaseUid
+    );
+
+    await expect(EventService.createEvent(authUser, input)).resolves.not.toThrow();
+    const event = await prisma.flareEvent.findFirst({
+      where: { organizationId: fakeOrg.org.id, title: input.eventName },
+      include: eventRowInclude,
+    });
+    expect(event).toBeTruthy();
+    expect(event?.title).toBe(input.eventName);
+    expect(event?.pricingType).toBe(input.priceType);
+    expect(event?.minPriceCents).toBe(1000);
+    expect(event?.maxPriceCents).toBeNull();
+  });
+
+  it('rejects invalid range price', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const input = eventInputFactory(
+      {
+        priceType: 'RANGE',
+        minPrice: 20,
+        maxPrice: 10,
+      },
+      authUser.firebaseUid
+    );
+
+    await expect(EventService.createEvent(authUser, input)).rejects.toThrow();
+  });
+
+  it('throws error and deletes image if event creation fails', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const input = eventInputFactory(
+      {
+        eventName: 'Test Event Error',
+      },
+      authUser.firebaseUid
+    );
     // Mock the DAL to throw an error when trying to create the event
     jest.spyOn(imageAssetDal, 'create').mockRejectedValueOnce(new Error('DB error'));
-
     await expect(EventService.createEvent(authUser, input)).rejects.toThrow('DB error');
-    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('events/uid3/image-error.jpg');
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith(input.image.storagePath);
     const event = await prisma.flareEvent.findFirst({
-      where: { organizationId: 'org1', title: 'Test Event Error' },
+      where: { organizationId: fakeOrg.org.id, title: input.eventName },
     });
     expect(event).toBeNull();
   });
 
   it('throws error if image storage path is invalid', async () => {
-    const authUser = {
-      orgId: 'org1',
-      firebaseUid: 'uid3',
-      userId: '3',
-    };
-    const input = {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const input = eventInputFactory({
+      image: { storagePath: 'invalid-path/image.jpg' },
       eventName: 'Test Event Invalid Image Path',
-      eventDescription: 'This event has an invalid image path',
-      startDateTime: '2026-02-15T19:00:00-05:00[America/Toronto]',
-      status: 'PUBLISHED' as 'DRAFT' | 'PUBLISHED',
-      ageRestriction: AgeRestriction.ALL_AGES,
-      location: {
-        placeId: 'placeId',
-        address: '123 Test St',
-        lat: 23.456,
-        lng: 45.678,
-      },
-      image: {
-        storagePath: 'invalid-path/image.jpg',
-        contentType: 'image/jpeg',
-        sizeBytes: 1024,
-        originalName: 'image.jpg',
-      },
-      category: EventCategory.SOCIAL,
-      priceType: PRICE_TYPE.Free,
-      tags: [],
-    };
-
+    });
     await expect(EventService.createEvent(authUser, input)).rejects.toThrow('AUTH_UNAUTHORIZED');
     expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
     const event = await prisma.flareEvent.findFirst({
-      where: { organizationId: 'org1', title: 'Test Event Invalid Image Path' },
+      where: { organizationId: fakeOrg.org.id, title: input.eventName },
     });
     expect(event).toBeNull();
   });

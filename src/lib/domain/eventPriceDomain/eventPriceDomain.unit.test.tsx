@@ -47,4 +47,25 @@ describe('EveentPriceDomain.fromInput', () => {
       EventErrors.InvalidPriceRange()
     );
   });
+
+  it('allows zero price for FIXED', () => {
+    const price = EventPriceDomain.fromInput('FIXED', 0);
+    expect(price.min?.cents).toBe(0);
+  });
+
+  it('throws when min is empty string for FIXED', () => {
+    expect(() => EventPriceDomain.fromInput('FIXED', '')).toThrow(EventErrors.MinPriceRequired());
+  });
+
+  it('throws when max is empty string for RANGE', () => {
+    expect(() => EventPriceDomain.fromInput('RANGE', 5, '')).toThrow(
+      EventErrors.MaxPriceRequired()
+    );
+  });
+
+  it('covers fallback branch for unknown type', () => {
+    const price = EventPriceDomain.fromInput('UNKNOWN' as any);
+    expect(price.min).toBeNull();
+    expect(price.max).toBeNull();
+  });
 });

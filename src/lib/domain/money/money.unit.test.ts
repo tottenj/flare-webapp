@@ -64,6 +64,21 @@ describe('Money.fromDollars', () => {
     expect(() => Money.fromDollars('-5')).toThrow(MoneyError);
     expect(() => Money.fromDollars(-5)).toThrow('Amount cannot be negative');
   });
+
+  it('creates from integer number dollars', () => {
+    const money = Money.fromDollars(20);
+    expect(money.cents).toBe(2000);
+  });
+
+  it('creates from integer string dollars', () => {
+    const money = Money.fromDollars('20');
+    expect(money.cents).toBe(2000);
+  });
+
+  it('trims whitespace in string input', () => {
+    const money = Money.fromDollars(' 20.50 ');
+    expect(money.cents).toBe(2050);
+  });
 });
 
 describe('Money formatting + helpers', () => {

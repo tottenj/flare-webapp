@@ -1,4 +1,4 @@
-import { EventCardDto } from "@/components/events/EventCard/EventCardPresentational";
+import { EventCardViewModel } from "@/components/events/EventCard/EventCardPresentational";
 import { CreateEventPreviewForm } from "@/lib/schemas/event/createEventPreviewFormSchema";
 import formatAgeRange from "@/lib/utils/ui/formatAgeRange/formatAgeRange";
 import { formatDateTime } from "@/lib/utils/ui/formatDateTime/formatDateTime";
@@ -8,7 +8,7 @@ export default function mapEventPreviewFormToEventCardDto(
   event: CreateEventPreviewForm,
   orgName?: string,
   imgUrl?: string | null
-): EventCardDto {
+): EventCardViewModel{
   const startLabels = formatDateTime(event.startDateTime);
 
   const endLabels = event.endDateTime ? formatDateTime(event.endDateTime) : undefined;
