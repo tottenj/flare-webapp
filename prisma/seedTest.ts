@@ -1,23 +1,23 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-function futureDate(days) {
-  const d = new Date();
-  d.setDate(d.getDate() + days);
-  return d;
-}
+export async function seedTest(prisma: PrismaClient) {
+  function futureDate(days: number) {
+    const d = new Date();
+    d.setDate(d.getDate() + days);
+    return d;
+  }
 
-function pastDate(days) {
-  const d = new Date();
-  d.setDate(d.getDate() - days);
-  return d;
-}
+  function pastDate(days: number) {
+    const d = new Date();
+    d.setDate(d.getDate() - days);
+    return d;
+  }
 
-async function main() {
   await prisma.$executeRawUnsafe(`CREATE EXTENSION IF NOT EXISTS postgis;`);
 
   // --- Seed Location ---
-  const locationRows = await prisma.$queryRaw(
+  const locationRows: any = await prisma.$queryRaw(
     Prisma.sql`
     INSERT INTO "Location" ("id", "placeId", "point")
     VALUES (
@@ -130,7 +130,7 @@ async function main() {
     update: {},
     create: {
       id: 'eventUpcoming',
-      organizationId: unverifiedOrgProfileId.id,
+      organizationId: unverifiedOrgProfileId!.id,
       status: 'PUBLISHED',
       title: 'Upcoming Event',
       description: 'Future published event',
@@ -148,7 +148,7 @@ async function main() {
     update: {},
     create: {
       id: 'eventPast',
-      organizationId: unverifiedOrgProfileId.id,
+      organizationId: unverifiedOrgProfileId!.id,
       status: 'PUBLISHED',
       title: 'Past Event',
       description: 'Past published event',
@@ -166,7 +166,7 @@ async function main() {
     update: {},
     create: {
       id: 'eventDraft',
-      organizationId: unverifiedOrgProfileId.id,
+      organizationId: unverifiedOrgProfileId!.id,
       status: 'DRAFT',
       title: 'Draft Event',
       description: 'Draft future event',
@@ -184,7 +184,7 @@ async function main() {
     update: {},
     create: {
       id: 'eventPublished',
-      organizationId: unverifiedOrgProfileId.id,
+      organizationId: unverifiedOrgProfileId!.id,
       status: 'PUBLISHED',
       title: 'Another Published Event',
       description: 'Another future published event',
@@ -197,10 +197,3 @@ async function main() {
   });
 }
 
-main()
-  .catch((e) => {
-    console.error('❌ Error seeding database:', e);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
