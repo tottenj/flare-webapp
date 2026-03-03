@@ -6,7 +6,7 @@ import orgSignUpInputFactory from '../../factories/service/orgSignUpInput.factor
 import { createOrgIntegration } from '../../factories/integration/org.factory';
 import AuthGateway from '@/lib/auth/authGateway';
 
-describe.skip('signUpOrgUseCase (integration)', () => {
+describe('signUpOrgUseCase (integration)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

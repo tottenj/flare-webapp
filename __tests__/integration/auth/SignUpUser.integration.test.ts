@@ -5,6 +5,7 @@ import { expect } from '@jest/globals';
 import { AuthErrors } from '@/lib/errors/authError';
 import { RequiresCleanupError } from '@/lib/errors/CleanupError';
 import { userDal } from '@/lib/dal/userDal/UserDal';
+import { createUserIntegration } from '../../factories/integration/user.factory';
 
 const mockVerify = AuthGateway.verifyIdToken as jest.Mock;
 
@@ -37,6 +38,9 @@ describe('AuthService.signUp (integration)', () => {
       email: 'user@gmail.com',
       emailVerified: false,
     });
+    await createUserIntegration({
+      email: "user@gmail.com",
+    })
     await expect(AuthService.signUp({ idToken: 'fakeToken' })).rejects.toMatchObject({
       code: AuthErrors.UserAlreadyExists().code,
     });
