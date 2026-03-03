@@ -1,6 +1,18 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+function futureDate(days) {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+function pastDate(days) {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return d;
+}
+
 async function main() {
   await prisma.$executeRawUnsafe(`CREATE EXTENSION IF NOT EXISTS postgis;`);
 
@@ -110,27 +122,77 @@ async function main() {
   });
 
   //Events
-  const eventOne = await prisma.flareEvent.upsert({
-    where: { id: 'eventOne' },
+  // --- Events ---
+
+  // 1️⃣ Upcoming Published Event
+  await prisma.flareEvent.upsert({
+    where: { id: 'eventUpcoming' },
     update: {},
     create: {
-      id: 'eventOne',
+      id: 'eventUpcoming',
       organizationId: unverifiedOrgProfileId.id,
       status: 'PUBLISHED',
-      title: 'Event One',
-      description: 'Event One Description',
+      title: 'Upcoming Event',
+      description: 'Future published event',
       imageId: stockEvent.id,
-      startsAtUTC: new Date(),
+      startsAtUTC: futureDate(5),
       timezone: 'America/Toronto',
       locationId: locationId,
       pricingType: 'FREE',
-      tags: {
-        create: [
-          { tag: { connect: { id: tag1.id } } },
-          { tag: { connect: { id: tag2.id } } },
-          { tag: { connect: { id: tag3.id } } },
-        ],
-      },
+    },
+  });
+
+  // 2️⃣ Past Published Event
+  await prisma.flareEvent.upsert({
+    where: { id: 'eventPast' },
+    update: {},
+    create: {
+      id: 'eventPast',
+      organizationId: unverifiedOrgProfileId.id,
+      status: 'PUBLISHED',
+      title: 'Past Event',
+      description: 'Past published event',
+      imageId: stockEvent.id,
+      startsAtUTC: pastDate(5),
+      timezone: 'America/Toronto',
+      locationId: locationId,
+      pricingType: 'FREE',
+    },
+  });
+
+  // 3️⃣ Draft Event (future date but not visible)
+  await prisma.flareEvent.upsert({
+    where: { id: 'eventDraft' },
+    update: {},
+    create: {
+      id: 'eventDraft',
+      organizationId: unverifiedOrgProfileId.id,
+      status: 'DRAFT',
+      title: 'Draft Event',
+      description: 'Draft future event',
+      imageId: stockEvent.id,
+      startsAtUTC: futureDate(10),
+      timezone: 'America/Toronto',
+      locationId: locationId,
+      pricingType: 'FREE',
+    },
+  });
+
+  // 4️⃣ Another Published Event (for list sorting tests)
+  await prisma.flareEvent.upsert({
+    where: { id: 'eventPublished' },
+    update: {},
+    create: {
+      id: 'eventPublished',
+      organizationId: unverifiedOrgProfileId.id,
+      status: 'PUBLISHED',
+      title: 'Another Published Event',
+      description: 'Another future published event',
+      imageId: stockEvent.id,
+      startsAtUTC: futureDate(15),
+      timezone: 'America/Toronto',
+      locationId: locationId,
+      pricingType: 'FREE',
     },
   });
 }
