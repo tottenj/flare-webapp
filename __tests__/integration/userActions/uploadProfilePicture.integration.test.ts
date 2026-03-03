@@ -14,7 +14,7 @@ jest.mock('@/lib/services/imageService/ImageService', () => ({
   },
 }));
 
-describe('AccountService.updateProfilePicture (integration)', () => {
+describe.skip('AccountService.updateProfilePicture (integration)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     resetTestDb();

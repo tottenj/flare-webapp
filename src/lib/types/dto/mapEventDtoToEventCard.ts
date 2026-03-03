@@ -1,12 +1,12 @@
 'use server';
-import { EventCardDto } from '@/components/events/EventCard/EventCardPresentational';
+import { EventCardViewModel } from '@/components/events/EventCard/EventCardPresentational';
 import ImageService from '@/lib/services/imageService/ImageService';
 import { EventDto } from '@/lib/types/dto/EventDto';
 import formatAgeRange from '@/lib/utils/ui/formatAgeRange/formatAgeRange';
 import { EventDateTimeLabels, formatDateTime } from '@/lib/utils/ui/formatDateTime/formatDateTime';
 import formatEventPrice from '@/lib/utils/ui/formatEventPrice/formatEventPrice';
 
-export default async function mapEventDtoToCardDto(event: EventDto): Promise<EventCardDto> {
+export default async function mapEventDtoToCardViewModel(event: EventDto): Promise<EventCardViewModel> {
   let imgUrl: string | null = null;
   if (event.imagePath) {
     try {

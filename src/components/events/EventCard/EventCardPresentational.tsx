@@ -11,10 +11,9 @@ import {
   faLocationArrow,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import { Chip } from '@heroui/react';
 import Image from 'next/image';
 
-export type EventCardDto = {
+export type EventCardViewModel = {
   id?: string;
   title: string;
   organizerName: string;
@@ -37,7 +36,7 @@ export type EventCardDto = {
 };
 const isDev = process.env.NODE_ENV === 'development';
 
-export default function EventCardPresentational({ event }: { event: EventCardDto }) {
+export default function EventCardPresentational({ event }: { event: EventCardViewModel }) {
   const {
     title,
     organizerName,
