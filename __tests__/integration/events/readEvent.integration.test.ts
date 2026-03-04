@@ -3,6 +3,7 @@ import { createEventIntegration } from '../../factories/integration/event.factor
 import { createOrgIntegration } from '../../factories/integration/org.factory';
 import { expect } from '@jest/globals';
 import { authOrgFactory } from '../../factories/auth/authOrg.factory';
+import { createAuthOrgIntegration } from '../../factories/integration/helpers/createAuthOrgIntegration';
 
 describe('EventService.getOrgUpcomingEvent (integration)', () => {
   it('returns upcoming event when org is verified', async () => {
@@ -93,5 +94,81 @@ describe('EventService.getOrgUpcomingEvent (integration)', () => {
     });
     const result = await EventService.getOrgUpcomingEvent(org.id);
     expect(result?.id).toBe(sooner.id);
+  });
+});
+
+describe('EventService.getEventById', () => {
+  it('returns published event for public viewer when org is verified', async () => {
+    const org = await createOrgIntegration();
+    const event = await createEventIntegration({
+      organizationId: org.org.id,
+    });
+    const res = await EventService.getEventById(event.id);
+    expect(res).not.toBeNull();
+    expect(res?.id).toBe(event.id);
+    expect(res?.organization.name).toBe(org.org.orgName);
+  });
+
+  it('returns draft event to owner', async () => {
+    const org = await createAuthOrgIntegration();
+    const event = await createEventIntegration({
+      organizationId: org.authUser.orgId,
+    });
+    const res = await EventService.getEventById(event.id, org.authUser);
+    expect(res).not.toBeNull();
+    expect(res?.id).toBe(event.id);
+    expect(res?.organization.name).toBe(org.fakeOrg.org.orgName);
+  });
+
+  it('Returns null if org is not verified', async () => {
+    const org = await createOrgIntegration({
+      org: {
+        status: 'PENDING',
+      },
+    });
+    const event = await createEventIntegration({
+      organizationId: org.org.id,
+    });
+
+    const res = await EventService.getEventById(event.id);
+    expect(res).toBeNull();
+  });
+
+  it('Returns null if event is not published', async () => {
+    const org = await createAuthOrgIntegration();
+    const event = await createEventIntegration({
+      organizationId: org.authUser.orgId,
+      overrides: {
+        status: 'DRAFT',
+      },
+    });
+    expect(await EventService.getEventById(event.id)).toBeNull();
+  });
+
+  it('returns null when non-owner tries to view draft event', async () => {
+    const org = await createAuthOrgIntegration();
+    const org2 = await createAuthOrgIntegration();
+    const event = await createEventIntegration({
+      organizationId: org.authUser.orgId,
+      overrides: {
+        status: 'DRAFT',
+      },
+    });
+
+    expect(await EventService.getEventById(event.id, org2.authUser)).toBeNull();
+  });
+
+  it('Returns null if event is published but org is not verified', async () => {
+    const org = await createOrgIntegration({
+      org: { status: 'PENDING' },
+    });
+
+    const event = await createEventIntegration({
+      organizationId: org.org.id,
+    });
+
+    const res = await EventService.getEventById(event.id);
+
+    expect(res).toBeNull();
   });
 });
