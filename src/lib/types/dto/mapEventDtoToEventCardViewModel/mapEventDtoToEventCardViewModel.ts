@@ -6,7 +6,7 @@ import formatAgeRange from '@/lib/utils/ui/formatAgeRange/formatAgeRange';
 import { EventDateTimeLabels, formatDateTime } from '@/lib/utils/ui/formatDateTime/formatDateTime';
 import formatEventPrice from '@/lib/utils/ui/formatEventPrice/formatEventPrice';
 
-export default async function mapEventDtoToCardViewModel(event: EventDto): Promise<EventCardViewModel> {
+export default async function mapEventDtoToEventCardViewModel(event: EventDto): Promise<EventCardViewModel> {
   let imgUrl: string | null = null;
   if (event.imagePath) {
     try {

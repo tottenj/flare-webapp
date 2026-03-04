@@ -9,7 +9,6 @@ export type EventDateTimeLabels = {
 export function formatDateTime(input: string): EventDateTimeLabels {
   if (input.includes('[')) {
     const zoned = parseZonedDateTime(input);
-
     return {
       dateLabel: zoned.toDate().toLocaleDateString(undefined, {
         weekday: 'short',
