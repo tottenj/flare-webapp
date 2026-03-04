@@ -25,9 +25,9 @@ export default function formatEventPrice(priceFields: PriceFields): string {
         return Money.fromCents(minPrice).format();
 
       case 'RANGE':
-        if (minPrice == null || !maxPrice) return 'Price TBD';
-        const min =  Money.fromCents(minPrice);
-        const max =  Money.fromCents(maxPrice);
+        if (minPrice == null || maxPrice == null) return 'Price TBD';
+        const min = Money.fromCents(minPrice);
+        const max = Money.fromCents(maxPrice);
         return `${min.format()} - ${max.format()}`;
 
       default:

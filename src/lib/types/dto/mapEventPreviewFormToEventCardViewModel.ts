@@ -4,15 +4,13 @@ import formatAgeRange from "@/lib/utils/ui/formatAgeRange/formatAgeRange";
 import { formatDateTime } from "@/lib/utils/ui/formatDateTime/formatDateTime";
 import formatEventPrice from "@/lib/utils/ui/formatEventPrice/formatEventPrice";
 
-export default function mapEventPreviewFormToEventCardDto(
+export default function mapEventPreviewFormToEventCardViewModel(
   event: CreateEventPreviewForm,
   orgName?: string,
   imgUrl?: string | null
 ): EventCardViewModel{
   const startLabels = formatDateTime(event.startDateTime);
-
   const endLabels = event.endDateTime ? formatDateTime(event.endDateTime) : undefined;
-
   return {
     title: event.eventName,
     organizerName: orgName ?? 'Your Organization',
