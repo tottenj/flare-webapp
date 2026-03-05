@@ -93,14 +93,6 @@ body {
   font-family: var(--font-pt_sans);
 }
 
-input {
-  outline: none !important;
-}
-
-input:focus {
-  outline: none;
-}
-
 label {
   position: relative;
 }
