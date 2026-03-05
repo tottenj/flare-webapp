@@ -4,6 +4,8 @@ import { createOrgIntegration } from '../../factories/integration/org.factory';
 import { expect } from '@jest/globals';
 import { authOrgFactory } from '../../factories/auth/authOrg.factory';
 import { createAuthOrgIntegration } from '../../factories/integration/helpers/createAuthOrgIntegration';
+import { EventStatus } from '@prisma/client';
+import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
 
 describe('EventService.getOrgUpcomingEvent (integration)', () => {
   it('returns upcoming event when org is verified', async () => {
@@ -170,5 +172,62 @@ describe('EventService.getEventById', () => {
     const res = await EventService.getEventById(event.id);
 
     expect(res).toBeNull();
+  });
+});
+
+describe('EventService.listEventsOrg (integration)', () => {
+  it('Fetches orgs events', async () => {
+    const org = await createAuthOrgIntegration();
+    const { orgId } = org.authUser;
+    await createEventIntegration({ organizationId: orgId });
+    await createEventIntegration({ organizationId: orgId });
+    const res = await EventService.listEventsOrg(org.authUser);
+    expect(res.length).toBe(2);
+  });
+
+  it('Filters events by status', async () => {
+    const org = await createAuthOrgIntegration();
+    const { orgId } = org.authUser;
+
+    const tests: EventStatus[] = ['DRAFT', 'DRAFT', 'PUBLISHED'];
+    const filters: OrgEventFilter = { status: 'DRAFT' };
+
+    const expectedIds: string[] = [];
+
+    await Promise.all(
+      tests.map(async (stat) => {
+        const event = await createEventIntegration({
+          organizationId: orgId,
+          overrides: { status: stat },
+        });
+
+        if (stat === 'DRAFT') {
+          expectedIds.push(event.id);
+        }
+      })
+    );
+    const res = await EventService.listEventsOrg(org.authUser, filters);
+    expect(res.length).toBe(expectedIds.length);
+    const ids = res.map((e) => e.id);
+    expect(ids).toEqual(expect.arrayContaining(expectedIds));
+  });
+
+  it('returns events sorted by start date', async () => {
+    const org = await createAuthOrgIntegration();
+    const early = await createEventIntegration({
+      organizationId: org.authUser.orgId,
+      overrides: {
+        startsAtUTC: new Date('2026-01-01'),
+      },
+    });
+    const late = await createEventIntegration({
+      organizationId: org.authUser.orgId,
+      overrides: {
+        startsAtUTC: new Date('2026-02-01'),
+      },
+    });
+    const events = await EventService.listEventsOrg(org.authUser);
+    expect(events[0].id).toBe(early.id);
+    expect(events[1].id).toBe(late.id);
   });
 });

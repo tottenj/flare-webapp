@@ -25,14 +25,6 @@ describe('General', () => {
       cy.contains('unverifiedOrg').should('be.visible');
     });
   });
-
-  it('Successfully loads upcoming event in my events list', () => {
-    cy.get('[data-cy="my-events-container"]').within(() => {
-      cy.contains('Upcoming Event').should('be.visible');
-      cy.contains('Mar').should('be.visible');
-      cy.contains('All Ages').should('be.visible');
-    });
-  });
 });
 
 describe('Profile Picture - Success Flow', () => {
@@ -89,5 +81,54 @@ describe('Profile Picture - Unsuccessful Flow', () => {
     cy.contains('.Toastify__toast', 'Image must be under 5MB', {
       timeout: 10000,
     }).should('be.visible');
+  });
+});
+
+describe('Events List', () => {
+  beforeEach(() => {
+    cy.loginTestOrg();
+    cy.reload();
+    cy.visit('/dashboard');
+    cy.loginTestOrgClient();
+  });
+
+  it('Successfully loads published event in my events list on default', () => {
+    cy.get('[data-cy="my-events-container"]').within(() => {
+      cy.contains('Another Published Event').should('be.visible');
+      cy.contains('Mar').should('be.visible');
+      cy.contains('All Ages').should('be.visible');
+    });
+  });
+
+  it('Successfully loads published events in my events list when clicked', () => {
+    cy.get('[data-cy="tab-published"]').click();
+
+    cy.get('[data-cy="my-events-container"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Another Published Event').should('be.visible');
+        cy.contains('Mar').should('be.visible');
+        cy.contains('All Ages').should('be.visible');
+        cy.contains('Draft Event').should('not.exist');
+      });
+  });
+
+  it('Successfully loads draft events in my events list', () => {
+    cy.get('[data-cy="tab-draft"]').click();
+    cy.get('[data-cy="my-events-container"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Mar').should('be.visible');
+        cy.contains('All Ages').should('be.visible');
+        cy.contains('Draft Event').should('be.visible');
+        cy.contains('Another Published Event').should('not.exist');
+      });
+  });
+
+  it('Loads draft events from URL filter', () => {
+    cy.visit('/dashboard?status=draft');
+    cy.get('[data-cy="my-events-container"]').within(() => {
+      cy.contains('Draft Event').should('be.visible');
+    });
   });
 });
