@@ -1,5 +1,5 @@
 import { DateRangePicker, DateRangePickerProps, DateValue, RangeValue } from '@heroui/react';
-import { CalendarDateTime, now, parseZonedDateTime, ZonedDateTime } from '@internationalized/date';
+import { now, ZonedDateTime } from '@internationalized/date';
 
 interface HeroDateRangeProps extends DateRangePickerProps {}
 export default function HeroDateRangeInput(props: HeroDateRangeProps) {
