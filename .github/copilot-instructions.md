@@ -55,8 +55,9 @@
 
 ## Data Access
 
-- All database access must go through `src/lib/dal/`.
-- Services should never call Prisma directly.
+- All database queries must be implemented in DAL modules under src/lib/dal/.
+- Services may import Prisma only to coordinate transactions.
+- DAL methods should accept an optional Prisma transaction client when used inside a service-level transaction.
 
 ## Authorization
 
