@@ -24,7 +24,7 @@ const pt_sans = PT_Sans({
   subsets: ['latin'],
 });
 
-export default async function RootLayout({ children, event }: Readonly<{ children: React.ReactNode, event: React.ReactNode }>) {
+export default async function RootLayout({ children, modal }: Readonly<{ children: React.ReactNode, modal: React.ReactNode }>) {
   return (
     <html lang="en">
       <body className={`${nunito.variable} ${pt_sans.variable} antialiased`}>
@@ -36,7 +36,7 @@ export default async function RootLayout({ children, event }: Readonly<{ childre
             <div className="gradient flex min-h-0 flex-1">
               <div className="webGrid mt-4 mr-auto mb-4 ml-auto flex flex-1 flex-col">
                 {children}
-                {event}
+                {modal}
               </div>
             </div>
           </main>

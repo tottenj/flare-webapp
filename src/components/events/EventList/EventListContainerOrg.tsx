@@ -11,5 +11,5 @@ export default async function EventListContainerOrg({ actor, filters }: { actor:
   } catch (error) {
     console.log(error)
   }
-  return <EventList events={events} actor={actor} />;
+  return <EventList events={events} />;
 }
