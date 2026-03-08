@@ -1,5 +1,5 @@
 'use server';
-import ProfilePictureSkeleton from '@/components/skeletons/ProfilePictureSkeleton/ProfilePictureSkeleton';
+import ProfilePictureSkeleton from '@/components/profiles/profilePicture/presentational/ProfilePictureSkeleton';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import MainBannerMenu from './MainBannerMenu';

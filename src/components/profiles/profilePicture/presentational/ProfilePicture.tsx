@@ -1,4 +1,4 @@
-import ProfilePictureSkeleton from '@/components/skeletons/ProfilePictureSkeleton/ProfilePictureSkeleton';
+import ProfilePictureSkeleton from '@/components/profiles/profilePicture/presentational/ProfilePictureSkeleton';
 import Image from 'next/image';
 
 interface profilePictureProps {

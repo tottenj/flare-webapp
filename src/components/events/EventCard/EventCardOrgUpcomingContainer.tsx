@@ -1,4 +1,4 @@
-import EventCardPresentational from '@/components/events/EventCard/EventCardPresentational';
+import EventCardPresentational from '@/components/events/EventCard/presentational/EventCardPresentational';
 import { EventService } from '@/lib/services/eventService/eventService';
 import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
 import mapEventDtoToEventCardViewModel from '@/lib/types/dto/mapEventDtoToEventCardViewModel/mapEventDtoToEventCardViewModel';

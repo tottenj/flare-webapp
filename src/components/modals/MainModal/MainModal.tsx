@@ -9,7 +9,7 @@ import {
   useDisclosure,
   ModalProps,
 } from '@heroui/react';
-import { ReactNode, cloneElement, isValidElement } from 'react';
+import { ReactNode } from 'react';
 
 type ModalRenderFn = (onClose?: () => void) => ReactNode;
 type ForwardedModalProps = Omit<ModalProps, 'isOpen' | 'onClose' | 'children'>;
@@ -36,7 +36,6 @@ export default function MainModal({
   onClose: controlledClose,
 }: MainModalProps) {
   const disclosure = useDisclosure({ defaultOpen });
-
   const isControlled = controlledOpen !== undefined;
 
   const isOpen = isControlled ? controlledOpen : disclosure.isOpen;
@@ -65,6 +64,7 @@ export default function MainModal({
       {Trigger}
 
       <Modal
+        data-cy="main-modal"
         {...modalProps}
         classNames={{
           base: 'bg-content1 rounded-lg',

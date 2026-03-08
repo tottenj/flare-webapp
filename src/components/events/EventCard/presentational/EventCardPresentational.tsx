@@ -1,4 +1,3 @@
-'use client';
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 import IconText from '@/components/misc/iconText/IconText';
 import MainModal from '@/components/modals/MainModal/MainModal';
@@ -64,7 +63,7 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
     { text: priceLabel, icon: faDollarSign },
   ];
   return (
-    <div className="@container">
+    <div data-cy={`${title}-event-modal`} className="@container">
       <div className="grid gap-6 rounded-2xl p-4 pt-2 pb-2 @md:grid-cols-[2.5fr_3fr] @lg:grid-rows-[auto_auto]">
         <div className="group relative mx-auto aspect-[2/3] w-full max-w-[70cqw] overflow-hidden rounded-md shadow-md @md:max-w-[100cqw]">
           {imageUrl && (
@@ -107,7 +106,9 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
             <p className="text-lg">{organizerName}</p>
           </div>
           <div className="flex flex-wrap gap-4">
-            {tags?.map((tag) => <TagChip label={tag} variant="bordered" key={tag} />)}
+            {tags?.map((tag) => (
+              <TagChip label={tag} variant="bordered" key={tag} />
+            ))}
           </div>
           <div className="flex flex-col gap-2">
             {metadata

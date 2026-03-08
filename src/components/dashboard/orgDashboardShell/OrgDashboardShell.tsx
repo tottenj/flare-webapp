@@ -1,6 +1,8 @@
 import OrgDashboardInfoPresentational from '@/components/dashboard/orgDashboard/orgDashboardInfo/OrgDashboardInfoPresentational';
 import EventCardOrgRecentContainer from '@/components/events/EventCard/EventCardOrgUpcomingContainer';
+import EventCardSkeleton from '@/components/events/EventCard/presentational/EventCardSkeleton';
 import EventListContainerOrg from '@/components/events/EventList/EventListContainerOrg';
+import EventListSkeleton from '@/components/events/EventList/presentational/EventListSkeleton';
 import QueryTabs from '@/components/inputs/hero/tab/QueryTabs';
 
 import CreateEventModalWrapper from '@/components/wrappers/CreateEventModalWrapper';
@@ -32,18 +34,18 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
           <h2>My Events</h2>
           <CreateEventModalWrapper orgName={ctx.profile.orgProfile.orgName} />
         </div>
-        <div className='mb-4 w-full'>
+        <div className="mb-4 w-full">
           <QueryTabs
             param="status"
             defaultValue="published"
-            color='primary'
+            color="primary"
             tabs={[
               { key: 'published', label: 'Published' },
               { key: 'draft', label: 'Draft' },
             ]}
           />
         </div>
-        <Suspense>
+        <Suspense fallback={<EventListSkeleton />}>
           <EventListContainerOrg actor={actor} filters={filters} />
         </Suspense>
       </div>
@@ -52,7 +54,7 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
         className="flex h-full w-full flex-col rounded-2xl bg-white pt-4 pb-4"
       >
         <h2 className="pb-8 text-center">Next Upcoming Event</h2>
-        <Suspense>
+        <Suspense fallback={<EventCardSkeleton />}>
           <EventCardOrgRecentContainer orgId={ctx.profile.orgProfile.id} actor={actor} />
         </Suspense>
       </div>
