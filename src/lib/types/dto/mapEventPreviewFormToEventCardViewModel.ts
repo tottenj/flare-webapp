@@ -1,14 +1,14 @@
-import { EventCardViewModel } from "@/components/events/EventCard/EventCardPresentational";
-import { CreateEventPreviewForm } from "@/lib/schemas/event/createEventPreviewFormSchema";
-import formatAgeRange from "@/lib/utils/ui/formatAgeRange/formatAgeRange";
-import { formatDateTime } from "@/lib/utils/ui/formatDateTime/formatDateTime";
-import formatEventPrice from "@/lib/utils/ui/formatEventPrice/formatEventPrice";
+import { EventCardViewModel } from '@/components/events/EventCard/presentational/EventCardPresentational';
+import { CreateEventPreviewForm } from '@/lib/schemas/event/createEventPreviewFormSchema';
+import formatAgeRange from '@/lib/utils/ui/formatAgeRange/formatAgeRange';
+import { formatDateTime } from '@/lib/utils/ui/formatDateTime/formatDateTime';
+import formatEventPrice from '@/lib/utils/ui/formatEventPrice/formatEventPrice';
 
 export default function mapEventPreviewFormToEventCardViewModel(
   event: CreateEventPreviewForm,
   orgName?: string,
   imgUrl?: string | null
-): EventCardViewModel{
+): EventCardViewModel {
   const startLabels = formatDateTime(event.startDateTime);
   const endLabels = event.endDateTime ? formatDateTime(event.endDateTime) : undefined;
   return {

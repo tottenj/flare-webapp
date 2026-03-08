@@ -1,6 +1,6 @@
 import EventCardPresentational, {
   EventCardViewModel,
-} from '@/components/events/EventCard/EventCardPresentational';
+} from '@/components/events/EventCard/presentational/EventCardPresentational';
 import { logger } from '@/lib/logger';
 import { EventService } from '@/lib/services/eventService/eventService';
 import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';

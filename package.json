@@ -30,6 +30,7 @@
     "test:watch": "jest --watch",
     "coverage": "jest --coverage --reporters=default --reporters=jest-junit",
     "storybook": "storybook dev -p 6006",
+    "storybook:local": "npx dotenv -e .env.dev -- npm run storybook",
     "build-storybook": "storybook build",
     "test-storybook": "vitest --project=storybook",
     "chromatic": "npx chromatic --project-token=chpt_63b29bbeaa870ab",

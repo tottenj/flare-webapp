@@ -1,8 +1,7 @@
 'use client';
 
-
 import mapEventPreviewFormToEventCardViewModel from '@/lib/types/dto/mapEventPreviewFormToEventCardViewModel';
-import EventCardPresentational from './EventCardPresentational';
+import EventCardPresentational from './presentational/EventCardPresentational';
 import { CreateEventPreviewForm } from '@/lib/schemas/event/createEventPreviewFormSchema';
 
 interface EventCardPreviewWrapperProps {

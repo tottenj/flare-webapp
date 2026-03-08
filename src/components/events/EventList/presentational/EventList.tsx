@@ -1,7 +1,4 @@
-import EventCardContainer from '@/components/events/EventCard/EventCardContainer';
 import EventListCardPresentational from '@/components/events/eventListCard/EventListCardPresentational';
-import MainModal from '@/components/modals/MainModal/MainModal';
-import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
 import { EventDto } from '@/lib/types/dto/EventDto';
 
 export default async function EventList({ events }: { events: EventDto[] }) {

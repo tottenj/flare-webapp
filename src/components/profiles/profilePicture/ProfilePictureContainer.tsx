@@ -1,5 +1,5 @@
 'use server';
-import ProfilePicture from '@/components/profiles/profilePicture/ProfilePicture';
+import ProfilePicture from '@/components/profiles/profilePicture/presentational/ProfilePicture';
 import { logger } from '@/lib/logger';
 import ImageService from '@/lib/services/imageService/ImageService';
 

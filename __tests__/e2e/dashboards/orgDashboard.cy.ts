@@ -131,4 +131,37 @@ describe('Events List', () => {
       cy.contains('Draft Event').should('be.visible');
     });
   });
+
+  it('Opens event modal on click', () => {
+    cy.get('[data-cy="my-events-container"]').within(() => {
+      cy.contains('Another Published Event').click();
+    });
+    cy.url().should('include', 'event/');
+    cy.get('[data-cy="Another Published Event-event-modal"]').should('be.visible');
+    cy.get('[data-cy="Another Published Event-event-modal"]').within(() => {
+      cy.contains('Another Published Event').should('be.visible');
+      cy.contains('Another future published event').should('be.visible');
+    });
+  });
+
+  it('Opens draft event modal on click', () => {
+    cy.visit('/dashboard?status=draft');
+    cy.get('[data-cy="my-events-container"]').within(() => {
+      cy.contains('Draft Event').click();
+    });
+    cy.url().should('include', 'event/');
+    cy.get('[data-cy="Draft Event-event-modal"]').should('be.visible');
+    cy.get('[data-cy="Draft Event-event-modal"]').within(() => {
+      cy.contains('Draft Event').should('be.visible');
+      cy.contains('Draft future event').should('be.visible');
+    });
+  });
+
+  it('Closes event modal when clicking close button', () => {
+    cy.contains('Another Published Event').click();
+    cy.get('[data-cy="main-modal"]').should('be.visible');
+    cy.get('[aria-label="Close"]').click();
+    cy.url().should('not.include', '/event/');
+    cy.get('[data-cy="main-modal"]').should('not.be.visible');
+  });
 });

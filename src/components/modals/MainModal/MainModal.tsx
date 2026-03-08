@@ -64,6 +64,7 @@ export default function MainModal({
       {Trigger}
 
       <Modal
+        data-cy="main-modal"
         {...modalProps}
         classNames={{
           base: 'bg-content1 rounded-lg',

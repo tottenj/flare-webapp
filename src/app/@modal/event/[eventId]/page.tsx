@@ -1,13 +1,13 @@
 import EventCardContainer from '@/components/events/EventCard/EventCardContainer';
+import EventCardSkeleton from '@/components/events/EventCard/presentational/EventCardSkeleton';
 import ModalRouter from '@/components/modals/ModalRouter/ModalRouter';
-import { EventModalSearchParamsSchema } from '@/lib/schemas/routes/eventModalSearchParamsSchema';
+import {
+  EventModalSearchParams,
+  EventModalSearchParamsSchema,
+} from '@/lib/schemas/routes/eventModalSearchParamsSchema';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
 import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
 import { Suspense } from 'react';
-
-type EventModalSearchParams = {
-  returnTo?: string;
-};
 
 export default async function Page({
   params,
@@ -31,11 +31,13 @@ export default async function Page({
 
   return (
     <>
-    <ModalRouter returnTo={returnTo} returnToFallback="/events" modalProps={{ size: '5xl' }}>
-      <Suspense fallback={<div className="flex h-96 items-center justify-center">Loading...</div>}>
-        <EventCardContainer eventId={eventId} actor={actor} />
-      </Suspense>
-    </ModalRouter>
+      <ModalRouter returnTo={returnTo} returnToFallback="/events" modalProps={{ size: '5xl' }}>
+        <Suspense
+          fallback={<EventCardSkeleton/>}
+        >
+          <EventCardContainer eventId={eventId} actor={actor} />
+        </Suspense>
+      </ModalRouter>
     </>
   );
 }
