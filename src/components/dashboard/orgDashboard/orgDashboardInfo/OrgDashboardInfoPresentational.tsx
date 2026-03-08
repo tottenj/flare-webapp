@@ -1,6 +1,6 @@
 import EditProfilePictureButtonContainer from '@/components/buttons/editProfilePictureButton/EditProfilePictureButtonContainer';
 import ProfilePictureContainer from '@/components/profiles/profilePicture/ProfilePictureContainer';
-import ProfilePictureSkeleton from '@/components/skeletons/ProfilePictureSkeleton/ProfilePictureSkeleton';
+import ProfilePictureSkeleton from '@/components/profiles/profilePicture/presentational/ProfilePictureSkeleton';
 import { Suspense } from 'react';
 
 interface Props {
@@ -19,11 +19,11 @@ export default async function OrgDashboardInfoPresentational({
   const profilePicSize = 175;
 
   return (
-    <div className="relative h-full max-h-[300px] w-full rounded-2xl bg-white p-4 shadow-2xl">
+    <div className="relative h-full max-h-75 w-full rounded-2xl bg-white p-4 shadow-2xl">
       <div className="flex h-full items-center gap-8">
         <div className="relative">
           <EditProfilePictureButtonContainer />
-          <Suspense fallback={<ProfilePictureSkeleton size={profilePicSize}/>}>
+          <Suspense fallback={<ProfilePictureSkeleton size={profilePicSize} />}>
             <ProfilePictureContainer
               priority
               profilePicPath={profilePicPath}

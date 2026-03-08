@@ -1,5 +1,8 @@
 import type { StoryObj, Meta } from '@storybook/react';
-import EventCardPresentational, { EventCardViewModel } from '@/components/events/EventCard/EventCardPresentational';
+import EventCardPresentational, {
+  EventCardViewModel,
+} from '@/components/events/EventCard/presentational/EventCardPresentational';
+import EventCardSkeleton from '@/components/events/EventCard/presentational/EventCardSkeleton';
 
 export default {
   component: EventCardPresentational,
@@ -30,16 +33,19 @@ const sampleEvent: EventCardViewModel = {
 
 export const Default: Story = {
   decorators: [
-    (Story: Story) => (
-      <div className="max-w-5xl">
-        <Story />
-      </div>
+    (Story:Story, context:any) => (
+      <div className="max-w-5xl">{context.args.loading ? <EventCardSkeleton /> : <Story />}</div>
     ),
   ],
   args: {
     event: sampleEvent,
+    loading: false,
   },
 };
+
+export const Loading: Story = {
+  render: () => <EventCardSkeleton />,
+}
 
 export const RealFlyer: Story = {
   decorators: [
