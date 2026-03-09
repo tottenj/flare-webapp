@@ -10,12 +10,22 @@ export default class ImageAssetDal {
     });
   }
 
-
-  async delete(imageAssetId: string, tx?: Prisma.TransactionClient){
-    const client = tx ?? prisma
+  async delete(imageAssetId: string, tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
     await client.imageAsset.delete({
-      where:{id: imageAssetId}
-    })
+      where: { id: imageAssetId },
+    });
+  }
+
+  async findOrphans(tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    return client.imageAsset.findMany({
+      where: {
+        profilePics: { none: {} },
+        orgProofFiles: { none: {} },
+        events: { none: {} },
+      },
+    });
   }
 }
 

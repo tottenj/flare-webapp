@@ -3,6 +3,7 @@ import { StorageErrors } from '@/lib/errors/StorageError';
 import { HTTP_METHOD } from '@/lib/types/Method';
 import { AppError } from '@/lib/errors/AppError';
 import { logger } from '@/lib/logger';
+import { imageAssetDal } from '@/lib/dal/imageAssetDal/ImageAssetDal';
 
 export default class ImageService {
   static getDownloadUrl = async (storagePath: string) => {
@@ -115,5 +116,17 @@ export default class ImageService {
         })
       )
     );
+  }
+
+  static async deleteOrphanedImages() {
+    const images = await imageAssetDal.findOrphans();
+    for(const image of images){
+      try{
+        await this.deleteByStoragePath(image.storagePath);
+        await imageAssetDal.delete(image.id);
+      }catch(err){
+        logger.error('Failed to delete orphaned image', { image, err });
+      }
+    }
   }
 }
