@@ -5,6 +5,7 @@ import { faGear } from '@fortawesome/free-solid-svg-icons';
 
 export default {
   component: IconButton,
+  title: "Buttons/IconButton",
 } satisfies Meta<typeof IconButton>;
 
 type Story = StoryObj<typeof IconButton>;

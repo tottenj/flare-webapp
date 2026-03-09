@@ -4,7 +4,6 @@ import EventCardSkeleton from '@/components/events/EventCard/presentational/Even
 import EventListContainerOrg from '@/components/events/EventList/EventListContainerOrg';
 import EventListSkeleton from '@/components/events/EventList/presentational/EventListSkeleton';
 import QueryTabs from '@/components/inputs/hero/tab/QueryTabs';
-
 import CreateEventModalWrapper from '@/components/wrappers/CreateEventModalWrapper';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
 import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';

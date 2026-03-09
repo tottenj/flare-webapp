@@ -1,7 +1,6 @@
-import EditProfilePictureButtonContainer from '@/components/buttons/editProfilePictureButton/EditProfilePictureButtonContainer';
-import ProfilePictureContainer from '@/components/profiles/profilePicture/ProfilePictureContainer';
-import ProfilePictureSkeleton from '@/components/profiles/profilePicture/presentational/ProfilePictureSkeleton';
-import { Suspense } from 'react';
+import OrgSettings from '@/components/dashboard/settings/orgSettings/OrgSettings';
+import UserDashboardInfo from '@/components/dashboard/userDashboardInfo/UserDashboardInfo';
+
 
 interface Props {
   email: string;
@@ -16,27 +15,11 @@ export default async function OrgDashboardInfoPresentational({
   status,
   profilePicPath,
 }: Props) {
-  const profilePicSize = 175;
-
   return (
-    <div className="relative h-full max-h-75 w-full rounded-2xl bg-white p-4 shadow-2xl">
-      <div className="flex h-full items-center gap-8">
-        <div className="relative">
-          <EditProfilePictureButtonContainer />
-          <Suspense fallback={<ProfilePictureSkeleton size={profilePicSize} />}>
-            <ProfilePictureContainer
-              priority
-              profilePicPath={profilePicPath}
-              size={profilePicSize}
-            />
-          </Suspense>
-        </div>
-        <div className="flex flex-col">
-          <h1>{orgName}</h1>
-          <p>{email}</p>
-          <p>{status}</p>
-        </div>
-      </div>
-    </div>
+    <UserDashboardInfo profilePicPath={profilePicPath} settings={<OrgSettings />}>
+        <h1>{orgName}</h1>
+        <p>{email}</p>
+        <p>{status}</p>
+    </UserDashboardInfo>
   );
 }

@@ -2,6 +2,7 @@ import 'server-only';
 import { StorageErrors } from '@/lib/errors/StorageError';
 import { HTTP_METHOD } from '@/lib/types/Method';
 import { AppError } from '@/lib/errors/AppError';
+import { logger } from '@/lib/logger';
 
 export default class ImageService {
   static getDownloadUrl = async (storagePath: string) => {
@@ -104,5 +105,15 @@ export default class ImageService {
     } finally {
       clearTimeout(timeout);
     }
+  }
+
+  static async deleteManyByStoragePaths(paths: string[]) {
+    await Promise.all(
+      paths.map((path) =>
+        this.deleteByStoragePath(path).catch((err) => {
+          logger.error('Failed to cleanup image', { path, err });
+        })
+      )
+    );
   }
 }

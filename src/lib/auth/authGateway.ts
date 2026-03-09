@@ -50,7 +50,7 @@ export default class AuthGateway {
     }>;
   }
 
-  static async createSession(idToken: string): Promise<{sessionCookie: string, uid: string}> {
+  static async createSession(idToken: string): Promise<{ sessionCookie: string; uid: string }> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
 
@@ -70,7 +70,7 @@ export default class AuthGateway {
     const { sessionCookie, uid } = await res.json();
     if (!sessionCookie || !uid) throw AuthErrors.SigninFailed();
 
-    return {sessionCookie, uid};
+    return { sessionCookie, uid };
   }
 
   static async deleteUser(uid: string) {
@@ -85,6 +85,8 @@ export default class AuthGateway {
     });
 
     clearTimeout(timeout);
+    if (res.status === 401) throw AuthErrors.InvalidToken();
+    if (res.status === 500) throw AuthErrors.DeleteUserFailed();
 
     if (!res.ok) {
       throw new Error(`Failed to delete Firebase user: ${res.status}`);

@@ -60,6 +60,63 @@ export class UserDal {
       },
     });
   }
+
+  async deleteUser(userId: string, tx?: Prisma.TransactionClient): Promise<string[]> {
+    const client = tx ?? prisma;
+
+    const user = await client.user.findUnique({
+      where: { id: userId },
+      select: {
+        profilePic: {
+          select: {
+            imageAsset: {
+              select: { storagePath: true },
+            },
+          },
+        },
+        organizationProfile: {
+          select: {
+            proofs: {
+              select: {
+                imageAsset: {
+                  select: { storagePath: true },
+                },
+              },
+            },
+            events: {
+              select: {
+                image: {
+                  select: { storagePath: true },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!user) return [];
+
+    const paths: string[] = [];
+
+    if (user.profilePic?.imageAsset.storagePath) {
+      paths.push(user.profilePic.imageAsset.storagePath);
+    }
+
+    user.organizationProfile?.proofs.forEach((p) => {
+      if (p.imageAsset.storagePath) paths.push(p.imageAsset.storagePath);
+    });
+
+    user.organizationProfile?.events.forEach((e) => {
+      if (e.image?.storagePath) paths.push(e.image.storagePath);
+    });
+
+    await client.user.delete({
+      where: { id: userId },
+    });
+
+    return paths;
+  }
 }
 
 export const userDal = new UserDal();

@@ -7,6 +7,7 @@ import { ImageMetadata } from '@/lib/schemas/proof/ImageMetadata';
 import ImageService from '@/lib/services/imageService/ImageService';
 import { prisma } from '../../../../prisma/prismaClient';
 import { AuthenticatedUser } from '@/lib/types/AuthenticatedUser';
+import { userDal } from '@/lib/dal/userDal/UserDal';
 
 export default class AccountService {
   static async updateProfilePicture({
@@ -45,5 +46,11 @@ export default class AccountService {
       await ImageService.deleteByStoragePath(imageData.storagePath).catch(() => {});
       throw err;
     }
+  }
+
+  static async deleteAccount({ authenticatedUser, idTokenUID }: { authenticatedUser: AuthenticatedUser, idTokenUID: string }) {
+    ensure(idTokenUID === authenticatedUser.firebaseUid, AuthErrors.Unauthorized());
+    const paths = await userDal.deleteUser(authenticatedUser.userId);
+    await ImageService.deleteManyByStoragePaths(paths);
   }
 }
