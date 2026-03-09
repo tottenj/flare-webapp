@@ -1,8 +1,8 @@
 import AuthGateway from '@/lib/auth/authGateway';
 import deleteAccount from '@/lib/serverActions/userActions/deleteAccount/deleteAccount';
-import AccountService from '@/lib/services/accountService/AccountService';
 import { expectFail } from '@/lib/test/expectFail';
-import { expect } from '@jest/globals';
+import deleteUserUseCase from '@/lib/useCase/deleteUserUseCase';
+import { expect, it } from '@jest/globals';
 
 jest.mock('@/lib/services/userContextService/userContextService', () => ({
   UserContextService: {
@@ -15,23 +15,20 @@ jest.mock('@/lib/services/userContextService/userContextService', () => ({
   },
 }));
 
-jest.mock('@/lib/services/accountService/AccountService', () => ({
+jest.mock('@/lib/useCase/deleteUserUseCase', () => ({
   __esModule: true,
-  default: {
-    deleteAccount: jest.fn(),
-  },
+  default: jest.fn(),
 }));
 
 jest.mock('@/lib/auth/authGateway', () => ({
   __esModule: true,
   default: {
     verifyIdToken: jest.fn(),
-    deleteUser: jest.fn(),
   },
 }));
 
 const mockedAuthGateway = jest.mocked(AuthGateway);
-const mockedAccountService = jest.mocked(AccountService);
+const mockedDeleteUserUseCase = jest.mocked(deleteUserUseCase);
 
 describe('delete Account', () => {
   beforeEach(() => {
@@ -45,18 +42,18 @@ describe('delete Account', () => {
       email: 'email',
       emailVerified: true,
     });
-    mockedAccountService.deleteAccount.mockResolvedValue(undefined);
-    mockedAuthGateway.deleteUser.mockResolvedValue(undefined);
+    mockedDeleteUserUseCase.mockResolvedValue(undefined);
+
     const res = await deleteAccount({ idToken });
+
     expect(mockedAuthGateway.verifyIdToken).toHaveBeenCalledWith(idToken);
-    expect(mockedAccountService.deleteAccount).toHaveBeenCalledWith({
+    expect(mockedDeleteUserUseCase).toHaveBeenCalledWith({
       authenticatedUser: {
         userId: 'userId',
         firebaseUid: 'firebaseUid',
       },
-      idTokenUID: 'firebaseUid',
+      firebaseUid: 'firebaseUid',
     });
-    expect(mockedAuthGateway.deleteUser).toHaveBeenCalledWith('firebaseUid');
     expect(res).toEqual({ ok: true, data: null });
   });
 
@@ -67,5 +64,16 @@ describe('delete Account', () => {
     expect(failed.code).toBe('AUTH_SIGNIN_FAILED');
   });
 
-  
+  it('Fails with unknown error', async () => {
+    mockedAuthGateway.verifyIdToken.mockResolvedValue({
+      uid: 'firebaseUid',
+      email: 'email',
+      emailVerified: true,
+    });
+    mockedDeleteUserUseCase.mockRejectedValue(new Error('Unknown error'));
+
+    const res = await deleteAccount({ idToken: 'validToken' });
+    const failed = expectFail(res);
+    expect(failed.code).toBe('UNKNOWN');
+  });
 });
