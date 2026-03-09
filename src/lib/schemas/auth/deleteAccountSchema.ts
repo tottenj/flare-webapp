@@ -1,7 +1,7 @@
-import z, { email } from 'zod';
+import z from 'zod';
 
 export const deleteAccountSchema = z.object({
-  idToken: z.string(),
+  idToken: z.string().min(10),
 });
 
 export type DeleteAccountInput = z.infer<typeof deleteAccountSchema>;
