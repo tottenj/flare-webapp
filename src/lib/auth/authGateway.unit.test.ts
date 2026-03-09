@@ -153,4 +153,44 @@ describe('AuthGateway.verifySession', () => {
       AuthErrors.SigninFailed()
     );
   });
+
+  describe('AuthGateway.deleteUser', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('successfully deletes user', async () => {
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+      });
+      await expect(AuthGateway.deleteUser('uid123')).resolves.toBeUndefined();
+    });
+
+    it('throws correct error on 401', async () => {
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: false,
+        status: 401,
+      });
+      await expect(AuthGateway.deleteUser('uid123')).rejects.toThrow(AuthErrors.InvalidToken());
+    });
+
+    it('throws correct error on 500', async () => {
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+      });
+      await expect(AuthGateway.deleteUser('uid123')).rejects.toThrow(AuthErrors.DeleteUserFailed());
+    });
+
+    it('throws generic error on other non-ok status', async () => {
+      (global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: false,
+        status: 400,
+      });
+      await expect(AuthGateway.deleteUser('uid123')).rejects.toThrow(
+        'Failed to delete Firebase user: 400'
+      );
+    });
+  });
 });

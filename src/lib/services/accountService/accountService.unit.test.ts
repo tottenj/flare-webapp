@@ -5,6 +5,7 @@ import AccountService from '@/lib/services/accountService/AccountService';
 import ImageService from '@/lib/services/imageService/ImageService';
 import { expect } from '@jest/globals';
 import { prisma } from '../../../../prisma/prismaClient';
+import { userDal } from '@/lib/dal/userDal/UserDal';
 
 jest.mock('../../../../prisma/prismaClient', () => {
   return {
@@ -36,6 +37,14 @@ jest.mock('@/lib/services/imageService/ImageService', () => ({
   __esModule: true,
   default: {
     deleteByStoragePath: jest.fn(),
+    deleteManyByStoragePaths: jest.fn(),
+  },
+}));
+
+jest.mock('@/lib/dal/userDal/UserDal', () => ({
+  __esModule: true,
+  userDal: {
+    deleteUser: jest.fn(),
   },
 }));
 
@@ -147,5 +156,48 @@ describe('AccountService.updateProfilePicture', () => {
       })
     ).rejects.toThrow();
     expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith(imageData.storagePath);
+  });
+});
+
+describe('AccountService.deleteAccount', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (ImageService.deleteByStoragePath as jest.Mock).mockResolvedValue(undefined);
+    (ImageService.deleteManyByStoragePaths as jest.Mock).mockResolvedValue(undefined);
+  });
+
+  it("successfully deletes user's account and images", async () => {
+    (userDal.deleteUser as jest.Mock).mockResolvedValueOnce([
+      'users/firebaseUid/profile-pic/cryptoId',
+      'users/firebaseUid/proof-images/proof1/cryptoId',
+    ]);
+    const authUser = {
+      userId: 'userId',
+      firebaseUid: 'firebaseUid',
+    };
+    const idTokenUID = 'firebaseUid';
+
+    await AccountService.deleteAccount({ authenticatedUser: authUser, idTokenUID });
+    expect(userDal.deleteUser).toHaveBeenCalledWith('userId');
+    expect(ImageService.deleteManyByStoragePaths).toHaveBeenCalledWith([
+      'users/firebaseUid/profile-pic/cryptoId',
+      'users/firebaseUid/proof-images/proof1/cryptoId',
+    ]);
+  });
+
+  it('throws error if idTokenUID does not match authenticatedUser firebaseUid', async () => {
+    const authUser = {
+      userId: 'userId',
+      firebaseUid: 'firebaseUid',
+    };
+    const idTokenUID = 'differentFirebaseUid';
+
+    await expect(
+      AccountService.deleteAccount({ authenticatedUser: authUser, idTokenUID })
+    ).rejects.toMatchObject({
+      code: 'AUTH_UNAUTHORIZED',
+    });
+    expect(userDal.deleteUser).not.toHaveBeenCalled();
+    expect(ImageService.deleteManyByStoragePaths).not.toHaveBeenCalled();
   });
 });
