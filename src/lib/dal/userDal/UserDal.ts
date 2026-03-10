@@ -3,6 +3,7 @@ import { Prisma, User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { UniqueConstraintError } from '../../errors/DalErrors';
 import { prisma } from '../../../../prisma/prismaClient';
+import { DeletedImageAsset } from '@/lib/dal/imageAssetDal/ImageAssetDal';
 
 export class UserDal {
   async findByFirebaseUid(
@@ -61,7 +62,7 @@ export class UserDal {
     });
   }
 
-  async deleteUser(userId: string, tx?: Prisma.TransactionClient): Promise<string[]> {
+  async deleteUser(userId: string, tx?: Prisma.TransactionClient): Promise<DeletedImageAsset[]> {
     const client = tx ?? prisma;
 
     const user = await client.user.findUnique({
@@ -70,7 +71,7 @@ export class UserDal {
         profilePic: {
           select: {
             imageAsset: {
-              select: { storagePath: true },
+              select: { id: true, storagePath: true },
             },
           },
         },
@@ -79,14 +80,14 @@ export class UserDal {
             proofs: {
               select: {
                 imageAsset: {
-                  select: { storagePath: true },
+                  select: { id: true, storagePath: true },
                 },
               },
             },
             events: {
               select: {
                 image: {
-                  select: { storagePath: true },
+                  select: { id: true, storagePath: true },
                 },
               },
             },
@@ -97,25 +98,25 @@ export class UserDal {
 
     if (!user) return [];
 
-    const paths: string[] = [];
+    const assets: DeletedImageAsset[] = [];
 
-    if (user.profilePic?.imageAsset.storagePath) {
-      paths.push(user.profilePic.imageAsset.storagePath);
+    if (user.profilePic?.imageAsset) {
+      assets.push(user.profilePic.imageAsset);
     }
 
     user.organizationProfile?.proofs.forEach((p) => {
-      if (p.imageAsset.storagePath) paths.push(p.imageAsset.storagePath);
+      if (p.imageAsset) assets.push(p.imageAsset);
     });
 
     user.organizationProfile?.events.forEach((e) => {
-      if (e.image?.storagePath) paths.push(e.image.storagePath);
+      if (e.image) assets.push(e.image);
     });
 
     await client.user.delete({
       where: { id: userId },
     });
 
-    return paths;
+    return assets;
   }
 }
 

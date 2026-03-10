@@ -20,6 +20,7 @@ afterAll(async () => {
 jest.mock('@/lib/auth/authGateway', () => ({
   verifyIdToken: jest.fn(),
   createSession: jest.fn(),
+  deleteUser: jest.fn(),
 }));
 
 

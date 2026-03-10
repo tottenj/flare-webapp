@@ -48,9 +48,17 @@ export default class AccountService {
     }
   }
 
-  static async deleteAccount({ authenticatedUser, idTokenUID }: { authenticatedUser: AuthenticatedUser, idTokenUID: string }) {
+  static async deleteAccount({
+    authenticatedUser,
+    idTokenUID,
+  }: {
+    authenticatedUser: AuthenticatedUser;
+    idTokenUID: string;
+  }) {
     ensure(idTokenUID === authenticatedUser.firebaseUid, AuthErrors.Unauthorized());
-    const paths = await userDal.deleteUser(authenticatedUser.userId);
-    await ImageService.deleteManyByStoragePaths(paths);
+    const assets = await userDal.deleteUser(authenticatedUser.userId);
+    if (assets.length === 0) return;
+    await imageAssetDal.deleteMany(assets.map((asset) => asset.id));
+    await ImageService.deleteManyByStoragePaths(assets.map((asset) => asset.storagePath));
   }
 }

@@ -1,12 +1,26 @@
 import { StorageErrors } from '@/lib/errors/StorageError';
 import ImageService from '@/lib/services/imageService/ImageService';
+import { imageAssetDal } from '@/lib/dal/imageAssetDal/ImageAssetDal';
+import { logger } from '@/lib/logger';
 import { expect, it } from '@jest/globals';
-
+import { kMaxLength } from 'buffer';
 
 jest.mock('react', () => ({
   cache: (fn: any) => fn,
 }));
 
+jest.mock('@/lib/dal/imageAssetDal/ImageAssetDal', () => ({
+  imageAssetDal: {
+    findOrphans: jest.fn(),
+    delete: jest.fn(),
+  },
+}));
+
+jest.mock('@/lib/logger', () => ({
+  logger: {
+    error: jest.fn(),
+  },
+}));
 
 describe('ImageService.getDownloadUrl', () => {
   beforeEach(() => {
@@ -155,7 +169,9 @@ describe('ImageService.deleteByStoragePath', () => {
         code,
       }),
     });
-    await expect(ImageService.deleteByStoragePath('path')).rejects.toMatchObject({ code: output.code });
+    await expect(ImageService.deleteByStoragePath('path')).rejects.toMatchObject({
+      code: output.code,
+    });
   });
 
   it('throws on fetch error', async () => {
@@ -190,5 +206,112 @@ describe('ImageService.deleteByStoragePath', () => {
     await Promise.resolve();
     await expect(promise).rejects.toEqual(StorageErrors.Timeout());
     jest.useRealTimers();
+  });
+});
+
+describe('deleteManyByStoragePaths', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('calls deleteByStoragePath for each path', async () => {
+    const paths = ['path1', 'path2', 'path3'];
+    (fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({}),
+    });
+    await ImageService.deleteManyByStoragePaths(paths);
+    expect(fetch).toHaveBeenCalledTimes(paths.length);
+    paths.forEach((path, index) => {
+      expect(fetch).toHaveBeenNthCalledWith(
+        index + 1,
+        expect.stringContaining('deleteByStoragePath'),
+        expect.objectContaining({
+          method: 'POST',
+          headers: expect.objectContaining({
+            'x-internal-api-key': expect.any(String),
+          }),
+          body: JSON.stringify({ storagePath: path }),
+        })
+      );
+    });
+  });
+
+  it('continues deleting other paths if one fails', async () => {
+    const paths = ['path1', 'path2', 'path3'];
+    (fetch as jest.Mock)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: jest.fn().mockResolvedValue({}),
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        json: jest.fn().mockResolvedValue({ code: 'STORAGE_MISSING_PATH' }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: jest.fn().mockResolvedValue({}),
+      });
+
+    await ImageService.deleteManyByStoragePaths(paths);
+    expect(fetch).toHaveBeenCalledTimes(paths.length);
+  });
+});
+
+describe('ImageService.deleteOrphanedImages', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('deletes all orphaned images from storage and DAL', async () => {
+    const images = [
+      { id: 'img-1', storagePath: 'users/u1/img-1.jpg' },
+      { id: 'img-2', storagePath: 'users/u2/img-2.jpg' },
+    ];
+
+    (imageAssetDal.findOrphans as jest.Mock).mockResolvedValue(images);
+    (imageAssetDal.delete as jest.Mock).mockResolvedValue(undefined);
+
+    const deleteByStoragePathSpy = jest
+      .spyOn(ImageService, 'deleteByStoragePath')
+      .mockResolvedValue(undefined);
+
+    await ImageService.deleteOrphanedImages();
+
+    expect(imageAssetDal.findOrphans).toHaveBeenCalledTimes(1);
+    expect(deleteByStoragePathSpy).toHaveBeenCalledTimes(2);
+    expect(deleteByStoragePathSpy).toHaveBeenNthCalledWith(1, 'users/u1/img-1.jpg');
+    expect(deleteByStoragePathSpy).toHaveBeenNthCalledWith(2, 'users/u2/img-2.jpg');
+    expect(imageAssetDal.delete).toHaveBeenCalledTimes(2);
+    expect(imageAssetDal.delete).toHaveBeenNthCalledWith(1, 'img-1');
+    expect(imageAssetDal.delete).toHaveBeenNthCalledWith(2, 'img-2');
+    expect(logger.error).not.toHaveBeenCalled();
+  });
+
+  it('logs and continues when deleting one orphaned image fails', async () => {
+    const images = [
+      { id: 'img-1', storagePath: 'users/u1/img-1.jpg' },
+      { id: 'img-2', storagePath: 'users/u2/img-2.jpg' },
+    ];
+    const storageError = new Error('storage delete failed');
+
+    (imageAssetDal.findOrphans as jest.Mock).mockResolvedValue(images);
+    (imageAssetDal.delete as jest.Mock).mockResolvedValue(undefined);
+
+    const deleteByStoragePathSpy = jest
+      .spyOn(ImageService, 'deleteByStoragePath')
+      .mockRejectedValueOnce(storageError)
+      .mockResolvedValueOnce(undefined);
+
+    await ImageService.deleteOrphanedImages();
+
+    expect(deleteByStoragePathSpy).toHaveBeenCalledTimes(2);
+    expect(imageAssetDal.delete).toHaveBeenCalledTimes(1);
+    expect(imageAssetDal.delete).toHaveBeenCalledWith('img-2');
+    expect(logger.error).toHaveBeenCalledTimes(1);
+    expect(logger.error).toHaveBeenCalledWith('Failed to delete orphaned image', {
+      image: images[0],
+      err: storageError,
+    });
   });
 });

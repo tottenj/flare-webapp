@@ -22,6 +22,7 @@ jest.mock('@/lib/dal/imageAssetDal/ImageAssetDal', () => ({
   imageAssetDal: {
     create: jest.fn(),
     delete: jest.fn(),
+    deleteMany: jest.fn(),
   },
 }));
 
@@ -168,8 +169,8 @@ describe('AccountService.deleteAccount', () => {
 
   it("successfully deletes user's account and images", async () => {
     (userDal.deleteUser as jest.Mock).mockResolvedValueOnce([
-      'users/firebaseUid/profile-pic/cryptoId',
-      'users/firebaseUid/proof-images/proof1/cryptoId',
+      { id: 'id1', storagePath: 'users/firebaseUid/profile-pic/cryptoId' },
+      { id: 'id2', storagePath: 'users/firebaseUid/proof-images/proof1/cryptoId' },
     ]);
     const authUser = {
       userId: 'userId',
@@ -179,10 +180,25 @@ describe('AccountService.deleteAccount', () => {
 
     await AccountService.deleteAccount({ authenticatedUser: authUser, idTokenUID });
     expect(userDal.deleteUser).toHaveBeenCalledWith('userId');
+    expect(imageAssetDal.deleteMany).toHaveBeenCalledWith(['id1', 'id2']);
     expect(ImageService.deleteManyByStoragePaths).toHaveBeenCalledWith([
       'users/firebaseUid/profile-pic/cryptoId',
       'users/firebaseUid/proof-images/proof1/cryptoId',
     ]);
+  });
+
+  it("successfully deletes user's account with no images", async () => {
+    (userDal.deleteUser as jest.Mock).mockResolvedValueOnce([]);
+    const authUser = {
+      userId: 'userId',
+      firebaseUid: 'firebaseUid',
+    };
+    const idTokenUID = 'firebaseUid';
+
+    await AccountService.deleteAccount({ authenticatedUser: authUser, idTokenUID });
+    expect(userDal.deleteUser).toHaveBeenCalledWith('userId');
+    expect(imageAssetDal.deleteMany).not.toHaveBeenCalled();
+    expect(ImageService.deleteManyByStoragePaths).not.toHaveBeenCalled();
   });
 
   it('throws error if idTokenUID does not match authenticatedUser firebaseUid', async () => {
@@ -198,6 +214,7 @@ describe('AccountService.deleteAccount', () => {
       code: 'AUTH_UNAUTHORIZED',
     });
     expect(userDal.deleteUser).not.toHaveBeenCalled();
+    expect(imageAssetDal.deleteMany).not.toHaveBeenCalled();
     expect(ImageService.deleteManyByStoragePaths).not.toHaveBeenCalled();
   });
 });

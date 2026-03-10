@@ -2,6 +2,11 @@ import { ImageMetadata } from '@/lib/schemas/proof/ImageMetadata';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../../../../prisma/prismaClient';
 
+export type DeletedImageAsset = {
+  id: string;
+  storagePath: string;
+};
+
 export default class ImageAssetDal {
   async create(input: ImageMetadata, tx?: Prisma.TransactionClient) {
     const client = tx ?? prisma;
@@ -14,6 +19,13 @@ export default class ImageAssetDal {
     const client = tx ?? prisma;
     await client.imageAsset.delete({
       where: { id: imageAssetId },
+    });
+  }
+
+  async deleteMany(imageAssetIds: string[], tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    await client.imageAsset.deleteMany({
+      where: { id: { in: imageAssetIds } },
     });
   }
 
