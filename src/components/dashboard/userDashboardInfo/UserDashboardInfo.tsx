@@ -22,7 +22,7 @@ export default async function UserDashboardInfo({
   return (
     <div className="relative flex h-full max-h-75 w-full items-center rounded-2xl bg-white p-4 shadow-2xl">
       {settings && (
-        <div className="absolute top-2 right-2 h-fit w-fit">
+        <div data-cy="user-dashboard-settings" className="absolute top-2 right-2 h-fit w-fit">
           <MainModal
             header="Settings"
             modalProps={{ size: '2xl' }}

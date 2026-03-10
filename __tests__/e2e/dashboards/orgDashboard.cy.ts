@@ -165,3 +165,43 @@ describe('Events List', () => {
     cy.get('[data-cy="main-modal"]').should('not.be.visible');
   });
 });
+
+describe.only('Settings Modal', () => {
+  beforeEach(() => {
+    cy.loginTestOrg();
+    cy.reload();
+    cy.visit('/dashboard');
+    cy.loginTestOrgClient();
+  });
+
+  it('Opens settings modal on click', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]').should('be.visible');
+    cy.contains('Settings').should('be.visible');
+  });
+
+  it('Closes settings modal when clicking close button', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Settings').should('be.visible');
+        cy.get('[aria-label="Close"]').click();
+      });
+    cy.get('[data-cy="main-modal"]').should('not.exist');
+  });
+
+  it('Displays settings content', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Delete Account').should('be.visible').click();
+      });
+    cy.contains('Confirm Account Deletion').should('be.visible');
+    cy.get('[data-cy="email-input"]').type('unverifiedOrg@gmail.com');
+    cy.get('[data-cy="password-input"]').type('password123');
+    cy.get('[data-cy="delete-account-button"]').should('be.visible').click();
+    cy.contains('Account successfully deleted').should('be.visible');
+  });
+});

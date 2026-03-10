@@ -39,10 +39,10 @@ export default function DeleteAccountFormPresentational({
         required
       />
       <div className="mt-4 flex w-full gap-4">
-        <HeroButton disabled={pending} color="default" className="w-full">
+        <HeroButton type='button' disabled={pending} color="default" className="w-full">
           Cancel
         </HeroButton>
-        <HeroButton disabled={pending} color="danger" className="w-full">
+        <HeroButton type='submit' data-cy="delete-account-button" disabled={pending} color="danger" className="w-full">
           Delete Account
         </HeroButton>
       </div>

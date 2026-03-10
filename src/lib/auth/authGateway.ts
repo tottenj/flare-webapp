@@ -80,7 +80,10 @@ export default class AuthGateway {
     const res = await fetch(`${process.env.FIREBASE_FUNCTION_URL}/deleteUser`, {
       method: 'POST',
       signal: controller.signal,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-internal-api-key': process.env.INTERNAL_API_KEY!,
+      },
       body: JSON.stringify({ uid }),
     });
 
