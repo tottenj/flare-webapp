@@ -2,6 +2,7 @@ import AuthGateway from '@/lib/auth/authGateway';
 import deleteAccount from '@/lib/serverActions/userActions/deleteAccount/deleteAccount';
 import { expectFail } from '@/lib/test/expectFail';
 import deleteUserUseCase from '@/lib/useCase/deleteUserUseCase';
+import { cookies } from 'next/headers';
 import { expect, it } from '@jest/globals';
 
 jest.mock('@/lib/services/userContextService/userContextService', () => ({
@@ -27,12 +28,19 @@ jest.mock('@/lib/auth/authGateway', () => ({
   },
 }));
 
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(),
+}));
+
 const mockedAuthGateway = jest.mocked(AuthGateway);
 const mockedDeleteUserUseCase = jest.mocked(deleteUserUseCase);
+const mockedCookies = jest.mocked(cookies);
+const deleteCookieMock = jest.fn();
 
 describe('delete Account', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockedCookies.mockResolvedValue({ delete: deleteCookieMock } as any);
   });
 
   it('Successfully deletes account', async () => {
@@ -54,6 +62,7 @@ describe('delete Account', () => {
       },
       firebaseUid: 'firebaseUid',
     });
+    expect(deleteCookieMock).toHaveBeenCalledWith('session');
     expect(res).toEqual({ ok: true, data: null });
   });
 
@@ -62,6 +71,7 @@ describe('delete Account', () => {
     const res = await deleteAccount({ idToken });
     const failed = expectFail(res);
     expect(failed.code).toBe('AUTH_SIGNIN_FAILED');
+    expect(deleteCookieMock).not.toHaveBeenCalled();
   });
 
   it('Fails with unknown error', async () => {
@@ -75,5 +85,6 @@ describe('delete Account', () => {
     const res = await deleteAccount({ idToken: 'validToken' });
     const failed = expectFail(res);
     expect(failed.code).toBe('UNKNOWN');
+    expect(deleteCookieMock).not.toHaveBeenCalled();
   });
 });

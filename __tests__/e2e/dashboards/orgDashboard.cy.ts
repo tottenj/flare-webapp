@@ -166,7 +166,7 @@ describe('Events List', () => {
   });
 });
 
-describe.only('Settings Modal', () => {
+describe('Settings Modal', () => {
   beforeEach(() => {
     cy.loginTestOrg();
     cy.reload();
@@ -190,8 +190,65 @@ describe.only('Settings Modal', () => {
       });
     cy.get('[data-cy="main-modal"]').should('not.exist');
   });
+});
 
-  it('Displays settings content', () => {
+describe('Delete Account Flow - Isolated', () => {
+  beforeEach(() => {
+    cy.loginTestOrg();
+    cy.reload();
+    cy.visit('/dashboard');
+    cy.loginTestOrgClient();
+  });
+
+  after(() => {
+    cy.clearAllEmulators();
+    cy.resetAndSeed();
+    cy.seedAuthEmulator();
+    cy.seedStorageEmulator();
+    cy.then(() => {
+      Cypress.session.clearAllSavedSessions();
+    });
+  });
+
+  it('Does not delete account with wrong password', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Delete Account').should('be.visible').click();
+      });
+
+    cy.contains('Confirm Account Deletion').should('be.visible');
+    cy.get('[data-cy="email-input"]').type('unverifiedOrg@gmail.com');
+    cy.get('[data-cy="password-input"]').type('wrongpassword123');
+    cy.get('[data-cy="delete-account-button"]').should('be.visible').click();
+
+    cy.contains('Failed to delete account. Please try again.').should('be.visible');
+    cy.getCookie('session').should('exist');
+    cy.window().its('auth.currentUser').should('not.be.null');
+    cy.url().should('include', '/dashboard');
+  });
+
+  it('Does not delete account with mismatched email', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Delete Account').should('be.visible').click();
+      });
+
+    cy.contains('Confirm Account Deletion').should('be.visible');
+    cy.get('[data-cy="email-input"]').type('not-my-email@gmail.com');
+    cy.get('[data-cy="password-input"]').type('password123');
+    cy.get('[data-cy="delete-account-button"]').should('be.visible').click();
+
+    cy.contains('Failed to delete account. Please try again.').should('be.visible');
+    cy.getCookie('session').should('exist');
+    cy.window().its('auth.currentUser').should('not.be.null');
+    cy.url().should('include', '/dashboard');
+  });
+
+  it('Deletes account successfully', () => {
     cy.get('[data-cy="user-dashboard-settings"]').click();
     cy.get('[data-cy="main-modal"]')
       .should('be.visible')
@@ -203,5 +260,10 @@ describe.only('Settings Modal', () => {
     cy.get('[data-cy="password-input"]').type('password123');
     cy.get('[data-cy="delete-account-button"]').should('be.visible').click();
     cy.contains('Account successfully deleted').should('be.visible');
+    cy.getCookie('session').should('not.exist');
+    cy.window().its('auth.currentUser').should('be.null');
+    cy.url().should('include', '/signin');
+    cy.visit('/dashboard');
+    cy.url().should('include', '/signin');
   });
 });

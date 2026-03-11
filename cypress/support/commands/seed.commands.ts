@@ -93,20 +93,65 @@ Cypress.Commands.add('resetAndSeed', () => {
 Cypress.Commands.add('seedAuthEmulator', () => {
   const functionsUrl = `${Cypress.env('FUNCTIONS_URL')}/${Cypress.env('NEXT_PUBLIC_FIREBASE_PROJECT_ID')}/us-central1/seedAuthEmulator`;
 
-  cy.request('POST', functionsUrl).then((response) => {
-    cy.log(functionsUrl);
-    cy.log(JSON.stringify(response.body));
-    expect(response.status).to.eq(200);
-    expect(response.body).to.have.property('success', true);
-  });
+  const attemptSeed = (retryCount = 0, maxRetries = 10): Cypress.Chainable<any> => {
+    return cy
+      .request({
+        method: 'POST',
+        url: functionsUrl,
+        failOnStatusCode: false,
+      })
+      .then((response) => {
+        if (response.status === 200 && response.body?.success === true) {
+          cy.log(functionsUrl);
+          cy.log(JSON.stringify(response.body));
+          return cy.wrap(response.body);
+        }
+
+        if (retryCount < maxRetries) {
+          cy.log(
+            `⏳ seedAuthEmulator not ready (status ${response.status}) attempt ${retryCount + 1}/${maxRetries}`
+          );
+          return cy.wait(1000).then(() => attemptSeed(retryCount + 1, maxRetries));
+        }
+
+        throw new Error(
+          `Failed to seed auth emulator after ${maxRetries} attempts. Status: ${response.status}. Response: ${JSON.stringify(response.body)}`
+        );
+      });
+  };
+
+  return attemptSeed();
 });
 
 Cypress.Commands.add('seedStorageEmulator', () => {
   const functionsUrl = `${Cypress.env('FUNCTIONS_URL')}/${Cypress.env('NEXT_PUBLIC_FIREBASE_PROJECT_ID')}/us-central1/seedStorageEmulator`;
-  cy.request('POST', functionsUrl).then((response) => {
-    cy.log(functionsUrl);
-    cy.log(JSON.stringify(response.body));
-    expect(response.status).to.eq(200);
-    expect(response.body).to.have.property('success', true);
-  });
+
+  const attemptSeed = (retryCount = 0, maxRetries = 10): Cypress.Chainable<any> => {
+    return cy
+      .request({
+        method: 'POST',
+        url: functionsUrl,
+        failOnStatusCode: false,
+      })
+      .then((response) => {
+        if (response.status === 200 && response.body?.success === true) {
+          cy.log(functionsUrl);
+          cy.log(JSON.stringify(response.body));
+          return cy.wrap(response.body);
+        }
+
+        if (retryCount < maxRetries) {
+          cy.log(
+            `⏳ seedStorageEmulator not ready (status ${response.status}) attempt ${retryCount + 1}/${maxRetries}`
+          );
+          return cy.wait(1000).then(() => attemptSeed(retryCount + 1, maxRetries));
+        }
+
+        throw new Error(
+          `Failed to seed storage emulator after ${maxRetries} attempts. Status: ${response.status}. Response: ${JSON.stringify(response.body)}`
+        );
+      });
+  };
+
+  return attemptSeed();
 });

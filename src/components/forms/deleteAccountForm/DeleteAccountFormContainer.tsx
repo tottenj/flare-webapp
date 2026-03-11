@@ -6,7 +6,7 @@ import { useFormAction } from '@/lib/hooks/useFormAction';
 import deleteAccount from '@/lib/serverActions/userActions/deleteAccount/deleteAccount';
 import { ActionResult } from '@/lib/types/ActionResult';
 import { FirebaseError } from 'firebase/app';
-import { EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+import { EmailAuthProvider, reauthenticateWithCredential, signOut } from 'firebase/auth';
 
 export default function DeleteAccountFormContainer() {
   async function onSubmit(formData: FormData): Promise<ActionResult<null>> {
@@ -52,6 +52,9 @@ export default function DeleteAccountFormContainer() {
       success: 'Account successfully deleted',
       error: 'Failed to delete account. Please try again.',
       loading: 'Deleting account...',
+    },
+    onSuccess: async () => {
+      await signOut(auth);
     },
   });
 
