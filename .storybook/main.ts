@@ -15,5 +15,19 @@ const config: StorybookConfig = {
   features: {
     experimentalRSC: true,
   },
+  viteFinal: async (config) => {
+    if (
+      config.resolve?.alias &&
+      typeof config.resolve.alias === 'object' &&
+      !Array.isArray(config.resolve.alias)
+    ) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@/lib/firebase/auth/configs/clientApp':
+          '@/lib/firebase/auth/configs/__mocks__/clientApp.ts',
+      };
+    }
+    return config;
+  },
 };
 export default config;

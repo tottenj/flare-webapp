@@ -7,6 +7,7 @@ import { Form } from '@heroui/form';
 
 interface DeleteAccountFormProps extends BaseFormProps {
   onSubmit: (formData: FormData) => void;
+  onCancel?: () => void;
 }
 
 export default function DeleteAccountFormPresentational({
@@ -14,6 +15,7 @@ export default function DeleteAccountFormPresentational({
   validationErrors,
   pending,
   onSubmit,
+  onCancel,
 }: DeleteAccountFormProps) {
   return (
     <Form className="flex flex-col gap-4" action={onSubmit} validationErrors={validationErrors}>
@@ -39,10 +41,23 @@ export default function DeleteAccountFormPresentational({
         required
       />
       <div className="mt-4 flex w-full gap-4">
-        <HeroButton type='button' disabled={pending} color="default" className="w-full">
+        <HeroButton
+          type="button"
+          disabled={pending}
+          color="default"
+          className="w-full"
+          onPress={onCancel}
+          data-cy="cancel-delete-account-button"
+        >
           Cancel
         </HeroButton>
-        <HeroButton type='submit' data-cy="delete-account-button" disabled={pending} color="danger" className="w-full">
+        <HeroButton
+          type="submit"
+          data-cy="delete-account-button"
+          disabled={pending}
+          color="danger"
+          className="w-full"
+        >
           Delete Account
         </HeroButton>
       </div>

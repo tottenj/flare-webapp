@@ -1,10 +1,11 @@
 import type { StoryObj, Meta } from '@storybook/react';
 
-import  OrgDashboardInfoPresentational  from './OrgDashboardInfoPresentational';
+import OrgDashboardInfoPresentational from './OrgDashboardInfoPresentational';
+import OrgSettings from '@/components/dashboard/settings/orgSettings/OrgSettings';
 
 export default {
   component: OrgDashboardInfoPresentational,
-  title: "Dashboard/Organization"
+  title: 'Dashboard/Organization',
 } satisfies Meta<typeof OrgDashboardInfoPresentational>;
 
 type Story = StoryObj<typeof OrgDashboardInfoPresentational>;
@@ -15,5 +16,6 @@ export const Default: Story = {
     orgName: 'Organization Name',
     status: 'PENDING',
     profilePicPath: null,
+    settings: <OrgSettings />,
   },
 };

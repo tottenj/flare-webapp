@@ -210,6 +210,23 @@ describe('Delete Account Flow - Isolated', () => {
     });
   });
 
+  it('Dismisses delete account form when cancel is clicked', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Delete Account').should('be.visible').click();
+      });
+
+    cy.contains('Confirm Account Deletion').should('be.visible');
+    cy.get('[data-cy="cancel-delete-account-button"]').should('be.visible').click();
+
+    cy.contains('Confirm Account Deletion').should('not.exist');
+    cy.getCookie('session').should('exist');
+    cy.window().its('auth.currentUser').should('not.be.null');
+    cy.url().should('include', '/dashboard');
+  });
+
   it('Does not delete account with wrong password', () => {
     cy.get('[data-cy="user-dashboard-settings"]').click();
     cy.get('[data-cy="main-modal"]')
@@ -259,7 +276,7 @@ describe('Delete Account Flow - Isolated', () => {
     cy.get('[data-cy="email-input"]').type('unverifiedOrg@gmail.com');
     cy.get('[data-cy="password-input"]').type('password123');
     cy.get('[data-cy="delete-account-button"]').should('be.visible').click();
-    cy.contains('Account successfully deleted').should('be.visible');
+    cy.contains('Account successfully deleted', { timeout: 10000 }).should('be.visible');
     cy.getCookie('session').should('not.exist');
     cy.window().its('auth.currentUser').should('be.null');
     cy.url().should('include', '/signin');

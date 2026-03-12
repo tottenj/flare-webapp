@@ -6,10 +6,14 @@ import MainModal from '@/components/modals/MainModal/MainModal';
 export default function OrgSettings() {
   return (
     <MainModal
-      trigger={<HeroButton className='w-11/12 ml-auto mr-auto' color="danger">Delete Account</HeroButton>}
+      trigger={
+        <HeroButton className="mr-auto ml-auto w-11/12" color="danger">
+          Delete Account
+        </HeroButton>
+      }
       modalProps={{ size: '2xl' }}
     >
-      <DeleteAccountFormContainer />
+      {(close: () => void) => <DeleteAccountFormContainer onClose={close} />}
     </MainModal>
   );
 }

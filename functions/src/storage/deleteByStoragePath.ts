@@ -5,7 +5,7 @@ import { requireInternalApiKey } from '../utils/guards/requireInternalApiKey';
 import { INTERNAL_API_KEY } from '../secrets';
 import { getInternalApiKey } from '../utils/guards/getInternalApiKey';
 
-const ALLOWED_PREFIXES = ['users/', 'org/proofs/'];
+const ALLOWED_PREFIXES = ['users/', 'org/proofs/', 'events/'];
 
 export async function deleteByStoragePathHandler(
   req: Request,

@@ -8,7 +8,7 @@ import { ActionResult } from '@/lib/types/ActionResult';
 import { FirebaseError } from 'firebase/app';
 import { EmailAuthProvider, reauthenticateWithCredential, signOut } from 'firebase/auth';
 
-export default function DeleteAccountFormContainer() {
+export default function DeleteAccountFormContainer({ onClose }: { onClose?: () => void } = {}) {
   async function onSubmit(formData: FormData): Promise<ActionResult<null>> {
     const email = formData.get('email');
     const password = formData.get('password');
@@ -64,6 +64,7 @@ export default function DeleteAccountFormContainer() {
       pending={pending}
       error={error?.message}
       validationErrors={validationErrors}
+      onCancel={onClose}
     />
   );
 }

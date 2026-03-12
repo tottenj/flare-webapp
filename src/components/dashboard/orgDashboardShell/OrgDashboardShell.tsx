@@ -1,4 +1,5 @@
 import OrgDashboardInfoPresentational from '@/components/dashboard/orgDashboard/orgDashboardInfo/OrgDashboardInfoPresentational';
+import OrgSettings from '@/components/dashboard/settings/orgSettings/OrgSettings';
 import EventCardOrgRecentContainer from '@/components/events/EventCard/EventCardOrgUpcomingContainer';
 import EventCardSkeleton from '@/components/events/EventCard/presentational/EventCardSkeleton';
 import EventListContainerOrg from '@/components/events/EventList/EventListContainerOrg';
@@ -24,6 +25,7 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
         orgName={ctx.profile.orgProfile!.orgName}
         email={ctx.user.email}
         status={ctx.profile.orgProfile!.status}
+        settings={<OrgSettings />}
       />
       <div
         data-cy="my-events-container"
