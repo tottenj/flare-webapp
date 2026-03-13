@@ -1,6 +1,5 @@
 // /app/api/test/logout/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { deleteCookie } from 'cookies-next';
 
 export async function POST(req: NextRequest) {
   if (process.env.MODE !== 'test') {
@@ -8,7 +7,7 @@ export async function POST(req: NextRequest) {
   }
 
   const res = NextResponse.json({ message: 'Logged out' });
-  deleteCookie('__session', { res, path: '/' });
+  res.cookies.delete('session');
 
   return res;
 }

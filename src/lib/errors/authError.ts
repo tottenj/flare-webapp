@@ -67,4 +67,12 @@ export const AuthErrors = {
       status: 500,
       cause,
     }),
+
+  DeleteUserFailed: (cause?: unknown) =>
+    new AppError({
+      code: 'AUTH_DELETE_USER_FAILED',
+      clientMessage: 'Unable to delete user. Please try again.',
+      status: 500,
+      cause,
+    }),
 };
