@@ -4,6 +4,7 @@ import {
   GetUserContext,
   GetUserContextSchema,
 } from '@/lib/schemas/userContext/GetUserContextSchema';
+import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 
@@ -15,7 +16,6 @@ export type OrgUserContext = GetUserContext & {
     isOrg: true;
   };
 };
-
 
 export class UserContextService {
   private static resolve = cache(async (): Promise<GetUserContext | null> => {
@@ -79,5 +79,13 @@ export class UserContextService {
     const ctx = await this.requireOrg();
     if (!ctx.flags.isOrgVerified) redirect('/org/pending');
     return ctx;
+  }
+
+  static getOrgActor(ctx: OrgUserContext): AuthenticatedOrganization {
+    return {
+      orgId: ctx.profile.orgProfile.id,
+      userId: ctx.user.id,
+      firebaseUid: ctx.user.firebaseUid,
+    };
   }
 }
