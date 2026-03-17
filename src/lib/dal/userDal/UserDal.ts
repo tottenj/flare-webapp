@@ -3,6 +3,7 @@ import { Prisma, User } from '@prisma/client';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { UniqueConstraintError } from '../../errors/DalErrors';
 import { prisma } from '../../../../prisma/prismaClient';
+import { DeletedImageAsset } from '@/lib/dal/imageAssetDal/ImageAssetDal';
 
 export class UserDal {
   async findByFirebaseUid(
@@ -59,6 +60,63 @@ export class UserDal {
         status: 'ACTIVE',
       },
     });
+  }
+
+  async deleteUser(userId: string, tx?: Prisma.TransactionClient): Promise<DeletedImageAsset[]> {
+    const client = tx ?? prisma;
+
+    const user = await client.user.findUnique({
+      where: { id: userId },
+      select: {
+        profilePic: {
+          select: {
+            imageAsset: {
+              select: { id: true, storagePath: true },
+            },
+          },
+        },
+        organizationProfile: {
+          select: {
+            proofs: {
+              select: {
+                imageAsset: {
+                  select: { id: true, storagePath: true },
+                },
+              },
+            },
+            events: {
+              select: {
+                image: {
+                  select: { id: true, storagePath: true },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!user) return [];
+
+    const assets: DeletedImageAsset[] = [];
+
+    if (user.profilePic?.imageAsset) {
+      assets.push(user.profilePic.imageAsset);
+    }
+
+    user.organizationProfile?.proofs.forEach((p) => {
+      if (p.imageAsset) assets.push(p.imageAsset);
+    });
+
+    user.organizationProfile?.events.forEach((e) => {
+      if (e.image) assets.push(e.image);
+    });
+
+    await client.user.delete({
+      where: { id: userId },
+    });
+
+    return assets;
   }
 }
 
