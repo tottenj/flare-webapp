@@ -7,8 +7,11 @@ import deleteAccount from '@/lib/serverActions/userActions/deleteAccount/deleteA
 import { ActionResult } from '@/lib/types/ActionResult';
 import { FirebaseError } from 'firebase/app';
 import { EmailAuthProvider, reauthenticateWithCredential, signOut } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export default function DeleteAccountFormContainer({ onClose }: { onClose?: () => void } = {}) {
+  const router = useRouter();
   async function onSubmit(formData: FormData): Promise<ActionResult<null>> {
     const email = formData.get('email');
     const password = formData.get('password');
@@ -54,7 +57,12 @@ export default function DeleteAccountFormContainer({ onClose }: { onClose?: () =
       loading: 'Deleting account...',
     },
     onSuccess: async () => {
-      await signOut(auth);
+      try {
+        await signOut(auth);
+      } catch {
+        toast.error('Signed out with server session only. Please sign in again.');
+        router.push('/signin');
+      }
     },
   });
 

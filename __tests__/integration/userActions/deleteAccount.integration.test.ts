@@ -158,4 +158,46 @@ describe('deleteAccount (integration)', () => {
     expect(mockedDeleteUser).not.toHaveBeenCalled();
     expect(mockedDeleteManyByStoragePaths).not.toHaveBeenCalled();
   });
+
+  it('Propagates Firebase deletion failure after DB deletion while keeping local deletion committed', async () => {
+    const firebaseUid = crypto.randomUUID();
+    const fakeUser = await createUserIntegration({
+      firebaseUid,
+      profilePic: {
+        create: {
+          imageAsset: {
+            create: {
+              storagePath: `users/${firebaseUid}/profile-pic/pic1.jpg`,
+            },
+          },
+        },
+      },
+    });
+
+    mockedDeleteUser.mockRejectedValueOnce(new Error('Failed to delete Firebase user: 500'));
+
+    await expect(
+      deleteUserUseCase({
+        authenticatedUser: {
+          userId: fakeUser.id,
+          firebaseUid: fakeUser.firebaseUid,
+        },
+        firebaseUid: fakeUser.firebaseUid,
+      })
+    ).rejects.toThrow('Failed to delete Firebase user: 500');
+
+    expect(mockedDeleteManyByStoragePaths).toHaveBeenCalledWith([
+      `users/${firebaseUid}/profile-pic/pic1.jpg`,
+    ]);
+
+    const user = await prisma.user.findUnique({ where: { id: fakeUser.id } });
+    expect(user).toBeNull();
+
+    const imageAsset = await prisma.imageAsset.findFirst({
+      where: {
+        storagePath: `users/${firebaseUid}/profile-pic/pic1.jpg`,
+      },
+    });
+    expect(imageAsset).toBeNull();
+  });
 });

@@ -1,7 +1,6 @@
 import { POST } from '@/app/api/orphan/route';
 import ImageService from '@/lib/services/imageService/ImageService';
 import { expect } from '@jest/globals';
-import { headers } from 'next/headers';
 jest.mock('@/lib/services/imageService/ImageService');
 
 describe('Orphan API', () => {
