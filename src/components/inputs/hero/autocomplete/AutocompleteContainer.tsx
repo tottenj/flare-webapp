@@ -13,15 +13,15 @@ export type AutoCompleteItem = {
   description?: string;
 };
 
-interface TagAutoCompleteContainerProps
-  extends Omit<
-    AutocompleteProps<AutoCompleteItem>,
-    'selectedKey' | 'onSelectionChange' | 'list' | 'children'
-  > {
+interface TagAutoCompleteContainerProps extends Omit<
+  AutocompleteProps<AutoCompleteItem>,
+  'selectedKey' | 'onSelectionChange' | 'list' | 'children'
+> {
   loadFunc: (filterText: string) => Promise<AutoCompleteItem[]>;
   withChips?: boolean;
   name?: string;
   maxNum?: number;
+  initialValues?: string[];
 }
 
 export default function AutoCompleteContainer({
@@ -29,9 +29,12 @@ export default function AutoCompleteContainer({
   withChips = true,
   name,
   maxNum,
+  initialValues,
   ...props
 }: TagAutoCompleteContainerProps) {
-  const [selectedTags, setSelectedTags] = useState<Map<string, string>>(new Map());
+  const [selectedTags, setSelectedTags] = useState<Map<string, string>>(
+    () => new Map((initialValues ?? []).map((value) => [value, value]))
+  );
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
   const list = useAsyncList<AutoCompleteItem>({

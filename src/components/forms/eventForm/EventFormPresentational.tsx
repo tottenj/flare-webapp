@@ -17,6 +17,17 @@ import AgeRestrictionSelect from '@/components/inputs/hero/selects/ageRestrictio
 import { PriceTypeValue } from '@/lib/types/PriceType';
 import PriceTypeSelect from '@/components/inputs/hero/selects/priceTypeSelect/PriceTypeSelect';
 import PriceInput from '@/components/inputs/hero/number/priceInput/PriceInput';
+import { EventFormInitialData } from '@/lib/types/EventForm/EventForm';
+import { parseZonedDateTime } from '@internationalized/date';
+
+function parseDefaultDateTime(value?: string | null) {
+  if (!value) return undefined;
+  try {
+    return parseZonedDateTime(value);
+  } catch {
+    return undefined;
+  }
+}
 
 interface EventFormPresentationalProps extends LocationFormProps, FileFormProps<EventFileKey> {
   eventImgPreview: string | null;
@@ -28,6 +39,8 @@ interface EventFormPresentationalProps extends LocationFormProps, FileFormProps<
   handlePreview: (fd: FormData) => void;
   imgError: string | null;
   setImgError: (error: string | null) => void;
+  submitText?: string;
+  initialEvent?: EventFormInitialData;
 }
 
 export default function EventFormPresentational({
@@ -43,7 +56,12 @@ export default function EventFormPresentational({
   handlePreview,
   imgError,
   setImgError,
+  submitText,
+  initialEvent,
 }: EventFormPresentationalProps) {
+  const defaultStartDate = parseDefaultDateTime(initialEvent?.startDateTime);
+  const defaultEndDate = parseDefaultDateTime(initialEvent?.endDateTime);
+
   return (
     <>
       <Form
@@ -69,24 +87,42 @@ export default function EventFormPresentational({
         {imgError && <FormError error={imgError} />}
         <ImageCropperInput label="Event Image" aspect={2 / 3} onCropped={onImageCropped} />
 
-        <HeroInput label="Event Name" name="eventName" placeholder="Enter event name" required />
+        <HeroInput
+          label="Event Name"
+          name="eventName"
+          placeholder="Enter event name"
+          required
+          defaultValue={initialEvent?.eventName}
+        />
         <HeroTextArea
           label="Event Description"
           name="eventDescription"
           placeholder="Enter event description"
           required
+          defaultValue={initialEvent?.eventDescription}
         />
-        <PlaceSearch label="Event Location" onChange={changeLocVal} />
-        <TagAutoComplete />
+        <PlaceSearch
+          label="Event Location"
+          value={initialEvent?.location}
+          onChange={changeLocVal}
+        />
+        <TagAutoComplete initialValues={initialEvent?.tags} />
 
         <div className="flex w-full gap-8">
-          <HeroDateInput isRequired label="Date" name="startDateTime" withTime />
+          <HeroDateInput
+            isRequired
+            label="Date"
+            name="startDateTime"
+            withTime
+            defaultValue={defaultStartDate}
+          />
           {hasEndTime && (
             <HeroDateInput
               label="End Date / Time"
               name="endDateTime"
               error={validationErrors?.endDateTime?.[0]}
               withTime
+              defaultValue={defaultEndDate}
             />
           )}
         </div>
@@ -96,28 +132,37 @@ export default function EventFormPresentational({
           </HeroCheckBox>
         </div>
 
-        <EventCategorySelect required />
+        <EventCategorySelect required defaultValue={initialEvent?.category} />
 
         <div className="flex w-full gap-4">
-          <AgeRestrictionSelect required />
+          <AgeRestrictionSelect required defaultValue={initialEvent?.ageRestriction} />
         </div>
         <PriceTypeSelect onChange={setPriceType} value={priceType} />
-        {priceType === 'FIXED' && <PriceInput required description="Price" name="minPrice" />}
+        {priceType === 'FIXED' && (
+          <PriceInput
+            required
+            description="Price"
+            name="minPrice"
+            defaultValue={initialEvent?.minPrice ?? undefined}
+          />
+        )}
         {priceType === 'RANGE' && (
           <div className="flex w-full gap-8">
             <PriceInput
               required
               description="Min Price"
               name="minPrice"
+              defaultValue={initialEvent?.minPrice ?? undefined}
             />
             <PriceInput
               required
               description="Max Price"
               name="maxPrice"
+              defaultValue={initialEvent?.maxPrice ?? undefined}
             />
           </div>
         )}
-        <PrimaryButton type="submit" />
+        <PrimaryButton type="submit" text={submitText} />
       </Form>
     </>
   );

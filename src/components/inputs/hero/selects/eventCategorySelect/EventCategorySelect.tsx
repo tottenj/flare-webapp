@@ -3,14 +3,20 @@ import EventCategorySelectItem from '@/components/inputs/hero/selects/Items/even
 import { EVENT_CATEGORIES, EventCategory } from '@/lib/types/EventCategory';
 import { SelectedItems } from '@heroui/react';
 
-export default function EventCategorySelect({ required }: { required?: boolean }) {
+export default function EventCategorySelect({
+  required,
+  defaultValue,
+}: {
+  required?: boolean;
+  defaultValue?: EventCategory;
+}) {
   type EventCategoryItem = (typeof EVENT_CATEGORIES)[number];
 
   return (
     <HeroSelect<EventCategoryItem>
       name="category"
       items={EVENT_CATEGORIES}
-      defaultSelectedKeys={[EVENT_CATEGORIES[0].key]}
+      defaultSelectedKeys={[defaultValue ?? EVENT_CATEGORIES[0].key]}
       required={required}
       label="Event Category"
       renderValue={(items: SelectedItems<EventCategoryItem>) => {

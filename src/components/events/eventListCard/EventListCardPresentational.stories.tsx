@@ -3,6 +3,7 @@ import type { StoryObj, Meta } from '@storybook/react';
 import EventListCardPresentational from './EventListCardPresentational';
 import EventListCardSkeleton from './EventListCardSkeleton';
 import { render } from '@testing-library/react';
+import { EventDto } from '@/lib/types/dto/EventDto';
 
 const meta = {
   component: EventListCardPresentational,
@@ -39,3 +40,17 @@ export const Default: Story = {
 export const Loading: Story = {
   render: () => <EventListCardSkeleton />
 }
+
+
+export const WithActions: Story = {
+  args: {
+    eventId: 'event-123',
+    title: 'Queer Trivia Night',
+    category: 'SOCIAL',
+    description: 'Join us for games, laughs, and community vibes.',
+    ageRestriction: 'ALL_AGES',
+    startDate: '2026-02-15',
+    loading: false,
+    actions: <div></div>
+  }
+};
