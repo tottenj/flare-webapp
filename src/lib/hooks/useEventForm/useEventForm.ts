@@ -14,6 +14,7 @@ interface UseEventFormInitialState {
   location?: LocationInput | null;
   hasEndTime?: boolean;
   priceType?: PriceTypeValue;
+  imgPreview?: string | null;
 }
 
 export default function useEventForm(initialState?: UseEventFormInitialState) {
@@ -23,6 +24,8 @@ export default function useEventForm(initialState?: UseEventFormInitialState) {
   const [previewErrors, setPreviewErrors] = useState<Record<string, string[]>>({});
   const [pendingFormData, setPendingFormData] = useState<CreateEventPreviewForm | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [imgError, setImgError] = useState<string | null>(null);
+  const [eventImgPreview, setEventImgPreview] = useState<string | null>(initialState?.imgPreview ?? null);
 
   function handlePreview(formData: FormData) {
     const result = parsePreviewFormData(formData);
@@ -49,5 +52,9 @@ export default function useEventForm(initialState?: UseEventFormInitialState) {
     previewOpen,
     setPreviewOpen,
     handlePreview,
+    imgError,
+    setImgError,
+    eventImgPreview,
+    setEventImgPreview
   };
 }

@@ -1,20 +1,14 @@
-import { LocationInput } from '@/lib/schemas/LocationInputSchema';
-import { AgeRangeValue } from '@/lib/types/AgeRange';
-import { EventCategory } from '@/lib/types/EventCategory';
-import { PriceTypeValue } from '@/lib/types/PriceType';
+import { ZonedDateTime } from '@internationalized/date';
 
 export type EventFormMode = 'create' | 'edit';
 
 export interface EventFormInitialData {
+  startDateTime: ZonedDateTime,
+  endDateTime?: ZonedDateTime,
   eventName: string;
   eventDescription: string;
-  category: EventCategory;
-  location: LocationInput | null;
-  tags: string[];
-  startDateTime: string;
-  endDateTime?: string | null;
-  ageRestriction: AgeRangeValue;
-  priceType: PriceTypeValue;
-  minPrice?: number | null;
-  maxPrice?: number | null;
+  imageDetails?: {
+    url?: string;
+    storagePath?: string;
+  };
 }

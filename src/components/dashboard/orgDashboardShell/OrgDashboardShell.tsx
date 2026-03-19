@@ -66,7 +66,7 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
           />
         </div>
         <Suspense fallback={<EventListSkeleton />}>
-          <EventListContainerOrg actor={actor} filters={filters} />
+          <EventListContainerOrg actor={actor} filters={filters} orgName={ctx.profile.orgProfile.orgName} />
         </Suspense>
       </div>
       <div

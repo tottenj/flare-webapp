@@ -17,13 +17,11 @@ import { EventFormInitialData, EventFormMode } from '@/lib/types/EventForm/Event
 import { basicFileUpload } from '@/lib/utils/other/basicFileUpload';
 import { Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 export type EventFileKey = 'eventImg';
 
 type EventSubmitAction = (input: CreateEvent) => Promise<ActionResult<null>>;
-
-const MODE_COPY: Record<
+type ModeCopy = Record<
   EventFormMode,
   {
     toast: { success: string; loading: string; error: string };
@@ -31,7 +29,9 @@ const MODE_COPY: Record<
     draftText: string;
     publishText: string;
   }
-> = {
+>;
+
+const MODE_COPY: ModeCopy = {
   create: {
     toast: {
       success: 'Created Event',
@@ -54,27 +54,18 @@ const MODE_COPY: Record<
   },
 };
 
-function isBlobUrl(url: string) {
-  return url.startsWith('blob:');
-}
-
 export default function EventFormContainer({
   orgName,
   onCloseModal,
   mode = 'create',
   submitAction = createEvent,
   initialEvent,
-  initialImage,
 }: {
   orgName?: string;
   onCloseModal?: () => void;
   mode?: EventFormMode;
   submitAction?: EventSubmitAction;
   initialEvent?: EventFormInitialData;
-  initialImage?: {
-    previewUrl: string;
-    metadata: ImageMetadata;
-  };
 }) {
   const {
     location,
@@ -88,36 +79,27 @@ export default function EventFormContainer({
     previewOpen,
     setPreviewOpen,
     handlePreview,
+    imgError,
+    setImgError,
+    eventImgPreview,
+    setEventImgPreview,
   } = useEventForm({
-    location: initialEvent?.location,
-    hasEndTime: Boolean(initialEvent?.endDateTime),
-    priceType: initialEvent?.priceType,
+    imgPreview: initialEvent?.imageDetails?.url ?? null,
   });
+
   const { files, setFile } = useFileMap<EventFileKey>({
     initial: {
       eventImg: null,
     },
   });
-  const [eventImgPreview, setEventImgPreview] = useState<string | null>(
-    initialImage?.previewUrl ?? null
-  );
-  const [imgError, setImgError] = useState<string | null>(null);
+
   const router = useRouter();
   const copy = MODE_COPY[mode];
-
-  useEffect(() => {
-    return () => {
-      if (eventImgPreview && isBlobUrl(eventImgPreview)) {
-        URL.revokeObjectURL(eventImgPreview);
-      }
-    };
-  }, [eventImgPreview]);
 
   async function confirmSubmit(isDraft = false) {
     if (!pendingFormData) return;
     const eventImg = files.eventImg;
-    let metadata: ImageMetadata | null = initialImage?.metadata ?? null;
-
+    let metadata: ImageMetadata | null = null;
     if (eventImg) {
       try {
         metadata = await basicFileUpload(eventImg, 'events');
@@ -129,6 +111,10 @@ export default function EventFormContainer({
         }
         return;
       }
+    } else if (mode === 'edit' && initialEvent?.imageDetails?.storagePath) {
+      metadata = {
+        storagePath: initialEvent.imageDetails.storagePath,
+      };
     }
 
     if (!metadata) {
@@ -152,9 +138,6 @@ export default function EventFormContainer({
   });
 
   function handleCropped(file: File, previewUrl: string) {
-    if (eventImgPreview && isBlobUrl(eventImgPreview)) {
-      URL.revokeObjectURL(eventImgPreview);
-    }
     const error = validateFileInput({ file });
     if (error) {
       toast.error(error);
