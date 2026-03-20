@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals';
+import { Prisma } from '#prisma/generated/client';
 import { userDal } from './UserDal';
 import { prisma } from '../../../../prisma/prismaClient';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { UniqueConstraintError } from '@/lib/errors/DalErrors';
 
 jest.mock('../../../../prisma/prismaClient', () => ({
@@ -42,7 +42,7 @@ describe('UserDal.createIfNotExists', () => {
   it('throws unique constraint error on duplicate email', async () => {
     (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null);
     (prisma.user.create as jest.Mock).mockRejectedValueOnce(
-      new PrismaClientKnownRequestError('message', { code: 'P2002', clientVersion: '1.0' })
+      new Prisma.PrismaClientKnownRequestError('message', { code: 'P2002', clientVersion: '1.0' })
     );
     await expect(
       userDal.createIfNotExists({ firebaseUid: 'uid123' } as any)

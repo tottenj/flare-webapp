@@ -1,6 +1,6 @@
 import 'server-only';
 import { EventDomainProps } from '@/lib/domain/eventDomain/EventDomain';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '#prisma/generated/client';
 import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
 import { EventRow, eventRowInclude } from '@/lib/types/dto/EventDto';

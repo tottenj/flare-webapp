@@ -55,7 +55,11 @@ describe('Create Event Integration Tests', () => {
     expect(event).toBeTruthy();
     expect(event?.title).toBe(input.eventName);
     expect(event?.tags.length).toBe(3);
-    expect(event?.tags.map((t) => t.tag.label).sort()).toEqual(['tag1', 'tag2', 'tag3']);
+    expect(event?.tags.map((t: { tag: { label: string } }) => t.tag.label).sort()).toEqual([
+      'tag1',
+      'tag2',
+      'tag3',
+    ]);
   });
 
   it('successfully creates event without location', async () => {

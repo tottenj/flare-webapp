@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma } from '#prisma/generated/client';
 import deepMerge from '../utils/deepMerge';
 import { createLocationIntegration } from './location.factory';
 import { prisma } from '../../../prisma/prismaClient';

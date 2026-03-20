@@ -1,4 +1,4 @@
-import { EventStatus } from "@prisma/client";
+import { EventStatus } from "#prisma/generated/client";
 import z from "zod";
 
 export const OrgEventFilterSchema = z.object({

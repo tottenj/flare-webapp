@@ -8,4 +8,6 @@ const prisma = new PrismaClient({ adapter });
 
 seedTest(prisma)
   .catch(console.error)
-  .finally(() => prisma.$disconnect());
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
