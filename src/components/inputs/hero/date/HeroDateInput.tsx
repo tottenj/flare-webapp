@@ -6,14 +6,20 @@ interface heroDateInputProps extends DatePickerProps {
   error?: string;
 }
 
-export default function HeroDateInput({ withTime, name, error, ...props }: heroDateInputProps) {
-  const defVal = withTime ? now(getLocalTimeZone()) : null;
+export default function HeroDateInput({
+  withTime,
+  name,
+  error,
+  defaultValue,
+  ...props
+}: heroDateInputProps) {
+  const resolvedDefault = defaultValue ?? (withTime ? now(getLocalTimeZone()) : null);
 
   return (
     <DatePicker
       name={name ?? 'date'}
       data-cy={`${name ?? 'date'}-input`}
-      defaultValue={defVal}
+      defaultValue={resolvedDefault}
       className="rounded-none"
       isInvalid={!!error}
       errorMessage={error}
