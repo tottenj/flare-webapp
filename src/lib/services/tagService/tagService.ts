@@ -1,6 +1,6 @@
 import { tagDal } from '@/lib/dal/tagDal/TagDal';
 import { normalizeTag } from '@/lib/utils/normalize/normalizeTag/normalizeTag';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '#prisma/generated/client';
 
 export default class tagService {
   static async createAndIncrementMany(

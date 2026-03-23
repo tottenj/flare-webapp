@@ -18,7 +18,7 @@ describe('Create Event', () => {
       force: true,
     });
     cy.contains('Confirm Crop').should('be.visible').click();
-    cy.contains('Submit').click();
+    cy.contains('Preview Event').click();
     cy.contains('Publish Event').should('exist').click();
     cy.contains('Created Event').should('be.visible');
     cy.contains('Test Event').should('be.visible');
@@ -53,7 +53,7 @@ describe('Create Event', () => {
       minute: '30',
       period: 'PM',
     });
-    cy.contains('Submit').click();
+    cy.contains('Preview Event').click();
     cy.contains('Publish Event').scrollIntoView().should('be.visible').click({ force: true });
     cy.contains('Created Event').should('be.visible');
     cy.contains('Test Event2').should('be.visible');
@@ -74,7 +74,7 @@ describe('Create Event', () => {
 
     cy.get('body').find("[role='listbox']").should('exist').contains('Fixed').click();
     cy.get("[data-cy='minPrice-input']").type('20');
-    cy.contains('Submit').click();
+    cy.contains('Preview Event').click();
     cy.contains('Publish Event').should('exist').click();
     cy.contains('Created Event').should('be.visible');
     cy.contains('Test Event').should('be.visible');
@@ -96,7 +96,7 @@ describe('Create Event', () => {
     cy.get('body').find("[role='listbox']").should('exist').contains('Range').click();
     cy.get("[data-cy='minPrice-input']").type('20');
     cy.get("[data-cy='maxPrice-input']").type('40');
-    cy.contains('Submit').click();
+    cy.contains('Preview Event').click();
     cy.contains('Publish Event').should('exist').click();
     cy.contains('Created Event').should('be.visible');
     cy.contains('Test Event').should('be.visible');
@@ -129,14 +129,14 @@ describe('Create Event - Unsuccessful Flows', () => {
     cy.get('body').find("[role='listbox']").should('exist').contains('Range').click();
     cy.get("[data-cy='minPrice-input']").clear().type('20');
     cy.get("[data-cy='maxPrice-input']").clear().type('18');
-    cy.contains('Submit').click();
+    cy.contains('Preview Event').click();
     cy.contains('Maximum price must be greater than or equal to minimum price').should(
       'be.visible'
     );
   });
 
   it('shows validation error when required fields are missing', () => {
-    cy.contains('Submit').click();
+    cy.contains('Preview Event').click();
     cy.contains('Please fill out this field.').should('be.visible');
     cy.contains('Publish Event').should('not.exist');
   });
@@ -170,7 +170,7 @@ describe('Create Event - Unsuccessful Flows', () => {
       period: 'PM',
     });
 
-    cy.contains('Submit').click();
+    cy.contains('Preview Event').click();
     cy.contains('End date/time must be after the start date/time').should('be.visible');
     cy.contains('Publish Event').should('not.exist');
   });
@@ -179,7 +179,7 @@ describe('Create Event - Unsuccessful Flows', () => {
     cy.get("[data-cy='eventName-input']").type('Test Event');
     cy.get("[data-cy='eventDescription-input']").type('This is a test event');
     cy.usePlacesInput("[data-cy='location-input']");
-    cy.contains('Submit').click();
+    cy.contains('Preview Event').click();
     cy.contains('Publish Event').should('not.exist');
     cy.contains('Event image is required').should('exist');
   });

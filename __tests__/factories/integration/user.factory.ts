@@ -1,6 +1,6 @@
 // tests/factories/integration/user.factory.ts
 import { prisma } from "../../../prisma/prismaClient"
-import { Prisma } from '@prisma/client';
+import { Prisma } from '#prisma/generated/client';
 import deepMerge from "../utils/deepMerge";
 
 let counter = 1;

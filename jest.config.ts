@@ -41,6 +41,13 @@ export default async (): Promise<Config> => {
     setupFilesAfterEnv: ['<rootDir>/jest.setup.integration.ts'],
   })();
 
+  // next/jest appends defaults when passed in, so override on the resolved config.
+  integrationConfig.transformIgnorePatterns = [
+    '/node_modules/(?!.pnpm)(?!(geist|@prisma/client|@prisma/debug|@prisma/engines)/)',
+    '/node_modules/.pnpm/(?!(geist|@prisma\\+client|@prisma\\+debug|@prisma\\+engines)@)',
+    '^.+\\.module\\.(css|sass|scss)$',
+  ];
+
   return {
     // ✅ top-level only
     collectCoverage: true,

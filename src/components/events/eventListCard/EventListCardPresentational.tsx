@@ -32,7 +32,7 @@ export default function EventListCardPresentational({
 
   return (
     <div className="group border-primary hover:bg-primary relative flex w-full cursor-pointer gap-4 rounded-2xl border-2 p-4 transition-all duration-200 ease-in-out hover:-translate-y-1 hover:text-white hover:shadow-lg">
-      <ModalLink route={`/event/${eventId}`} className="absolute inset-0 z-10" />
+      <ModalLink route={`/event/${eventId}`} aria-label={title} className="absolute inset-0 z-10" />
 
       {actions && (
         <div className="absolute top-2 right-4 z-20 hidden text-white group-hover:block">
@@ -57,6 +57,7 @@ export default function EventListCardPresentational({
             <p className="line-clamp-2">{description}</p>
           </div>
           <div className="flex flex-col justify-end text-right">
+            <p>{ageRestrictionLabel}</p>
             <p>{dateLabel}</p>
           </div>
         </div>

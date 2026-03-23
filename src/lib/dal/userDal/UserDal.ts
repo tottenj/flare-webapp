@@ -1,6 +1,5 @@
 import 'server-only';
-import { Prisma, User } from '@prisma/client';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Prisma, User } from '#prisma/generated/client';
 import { UniqueConstraintError } from '../../errors/DalErrors';
 import { prisma } from '../../../../prisma/prismaClient';
 import { DeletedImageAsset } from '@/lib/dal/imageAssetDal/ImageAssetDal';
@@ -46,7 +45,7 @@ export class UserDal {
     try {
       return await client.user.create({ data: input });
     } catch (e) {
-      if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
         throw new UniqueConstraintError('User already exists');
       }
       throw e;

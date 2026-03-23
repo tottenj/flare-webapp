@@ -1,5 +1,5 @@
 import { ImageMetadata } from '@/lib/schemas/proof/ImageMetadata';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '#prisma/generated/client';
 import { prisma } from '../../../../prisma/prismaClient';
 
 export type DeletedImageAsset = {

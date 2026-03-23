@@ -7,7 +7,7 @@ type ModalLinkProps = Omit<React.ComponentProps<typeof Link>, 'href'> & {
   route: string;
 };
 
-export default function ModalLink({ route, children, className = '' }: ModalLinkProps) {
+export default function ModalLink({ route, children, className = '', ...rest }: ModalLinkProps) {
   const pathname = usePathname();
   const params = useSearchParams();
 
@@ -25,6 +25,7 @@ export default function ModalLink({ route, children, className = '' }: ModalLink
     <Link
       href={{ pathname: route, query: Object.fromEntries(search) }}
       className={`inline-flex cursor-pointer items-center justify-center ${className}`}
+      {...rest}
     >
       {children}
     </Link>

@@ -4,7 +4,7 @@ import { createOrgIntegration } from '../../factories/integration/org.factory';
 import { expect } from '@jest/globals';
 import { authOrgFactory } from '../../factories/auth/authOrg.factory';
 import { createAuthOrgIntegration } from '../../factories/integration/helpers/createAuthOrgIntegration';
-import { EventStatus } from '@prisma/client';
+import { EventStatus } from '#prisma/generated/client';
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
 
 describe('EventService.getOrgUpcomingEvent (integration)', () => {
