@@ -1,13 +1,13 @@
 import { AgeRangeValue } from '@/lib/types/AgeRange';
 import { EventCategory } from '@/lib/types/EventCategory';
 import { PriceTypeValue } from '@/lib/types/PriceType';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '#prisma/generated/client';
 
 export type EventRow = Prisma.FlareEventGetPayload<{
   include: typeof eventRowInclude;
 }>;
 
-export const eventRowInclude = Prisma.validator<Prisma.FlareEventInclude>()({
+export const eventRowInclude = {
   location: {
     select: {
       address: true,
@@ -35,7 +35,7 @@ export const eventRowInclude = Prisma.validator<Prisma.FlareEventInclude>()({
       status: true,
     },
   },
-});
+} satisfies Prisma.FlareEventInclude;
 
 export type EventDto = {
   id: string;

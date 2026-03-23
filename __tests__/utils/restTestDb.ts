@@ -1,7 +1,7 @@
 // tests/utils/resetTestDb.ts
 import { execSync } from 'child_process';
 import { prisma as myPrisma } from '../../prisma/prismaClient';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '#prisma/generated/client';
 
 export function resetTestDb() {
   execSync('npm run db:reset', { stdio: 'inherit' });

@@ -134,7 +134,7 @@ describe('Events List', () => {
 
   it('Opens event modal on click', () => {
     cy.get('[data-cy="my-events-container"]').within(() => {
-      cy.contains('Another Published Event').click();
+      cy.get('[aria-label="Another Published Event"]').click();
     });
     cy.url().should('include', 'event/');
     cy.get('[data-cy="Another Published Event-event-modal"]').should('be.visible');
@@ -147,7 +147,7 @@ describe('Events List', () => {
   it('Opens draft event modal on click', () => {
     cy.visit('/dashboard?status=draft');
     cy.get('[data-cy="my-events-container"]').within(() => {
-      cy.contains('Draft Event').click();
+      cy.get('[aria-label="Draft Event"]').click();
     });
     cy.url().should('include', 'event/');
     cy.get('[data-cy="Draft Event-event-modal"]').should('be.visible');
@@ -158,7 +158,7 @@ describe('Events List', () => {
   });
 
   it('Closes event modal when clicking close button', () => {
-    cy.contains('Another Published Event').click();
+    cy.get('[aria-label="Another Published Event"]').click();
     cy.get('[data-cy="main-modal"]').should('be.visible');
     cy.get('[aria-label="Close"]').click();
     cy.url().should('not.include', '/event/');

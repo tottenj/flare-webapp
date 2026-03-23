@@ -7,9 +7,7 @@ const loader = new Loader({
 
 export async function getPlaceDetails(placeId: string) {
   const placesLib = (await loader.importLibrary('places'))
-
   const place = new placesLib.Place({ id: placeId});
-  
   
   try {
     const result = await place.fetchFields({

@@ -3,13 +3,11 @@
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-export default function ModalLink({
-  route,
-  children,
-}: {
+type ModalLinkProps = Omit<React.ComponentProps<typeof Link>, 'href'> & {
   route: string;
-  children: React.ReactNode;
-}) {
+};
+
+export default function ModalLink({ route, children, className = '', ...rest }: ModalLinkProps) {
   const pathname = usePathname();
   const params = useSearchParams();
 
@@ -26,7 +24,8 @@ export default function ModalLink({
   return (
     <Link
       href={{ pathname: route, query: Object.fromEntries(search) }}
-      className="inline-flex cursor-pointer items-center justify-center"
+      className={`inline-flex cursor-pointer items-center justify-center ${className}`}
+      {...rest}
     >
       {children}
     </Link>

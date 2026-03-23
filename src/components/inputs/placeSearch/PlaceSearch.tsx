@@ -28,7 +28,7 @@ export default function PlaceSearch({
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [getPlaces, setGetPlaces] = useState<null | Function>(null);
   const [getPlaceDetails, setGetPlaceDetails] = useState<null | Function>(null);
-  const [locationSelect, setLocationSelect] = useState<null | LocationInput>(null)
+  const [locationSelect, setLocationSelect] = useState<null | LocationInput>(value ?? null);
 
   // Get user location once
   useEffect(() => {
@@ -90,7 +90,7 @@ export default function PlaceSearch({
       lat: place.place.location.lat(),
       lng: place.place.location.lng(),
     };
-    setLocationSelect(location)
+    setLocationSelect(location);
     onChange(location);
   }
 
@@ -100,6 +100,7 @@ export default function PlaceSearch({
         required={required}
         label={label ? label : 'Select Location'}
         placeholder="Type to search..."
+        defaultInputValue={value?.address ?? ''}
         inputValue={list.filterText}
         isLoading={list.isLoading}
         items={list.items}
@@ -120,7 +121,7 @@ export default function PlaceSearch({
           </AutocompleteItem>
         )}
       </Autocomplete>
-      <input type="hidden" name='location' value={JSON.stringify(locationSelect)} />
+      <input type="hidden" name="location" value={JSON.stringify(locationSelect)} />
     </>
   );
 }

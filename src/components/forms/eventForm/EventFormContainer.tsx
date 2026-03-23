@@ -5,84 +5,128 @@ import EventFormPresentational from '@/components/forms/eventForm/EventFormPrese
 import MainModal from '@/components/modals/MainModal/MainModal';
 import { ClientError } from '@/lib/errors/clientErrors/ClientError';
 import { ClientErrors } from '@/lib/errors/clientErrors/ClientErrors';
-import { extractFieldErrors } from '@/lib/errors/extractError';
+import useEventForm from '@/lib/hooks/useEventForm/useEventForm';
 import useFileMap from '@/lib/hooks/useFileMap/useFileMap';
 import { useFormAction } from '@/lib/hooks/useFormAction';
-import {
-  CreateEventPreviewForm,
-  parsePreviewFormData,
-} from '@/lib/schemas/event/createEventPreviewFormSchema';
-import { LocationInput } from '@/lib/schemas/LocationInputSchema';
 import { ImageMetadata } from '@/lib/schemas/proof/ImageMetadata';
+import { CreateEvent } from '@/lib/schemas/event/createEventFormSchema';
 import validateFileInput from '@/lib/schemas/validateFileInput';
 import createEvent from '@/lib/serverActions/events/createEvent/createEvent';
-import { PriceTypeValue } from '@/lib/types/PriceType';
+import { ActionResult } from '@/lib/types/ActionResult';
+import { EventFormInitialData, EventFormMode } from '@/lib/types/EventForm/EventForm';
 import { basicFileUpload } from '@/lib/utils/other/basicFileUpload';
 import { Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import { toast } from 'react-toastify';
-import z from 'zod';
 export type EventFileKey = 'eventImg';
 
-export default function EventFormContainer({
-  orgName,
-  onCloseModal,
-}: {
-  orgName?: string;
-  onCloseModal?: () => void;
-}) {
-  const [location, setLocation] = useState<LocationInput | null>(null);
-  const { files, setFile } = useFileMap<EventFileKey>({
-    initial: {
-      eventImg: null,
-    },
-  });
-  const [eventImgPreview, setEventImgPreview] = useState<string | null>(null);
-  const [hasEndTime, setHasEndTime] = useState(false);
-  const [priceType, setPriceType] = useState<PriceTypeValue>('FREE');
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [pendingFormData, setPendingFormData] = useState<CreateEventPreviewForm | null>(null);
-  const [imgError, setImgError] = useState<string | null>(null);
-  const router = useRouter();
-  const [previewErrors, setPreviewErrors] = useState<Record<string, string[]>>({});
-
-  function handlePreview(formData: FormData) {
-    const result = parsePreviewFormData(formData);
-    if (!result.success) {
-      const fieldErrors = extractFieldErrors(z.treeifyError(result.error));
-      setPreviewErrors(fieldErrors);
-      return;
-    }
-    setPreviewErrors({});
-    setPendingFormData(result.data);
-    setPreviewOpen(true);
+type EventSubmitAction = (input: CreateEvent) => Promise<ActionResult<null>>;
+type ModeCopy = Record<
+  EventFormMode,
+  {
+    toast: { success: string; loading: string; error: string };
+    submitText: string;
+    draftText: string;
+    publishText: string;
   }
+>;
 
-  async function confirmSubmit(isDraft = false) {
-    if (!pendingFormData) return;
-    const eventImg = files.eventImg;
-    if (!eventImg) return;
-    let metadata: ImageMetadata | null = null;
-    try {
-      metadata = await basicFileUpload(eventImg, 'events');
-    } catch (error) {
-      if (error instanceof ClientError) {
-        toast.error(error.message);
-      } else {
-        toast.error(ClientErrors.UploadFailed().message);
-      }
-      return;
-    }
-    await action({ image: metadata, status: isDraft ? 'DRAFT' : 'PUBLISHED', ...pendingFormData });
-  }
-
-  const { action, pending, validationErrors, error } = useFormAction(createEvent, {
+const MODE_COPY: ModeCopy = {
+  create: {
     toast: {
       success: 'Created Event',
       loading: 'Creating Event',
       error: 'Error Creating Event',
     },
+    submitText: 'Preview Event',
+    draftText: 'Save as Draft',
+    publishText: 'Publish Event',
+  },
+  edit: {
+    toast: {
+      success: 'Updated Event',
+      loading: 'Updating Event',
+      error: 'Error Updating Event',
+    },
+    submitText: 'Preview Changes',
+    draftText: 'Save Draft Changes',
+    publishText: 'Save Changes',
+  },
+};
+
+export default function EventFormContainer({
+  orgName,
+  onCloseModal,
+  mode = 'create',
+  submitAction = createEvent,
+  initialEvent,
+}: {
+  orgName?: string;
+  onCloseModal?: () => void;
+  mode?: EventFormMode;
+  submitAction?: EventSubmitAction;
+  initialEvent?: EventFormInitialData;
+}) {
+  const {
+    location,
+    setLocation,
+    hasEndTime,
+    setHasEndTime,
+    priceType,
+    setPriceType,
+    previewErrors,
+    pendingFormData,
+    previewOpen,
+    setPreviewOpen,
+    handlePreview,
+    imgError,
+    setImgError,
+    eventImgPreview,
+    setEventImgPreview,
+  } = useEventForm({
+    imgPreview: initialEvent?.imageDetails?.url ?? null,
+  });
+
+  const { files, setFile } = useFileMap<EventFileKey>({
+    initial: {
+      eventImg: null,
+    },
+  });
+
+  const router = useRouter();
+  const copy = MODE_COPY[mode];
+
+  async function confirmSubmit(isDraft = false) {
+    if (!pendingFormData) return;
+    const eventImg = files.eventImg;
+    let metadata: ImageMetadata | null = null;
+    if (eventImg) {
+      try {
+        metadata = await basicFileUpload(eventImg, 'events');
+      } catch (error) {
+        if (error instanceof ClientError) {
+          toast.error(error.message);
+        } else {
+          toast.error(ClientErrors.UploadFailed().message);
+        }
+        return;
+      }
+    } else if (mode === 'edit' && initialEvent?.imageDetails?.storagePath) {
+      metadata = {
+        storagePath: initialEvent.imageDetails.storagePath,
+      };
+    }
+
+    if (!metadata) {
+      setImgError('Event image is required');
+      return;
+    }
+
+    await action({ image: metadata, status: isDraft ? 'DRAFT' : 'PUBLISHED', ...pendingFormData });
+  }
+
+  const { action, pending, validationErrors, error } = useFormAction(submitAction, {
+    toast: copy.toast,
     onSuccess: () => {
       setPreviewOpen(false);
       onCloseModal?.();
@@ -94,9 +138,6 @@ export default function EventFormContainer({
   });
 
   function handleCropped(file: File, previewUrl: string) {
-    if (eventImgPreview) {
-      URL.revokeObjectURL(eventImgPreview);
-    }
     const error = validateFileInput({ file });
     if (error) {
       toast.error(error);
@@ -129,6 +170,8 @@ export default function EventFormContainer({
         setPriceType={setPriceType}
         priceType={priceType}
         handlePreview={handlePreview}
+        submitText={copy.submitText}
+        initialEvent={initialEvent}
       />
       {previewOpen && pendingFormData && (
         <MainModal modalProps={{ size: '5xl' }} isOpen onClose={() => setPreviewOpen(false)}>
@@ -142,13 +185,13 @@ export default function EventFormContainer({
               onPress={() => confirmSubmit(true)}
               className="bg-secondary mt-4 w-full p-6 text-white md:w-1/2"
             >
-              Save as Draft
+              {copy.draftText}
             </Button>
             <div className="w-full md:w-1/2">
               <PrimaryButton
                 centered
                 styleOver={{ width: 'full' }}
-                text="Publish Event"
+                text={copy.publishText}
                 click={() => confirmSubmit(false)}
               />
             </div>

@@ -1,5 +1,5 @@
-import { Prisma, PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import 'dotenv/config';
+import { Prisma, PrismaClient } from './generated/client';
 
 export async function seedTest(prisma: PrismaClient) {
   function futureDate(days: number) {
@@ -196,4 +196,3 @@ export async function seedTest(prisma: PrismaClient) {
     },
   });
 }
-
