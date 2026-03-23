@@ -20,7 +20,14 @@ export default async (): Promise<Config> => {
     testEnvironment: 'jsdom',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
     coveragePathIgnorePatterns: ['node_modules', '/src/app/generated/prisma/', '/src/lib/dal/'],
-    testPathIgnorePatterns: ['/node_modules/', '/app/generated/prisma/'],
+    testPathIgnorePatterns: [
+      '/node_modules/',
+      '/app/generated/prisma/',
+      '/src/lib/auth/',
+      '/src/lib/serverActions/',
+      '/src/lib/dal/',
+      '/src/lib/services/',
+    ],
   })();
 
   const apiConfig = await createJestConfig({
