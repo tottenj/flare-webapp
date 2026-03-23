@@ -4,7 +4,7 @@ import { UserContextService } from '@/lib/services/userContextService/userContex
 import { ActionResult } from '@/lib/types/ActionResult';
 import { NextRequest } from 'next/server';
 
-export default async function GET(
+export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ eventId: string }> }
 ): Promise<ActionResult<EditEventData>> {
