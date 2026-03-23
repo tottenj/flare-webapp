@@ -1,7 +1,8 @@
 import { AgeRangeValue } from '@/lib/types/AgeRange';
 import { EventCategory } from '@/lib/types/EventCategory';
 import { PriceTypeValue } from '@/lib/types/PriceType';
-import { Prisma } from '#prisma/generated/client';
+import { Prisma } from '../../../../prisma/generated/client';
+
 
 export type EventRow = Prisma.FlareEventGetPayload<{
   include: typeof eventRowInclude;

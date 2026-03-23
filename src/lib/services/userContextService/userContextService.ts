@@ -75,7 +75,7 @@ export class UserContextService {
     return ctx as OrgUserContext;
   }
 
-  static async requireVerifiedOrg(): Promise<GetUserContext> {
+  static async requireVerifiedOrg(): Promise<OrgUserContext> {
     const ctx = await this.requireOrg();
     if (!ctx.flags.isOrgVerified) redirect('/org/pending');
     return ctx;

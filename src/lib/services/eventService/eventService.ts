@@ -13,6 +13,7 @@ import { OrgEventFilter, OrgEventFilterSchema } from '@/lib/types/OrgEventFilter
 import { EventDto, mapEventRowToDto } from '@/lib/types/dto/EventDto';
 import { UserEventFilter, userEventFilterSchema } from '@/lib/types/UserEventFilter';
 import tagService from '@/lib/services/tagService/tagService';
+import EventPermission from '@/lib/permissions/eventPermission/EventPermission';
 
 export class EventService {
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
@@ -68,16 +69,8 @@ export class EventService {
   ): Promise<EventDto | null> {
     const event = await eventDal.getEvent(eventId);
     if (!event) return null;
-    const isOwner = actor?.orgId === event.organizationId;
-    const isPublished = event.status === 'PUBLISHED';
-    const isOrgVerified = event.organization.status === 'VERIFIED';
-    if (isOwner) {
-      return mapEventRowToDto(event);
-    }
-    if (isPublished && isOrgVerified) {
-      return mapEventRowToDto(event);
-    }
-    return null;
+    if (!EventPermission.canView(event, actor)) return null;
+    return mapEventRowToDto(event);
   }
 
   static async getOrgUpcomingEvent(
@@ -86,11 +79,7 @@ export class EventService {
   ): Promise<EventDto | null> {
     const event = await eventDal.getUpcomingOrgEvent(orgId);
     if (!event) return null;
-    const isOwner = actor?.orgId === event.organizationId;
-    const isOrgVerified = event.organization.status === 'VERIFIED';
-    if (isOwner || isOrgVerified) {
-      return mapEventRowToDto(event);
-    }
-    return null;
+    if (!EventPermission.canView(event, actor)) return null;
+    return mapEventRowToDto(event);
   }
 }

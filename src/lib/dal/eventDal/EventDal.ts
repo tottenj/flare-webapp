@@ -1,10 +1,11 @@
 import 'server-only';
 import { EventDomainProps } from '@/lib/domain/eventDomain/EventDomain';
-import { Prisma } from '#prisma/generated/client';
+
 import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
 import { EventRow, eventRowInclude } from '@/lib/types/dto/EventDto';
 import { UserEventFilter } from '@/lib/types/UserEventFilter';
+import { Prisma } from '../../../../prisma/generated/client';
 
 export class EventDal {
   async create(input: EventDomainProps, tx?: Prisma.TransactionClient) {
