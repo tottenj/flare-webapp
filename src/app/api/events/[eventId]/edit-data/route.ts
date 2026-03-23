@@ -1,4 +1,3 @@
-
 import { AppError } from '@/lib/errors/AppError';
 import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
@@ -10,10 +9,8 @@ export default async function GET(
   { params }: { params: Promise<{ eventId: string }> }
 ): Promise<ActionResult<EditEventData>> {
   const { eventId } = await params;
-  const ctx = await UserContextService.requireOrg()
+  const ctx = await UserContextService.requireOrg();
   const actor = UserContextService.getOrgActor(ctx);
-
-
 
   return fail(
     new AppError({

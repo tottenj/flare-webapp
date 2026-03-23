@@ -1,5 +1,6 @@
 import { ImageMetadata } from '@/lib/schemas/proof/ImageMetadata';
-import { Prisma, ProofPlatform as PrismaProofPlatform } from '#prisma/generated/client';
+import { Prisma } from '#prisma/generated/client';
+import { ProofPlatform as PrismaProofPlatform } from '#prisma/generated/enums';
 import { prisma } from '../../../../prisma/prismaClient';
 import { ProofPlatform as DomainProofPlatform } from '@/lib/domain/ProofPlatform';
 import { ProofImageMetadata } from '@/lib/schemas/proof/ProofImageMetadataSchema';

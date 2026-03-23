@@ -8,7 +8,7 @@ import { UserContextService } from '@/lib/services/userContextService/userContex
 import { expectFail } from '@/lib/test/expectFail';
 import { PRICE_TYPE } from '@/lib/types/PriceType';
 import { expect } from '@jest/globals';
-import { AgeRestriction, EventCategory } from '#prisma/generated/client';
+import { AgeRestriction, EventCategory } from '#prisma/generated/enums';
 
 jest.mock('@/lib/services/userContextService/userContextService', () => ({
   __esModule: true,
