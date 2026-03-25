@@ -9,7 +9,7 @@ import { CreateEvent, CreateEventSchema } from '@/lib/schemas/event/createEventF
 import { EventService } from '@/lib/services/eventService/eventService';
 import ImageService from '@/lib/services/imageService/ImageService';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
-import { ActionResult } from '@/lib/types/ActionResult';
+import { ActionResult } from '@/lib/types/responses/ActionResult';
 import z from 'zod';
 
 export default async function createEvent(input: CreateEvent): Promise<ActionResult<null>> {

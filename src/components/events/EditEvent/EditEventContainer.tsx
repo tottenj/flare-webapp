@@ -5,16 +5,11 @@ import MainModal from '@/components/modals/MainModal/MainModal';
 import Skeleton from '@/components/skeletons/BaseSkeleton/BaseSkeleton';
 import { ClientError } from '@/lib/errors/clientErrors/ClientError';
 import { ClientErrors } from '@/lib/errors/clientErrors/ClientErrors';
-import { LocationInput } from '@/lib/schemas/LocationInputSchema';
-import { ActionResult } from '@/lib/types/ActionResult';
+import fetchEditData from '@/lib/fetch/fetchEditData/fetchEditData';
+import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
 import { EventDto } from '@/lib/types/dto/EventDto';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-
-interface EditEventFetchData {
-  imageURL?: string;
-  locationDetails?: LocationInput;
-}
 
 export default function EditEventContainer({
   event,
@@ -23,7 +18,7 @@ export default function EditEventContainer({
   event: EventDto;
   orgName?: string;
 }) {
-  const [data, setData] = useState<EditEventFetchData | null>(null);
+  const [data, setData] = useState<EditEventData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,24 +28,13 @@ export default function EditEventContainer({
     setData(null);
     setLoading(true);
     try {
-      const res = await fetch(`/api/events/${event.id}/edit-data`);
-      const json = (await res.json()) as ActionResult<EditEventFetchData> | null;
-      if (!res.ok) {
-        if (res.status === 401) throw ClientErrors.SessionExpired();
-        if (json && !json.ok) {
-          throw ClientErrors.ServerRejected(json.error.message, json.error.code);
-        }
-        throw ClientErrors.ServerRejected('Failed to load event data. Please try again.');
-      }
-      if (!json || !json.ok) {
-        throw ClientErrors.ServerRejected(json?.error.message ?? 'Invalid server response');
-      }
-      setData(json.data);
-    } catch (error) {
-      if (error instanceof ClientError) {
-        setError(error.message);
+      const result = await fetchEditData(event.id);
+      setData(result);
+    } catch (err) {
+      if (err instanceof ClientError) {
+        setError(err.message);
       } else {
-        setError('An unexpected error occurred. Please try again later.');
+        setError(ClientErrors.Network().message);
       }
     } finally {
       setLoading(false);
@@ -72,8 +56,8 @@ export default function EditEventContainer({
           <EditEventPresentational
             event={event}
             orgName={orgName}
-            imageURL={data?.imageURL}
-            locationDetails={data?.locationDetails}
+            imageURL={data?.imageUrl}
+            locationDetails={data?.location}
             close={close}
           />
         )

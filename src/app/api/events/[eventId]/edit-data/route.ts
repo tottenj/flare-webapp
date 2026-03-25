@@ -1,4 +1,8 @@
+import handleRouteError from '@/lib/errors/routeError/handleRouteError';
+import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
+import { EventService } from '@/lib/services/eventService/eventService';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
+import { ApiSuccess } from '@/lib/types/responses/ApiResponse';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -9,13 +13,12 @@ export async function GET(
   const ctx = await UserContextService.requireOrg();
   const actor = UserContextService.getOrgActor(ctx);
 
-  return NextResponse.json(
-    {
-      error: {
-        code: 'DLSKjf',
-        message: 'Ldfksjf',
-      },
-    },
-    { status: 500 }
-  );
+  try {
+    const editData = await EventService.getEditData(eventId, actor);
+    return NextResponse.json<ApiSuccess<EditEventData>>({
+      data: editData,
+    });
+  } catch (error) {
+    return handleRouteError(error);
+  }
 }

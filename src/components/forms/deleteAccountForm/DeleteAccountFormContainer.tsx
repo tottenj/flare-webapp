@@ -4,7 +4,7 @@ import mapFirebaseAuthError from '@/lib/errors/firebaseErrors/mapFirebaseAuthErr
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import { useFormAction } from '@/lib/hooks/useFormAction';
 import deleteAccount from '@/lib/serverActions/userActions/deleteAccount/deleteAccount';
-import { ActionResult } from '@/lib/types/ActionResult';
+import { ActionResult } from '@/lib/types/responses/ActionResult';
 import { FirebaseError } from 'firebase/app';
 import { EmailAuthProvider, reauthenticateWithCredential, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';

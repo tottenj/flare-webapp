@@ -23,6 +23,15 @@ export class EventDal {
     });
   }
 
+  async getOwnerInfo(eventId: string) {
+    return await prisma.flareEvent.findUnique({
+      where: { id: eventId },
+      select: {
+        organizationId: true,
+      },
+    });
+  }
+
   async getEvent(eventId: string): Promise<EventRow | null> {
     return await prisma.flareEvent.findUnique({
       where: { id: eventId },
@@ -43,6 +52,16 @@ export class EventDal {
         startsAtUTC: 'asc',
       },
       include: eventRowInclude,
+    });
+  }
+
+  async getEditData(eventId: string) {
+    return await prisma.flareEvent.findUnique({
+      where: { id: eventId },
+      select: {
+        image: true,
+        locationId: true
+      },
     });
   }
 

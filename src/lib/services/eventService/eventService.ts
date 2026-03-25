@@ -14,8 +14,17 @@ import { EventDto, mapEventRowToDto } from '@/lib/types/dto/EventDto';
 import { UserEventFilter, userEventFilterSchema } from '@/lib/types/UserEventFilter';
 import tagService from '@/lib/services/tagService/tagService';
 import EventPermission from '@/lib/permissions/eventPermission/EventPermission';
+import { EventErrors } from '@/lib/errors/eventErrors/EventErrors';
+import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
 
 export class EventService {
+  private static async assertCanEdit(eventId: string, actor: AuthenticatedOrganization) {
+    const event = await eventDal.getOwnerInfo(eventId);
+    if (!event) throw EventErrors.EventNotFound();
+    if (!EventPermission.canEdit({ organizationId: event.organizationId }, actor))
+      throw AuthErrors.Unauthorized();
+  }
+
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
     ensure(
       eventData.image.storagePath.startsWith(`events/${authenticatedUser.firebaseUid}`),
@@ -81,5 +90,39 @@ export class EventService {
     if (!event) return null;
     if (!EventPermission.canView(event, actor)) return null;
     return mapEventRowToDto(event);
+  }
+
+  static async getEditData(eventId: string, actor: AuthenticatedOrganization) {
+    await this.assertCanEdit(eventId, actor);
+    const event = await eventDal.getEditData(eventId);
+    if (!event) throw EventErrors.EventNotFound();
+    const [imageUrl, location] = await Promise.all([
+      event.image?.storagePath
+        ? ImageService.getDownloadUrl(event.image.storagePath)
+        : Promise.resolve(undefined),
+      event.locationId ? locationDal.get(event.locationId) : Promise.resolve(undefined),
+    ]);
+
+    const editData: EditEventData = {
+      imageUrl,
+      location: location
+        ? {
+            address: location.address,
+            placeId: location.placeId,
+            lat: location.latitude,
+            lng: location.longitude,
+          }
+        : undefined,
+
+      imageMetadata: event.image
+        ? {
+            contentType: event.image.contentType ?? undefined,
+            sizeBytes: event.image.sizeBytes ?? undefined,
+            storagePath: event.image.storagePath ?? undefined,
+            originalName: event.image.originalName ?? undefined,
+          }
+        : undefined,
+    };
+    return editData;
   }
 }

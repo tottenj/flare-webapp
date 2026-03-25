@@ -8,7 +8,7 @@ import ImageCropperInput from '@/components/inputs/image/ImageCropper/ImageCropp
 import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import EventCategorySelect from '@/components/inputs/hero/selects/eventCategorySelect/EventCategorySelect';
 import FileFormProps from '@/lib/types/FileFormProps';
-import LocationFormProps from '@/lib/types/LocationFormProps';
+import LocationFormProps from '@/lib/types/location/LocationFormProps';
 import { Form } from '@heroui/react';
 import TagAutoComplete from '@/components/inputs/hero/autocomplete/tagAutocomplete/TagAutoComplete';
 import HeroCheckBox from '@/components/inputs/hero/checkbox/HeroCheckBox';
