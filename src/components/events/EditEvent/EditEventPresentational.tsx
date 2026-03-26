@@ -1,11 +1,8 @@
 'use client';
 import EventFormContainer from '@/components/forms/eventForm/EventFormContainer';
-import MainModal from '@/components/modals/MainModal/MainModal';
 import mapEventDtoToInitialFormData from '@/lib/mappers/mapEventDtoToInitialFormData/mapEventDtoToInitialFormData';
 import { LocationInput } from '@/lib/schemas/LocationInputSchema';
 import { EventDto } from '@/lib/types/dto/EventDto';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function EditEventPresentational({
   event,

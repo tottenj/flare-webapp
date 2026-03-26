@@ -1,14 +1,17 @@
+import { LocationInput } from '@/lib/schemas/LocationInputSchema';
+import { ImageMetadata } from '@/lib/schemas/proof/ImageMetadata';
+import { EventDto } from '@/lib/types/dto/EventDto';
 import { ZonedDateTime } from '@internationalized/date';
 
 export type EventFormMode = 'create' | 'edit';
 
 export interface EventFormInitialData {
-  startDateTime: ZonedDateTime,
-  endDateTime?: ZonedDateTime,
-  eventName: string;
-  eventDescription: string;
+  event: EventDto;
+  location?: LocationInput;
+  startDateTime: ZonedDateTime;
+  endDateTime?: ZonedDateTime;
   imageDetails?: {
     url?: string;
-    storagePath?: string;
+    metaData?: ImageMetadata;
   };
 }

@@ -1,5 +1,6 @@
-import { LocationInputSchema } from "#src/lib/schemas/LocationInputSchema.js";
-import { ImageMetadataSchema } from "#src/lib/schemas/proof/ImageMetadata.js";
+
+import { LocationInputSchema } from "@/lib/schemas/LocationInputSchema";
+import { ImageMetadataSchema } from "@/lib/schemas/proof/ImageMetadata";
 import z from "zod";
 
 export const editEventDataSchema = z.object({

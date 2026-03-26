@@ -83,9 +83,7 @@ export default function EventFormContainer({
     setImgError,
     eventImgPreview,
     setEventImgPreview,
-  } = useEventForm({
-    imgPreview: initialEvent?.imageDetails?.url ?? null,
-  });
+  } = useEventForm(initialEvent);
 
   const { files, setFile } = useFileMap<EventFileKey>({
     initial: {
@@ -111,9 +109,9 @@ export default function EventFormContainer({
         }
         return;
       }
-    } else if (mode === 'edit' && initialEvent?.imageDetails?.storagePath) {
+    } else if (mode === 'edit' && initialEvent?.imageDetails?.metaData?.storagePath) {
       metadata = {
-        storagePath: initialEvent.imageDetails.storagePath,
+        ...initialEvent.imageDetails.metaData,
       };
     }
 

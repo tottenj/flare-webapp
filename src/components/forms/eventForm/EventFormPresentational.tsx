@@ -80,16 +80,16 @@ export default function EventFormPresentational({
           name="eventName"
           placeholder="Enter event name"
           required
-          defaultValue={initialEvent?.eventName}
+          defaultValue={initialEvent?.event.title}
         />
         <HeroTextArea
           label="Event Description"
           name="eventDescription"
           placeholder="Enter event description"
           required
-          defaultValue={initialEvent?.eventDescription}
+          defaultValue={initialEvent?.event.description}
         />
-        <PlaceSearch label="Event Location" onChange={changeLocVal} />
+        <PlaceSearch label="Event Location" onChange={changeLocVal} value={initialEvent?.location} />
         <TagAutoComplete />
 
         <div className="flex w-full gap-8">
@@ -116,13 +116,13 @@ export default function EventFormPresentational({
           </HeroCheckBox>
         </div>
 
-        <EventCategorySelect required />
+        <EventCategorySelect defaultValue={initialEvent?.event.category}  required />
 
         <div className="flex w-full gap-4">
-          <AgeRestrictionSelect required />
+          <AgeRestrictionSelect defaultValue={initialEvent?.event.ageRestriction} required />
         </div>
         <PriceTypeSelect onChange={setPriceType} value={priceType} />
-        {priceType === 'FIXED' && <PriceInput required description="Price" name="minPrice" />}
+        {priceType === 'FIXED' && <PriceInput  required description="Price" name="minPrice" />}
         {priceType === 'RANGE' && (
           <div className="flex w-full gap-8">
             <PriceInput required description="Min Price" name="minPrice" />

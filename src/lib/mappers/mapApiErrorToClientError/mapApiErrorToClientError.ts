@@ -3,6 +3,12 @@ import { ApiError } from "@/lib/types/responses/ApiResponse";
 
 export default function mapApiErrorToClientError(error: ApiError['error']) {
   switch (error.code) {
+    case "EVENT_NOT_FOUND": 
+      return ClientErrors.NotFound("Event");
+
+    case "AUTH_UNAUTHORIZED":
+      return ClientErrors.Unauthorized();
+
     case 'AUTH_INVALID_SESSION':
       return ClientErrors.SessionExpired();
 

@@ -1,11 +1,12 @@
 'use client';
 import IconButton from '@/components/buttons/iconButton/IconButton';
-import EditEventPresentational from '@/components/events/EditEvent/EditEventPresentational';
+import EventFormContainer from '@/components/forms/eventForm/EventFormContainer';
 import MainModal from '@/components/modals/MainModal/MainModal';
 import Skeleton from '@/components/skeletons/BaseSkeleton/BaseSkeleton';
 import { ClientError } from '@/lib/errors/clientErrors/ClientError';
 import { ClientErrors } from '@/lib/errors/clientErrors/ClientErrors';
 import fetchEditData from '@/lib/fetch/fetchEditData/fetchEditData';
+import mapEventDtoToInitialFormData from '@/lib/mappers/mapEventDtoToInitialFormData/mapEventDtoToInitialFormData';
 import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
 import { EventDto } from '@/lib/types/dto/EventDto';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
@@ -25,7 +26,6 @@ export default function EditEventContainer({
   async function loadData() {
     if (loading) return;
     setError(null);
-    setData(null);
     setLoading(true);
     try {
       const result = await fetchEditData(event.id);
@@ -44,24 +44,49 @@ export default function EditEventContainer({
   return (
     <MainModal
       onOpen={loadData}
+      onClose={() => {
+        setError(null);
+        setData(null);
+      }}
       modalProps={{ size: '5xl' }}
       trigger={<IconButton icon={faEdit} />}
     >
-      {(close) =>
-        loading ? (
-          <Skeleton className="h-8 w-8 rounded-full" />
-        ) : error ? (
-          <div className="text-red-500">{error}</div>
-        ) : (
-          <EditEventPresentational
-            event={event}
+      {(close) => {
+        if (loading) {
+          return <Skeleton className="h-100 w-full rounded-xl" />;
+        }
+
+        if (error) {
+          return (
+            <div className="flex flex-col items-center gap-2 text-red-500">
+              <p>{error}</p>
+              <button onClick={loadData} className="underline">
+                Try again
+              </button>
+            </div>
+          );
+        }
+
+        if (!data) {
+          return <Skeleton className="h-100 w-full rounded-xl" />;
+        }
+
+        const initialEvent = mapEventDtoToInitialFormData(
+          event,
+          data.imageUrl,
+          data.imageMetadata,
+          data.location
+        );
+
+        return (
+          <EventFormContainer
+            mode="edit"
+            initialEvent={initialEvent}
             orgName={orgName}
-            imageURL={data?.imageUrl}
-            locationDetails={data?.location}
-            close={close}
+            onCloseModal={close}
           />
-        )
-      }
+        );
+      }}
     </MainModal>
   );
 }
