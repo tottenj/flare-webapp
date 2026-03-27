@@ -6,17 +6,16 @@ import Skeleton from '@/components/skeletons/BaseSkeleton/BaseSkeleton';
 import { ClientError } from '@/lib/errors/clientErrors/ClientError';
 import { ClientErrors } from '@/lib/errors/clientErrors/ClientErrors';
 import fetchEditData from '@/lib/fetch/fetchEditData/fetchEditData';
-import mapEventDtoToInitialFormData from '@/lib/mappers/mapEventDtoToInitialFormData/mapEventDtoToInitialFormData';
+import mapEditEventDataToInitialFormData from '@/lib/mappers/mapEditEventDataToInitialFormData/mapEditEventDataToInitialFormData';
 import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
-import { EventDto } from '@/lib/types/dto/EventDto';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
 export default function EditEventContainer({
-  event,
+  eventId,
   orgName,
 }: {
-  event: EventDto;
+  eventId: string;
   orgName?: string;
 }) {
   const [data, setData] = useState<EditEventData | null>(null);
@@ -28,7 +27,7 @@ export default function EditEventContainer({
     setError(null);
     setLoading(true);
     try {
-      const result = await fetchEditData(event.id);
+      const result = await fetchEditData(eventId);
       setData(result);
     } catch (err) {
       if (err instanceof ClientError) {
@@ -71,12 +70,7 @@ export default function EditEventContainer({
           return <Skeleton className="h-100 w-full rounded-xl" />;
         }
 
-        const initialEvent = mapEventDtoToInitialFormData(
-          event,
-          data.imageUrl,
-          data.imageMetadata,
-          data.location
-        );
+        const initialEvent = mapEditEventDataToInitialFormData(data);
 
         return (
           <EventFormContainer

@@ -10,7 +10,8 @@ import ImageService from '@/lib/services/imageService/ImageService';
 import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
 import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter, OrgEventFilterSchema } from '@/lib/types/OrgEventFilter';
-import { EventDto, mapEventRowToDto } from '@/lib/types/dto/EventDto';
+import type { EventDto } from '@/lib/schemas/event/eventDtoSchema';
+import { mapEventRowToDto } from '@/lib/types/dto/EventDto';
 import { UserEventFilter, userEventFilterSchema } from '@/lib/types/UserEventFilter';
 import tagService from '@/lib/services/tagService/tagService';
 import EventPermission from '@/lib/permissions/eventPermission/EventPermission';
@@ -94,16 +95,22 @@ export class EventService {
 
   static async getEditData(eventId: string, actor: AuthenticatedOrganization) {
     await this.assertCanEdit(eventId, actor);
-    const event = await eventDal.getEditData(eventId);
-    if (!event) throw EventErrors.EventNotFound();
+    const [eventRow, eventAssets] = await Promise.all([
+      eventDal.getEvent(eventId),
+      eventDal.getEditData(eventId),
+    ]);
+    if (!eventRow || !eventAssets) throw EventErrors.EventNotFound();
+
+    const event = mapEventRowToDto(eventRow);
     const [imageUrl, location] = await Promise.all([
-      event.image?.storagePath
-        ? ImageService.getDownloadUrl(event.image.storagePath)
+      eventAssets.image?.storagePath
+        ? ImageService.getDownloadUrl(eventAssets.image.storagePath)
         : Promise.resolve(undefined),
-      event.locationId ? locationDal.get(event.locationId) : Promise.resolve(undefined),
+      eventAssets.locationId ? locationDal.get(eventAssets.locationId) : Promise.resolve(undefined),
     ]);
 
     const editData: EditEventData = {
+      event,
       imageUrl,
       location: location
         ? {
@@ -114,12 +121,12 @@ export class EventService {
           }
         : undefined,
 
-      imageMetadata: event.image
+      imageMetadata: eventAssets.image
         ? {
-            contentType: event.image.contentType ?? undefined,
-            sizeBytes: event.image.sizeBytes ?? undefined,
-            storagePath: event.image.storagePath ?? undefined,
-            originalName: event.image.originalName ?? undefined,
+            contentType: eventAssets.image.contentType ?? undefined,
+            sizeBytes: eventAssets.image.sizeBytes ?? undefined,
+            storagePath: eventAssets.image.storagePath ?? undefined,
+            originalName: eventAssets.image.originalName ?? undefined,
           }
         : undefined,
     };

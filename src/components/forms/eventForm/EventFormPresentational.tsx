@@ -18,7 +18,6 @@ import { PriceTypeValue } from '@/lib/types/PriceType';
 import PriceTypeSelect from '@/components/inputs/hero/selects/priceTypeSelect/PriceTypeSelect';
 import PriceInput from '@/components/inputs/hero/number/priceInput/PriceInput';
 import { EventFormInitialData } from '@/lib/types/EventForm/EventForm';
-import { parseZonedDateTime } from '@internationalized/date';
 
 interface EventFormPresentationalProps extends LocationFormProps, FileFormProps<EventFileKey> {
   eventImgPreview: string | null;
@@ -80,16 +79,20 @@ export default function EventFormPresentational({
           name="eventName"
           placeholder="Enter event name"
           required
-          defaultValue={initialEvent?.event.title}
+          defaultValue={initialEvent?.eventName}
         />
         <HeroTextArea
           label="Event Description"
           name="eventDescription"
           placeholder="Enter event description"
           required
-          defaultValue={initialEvent?.event.description}
+          defaultValue={initialEvent?.eventDescription}
         />
-        <PlaceSearch label="Event Location" onChange={changeLocVal} value={initialEvent?.location} />
+        <PlaceSearch
+          label="Event Location"
+          onChange={changeLocVal}
+          value={initialEvent?.location}
+        />
         <TagAutoComplete />
 
         <div className="flex w-full gap-8">
@@ -116,17 +119,34 @@ export default function EventFormPresentational({
           </HeroCheckBox>
         </div>
 
-        <EventCategorySelect defaultValue={initialEvent?.event.category}  required />
+        <EventCategorySelect defaultValue={initialEvent?.category} required />
 
         <div className="flex w-full gap-4">
-          <AgeRestrictionSelect defaultValue={initialEvent?.event.ageRestriction} required />
+          <AgeRestrictionSelect defaultValue={initialEvent?.ageRestriction} required />
         </div>
         <PriceTypeSelect onChange={setPriceType} value={priceType} />
-        {priceType === 'FIXED' && <PriceInput  required description="Price" name="minPrice" />}
+        {priceType === 'FIXED' && (
+          <PriceInput
+            required
+            description="Price"
+            name="minPrice"
+            defaultValue={initialEvent?.minPrice}
+          />
+        )}
         {priceType === 'RANGE' && (
           <div className="flex w-full gap-8">
-            <PriceInput required description="Min Price" name="minPrice" />
-            <PriceInput required description="Max Price" name="maxPrice" />
+            <PriceInput
+              required
+              description="Min Price"
+              name="minPrice"
+              defaultValue={initialEvent?.minPrice}
+            />
+            <PriceInput
+              required
+              description="Max Price"
+              name="maxPrice"
+              defaultValue={initialEvent?.maxPrice}
+            />
           </div>
         )}
         <PrimaryButton type="submit" text={submitText} />

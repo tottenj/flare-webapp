@@ -11,17 +11,17 @@ import { PriceTypeValue } from '@/lib/types/PriceType';
 import { useState } from 'react';
 import z from 'zod';
 
-
-
 export default function useEventForm(initialState?: EventFormInitialData) {
   const [location, setLocation] = useState<LocationInput | null>(initialState?.location ?? null);
-  const [hasEndTime, setHasEndTime] = useState(initialState?.event.endsAt ? true : false);
-  const [priceType, setPriceType] = useState<PriceTypeValue>(initialState?.event.pricing.type ?? 'FREE');
+  const [hasEndTime, setHasEndTime] = useState(Boolean(initialState?.endDateTime));
+  const [priceType, setPriceType] = useState<PriceTypeValue>(initialState?.priceType ?? 'FREE');
   const [previewErrors, setPreviewErrors] = useState<Record<string, string[]>>({});
   const [pendingFormData, setPendingFormData] = useState<CreateEventPreviewForm | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [imgError, setImgError] = useState<string | null>(null);
-  const [eventImgPreview, setEventImgPreview] = useState<string | null>(initialState?.imageDetails?.url ?? null);
+  const [eventImgPreview, setEventImgPreview] = useState<string | null>(
+    initialState?.imageDetails?.url ?? null
+  );
 
   function handlePreview(formData: FormData) {
     const result = parsePreviewFormData(formData);
@@ -51,6 +51,6 @@ export default function useEventForm(initialState?: EventFormInitialData) {
     imgError,
     setImgError,
     eventImgPreview,
-    setEventImgPreview
+    setEventImgPreview,
   };
 }

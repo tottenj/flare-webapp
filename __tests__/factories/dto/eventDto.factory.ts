@@ -1,4 +1,4 @@
-import { EventDto } from '@/lib/types/dto/EventDto';
+import type { EventDto } from '@/lib/schemas/event/eventDtoSchema';
 import { EventCategory } from '#prisma/generated/enums';
 import { PRICE_TYPE } from '@/lib/types/PriceType';
 import { AGE_RANGE } from '@/lib/types/AgeRange';

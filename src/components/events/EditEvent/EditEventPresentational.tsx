@@ -1,8 +1,8 @@
 'use client';
 import EventFormContainer from '@/components/forms/eventForm/EventFormContainer';
-import mapEventDtoToInitialFormData from '@/lib/mappers/mapEventDtoToInitialFormData/mapEventDtoToInitialFormData';
+import mapEditEventDataToInitialFormData from '@/lib/mappers/mapEditEventDataToInitialFormData/mapEditEventDataToInitialFormData';
 import { LocationInput } from '@/lib/schemas/LocationInputSchema';
-import { EventDto } from '@/lib/types/dto/EventDto';
+import type { EventDto } from '@/lib/schemas/event/eventDtoSchema';
 
 export default function EditEventPresentational({
   event,
@@ -17,7 +17,11 @@ export default function EditEventPresentational({
   locationDetails?: LocationInput;
   close?: () => void;
 }) {
-  const initialEvent = mapEventDtoToInitialFormData(event, imageURL);
+  const initialEvent = mapEditEventDataToInitialFormData({
+    event,
+    imageUrl: imageURL,
+    location: locationDetails,
+  });
 
   return (
     <EventFormContainer
