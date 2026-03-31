@@ -144,81 +144,83 @@ export class EventService {
     eventData: EditEventInput
   ) {
     await this.assertCanEdit(eventId, actor);
-    if (eventData.image.isNew) {
-      ensure(
-        eventData.image.metadata.storagePath.startsWith(`events/${actor.firebaseUid}`),
-        AuthErrors.Unauthorized()
-      );
+    const prevEvent = await eventDal.getEvent(eventId);
+    ensure(prevEvent, EventErrors.EventNotFound());
 
-      const prevEvent = await eventDal.getEvent(eventId);
-      ensure(prevEvent, EventErrors.EventNotFound());
-      await prisma.$transaction(async (tx) => {
-        let imageId: string | undefined = undefined;
-        let locationId: string | undefined = undefined;
-        if (eventData.image.isNew) {
-          const imageAsset = await imageAssetDal.create(eventData.image.metadata, tx);
-          imageId = imageAsset.id;
-        }
-        if (eventData.location && prevEvent?.location?.placeId !== eventData.location?.placeId) {
-          const location = await locationDal.create(eventData.location, tx);
-          locationId = location.id;
-        }
+    await prisma.$transaction(async (tx) => {
+      let imageId: string | undefined = undefined;
+      let locationId: string | undefined = undefined;
 
-        const tagsToDelete =
-          prevEvent?.tags
-            .filter((prevTag) => !eventData.tags.includes(prevTag.tag.label))
-            .map((tag) => tag.tag) ?? [];
-        const newTags =
-          eventData.tags.filter(
-            (tag) => !prevEvent?.tags.some((prevTag) => prevTag.tag.label === tag)
-          ) ?? [];
+      if (eventData.image.isNew) {
+        ensure(
+          eventData.image.metadata.storagePath.startsWith(`events/${actor.firebaseUid}`),
+          AuthErrors.Unauthorized()
+        );
 
-        const newTagIds = await tagService.createAndIncrementMany(newTags, tx);
-        if (tagsToDelete.length > 0) {
-          const tagIdsToDelete = tagsToDelete.map((tag) => tag.id);
-          await tagService.decrementMany(tagIdsToDelete, tx);
-          await tagService.deleteUnused(tagIdsToDelete, tx);
-        }
-        const remainingTagIds =
-          prevEvent?.tags
-            .filter((prevTag) => eventData.tags.includes(prevTag.tag.label))
-            .map((t) => t.tag.id) ?? [];
+        const imageAsset = await imageAssetDal.create(eventData.image.metadata, tx);
+        imageId = imageAsset.id;
+      }
 
-        const allTags = [...remainingTagIds, ...newTagIds];
-        const resolved: EditEventResolved = {
-          ...eventData,
-          tags: Array.from(allTags),
-          imageId: imageId ?? prevEvent?.imageId ?? undefined,
-          locationId: locationId ?? prevEvent?.locationId ?? undefined,
-        };
-        const eventEditInput = EventDomain.onEdit(resolved, {
-          organizationId: prevEvent.organizationId,
-          category: prevEvent.category,
-          title: prevEvent.title,
-          description: prevEvent.description,
-          ageRestriction: prevEvent.ageRestriction,
-          status: prevEvent.status,
-          publishedAt: prevEvent.publishedAt,
-          imageId: prevEvent.imageId,
-          startsAtUTC: prevEvent.startsAtUTC,
-          endsAtUTC: prevEvent.endsAtUTC,
-          timezone: prevEvent.timezone,
-          locationId: prevEvent.locationId,
-          pricingType: prevEvent.pricingType,
-          minPriceCents: prevEvent.minPriceCents,
-          maxPriceCents: prevEvent.maxPriceCents,
-          tags: prevEvent.tags.map((t) => t.tag.id),
-        });
-        await eventDal.edit(eventId, eventEditInput.props, tx);
-        if (eventData.image.isNew && prevEvent?.imageId) {
-          await imageAssetDal.delete(prevEvent.imageId, tx);
-          await ImageService.deleteByStoragePath(prevEvent.image?.storagePath ?? '').catch(
-            (error) => {
-              console.log(error);
-            }
-          );
-        }
+      if (eventData.location && prevEvent.location?.placeId !== eventData.location?.placeId) {
+        const location = await locationDal.create(eventData.location, tx);
+        locationId = location.id;
+      }
+
+      const tagsToDelete =
+        prevEvent.tags
+          .filter((prevTag) => !eventData.tags.includes(prevTag.tag.label))
+          .map((tag) => tag.tag) ?? [];
+      const newTags =
+        eventData.tags.filter(
+          (tag) => !prevEvent.tags.some((prevTag) => prevTag.tag.label === tag)
+        ) ?? [];
+
+      const newTagIds = await tagService.createAndIncrementMany(newTags, tx);
+      if (tagsToDelete.length > 0) {
+        const tagIdsToDelete = tagsToDelete.map((tag) => tag.id);
+        await tagService.decrementMany(tagIdsToDelete, tx);
+        await tagService.deleteUnused(tagIdsToDelete, tx);
+      }
+      const remainingTagIds =
+        prevEvent.tags
+          .filter((prevTag) => eventData.tags.includes(prevTag.tag.label))
+          .map((t) => t.tag.id) ?? [];
+
+      const allTags = [...remainingTagIds, ...newTagIds];
+      const resolved: EditEventResolved = {
+        ...eventData,
+        tags: Array.from(allTags),
+        imageId: imageId ?? prevEvent.imageId ?? undefined,
+        locationId: locationId ?? prevEvent.locationId ?? undefined,
+      };
+      const eventEditInput = EventDomain.onEdit(resolved, {
+        organizationId: prevEvent.organizationId,
+        category: prevEvent.category,
+        title: prevEvent.title,
+        description: prevEvent.description,
+        ageRestriction: prevEvent.ageRestriction,
+        status: prevEvent.status,
+        publishedAt: prevEvent.publishedAt,
+        imageId: prevEvent.imageId,
+        startsAtUTC: prevEvent.startsAtUTC,
+        endsAtUTC: prevEvent.endsAtUTC,
+        timezone: prevEvent.timezone,
+        locationId: prevEvent.locationId,
+        pricingType: prevEvent.pricingType,
+        minPriceCents: prevEvent.minPriceCents,
+        maxPriceCents: prevEvent.maxPriceCents,
+        tags: prevEvent.tags.map((t) => t.tag.id),
       });
-    }
+      await eventDal.edit(eventId, eventEditInput.props, tx);
+
+      if (eventData.image.isNew && prevEvent.imageId) {
+        await imageAssetDal.delete(prevEvent.imageId, tx);
+        await ImageService.deleteByStoragePath(prevEvent.image?.storagePath ?? '').catch(
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+    });
   }
 }
