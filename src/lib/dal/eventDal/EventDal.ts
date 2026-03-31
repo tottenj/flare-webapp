@@ -60,7 +60,7 @@ export class EventDal {
       where: { id: eventId },
       select: {
         image: true,
-        locationId: true
+        locationId: true,
       },
     });
   }
@@ -99,6 +99,24 @@ export class EventDal {
         startsAtUTC: 'asc',
       },
       include: eventRowInclude,
+    });
+  }
+
+  async edit(eventId: string, input: EventDomainProps, tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    const { tags, organizationId, ...rest } = input;
+
+    return await client.flareEvent.update({
+      where: { id: eventId },
+      data: {
+        ...rest,
+        tags: {
+          deleteMany: {}, 
+          create: tags.map((tagId) => ({
+            tag: { connect: { id: tagId } },
+          })),
+        },
+      },
     });
   }
 }

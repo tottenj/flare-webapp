@@ -8,6 +8,10 @@ import { ClientErrors } from '@/lib/errors/clientErrors/ClientErrors';
 import fetchEditData from '@/lib/fetch/fetchEditData/fetchEditData';
 import mapEditEventDataToInitialFormData from '@/lib/mappers/mapEditEventDataToInitialFormData/mapEditEventDataToInitialFormData';
 import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
+import { EditEventInput } from '@/lib/schemas/event/editEventInputSchema';
+import { CreateEvent } from '@/lib/schemas/event/createEventFormSchema';
+import editEvent from '@/lib/serverActions/events/updateEvent/updateEvent';
+import { EventFormInitialData } from '@/lib/types/EventForm/EventForm';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
@@ -48,7 +52,7 @@ export default function EditEventContainer({
         setData(null);
       }}
       modalProps={{ size: '5xl' }}
-      trigger={<IconButton icon={faEdit} />}
+      trigger={<IconButton className="absolute -top-4 -right-6 z-10" icon={faEdit} />}
     >
       {(close) => {
         if (loading) {
@@ -72,12 +76,30 @@ export default function EditEventContainer({
 
         const initialEvent = mapEditEventDataToInitialFormData(data);
 
+        function buildSubmitAction(
+          id: string,
+          original: EventFormInitialData
+        ): (input: CreateEvent) => ReturnType<typeof editEvent> {
+          return (input: CreateEvent) => {
+            const originalStoragePath = original.imageDetails?.metaData?.storagePath;
+            const isNew = input.image.storagePath !== originalStoragePath;
+            const editInput: EditEventInput = {
+              ...input,
+              image: isNew
+                ? { isNew: true, metadata: input.image }
+                : { isNew: false, storagePath: input.image.storagePath },
+            };
+            return editEvent(id, editInput);
+          };
+        }
+
         return (
           <EventFormContainer
             mode="edit"
             initialEvent={initialEvent}
             orgName={orgName}
             onCloseModal={close}
+            submitAction={buildSubmitAction(eventId, initialEvent)}
           />
         );
       }}

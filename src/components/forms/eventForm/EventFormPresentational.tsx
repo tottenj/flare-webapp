@@ -93,7 +93,7 @@ export default function EventFormPresentational({
           onChange={changeLocVal}
           value={initialEvent?.location}
         />
-        <TagAutoComplete />
+        <TagAutoComplete initialValues={initialEvent?.tags} />
 
         <div className="flex w-full gap-8">
           <HeroDateInput

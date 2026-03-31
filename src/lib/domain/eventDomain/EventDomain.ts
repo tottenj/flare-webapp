@@ -30,6 +30,12 @@ export type CreateEventResolved = Omit<CreateEvent, 'image' | 'location'> & {
   locationId?: string | null;
 };
 
+export type EditEventResolved = Omit<CreateEvent, 'image' | 'location' | 'tags'> & {
+  imageId?: string;
+  locationId?: string | null;
+  tags?: string[];
+};
+
 export class EventDomain {
   private constructor(public readonly props: EventDomainProps) {}
   static onCreate(input: CreateEventResolved, organizationId: string) {
@@ -55,6 +61,36 @@ export class EventDomain {
       pricingType: pricing.type,
       ageRestriction: input.ageRestriction,
       tags: input.tags,
+    });
+  }
+
+  static onEdit(input: EditEventResolved, existing: EventDomainProps) {
+    const pricing = EventPriceDomain.fromInput(input.priceType, input.minPrice, input.maxPrice);
+    const start = parseZonedToUTC(input.startDateTime);
+    const end = input.endDateTime ? parseZonedToUTC(input.endDateTime) : null;
+    if (end && end.utcDate <= start.utcDate) {
+      throw EventErrors.InvalidTimeRange();
+    }
+    if (input.tags && input.tags.length > 5) {
+      throw EventErrors.InvalidTagNumber();
+    }
+    return new EventDomain({
+      ...existing,
+      status: input.status,
+      title: input.eventName,
+      category: input.category,
+      description: input.eventDescription,
+      publishedAt: input.status === 'PUBLISHED' ? (existing.publishedAt ?? new Date()) : null,
+      startsAtUTC: start.utcDate,
+      endsAtUTC: end ? end.utcDate : null,
+      timezone: start.timeZone,
+      imageId: input.imageId ?? existing.imageId,
+      locationId: input.locationId ?? existing.locationId,
+      minPriceCents: pricing?.min?.cents,
+      maxPriceCents: pricing?.max?.cents,
+      pricingType: pricing.type,
+      ageRestriction: input.ageRestriction,
+      tags: input.tags ?? existing.tags,
     });
   }
 }

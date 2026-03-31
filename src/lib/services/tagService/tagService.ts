@@ -16,4 +16,29 @@ export default class tagService {
       })
     );
   }
+
+
+  static async decrementMany(tagIds: string[], tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    await client.tag.updateMany({
+      where: {
+        id: { in: tagIds },
+      },
+      data: {
+        usageCount: { decrement: 1 },
+      },
+    });
+  }
+
+
+  static async deleteUnused(tagIds: string[], tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    await client.tag.deleteMany({
+      where: {
+        id: { in: tagIds },
+        usageCount: { lte: 0 },
+      },
+    });
+  }
 }
+

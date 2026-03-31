@@ -18,6 +18,7 @@ export interface EventFormInitialData {
   endDateTime?: ZonedDateTime;
   minPrice?: number;
   maxPrice?: number;
+  tags: string[];
   imageDetails?: {
     url?: string;
     metaData?: ImageMetadata;

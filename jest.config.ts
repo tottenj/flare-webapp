@@ -24,9 +24,7 @@ export default async (): Promise<Config> => {
       '/node_modules/',
       '/app/generated/prisma/',
       '/src/lib/auth/',
-      '/src/lib/serverActions/',
       '/src/lib/dal/',
-      '/src/lib/services/',
     ],
   })();
 

@@ -23,13 +23,14 @@ export default function IconButton({
   size = 30,
   variant = 'primary',
   type = 'button',
+  className,
   ...buttonProps
 }: IconButtonProps) {
   return (
     <button
       type={type}
       style={{ width: size, height: size }}
-      className={`${baseStyles} ${variantStyles[variant]}`}
+      className={`${baseStyles} ${variantStyles[variant]} ${className ?? ''}`.trim()}
       {...buttonProps}
     >
       <FontAwesomeIcon icon={icon} style={{ fontSize: size * 0.5 }} />
