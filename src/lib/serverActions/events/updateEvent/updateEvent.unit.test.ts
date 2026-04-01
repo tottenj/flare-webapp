@@ -140,6 +140,44 @@ describe('updateEvent', () => {
     );
   });
 
+  it('does not delete new image when storage path is not owned by current user', async () => {
+    const invalidInput = {
+      ...input,
+      eventName: '',
+      image: {
+        isNew: true as const,
+        metadata: {
+          storagePath: 'events/someone-else/image.jpg',
+          contentType: 'image/jpeg',
+          sizeBytes: 1024,
+          originalName: 'image.jpg',
+        },
+      },
+    };
+
+    const result = await updateEvent(eventId, invalidInput);
+
+    expect(result.ok).toBe(false);
+    expect(expectFail(result as ActionResult<null>).code).toBe('INVALID_INPUT');
+    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+  });
+
+  it('passes undefined orgId when org profile is missing', async () => {
+    (UserContextService.requireOrg as jest.Mock).mockResolvedValueOnce({
+      ...ctx,
+      profile: {},
+    });
+
+    const result = await updateEvent(eventId, input);
+
+    expect(result).toEqual({ ok: true, data: null });
+    expect(EventService.editEvent).toHaveBeenCalledWith(
+      eventId,
+      { userId: 'userId', firebaseUid: 'uid123', orgId: undefined },
+      input
+    );
+  });
+
   it('handles unknown event update error', async () => {
     (EventService.editEvent as jest.Mock).mockRejectedValue(new Error('Update failed'));
 

@@ -8,7 +8,18 @@ import { mapEventRowToDto } from '@/lib/types/dto/EventDto';
 import { buildEventRow } from '../../../../__tests__/factories/dal/eventRow.builder';
 import tagService from '@/lib/services/tagService/tagService';
 import { eventInputFactory } from '../../../../__tests__/factories/service/eventInput.factory';
+import { editEventInputFactory } from '../../../../__tests__/factories/service/editEventInput.factory';
 import { authOrgFactory } from '../../../../__tests__/factories/auth/authOrg.factory';
+import { prisma } from '../../../../prisma/prismaClient';
+
+jest.mock('../../../../prisma/prismaClient', () => ({
+  prisma: {
+    $transaction: jest.fn(async (fn: any) => {
+      const tx = {};
+      return fn(tx);
+    }),
+  },
+}));
 
 jest.mock('@/lib/dal/imageAssetDal/ImageAssetDal', () => ({
   imageAssetDal: {
@@ -27,6 +38,8 @@ jest.mock('@/lib/dal/eventDal/EventDal', () => ({
     create: jest.fn(),
     getEvent: jest.fn(),
     getUpcomingOrgEvent: jest.fn(),
+    getOwnerInfo: jest.fn(),
+    edit: jest.fn(),
   },
 }));
 
@@ -34,6 +47,8 @@ jest.mock('@/lib/services/tagService/tagService', () => ({
   __esModule: true,
   default: {
     createAndIncrementMany: jest.fn(),
+    decrementMany: jest.fn(),
+    deleteUnused: jest.fn(),
   },
 }));
 
@@ -348,5 +363,59 @@ describe('EventService.getOrgUpcomingEvent', () => {
     expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
     expect(mapEventRowToDto).not.toHaveBeenCalled();
     expect(res).toBeNull();
+  });
+});
+
+describe('eventService.editEvent', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('successfully edits event', async () => {
+    const eventId = 'eventId';
+    const actor = {
+      userId: 'userId',
+      orgId: 'orgId',
+      firebaseUid: 'uid',
+    };
+    const input = editEventInputFactory({
+      image: { isNew: false, storagePath: 'events/uid/existing-image.jpg' },
+      tags: ['drag', 'community'],
+      location: {
+        address: '123 Main St, Anytown, USA',
+        placeId: 'place123',
+        lat: 40.7128,
+        lng: -74.006,
+      },
+    });
+
+    jest.spyOn(EventService as any, 'assertCanEdit').mockResolvedValueOnce(undefined);
+    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(
+      buildEventRow({
+        id: eventId,
+        organizationId: actor.orgId,
+        imageId: 'image-id',
+        location: { placeId: 'place123', address: '123 Main St, Anytown, USA' },
+      })
+    );
+    (tagService.createAndIncrementMany as jest.Mock).mockResolvedValueOnce([]);
+
+    await expect(EventService.editEvent(eventId, actor, input)).resolves.not.toThrow();
+    expect((EventService as any).assertCanEdit).toHaveBeenCalledWith(eventId, actor);
+    expect(prisma.$transaction).toHaveBeenCalled();
+    expect(tagService.createAndIncrementMany).toHaveBeenCalledWith([], expect.anything());
+    expect(tagService.decrementMany).not.toHaveBeenCalled();
+    expect(tagService.deleteUnused).not.toHaveBeenCalled();
+
+    const editArgs = (eventDal.edit as jest.Mock).mock.calls[0][1];
+    expect(editArgs.tags).toEqual(['id1', 'id2']);
+    expect(editArgs.imageId).toBe('image-id');
+    expect(editArgs.locationId).toBe('location-id');
+    expect(eventDal.edit).toHaveBeenCalledTimes(1);
+    expect(eventDal.edit).toHaveBeenCalledWith(eventId, editArgs, expect.anything());
+
+    expect(imageAssetDal.create).not.toHaveBeenCalled();
+    expect(locationDal.create).not.toHaveBeenCalled();
+    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
   });
 });
