@@ -146,6 +146,8 @@ export class EventService {
     await this.assertCanEdit(eventId, actor);
     const prevEvent = await eventDal.getEvent(eventId);
     ensure(prevEvent, EventErrors.EventNotFound());
+    let shouldDeleteOldImage = false;
+    let oldImagePath: string | null = null;
 
     await prisma.$transaction(async (tx) => {
       let imageId: string | undefined = undefined;
@@ -156,9 +158,14 @@ export class EventService {
           eventData.image.metadata.storagePath.startsWith(`events/${actor.firebaseUid}`),
           AuthErrors.Unauthorized()
         );
-
         const imageAsset = await imageAssetDal.create(eventData.image.metadata, tx);
         imageId = imageAsset.id;
+
+        if (prevEvent.imageId) {
+          await imageAssetDal.delete(prevEvent.imageId, tx);
+          shouldDeleteOldImage = true;
+          oldImagePath = prevEvent.image?.storagePath ?? null;
+        }
       }
 
       if (eventData.location && prevEvent.location?.placeId !== eventData.location?.placeId) {
@@ -212,15 +219,11 @@ export class EventService {
         tags: prevEvent.tags.map((t) => t.tag.id),
       });
       await eventDal.edit(eventId, eventEditInput.props, tx);
-
-      if (eventData.image.isNew && prevEvent.imageId) {
-        await imageAssetDal.delete(prevEvent.imageId, tx);
-        await ImageService.deleteByStoragePath(prevEvent.image?.storagePath ?? '').catch(
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
     });
+    if (shouldDeleteOldImage && oldImagePath) {
+      await ImageService.deleteByStoragePath(oldImagePath).catch((error) => {
+        console.log(error);
+      });
+    }
   }
 }

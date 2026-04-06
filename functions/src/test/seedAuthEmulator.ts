@@ -58,14 +58,23 @@ export const seedStorageEmulator = onRequest(async (req: any, res: any) => {
     const filePath = path.join(process.cwd(), 'src', 'testAssets', 'stockEvent.jpg');
     const bucket = storage.bucket();
     await bucket.deleteFiles({ force: true });
-    await bucket.upload(filePath, {
-      destination: 'events/uid3/randoCrypto/stockEvent.jpg',
-      metadata: { contentType: 'image/jpeg' },
-    });
+    const destinations = [
+      'events/uid3/randoCrypto/stockEvent.jpg',
+      'events/uid3/randoCrypto/editable-event.jpg',
+    ];
+
+    await Promise.all(
+      destinations.map((destination) =>
+        bucket.upload(filePath, {
+          destination,
+          metadata: { contentType: 'image/jpeg' },
+        })
+      )
+    );
 
     res.json({
       success: true,
-      files: ['events/uid3/randoCrypto/stockEvent.jpg'],
+      files: destinations,
     });
   } catch (error: any) {
     console.log(error);
