@@ -122,4 +122,16 @@ describe('Edit Event', () => {
       cy.contains('CN Tower, Toronto').should('be.visible');
     });
   });
+
+  it('handles submitting without changes', () => {
+    openEditForm(editableEvent.title);
+
+    cy.contains('Preview Changes').click();
+    cy.contains('Save Changes').click();
+
+    cy.contains('.Toastify__toast', 'Updated Event').should('be.visible');
+
+    // Still same title
+    cy.contains(editableEvent.title).should('exist');
+  });
 });
