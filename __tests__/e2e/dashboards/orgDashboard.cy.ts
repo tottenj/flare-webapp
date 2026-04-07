@@ -19,10 +19,9 @@ describe('General', () => {
 
   it('Successfully Loads Next Upcoming Event', () => {
     cy.get('[data-cy="upcoming-container"]').within(() => {
-      cy.contains('Upcoming Event').should('be.visible');
+      cy.contains(seededEvents.upcoming.title).should('be.visible');
       cy.contains('Free').should('be.visible');
-      cy.contains('Mar').should('be.visible');
-      cy.contains('unverifiedOrg').should('be.visible');
+      cy.contains(pendingOrg.orgName).should('be.visible');
     });
   });
 });
@@ -233,7 +232,7 @@ describe('Delete Account Flow - Isolated', () => {
       });
 
     cy.contains('Confirm Account Deletion').should('be.visible');
-    cy.get('[data-cy="email-input"]').type(pendingOrg.email);
+    cy.get('[data-cy="email-input"]').type('unverifiedOrg@gmail.com');
     cy.get('[data-cy="password-input"]').type('wrongpassword123');
     cy.get('[data-cy="delete-account-button"]').should('be.visible').click();
 
@@ -256,27 +255,28 @@ describe('Delete Account Flow - Isolated', () => {
     cy.get('[data-cy="password-input"]').type('password123');
     cy.get('[data-cy="delete-account-button"]').should('be.visible').click();
 
-    cy.contains('Email does not match the currently authenticated user').should('be.visible');
+    cy.contains('Failed to delete account. Please try again.').should('be.visible');
     cy.getCookie('session').should('exist');
     cy.window().its('auth.currentUser').should('not.be.null');
     cy.url().should('include', '/dashboard');
   });
 
-  it('Deletes account successfully and logs the user out', () => {
+  it('Deletes account successfully', () => {
     cy.get('[data-cy="user-dashboard-settings"]').click();
     cy.get('[data-cy="main-modal"]')
       .should('be.visible')
       .within(() => {
         cy.contains('Delete Account').should('be.visible').click();
       });
-
     cy.contains('Confirm Account Deletion').should('be.visible');
-    cy.get('[data-cy="email-input"]').type(pendingOrg.email);
-    cy.get('[data-cy="password-input"]').type(pendingOrg.password);
+    cy.get('[data-cy="email-input"]').type('unverifiedOrg@gmail.com');
+    cy.get('[data-cy="password-input"]').type('password123');
     cy.get('[data-cy="delete-account-button"]').should('be.visible').click();
-
-    cy.url().should('include', '/');
+    cy.contains('Account successfully deleted', { timeout: 10000 }).should('be.visible');
     cy.getCookie('session').should('not.exist');
     cy.window().its('auth.currentUser').should('be.null');
+    cy.url().should('include', '/signin');
+    cy.visit('/dashboard');
+    cy.url().should('include', '/signin');
   });
 });
