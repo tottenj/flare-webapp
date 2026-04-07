@@ -1,5 +1,5 @@
 import EventListCardPresentational from '@/components/events/eventListCard/EventListCardPresentational';
-import { EventDto } from '@/lib/types/dto/EventDto';
+import type { EventDto } from '@/lib/schemas/event/eventDtoSchema';
 
 export default async function EventList({
   events,

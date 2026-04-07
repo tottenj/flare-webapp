@@ -1,4 +1,4 @@
-import { EventStatus } from '#prisma/generated/client';
+import { EventStatus } from '#prisma/generated/enums';
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
 import { OrgEventUrlFilters } from '@/lib/schemas/event/orgEventUrlFilterSchema';
 

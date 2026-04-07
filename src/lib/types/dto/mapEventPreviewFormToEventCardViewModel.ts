@@ -2,7 +2,6 @@ import { EventCardViewModel } from '@/components/events/EventCard/presentational
 import { CreateEventPreviewForm } from '@/lib/schemas/event/createEventPreviewFormSchema';
 import formatAgeRange from '@/lib/utils/ui/formatAgeRange/formatAgeRange';
 import { formatDateTime } from '@/lib/utils/ui/formatDateTime/formatDateTime';
-import formatEventPrice from '@/lib/utils/ui/formatEventPrice/formatEventPrice';
 
 export default function mapEventPreviewFormToEventCardViewModel(
   event: CreateEventPreviewForm,
@@ -26,11 +25,7 @@ export default function mapEventPreviewFormToEventCardViewModel(
 
     locationLabel: event.location?.address ?? null,
 
-    priceLabel: formatEventPrice({
-      priceType: event.priceType,
-      minPrice: event.minPrice,
-      maxPrice: event.maxPrice,
-    }),
+    priceLabel: `${event.minPrice}.00 ${event.maxPrice ? `- ${event.maxPrice}.00` : ''}`,
 
     ageRestrictionLabel: formatAgeRange(event.ageRestriction),
 

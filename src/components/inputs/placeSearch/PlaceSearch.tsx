@@ -63,6 +63,13 @@ export default function PlaceSearch({
     loadModules();
   }, []);
 
+  useEffect(() => {
+    if (value) {
+      setLocationSelect(value);
+      list.setFilterText(value.address);
+    }
+  }, [value]);
+
   // Async list for autocomplete
   let list = useAsyncList<placeOption>({
     async load({ filterText }) {
@@ -100,14 +107,16 @@ export default function PlaceSearch({
         required={required}
         label={label ? label : 'Select Location'}
         placeholder="Type to search..."
-        defaultInputValue={value?.address ?? ''}
         inputValue={list.filterText}
         isLoading={list.isLoading}
         items={list.items}
         variant="flat"
         data-cy={'location-input'}
-        defaultSelectedKey={value?.placeId}
-        onInputChange={list.setFilterText}
+        selectedKey={locationSelect?.placeId ?? null}
+        onInputChange={(val) => {
+          list.setFilterText(val);
+          setLocationSelect(null);
+        }}
         onSelectionChange={handleSelection}
         radius="sm"
         classNames={{

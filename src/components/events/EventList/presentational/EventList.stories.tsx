@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import EventList from './EventList';
 import EventListSkeleton from './EventListSkeleton';
-import { EventDto } from '@/lib/types/dto/EventDto';
+import type { EventDto } from '@/lib/schemas/event/eventDtoSchema';
 
 const sampleEvents: Partial<EventDto>[] = [
   {
@@ -53,7 +53,11 @@ export const Default: Story = {
   },
 
   render: (args: any) =>
-    args.loading ? <EventListSkeleton numEvents={args.events.length} /> : <EventList events={args.events} />,
+    args.loading ? (
+      <EventListSkeleton numEvents={args.events.length} />
+    ) : (
+      <EventList events={args.events} />
+    ),
 };
 
 export const Loading: Story = {

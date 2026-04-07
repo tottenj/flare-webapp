@@ -1,7 +1,5 @@
-import { AgeRangeValue } from '@/lib/types/AgeRange';
-import { EventCategory } from '@/lib/types/EventCategory';
-import { PriceTypeValue } from '@/lib/types/PriceType';
-import { Prisma } from '#prisma/generated/client';
+import type { EventDto } from '@/lib/schemas/event/eventDtoSchema';
+import { Prisma } from '../../../../prisma/generated/client';
 
 export type EventRow = Prisma.FlareEventGetPayload<{
   include: typeof eventRowInclude;
@@ -36,35 +34,6 @@ export const eventRowInclude = {
     },
   },
 } satisfies Prisma.FlareEventInclude;
-
-export type EventDto = {
-  id: string;
-  title: string;
-  description: string;
-  category: EventCategory;
-  ageRestriction: AgeRangeValue;
-  status: 'DRAFT' | 'PUBLISHED';
-  imagePath: string | null;
-  startsAt: string;
-  endsAt: string | null;
-  timezone: string;
-  organization: {
-    name: string;
-  };
-  location: {
-    address: string | null;
-    placeId: string | null;
-  };
-  pricing: {
-    type: PriceTypeValue;
-    minCents: number | null;
-    maxCents: number | null;
-  };
-  tags: {
-    id: string;
-    label: string;
-  }[];
-};
 
 export function mapEventRowToDto(row: EventRow): EventDto {
   return {

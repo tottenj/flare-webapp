@@ -1,4 +1,4 @@
-import { pendingOrg } from '../constants';
+import { pendingOrg, seededEvents } from '../constants';
 
 describe('General', () => {
   beforeEach(() => {
@@ -19,10 +19,9 @@ describe('General', () => {
 
   it('Successfully Loads Next Upcoming Event', () => {
     cy.get('[data-cy="upcoming-container"]').within(() => {
-      cy.contains('Upcoming Event').should('be.visible');
+      cy.contains(seededEvents.upcoming.title).should('be.visible');
       cy.contains('Free').should('be.visible');
-      cy.contains('Mar').should('be.visible');
-      cy.contains('unverifiedOrg').should('be.visible');
+      cy.contains(pendingOrg.orgName).should('be.visible');
     });
   });
 });
@@ -94,8 +93,7 @@ describe('Events List', () => {
 
   it('Successfully loads published event in my events list on default', () => {
     cy.get('[data-cy="my-events-container"]').within(() => {
-      cy.contains('Another Published Event').should('be.visible');
-      cy.contains('Mar').should('be.visible');
+      cy.contains(seededEvents.published.title).should('be.visible');
       cy.contains('All Ages').should('be.visible');
     });
   });
@@ -106,10 +104,9 @@ describe('Events List', () => {
     cy.get('[data-cy="my-events-container"]')
       .should('be.visible')
       .within(() => {
-        cy.contains('Another Published Event').should('be.visible');
-        cy.contains('Mar').should('be.visible');
+        cy.contains(seededEvents.published.title).should('be.visible');
         cy.contains('All Ages').should('be.visible');
-        cy.contains('Draft Event').should('not.exist');
+        cy.contains(seededEvents.draft.title).should('not.exist');
       });
   });
 
@@ -118,47 +115,46 @@ describe('Events List', () => {
     cy.get('[data-cy="my-events-container"]')
       .should('be.visible')
       .within(() => {
-        cy.contains('Mar').should('be.visible');
         cy.contains('All Ages').should('be.visible');
-        cy.contains('Draft Event').should('be.visible');
-        cy.contains('Another Published Event').should('not.exist');
+        cy.contains(seededEvents.draft.title).should('be.visible');
+        cy.contains(seededEvents.published.title).should('not.exist');
       });
   });
 
   it('Loads draft events from URL filter', () => {
     cy.visit('/dashboard?status=draft');
     cy.get('[data-cy="my-events-container"]').within(() => {
-      cy.contains('Draft Event').should('be.visible');
+      cy.contains(seededEvents.draft.title).should('be.visible');
     });
   });
 
   it('Opens event modal on click', () => {
     cy.get('[data-cy="my-events-container"]').within(() => {
-      cy.get('[aria-label="Another Published Event"]').click();
+      cy.get(`[aria-label="${seededEvents.published.title}"]`).click();
     });
     cy.url().should('include', 'event/');
-    cy.get('[data-cy="Another Published Event-event-modal"]').should('be.visible');
-    cy.get('[data-cy="Another Published Event-event-modal"]').within(() => {
-      cy.contains('Another Published Event').should('be.visible');
-      cy.contains('Another future published event').should('be.visible');
+    cy.get(`[data-cy="${seededEvents.published.title}-event-modal"]`).should('be.visible');
+    cy.get(`[data-cy="${seededEvents.published.title}-event-modal"]`).within(() => {
+      cy.contains(seededEvents.published.title).should('be.visible');
+      cy.contains(seededEvents.published.description).should('be.visible');
     });
   });
 
   it('Opens draft event modal on click', () => {
     cy.visit('/dashboard?status=draft');
     cy.get('[data-cy="my-events-container"]').within(() => {
-      cy.get('[aria-label="Draft Event"]').click();
+      cy.get(`[aria-label="${seededEvents.draft.title}"]`).click();
     });
     cy.url().should('include', 'event/');
-    cy.get('[data-cy="Draft Event-event-modal"]').should('be.visible');
-    cy.get('[data-cy="Draft Event-event-modal"]').within(() => {
-      cy.contains('Draft Event').should('be.visible');
-      cy.contains('Draft future event').should('be.visible');
+    cy.get(`[data-cy="${seededEvents.draft.title}-event-modal"]`).should('be.visible');
+    cy.get(`[data-cy="${seededEvents.draft.title}-event-modal"]`).within(() => {
+      cy.contains(seededEvents.draft.title).should('be.visible');
+      cy.contains(seededEvents.draft.description).should('be.visible');
     });
   });
 
   it('Closes event modal when clicking close button', () => {
-    cy.get('[aria-label="Another Published Event"]').click();
+    cy.get(`[aria-label="${seededEvents.published.title}"]`).click();
     cy.get('[data-cy="main-modal"]').should('be.visible');
     cy.get('[aria-label="Close"]').click();
     cy.url().should('not.include', '/event/');

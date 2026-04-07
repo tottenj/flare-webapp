@@ -6,7 +6,7 @@ import { execSync } from 'child_process';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { resetTestDbFast } from './__tests__/utils/restTestDb';
 import { seedTest } from './prisma/seedTest';
-import { PrismaClient } from '#prisma/generated/client';
+import { PrismaClient } from './prisma/generated/client';
 
 export default defineConfig({
   projectId: 'f7wjfu',

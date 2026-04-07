@@ -3,7 +3,6 @@ import type { StoryObj, Meta } from '@storybook/react';
 import EventListCardPresentational from './EventListCardPresentational';
 import EventListCardSkeleton from './EventListCardSkeleton';
 import { render } from '@testing-library/react';
-import { EventDto } from '@/lib/types/dto/EventDto';
 
 const meta = {
   component: EventListCardPresentational,
@@ -36,11 +35,9 @@ export const Default: Story = {
     args.loading ? <EventListCardSkeleton /> : <EventListCardPresentational {...args} />,
 };
 
-
 export const Loading: Story = {
-  render: () => <EventListCardSkeleton />
-}
-
+  render: () => <EventListCardSkeleton />,
+};
 
 export const WithActions: Story = {
   args: {
@@ -51,6 +48,6 @@ export const WithActions: Story = {
     ageRestriction: 'ALL_AGES',
     startDate: '2026-02-15',
     loading: false,
-    actions: <div></div>
-  }
+    actions: <div></div>,
+  },
 };

@@ -1,17 +1,19 @@
 /// <reference types="cypress" />
 
+import { nonPendingOrg, pendingOrg, userEmailVerified } from '../../../__tests__/e2e/constants';
+
 Cypress.Commands.add('loginTestUser', () => {
-  cy.loginUser('user@gmail.com', 'password123');
+  cy.loginUser(userEmailVerified.email, userEmailVerified.password);
 });
 
 Cypress.Commands.add('loginTestOrg', () => {
-  cy.loginUser('unverifiedOrg@gmail.com', 'password123');
+  cy.loginUser(pendingOrg.email, pendingOrg.password);
 });
 
 Cypress.Commands.add('loginTestOrgClient', () => {
-  cy.clientLogin('unverifiedOrg@gmail.com', 'password123');
-})
+  cy.clientLogin(pendingOrg.email, pendingOrg.password);
+});
 
 Cypress.Commands.add('loginVerifiedOrg', () => {
-  cy.loginUser('verifiedOrg@gmail.com', 'password123');
+  cy.loginUser(nonPendingOrg.email, nonPendingOrg.password);
 });

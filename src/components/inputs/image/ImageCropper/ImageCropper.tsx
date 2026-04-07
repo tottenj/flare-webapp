@@ -25,7 +25,7 @@ export default function ImageCropper({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 items-center">
       <div className="relative h-100 w-full">
         <Cropper
           image={image}

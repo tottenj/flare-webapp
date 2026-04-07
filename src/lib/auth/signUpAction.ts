@@ -3,7 +3,7 @@ import z from 'zod';
 import { AppError } from '../errors/AppError';
 import { AuthErrors } from '../errors/authError';
 import fail from '../errors/fail';
-import { ActionResult } from '../types/ActionResult';
+import { ActionResult } from '../types/responses/ActionResult';
 import { extractFieldErrors } from '../errors/extractError';
 import { logger } from '../logger';
 import { AuthService } from '../services/authService/AuthService';
@@ -34,7 +34,7 @@ export async function signUpAction(input: unknown): Promise<ActionResult<null>> 
     if (err instanceof AppError) {
       return fail(err);
     }
-    
+
     logger.error('signUpAction failed', {
       err,
       input: { email: data.data.idToken },

@@ -1,56 +1,43 @@
 'use client';
 import IconButton from '@/components/buttons/iconButton/IconButton';
-import EditEventPresentational from '@/components/events/EditEvent/EditEventPresentational';
+import EventFormContainer from '@/components/forms/eventForm/EventFormContainer';
 import MainModal from '@/components/modals/MainModal/MainModal';
 import Skeleton from '@/components/skeletons/BaseSkeleton/BaseSkeleton';
 import { ClientError } from '@/lib/errors/clientErrors/ClientError';
 import { ClientErrors } from '@/lib/errors/clientErrors/ClientErrors';
-import { LocationInput } from '@/lib/schemas/LocationInputSchema';
-import { ActionResult } from '@/lib/types/ActionResult';
-import { EventDto } from '@/lib/types/dto/EventDto';
+import fetchEditData from '@/lib/fetch/fetchEditData/fetchEditData';
+import mapEditEventDataToInitialFormData from '@/lib/mappers/mapEditEventDataToInitialFormData/mapEditEventDataToInitialFormData';
+import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
+import { EditEventInput } from '@/lib/schemas/event/editEventInputSchema';
+import { CreateEvent } from '@/lib/schemas/event/createEventFormSchema';
+import editEvent from '@/lib/serverActions/events/updateEvent/updateEvent';
+import { EventFormInitialData } from '@/lib/types/EventForm/EventForm';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
-interface EditEventFetchData {
-  imageURL?: string;
-  locationDetails?: LocationInput;
-}
-
 export default function EditEventContainer({
-  event,
+  eventId,
   orgName,
 }: {
-  event: EventDto;
+  eventId: string;
   orgName?: string;
 }) {
-  const [data, setData] = useState<EditEventFetchData | null>(null);
+  const [data, setData] = useState<EditEventData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function loadData() {
     if (loading) return;
     setError(null);
-    setData(null);
     setLoading(true);
     try {
-      const res = await fetch(`/api/events/${event.id}/edit-data`);
-      const json = (await res.json()) as ActionResult<EditEventFetchData> | null;
-      if (!res.ok) {
-        if (res.status === 401) throw ClientErrors.SessionExpired();
-        if (json && !json.ok) {
-          throw ClientErrors.ServerRejected(json.error.message, json.error.code);
-        }
-        throw ClientErrors.ServerRejected('Failed to load event data. Please try again.');
-      }
-      if (!json || !json.ok) {
-        throw ClientErrors.ServerRejected(json?.error.message ?? 'Invalid server response');
-      }
-      setData(json.data);
-    } catch (error) {
-      if (error instanceof ClientError) {
-        setError(error.message);
+      const result = await fetchEditData(eventId);
+      setData(result);
+    } catch (err) {
+      if (err instanceof ClientError) {
+        setError(err.message);
       } else {
-        setError('An unexpected error occurred. Please try again later.');
+        setError(ClientErrors.Network().message);
       }
     } finally {
       setLoading(false);
@@ -60,24 +47,62 @@ export default function EditEventContainer({
   return (
     <MainModal
       onOpen={loadData}
+      onClose={() => {
+        setError(null);
+        setData(null);
+      }}
       modalProps={{ size: '5xl' }}
-      trigger={<IconButton icon={faEdit} />}
+      trigger={<IconButton className="absolute -top-4 -right-6 z-10" icon={faEdit} />}
     >
-      {(close) =>
-        loading ? (
-          <Skeleton className="h-8 w-8 rounded-full" />
-        ) : error ? (
-          <div className="text-red-500">{error}</div>
-        ) : (
-          <EditEventPresentational
-            event={event}
+      {(close) => {
+        if (loading) {
+          return <Skeleton className="h-100 w-full rounded-xl" />;
+        }
+
+        if (error) {
+          return (
+            <div className="flex flex-col items-center gap-2 text-red-500">
+              <p>{error}</p>
+              <button onClick={loadData} className="underline">
+                Try again
+              </button>
+            </div>
+          );
+        }
+
+        if (!data) {
+          return <Skeleton className="h-100 w-full rounded-xl" />;
+        }
+
+        const initialEvent = mapEditEventDataToInitialFormData(data);
+
+        function buildSubmitAction(
+          id: string,
+          original: EventFormInitialData
+        ): (input: CreateEvent) => ReturnType<typeof editEvent> {
+          return (input: CreateEvent) => {
+            const originalStoragePath = original.imageDetails?.metaData?.storagePath;
+            const isNew = input.image.storagePath !== originalStoragePath;
+            const editInput: EditEventInput = {
+              ...input,
+              image: isNew
+                ? { isNew: true, metadata: input.image }
+                : { isNew: false, storagePath: input.image.storagePath },
+            };
+            return editEvent(id, editInput);
+          };
+        }
+
+        return (
+          <EventFormContainer
+            mode="edit"
+            initialEvent={initialEvent}
             orgName={orgName}
-            imageURL={data?.imageURL}
-            locationDetails={data?.locationDetails}
-            close={close}
+            onCloseModal={close}
+            submitAction={buildSubmitAction(eventId, initialEvent)}
           />
-        )
-      }
+        );
+      }}
     </MainModal>
   );
 }

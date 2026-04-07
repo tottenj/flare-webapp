@@ -1,11 +1,26 @@
 import { EventService } from '@/lib/services/eventService/eventService';
+import ImageService from '@/lib/services/imageService/ImageService';
 import { createEventIntegration } from '../../factories/integration/event.factory';
 import { createOrgIntegration } from '../../factories/integration/org.factory';
 import { expect } from '@jest/globals';
 import { authOrgFactory } from '../../factories/auth/authOrg.factory';
 import { createAuthOrgIntegration } from '../../factories/integration/helpers/createAuthOrgIntegration';
-import { EventStatus } from '#prisma/generated/client';
+import { EventStatus } from '#prisma/generated/enums';
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
+import { prisma } from '../../../prisma/prismaClient';
+import { eventInputFactory } from '../../factories/service/eventInput.factory';
+
+jest.mock('@/lib/services/imageService/ImageService', () => ({
+  __esModule: true,
+  default: {
+    getDownloadUrl: jest.fn(),
+  },
+}));
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  (ImageService.getDownloadUrl as jest.Mock).mockResolvedValue('https://example.com/image.jpg');
+});
 
 describe('EventService.getOrgUpcomingEvent (integration)', () => {
   it('returns upcoming event when org is verified', async () => {
@@ -229,5 +244,110 @@ describe('EventService.listEventsOrg (integration)', () => {
     const events = await EventService.listEventsOrg(org.authUser);
     expect(events[0].id).toBe(early.id);
     expect(events[1].id).toBe(late.id);
+  });
+});
+
+describe('EventService.getEditData (integration)', () => {
+  it('returns edit data with event, image metadata, and location for owner', async () => {
+    const { authUser, fakeOrg } = await createAuthOrgIntegration();
+    const input = eventInputFactory(
+      {
+        eventName: 'Editable Event',
+        location: {
+          placeId: 'edit-place-id',
+          address: '123 Edit St',
+          lat: 43.7001,
+          lng: -79.4163,
+        },
+        tags: ['drag', 'community'],
+      },
+      authUser.firebaseUid
+    );
+
+    await EventService.createEvent(authUser, input);
+
+    const createdEvent = await prisma.flareEvent.findFirst({
+      where: {
+        organizationId: fakeOrg.org.id,
+        title: input.eventName,
+      },
+      include: {
+        image: true,
+        location: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+        organization: true,
+      },
+    });
+
+    expect(createdEvent).not.toBeNull();
+    if (!createdEvent) throw new Error('Expected created event');
+
+    const result = await EventService.getEditData(createdEvent.id, authUser);
+
+    expect(result.event.id).toBe(createdEvent.id);
+    expect(result.event.title).toBe(input.eventName);
+    expect(result.event.organization.name).toBe(fakeOrg.org.orgName);
+    expect(result.event.tags.map((tag) => tag.label).sort()).toEqual(['community', 'drag']);
+    expect(result.imageUrl).toBe('https://example.com/image.jpg');
+    expect(result.imageMetadata).toEqual({
+      storagePath: input.image.storagePath,
+      contentType: input.image.contentType,
+      sizeBytes: input.image.sizeBytes,
+      originalName: input.image.originalName,
+    });
+    expect(result.location).toEqual({
+      placeId: input.location?.placeId,
+      address: input.location?.address,
+      lat: input.location?.lat,
+      lng: input.location?.lng,
+    });
+    expect(ImageService.getDownloadUrl).toHaveBeenCalledWith(input.image.storagePath);
+  });
+
+  it('throws unauthorized when actor does not own the event', async () => {
+    const owner = await createAuthOrgIntegration();
+    const otherOrg = await createAuthOrgIntegration();
+    const input = eventInputFactory(
+      {
+        eventName: 'Protected Event',
+        location: {
+          placeId: 'protected-place-id',
+          address: '123 Protected St',
+          lat: 43.651,
+          lng: -79.347,
+        },
+      },
+      owner.authUser.firebaseUid
+    );
+
+    await EventService.createEvent(owner.authUser, input);
+
+    const createdEvent = await prisma.flareEvent.findFirst({
+      where: {
+        organizationId: owner.fakeOrg.org.id,
+        title: input.eventName,
+      },
+    });
+
+    expect(createdEvent).not.toBeNull();
+    if (!createdEvent) throw new Error('Expected created event');
+
+    await expect(EventService.getEditData(createdEvent.id, otherOrg.authUser)).rejects.toThrow(
+      'AUTH_UNAUTHORIZED'
+    );
+    expect(ImageService.getDownloadUrl).not.toHaveBeenCalled();
+  });
+
+  it('throws if event does not exist', async () => {
+    const { authUser } = await createAuthOrgIntegration();
+
+    await expect(EventService.getEditData('missing-event-id', authUser)).rejects.toThrow(
+      'EVENT_NOT_FOUND'
+    );
+    expect(ImageService.getDownloadUrl).not.toHaveBeenCalled();
   });
 });

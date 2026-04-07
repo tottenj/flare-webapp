@@ -6,26 +6,22 @@ import {
   parsePreviewFormData,
 } from '@/lib/schemas/event/createEventPreviewFormSchema';
 import { LocationInput } from '@/lib/schemas/LocationInputSchema';
+import { EventFormInitialData } from '@/lib/types/EventForm/EventForm';
 import { PriceTypeValue } from '@/lib/types/PriceType';
 import { useState } from 'react';
 import z from 'zod';
 
-interface UseEventFormInitialState {
-  location?: LocationInput | null;
-  hasEndTime?: boolean;
-  priceType?: PriceTypeValue;
-  imgPreview?: string | null;
-}
-
-export default function useEventForm(initialState?: UseEventFormInitialState) {
+export default function useEventForm(initialState?: EventFormInitialData) {
   const [location, setLocation] = useState<LocationInput | null>(initialState?.location ?? null);
-  const [hasEndTime, setHasEndTime] = useState(initialState?.hasEndTime ?? false);
+  const [hasEndTime, setHasEndTime] = useState(Boolean(initialState?.endDateTime));
   const [priceType, setPriceType] = useState<PriceTypeValue>(initialState?.priceType ?? 'FREE');
   const [previewErrors, setPreviewErrors] = useState<Record<string, string[]>>({});
   const [pendingFormData, setPendingFormData] = useState<CreateEventPreviewForm | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [imgError, setImgError] = useState<string | null>(null);
-  const [eventImgPreview, setEventImgPreview] = useState<string | null>(initialState?.imgPreview ?? null);
+  const [eventImgPreview, setEventImgPreview] = useState<string | null>(
+    initialState?.imageDetails?.url ?? null
+  );
 
   function handlePreview(formData: FormData) {
     const result = parsePreviewFormData(formData);
@@ -55,6 +51,6 @@ export default function useEventForm(initialState?: UseEventFormInitialState) {
     imgError,
     setImgError,
     eventImgPreview,
-    setEventImgPreview
+    setEventImgPreview,
   };
 }

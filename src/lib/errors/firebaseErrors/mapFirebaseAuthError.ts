@@ -1,5 +1,4 @@
-
-import { ActionResult } from '@/lib/types/ActionResult';
+import { ActionResult } from '@/lib/types/responses/ActionResult';
 import { FirebaseError } from 'firebase/app';
 
 export default function mapFirebaseAuthError(err: unknown): ActionResult<null> {

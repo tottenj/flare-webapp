@@ -1,7 +1,7 @@
 import { expect } from '@jest/globals';
-import { Prisma } from '#prisma/generated/client';
 import { userDal } from './UserDal';
 import { prisma } from '../../../../prisma/prismaClient';
+import { Prisma } from '../../../../prisma/generated/client';
 import { UniqueConstraintError } from '@/lib/errors/DalErrors';
 
 jest.mock('../../../../prisma/prismaClient', () => ({

@@ -2,7 +2,7 @@
 import z from 'zod';
 import { AuthErrors } from '../errors/authError';
 import { extractFieldErrors } from '../errors/extractError';
-import { ActionResult } from '../types/ActionResult';
+import { ActionResult } from '../types/responses/ActionResult';
 import fail from '../errors/fail';
 import { AuthService } from '../services/authService/AuthService';
 import { AppError } from '../errors/AppError';

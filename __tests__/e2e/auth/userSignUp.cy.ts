@@ -1,3 +1,5 @@
+import { userEmailVerified } from '../constants';
+
 describe('User Sign Up = Successful Flow', () => {
   beforeEach(() => {
     cy.visit('/signup');
@@ -20,8 +22,8 @@ describe('User Sign Up - Unsuccessful Flow', () => {
   });
 
   it('Tests email already in use flow', () => {
-    const email = 'user@gmail.com';
-    const password = 'password123';
+    const email = userEmailVerified.email;
+    const password = userEmailVerified.password;
     cy.get('[data-cy="email-input"]').type(email, { force: true });
     cy.get('[data-cy="password-input"]').type(password, { force: true });
     cy.get('[data-cy="submit-button"]').click({ force: true });

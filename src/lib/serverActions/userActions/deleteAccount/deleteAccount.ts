@@ -8,7 +8,7 @@ import fail from '@/lib/errors/fail';
 import { GeneralErrors } from '@/lib/errors/GeneralErrors';
 import { DeleteAccountInput, deleteAccountSchema } from '@/lib/schemas/auth/deleteAccountSchema';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
-import { ActionResult } from '@/lib/types/ActionResult';
+import { ActionResult } from '@/lib/types/responses/ActionResult';
 import deleteUserUseCase from '@/lib/useCase/deleteUserUseCase';
 import { cookies } from 'next/headers';
 import z from 'zod';

@@ -1,8 +1,8 @@
 import 'server-only';
-import { Prisma, User } from '#prisma/generated/client';
 import { UniqueConstraintError } from '../../errors/DalErrors';
 import { prisma } from '../../../../prisma/prismaClient';
 import { DeletedImageAsset } from '@/lib/dal/imageAssetDal/ImageAssetDal';
+import { Prisma, User } from '../../../../prisma/generated/client';
 
 export class UserDal {
   async findByFirebaseUid(
