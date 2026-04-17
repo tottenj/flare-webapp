@@ -3,7 +3,6 @@ import { AppError } from '@/lib/errors/AppError';
 import { extractFieldErrors } from '@/lib/errors/extractError';
 import fail from '@/lib/errors/fail';
 import { GeneralErrors } from '@/lib/errors/GeneralErrors';
-import { MoneyError } from '@/lib/errors/moneyError/MoneyError';
 import { logger } from '@/lib/logger';
 import { CreateEvent, CreateEventSchema } from '@/lib/schemas/event/createEventFormSchema';
 import ImageService from '@/lib/services/imageService/ImageService';
@@ -33,13 +32,6 @@ export default async function createEvent(input: CreateEvent): Promise<ActionRes
       sanitized.data
     );
   } catch (error) {
-    if (error instanceof MoneyError) {
-      const appErr = new AppError({
-        code: error.name,
-        clientMessage: error.message,
-      });
-      return fail(appErr);
-    }
     if (error instanceof AppError) {
       return fail(error);
     }

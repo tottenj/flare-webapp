@@ -146,7 +146,9 @@ describe('EventService.createEvent', () => {
       image: { storagePath: 'events/otherUser/randoId/stock.jpeg' },
     });
 
-    await expect(EventService.createEvent(authUser, input)).rejects.toThrow('AUTH_UNAUTHORIZED');
+    await expect(EventService.createEvent(authUser, input)).rejects.toMatchObject({
+      code: 'AUTH_UNAUTHORIZED',
+    });
     expect(eventDal.create).not.toHaveBeenCalled();
     expect(locationDal.create).not.toHaveBeenCalled();
     expect(imageAssetDal.create).not.toHaveBeenCalled();
@@ -452,7 +454,9 @@ describe('EventService.getEditData', () => {
       firebaseUid: 'uid',
     };
     (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(null);
-    await expect(EventService.getEditData(eventId, actor)).rejects.toThrow('EVENT_NOT_FOUND');
+    await expect(EventService.getEditData(eventId, actor)).rejects.toMatchObject({
+      code: 'EVENT_NOT_FOUND',
+    });
     expect(eventDal.getEvent).toHaveBeenCalledWith(eventId);
     expect(eventDal.getEditData).toHaveBeenCalledWith(eventId);
     expect(mapEventRowToDto).not.toHaveBeenCalled();
@@ -557,7 +561,9 @@ describe('eventService.editEvent', () => {
 
     await expect(EventService.editEvent(eventId, actor, input)).resolves.not.toThrow();
 
-    if (!input.image.isNew) throw new Error('Image should be new in this test case');
+    if (!input.image || !input.image.isNew) {
+      throw new Error('Image should be new in this test case');
+    }
     expect(imageAssetDal.create).toHaveBeenCalledWith(input.image.metadata, expect.anything());
     expect((EventService as any).assertCanEdit).toHaveBeenCalledWith(eventId, actor);
     expect(prisma.$transaction).toHaveBeenCalled();
@@ -688,7 +694,9 @@ describe('eventService.editEvent', () => {
 
     (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(null);
 
-    await expect(EventService.editEvent(eventId, actor, input)).rejects.toThrow('EVENT_NOT_FOUND');
+    await expect(EventService.editEvent(eventId, actor, input)).rejects.toMatchObject({
+      code: 'EVENT_NOT_FOUND',
+    });
     expect((EventService as any).assertCanEdit).toHaveBeenCalledWith(eventId, actor);
     expect(eventDal.getEvent).toHaveBeenCalledWith(eventId);
     expect(imageAssetDal.create).not.toHaveBeenCalled();
