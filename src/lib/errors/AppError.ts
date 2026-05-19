@@ -5,7 +5,7 @@ export class AppError extends Error {
   readonly clientMessage: string;
 
   constructor(opts: { code: string; clientMessage: string; status?: number; cause?: unknown }) {
-    super(opts.code);
+    super(opts.clientMessage);
     this.code = opts.code;
     this.clientMessage = opts.clientMessage;
     this.status = opts.status ?? 400;

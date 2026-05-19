@@ -8,8 +8,8 @@ export default function fail<T>(
   return {
     ok: false,
     error: {
-      code: err.code,
-      message: err.clientMessage,
+      code: err.code || err.name,
+      message: err.clientMessage || err.message,
       ...(fieldErrors ? { fieldErrors } : {}),
     },
   };
