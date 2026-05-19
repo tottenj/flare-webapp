@@ -1,12 +1,9 @@
 import ImageService from '@/lib/services/imageService/ImageService';
-import { resetTestDb } from '../../utils/restTestDb';
 import { EventService } from '@/lib/services/eventService/eventService';
 import { expect } from '@jest/globals';
 import { imageAssetDal } from '@/lib/dal/imageAssetDal/ImageAssetDal';
 import { eventRowInclude } from '@/lib/types/dto/EventDto';
-import { authOrgFactory } from '../../factories/auth/authOrg.factory';
 import { eventInputFactory } from '../../factories/service/eventInput.factory';
-import { createOrgIntegration } from '../../factories/integration/org.factory';
 import { createAuthOrgIntegration } from '../../factories/integration/helpers/createAuthOrgIntegration';
 
 jest.mock('@/lib/services/imageService/ImageService', () => ({
@@ -168,7 +165,7 @@ describe('Create Event Integration Tests', () => {
       image: { storagePath: 'invalid-path/image.jpg' },
       eventName: 'Test Event Invalid Image Path',
     });
-    await expect(EventService.createEvent(authUser, input)).rejects.toThrow('AUTH_UNAUTHORIZED');
+    await expect(EventService.createEvent(authUser, input)).rejects.toThrow(expect.objectContaining({ code: 'AUTH_UNAUTHORIZED' }));
     expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
     const event = await prisma.flareEvent.findFirst({
       where: { organizationId: fakeOrg.org.id, title: input.eventName },

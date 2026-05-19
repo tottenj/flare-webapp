@@ -20,7 +20,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 export type EventFileKey = 'eventImg';
 
-type EventSubmitAction = (input: CreateEvent) => Promise<ActionResult<null>>;
+type EventSubmitAction = (input: CreateEvent) => Promise<ActionResult<void>> | Promise<ActionResult<null>>;
 type ModeCopy = Record<
   EventFormMode,
   {

@@ -336,18 +336,14 @@ describe('EventService.getEditData (integration)', () => {
     expect(createdEvent).not.toBeNull();
     if (!createdEvent) throw new Error('Expected created event');
 
-    await expect(EventService.getEditData(createdEvent.id, otherOrg.authUser)).rejects.toThrow(
-      'AUTH_UNAUTHORIZED'
-    );
+    await expect(EventService.getEditData(createdEvent.id, otherOrg.authUser)).rejects.toThrow(expect.objectContaining({ code: 'AUTH_UNAUTHORIZED' }));
     expect(ImageService.getDownloadUrl).not.toHaveBeenCalled();
   });
 
   it('throws if event does not exist', async () => {
     const { authUser } = await createAuthOrgIntegration();
 
-    await expect(EventService.getEditData('missing-event-id', authUser)).rejects.toThrow(
-      'EVENT_NOT_FOUND'
-    );
+    await expect(EventService.getEditData('missing-event-id', authUser)).rejects.toThrow(expect.objectContaining({ code: 'EVENT_NOT_FOUND' }));
     expect(ImageService.getDownloadUrl).not.toHaveBeenCalled();
   });
 });
