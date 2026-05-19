@@ -38,6 +38,10 @@ describe('Edit Event Integration Tests', () => {
     });
     expect(updated?.title).toBe('Updated Name');
     expect(updated?.description).toBe('Updated description');
+    expect(updated).toMatchObject({
+      title: 'Updated Name',
+      description: 'Updated description',
+    });
   });
 
   it('successfully updates location when placeId changes', async () => {
@@ -117,6 +121,172 @@ describe('Edit Event Integration Tests', () => {
       include: eventRowInclude,
     });
     expect(updated?.tags.map((t) => t.tag.label).sort()).toEqual(['family', 'jazz', 'outdoor']);
+  });
+
+  it('successfully updates event and leaves tags unchanged when tags field is undefined', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const originalEvent = await createEventIntegration({
+      organizationId: fakeOrg.org.id,
+      overrides: { tags: { create: { tag: { create: { label: 'music' } } } } },
+    });
+    const updateData = editEventInputFactory(
+      { eventName: 'Updated Event Name', tags: undefined },
+      authUser.firebaseUid
+    );
+
+    await EventService.editEvent(originalEvent.id, authUser, updateData);
+
+    const updated = await prisma.flareEvent.findUnique({
+      where: { id: originalEvent.id },
+      include: eventRowInclude,
+    });
+    expect(updated?.title).toBe('Updated Event Name');
+    expect(updated?.tags.map((t) => t.tag.label)).toEqual(['music']);
+  });
+
+  it('successfully diffs tags when some are added and some are removed', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const originalEvent = await createEventIntegration({
+      organizationId: fakeOrg.org.id,
+      overrides: {
+        tags: {
+          create: [{ tag: { create: { label: 'music' } } }, { tag: { create: { label: 'art' } } }],
+        },
+      },
+    });
+    const updateData = editEventInputFactory({ tags: ['music', 'outdoor'] }, authUser.firebaseUid);
+
+    await EventService.editEvent(originalEvent.id, authUser, updateData);
+
+    const updated = await prisma.flareEvent.findUnique({
+      where: { id: originalEvent.id },
+      include: eventRowInclude,
+    });
+    expect(updated?.tags.map((t) => t.tag.label).sort()).toEqual(['music', 'outdoor']);
+  });
+
+  it('removes all tags when tags is an empty array', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const originalEvent = await createEventIntegration({
+      organizationId: fakeOrg.org.id,
+      overrides: {
+        tags: {
+          create: [{ tag: { create: { label: 'music' } } }, { tag: { create: { label: 'art' } } }],
+        },
+      },
+    });
+    const updateData = editEventInputFactory({ tags: [] }, authUser.firebaseUid);
+
+    await EventService.editEvent(originalEvent.id, authUser, updateData);
+
+    const updated = await prisma.flareEvent.findUnique({
+      where: { id: originalEvent.id },
+      include: eventRowInclude,
+    });
+    expect(updated?.tags).toHaveLength(0);
+  });
+
+  it('does not replace location when placeId is unchanged', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const originalEvent = await createEventIntegration({ organizationId: fakeOrg.org.id });
+
+    const seedLocationData = editEventInputFactory(
+      {
+        location: {
+          placeId: 'same-place-id',
+          address: '123 Existing St',
+          lat: 1.23,
+          lng: 4.56,
+        },
+      },
+      authUser.firebaseUid
+    );
+
+    await EventService.editEvent(originalEvent.id, authUser, seedLocationData);
+
+    const seeded = await prisma.flareEvent.findUnique({
+      where: { id: originalEvent.id },
+      include: eventRowInclude,
+    });
+    const originalLocationId = seeded?.locationId;
+    const originalPlaceId = seeded?.location?.placeId;
+    expect(originalLocationId).toBeTruthy();
+    expect(originalPlaceId).toBeTruthy();
+
+    const updateData = editEventInputFactory(
+      {
+        location: {
+          placeId: originalPlaceId as string,
+          address: 'Updated Address That Should Not Apply',
+          lat: 10,
+          lng: 20,
+        },
+      },
+      authUser.firebaseUid
+    );
+
+    await EventService.editEvent(originalEvent.id, authUser, updateData);
+
+    const updated = await prisma.flareEvent.findUnique({
+      where: { id: originalEvent.id },
+      include: eventRowInclude,
+    });
+    expect(updated?.locationId).toBe(originalLocationId);
+    expect(updated?.location?.placeId).toBe(originalPlaceId);
+  });
+
+  it('does not schedule old image deletion when assigning a new image to an event without an image', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const originalEvent = await createEventIntegration({ organizationId: fakeOrg.org.id });
+    const newStoragePath = `events/${authUser.firebaseUid}/brand-new-image.jpg`;
+    const updateData = editEventInputFactory(
+      {
+        image: {
+          isNew: true,
+          metadata: {
+            storagePath: newStoragePath,
+            contentType: 'image/jpeg',
+            sizeBytes: 1024,
+            originalName: 'brand-new-image.jpg',
+          },
+        },
+      },
+      authUser.firebaseUid
+    );
+
+    await EventService.editEvent(originalEvent.id, authUser, updateData);
+
+    const updated = await prisma.flareEvent.findUnique({
+      where: { id: originalEvent.id },
+      include: eventRowInclude,
+    });
+    expect(updated?.image?.storagePath).toBe(newStoragePath);
+    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+  });
+
+  it('throws AUTH_UNAUTHORIZED when new image storage path does not match actor uid prefix', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const originalEvent = await createEventIntegration({ organizationId: fakeOrg.org.id });
+    const updateData = editEventInputFactory(
+      {
+        image: {
+          isNew: true,
+          metadata: {
+            storagePath: 'events/someone-else-uid/not-allowed.jpg',
+            contentType: 'image/jpeg',
+            sizeBytes: 2048,
+            originalName: 'not-allowed.jpg',
+          },
+        },
+      },
+      authUser.firebaseUid
+    );
+
+    await expect(
+      EventService.editEvent(originalEvent.id, authUser, updateData)
+    ).rejects.toMatchObject({
+      code: 'AUTH_UNAUTHORIZED',
+    });
   });
 
   it('throws AUTH_UNAUTHORIZED when actor does not own the event', async () => {
