@@ -4,8 +4,8 @@ import { imageAssetDal } from '@/lib/dal/imageAssetDal/ImageAssetDal';
 import { locationDal } from '@/lib/dal/locationDal/LocationDal';
 import {
   CreateEventResolved,
-  EditEventResolved,
   EventDomain,
+  EventDomainProps,
 } from '@/lib/domain/eventDomain/EventDomain';
 import { AuthErrors } from '@/lib/errors/authError';
 import ensure from '@/lib/errors/ensure/ensure';
@@ -22,6 +22,8 @@ import EventPermission from '@/lib/permissions/eventPermission/EventPermission';
 import { EventErrors } from '@/lib/errors/eventErrors/EventErrors';
 import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
 import { EditEventInput } from '@/lib/schemas/event/editEventInputSchema';
+import { logger } from '@/lib/logger';
+
 
 export class EventService {
   private static async assertCanEdit(eventId: string, actor: AuthenticatedOrganization) {
@@ -152,8 +154,9 @@ export class EventService {
     await prisma.$transaction(async (tx) => {
       let imageId: string | undefined = undefined;
       let locationId: string | undefined = undefined;
+      let allTagIds: string[] | undefined = undefined;
 
-      if (eventData.image.isNew) {
+      if (eventData.image && eventData.image.isNew) {
         ensure(
           eventData.image.metadata.storagePath.startsWith(`events/${actor.firebaseUid}`),
           AuthErrors.Unauthorized()
@@ -168,39 +171,16 @@ export class EventService {
         }
       }
 
-      if (eventData.location && prevEvent.location?.placeId !== eventData.location?.placeId) {
+      if (eventData.location && prevEvent.location?.placeId !== eventData.location.placeId) {
         const location = await locationDal.create(eventData.location, tx);
         locationId = location.id;
       }
 
-      const tagsToDelete =
-        prevEvent.tags
-          .filter((prevTag) => !eventData.tags.includes(prevTag.tag.label))
-          .map((tag) => tag.tag) ?? [];
-      const newTags =
-        eventData.tags.filter(
-          (tag) => !prevEvent.tags.some((prevTag) => prevTag.tag.label === tag)
-        ) ?? [];
-
-      const newTagIds = await tagService.createAndIncrementMany(newTags, tx);
-      if (tagsToDelete.length > 0) {
-        const tagIdsToDelete = tagsToDelete.map((tag) => tag.id);
-        await tagService.decrementMany(tagIdsToDelete, tx);
-        await tagService.deleteUnused(tagIdsToDelete, tx);
+      if (eventData.tags !== undefined) {
+        allTagIds = await tagService.applyTagDiff(prevEvent.tags, eventData.tags, tx);
       }
-      const remainingTagIds =
-        prevEvent.tags
-          .filter((prevTag) => eventData.tags.includes(prevTag.tag.label))
-          .map((t) => t.tag.id) ?? [];
 
-      const allTags = [...remainingTagIds, ...newTagIds];
-      const resolved: EditEventResolved = {
-        ...eventData,
-        tags: Array.from(allTags),
-        imageId: imageId ?? prevEvent.imageId ?? undefined,
-        locationId: locationId ?? prevEvent.locationId ?? undefined,
-      };
-      const eventEditInput = EventDomain.onEdit(resolved, {
+      const existing: EventDomainProps = {
         organizationId: prevEvent.organizationId,
         category: prevEvent.category,
         title: prevEvent.title,
@@ -217,12 +197,26 @@ export class EventService {
         minPriceCents: prevEvent.minPriceCents,
         maxPriceCents: prevEvent.maxPriceCents,
         tags: prevEvent.tags.map((t) => t.tag.id),
-      });
+      };
+
+      const eventEditInput = EventDomain.onEdit(
+        {
+          ...eventData,
+          imageId,
+          locationId,
+          tags: allTagIds,
+        },
+        existing
+      );
       await eventDal.edit(eventId, eventEditInput.props, tx);
     });
     if (shouldDeleteOldImage && oldImagePath) {
       await ImageService.deleteByStoragePath(oldImagePath).catch((error) => {
-        console.log(error);
+        logger.error('STORAGE_DELETE_FAILED', {
+          error,
+          storagePath: oldImagePath,
+          eventId,
+        });
       });
     }
   }

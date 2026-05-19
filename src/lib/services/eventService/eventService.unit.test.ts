@@ -11,7 +11,9 @@ import { eventInputFactory } from '../../../../__tests__/factories/service/event
 import { editEventInputFactory } from '../../../../__tests__/factories/service/editEventInput.factory';
 import { authOrgFactory } from '../../../../__tests__/factories/auth/authOrg.factory';
 import { prisma } from '../../../../prisma/prismaClient';
-import { event } from 'cypress/types/jquery';
+import orgSignUpInputFactory from '../../../../__tests__/factories/service/orgSignUpInput.factory';
+import { EventDomain } from '@/lib/domain/eventDomain/EventDomain';
+import { logger } from '@/lib/logger';
 
 jest.mock('../../../../prisma/prismaClient', () => ({
   prisma: {
@@ -19,6 +21,12 @@ jest.mock('../../../../prisma/prismaClient', () => ({
       const tx = {};
       return fn(tx);
     }),
+  },
+}));
+
+jest.mock("@/lib/logger", () => ({
+  logger: {
+    error: jest.fn(),
   },
 }));
 
@@ -53,6 +61,7 @@ jest.mock('@/lib/services/tagService/tagService', () => ({
     createAndIncrementMany: jest.fn(),
     decrementMany: jest.fn(),
     deleteUnused: jest.fn(),
+    applyTagDiff: jest.fn(),
   },
 }));
 
@@ -65,6 +74,30 @@ jest.mock('@/lib/services/imageService/ImageService', () => ({
 }));
 
 jest.mock('@/lib/types/dto/EventDto');
+
+(tagService.applyTagDiff as jest.Mock).mockImplementation(async (prevTags, newLabels, tx) => {
+  const prevLabelSet = new Set(prevTags.map(({ tag }: any) => tag.label));
+  const newLabelSet = new Set(newLabels);
+
+  const toAdd = newLabels.filter((label: string) => !prevLabelSet.has(label));
+  const toRemove = prevTags
+    .filter(({ tag }: any) => !newLabelSet.has(tag.label))
+    .map(({ tag }: any) => tag.id);
+
+  const newTagIds = ((await (tagService.createAndIncrementMany as jest.Mock)(toAdd, tx)) ??
+    []) as string[];
+
+  if (toRemove.length > 0) {
+    await (tagService.decrementMany as jest.Mock)(toRemove, tx);
+    await (tagService.deleteUnused as jest.Mock)(toRemove, tx);
+  }
+
+  const remainingIds = prevTags
+    .filter(({ tag }: any) => newLabelSet.has(tag.label))
+    .map(({ tag }: any) => tag.id);
+
+  return [...remainingIds, ...newTagIds];
+});
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -481,228 +514,474 @@ describe('EventService.getEditData', () => {
   });
 });
 
-describe('eventService.editEvent', () => {
+describe('EventService.editEvent', () => {
+  const cleanupUploadedImageOnFailure = jest.fn();
+  const mockedEditProps = { title: 'Edited title from mocked domain' };
+  let onEditSpy: jest.SpiedFunction<typeof EventDomain.onEdit>;
+
   beforeEach(() => {
     jest.clearAllMocks();
     jest.spyOn(EventService as any, 'assertCanEdit').mockResolvedValue(undefined);
+    (imageAssetDal.create as jest.Mock).mockResolvedValue({ id: 'newImageId' });
+    (eventDal.edit as jest.Mock).mockResolvedValue(undefined);
+    (cleanupUploadedImageOnFailure as jest.Mock).mockResolvedValue(undefined);
+    onEditSpy = jest
+      .spyOn(EventDomain, 'onEdit')
+      .mockReturnValue({ props: mockedEditProps } as any);
   });
 
   it('successfully edits event', async () => {
+    const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
     const eventId = 'eventId';
-    const actor = {
-      userId: 'userId',
-      orgId: 'orgId',
-      firebaseUid: 'uid',
+    const newImageMetadata = {
+      contentType: 'image/jpeg',
+      sizeBytes: 555,
+      originalName: 'replacement.jpg',
+      storagePath: 'events/uid3/replacement.jpg',
     };
-    const input = editEventInputFactory({
-      image: { isNew: false, storagePath: 'events/uid/existing-image.jpg' },
-      tags: ['drag', 'community'],
-      location: {
-        address: '123 Main St, Anytown, USA',
-        placeId: 'place123',
-        lat: 40.7128,
-        lng: -74.006,
-      },
-    });
-
-    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(
-      buildEventRow({
-        id: eventId,
-        organizationId: actor.orgId,
-        imageId: 'image-id',
-        location: { placeId: 'place123', address: '123 Main St, Anytown, USA' },
-      })
-    );
-    (tagService.createAndIncrementMany as jest.Mock).mockResolvedValueOnce([]);
-
-    await expect(EventService.editEvent(eventId, actor, input)).resolves.not.toThrow();
-    expect((EventService as any).assertCanEdit).toHaveBeenCalledWith(eventId, actor);
-    expect(prisma.$transaction).toHaveBeenCalled();
-    expect(tagService.createAndIncrementMany).toHaveBeenCalledWith([], expect.anything());
-    expect(tagService.decrementMany).not.toHaveBeenCalled();
-    expect(tagService.deleteUnused).not.toHaveBeenCalled();
-
-    const editArgs = (eventDal.edit as jest.Mock).mock.calls[0][1];
-    expect(editArgs.tags).toEqual(['id1', 'id2']);
-    expect(editArgs.imageId).toBe('image-id');
-    expect(editArgs.locationId).toBe('location-id');
-    expect(eventDal.edit).toHaveBeenCalledTimes(1);
-    expect(eventDal.edit).toHaveBeenCalledWith(eventId, editArgs, expect.anything());
-
-    expect(imageAssetDal.create).not.toHaveBeenCalled();
-    expect(locationDal.create).not.toHaveBeenCalled();
-    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
-  });
-
-  it('successfully edits event with new image', async () => {
-    const eventId = 'eventId';
-    const actor = {
-      userId: 'userId',
-      orgId: 'orgId',
-      firebaseUid: 'uid',
-    };
-    const input = editEventInputFactory({
-      image: { isNew: true, metadata: { storagePath: 'events/uid/new-image.jpg' } },
-      tags: ['drag', 'community'],
-      location: undefined,
-    });
-
-    const prevEvent = buildEventRow({
+    const originalEvent = buildEventRow({
       id: eventId,
       organizationId: actor.orgId,
-      imageId: 'image-id',
-      location: { placeId: 'place-123', address: '123 Main St, Anytown, USA' },
+      imageId: 'old-image-id',
+      image: { storagePath: 'events/uid3/old-image.jpg' },
+      location: { placeId: 'old-place-id', address: 'Old address' },
+      tags: [{ tag: { id: 'id1', label: 'drag' } }, { tag: { id: 'id2', label: 'community' } }],
     });
 
-    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(prevEvent);
-
-    (imageAssetDal.create as jest.Mock).mockResolvedValueOnce({ id: 'new-image-id' });
-    (tagService.createAndIncrementMany as jest.Mock).mockResolvedValueOnce([]);
-
-    await expect(EventService.editEvent(eventId, actor, input)).resolves.not.toThrow();
-
-    if (!input.image || !input.image.isNew) {
-      throw new Error('Image should be new in this test case');
-    }
-    expect(imageAssetDal.create).toHaveBeenCalledWith(input.image.metadata, expect.anything());
-    expect((EventService as any).assertCanEdit).toHaveBeenCalledWith(eventId, actor);
-    expect(prisma.$transaction).toHaveBeenCalled();
-    expect(tagService.createAndIncrementMany).toHaveBeenCalledWith([], expect.anything());
-    expect(tagService.decrementMany).not.toHaveBeenCalled();
-    expect(tagService.deleteUnused).not.toHaveBeenCalled();
-
-    const editArgs = (eventDal.edit as jest.Mock).mock.calls[0][1];
-    expect(editArgs.tags).toEqual(['id1', 'id2']);
-    expect(editArgs.imageId).toBe('new-image-id');
-    expect(editArgs.locationId).toBe('location-id');
-    expect(eventDal.edit).toHaveBeenCalledTimes(1);
-    expect(eventDal.edit).toHaveBeenCalledWith(eventId, editArgs, expect.anything());
-
-    expect(locationDal.create).not.toHaveBeenCalled();
-    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith(prevEvent.image?.storagePath);
-    expect(imageAssetDal.delete).toHaveBeenCalledWith(prevEvent.imageId, expect.anything());
-  });
-
-  it('successfully edits event with new location', async () => {
-    const eventId = 'eventId';
-    const actor = {
-      userId: 'userId',
-      orgId: 'orgId',
-      firebaseUid: 'uid',
-    };
-    const input = editEventInputFactory({
-      image: { isNew: false, storagePath: 'events/uid/existing-image.jpg' },
-      tags: ['drag', 'community'],
+    const event = editEventInputFactory({
+      startDateTime: '2026-01-01T00:00:00+00:00[UTC]',
       location: {
-        address: '456 Elm St, Othertown, USA',
-        placeId: 'place456',
-        lat: 34.0522,
-        lng: -118.2437,
+        placeId: 'new-place-id',
+        address: '123 Updated St',
+        lat: 44.1,
+        lng: -79.2,
       },
+      image: {
+        isNew: true,
+        metadata: newImageMetadata,
+      },
+      tags: ['tag1', 'tag2'],
     });
 
-    const prevEvent = buildEventRow({
-      id: eventId,
-      organizationId: actor.orgId,
-      imageId: 'image-id',
-      location: { placeId: 'place123', address: '123 Main St, Anytown, USA' },
-    });
-
-    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(prevEvent);
+    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(originalEvent);
     (locationDal.create as jest.Mock).mockResolvedValueOnce({ id: 'new-location-id' });
-    (tagService.createAndIncrementMany as jest.Mock).mockResolvedValueOnce([]);
+    (tagService.applyTagDiff as jest.Mock).mockResolvedValueOnce(['tag-id-1', 'tag-id-2']);
 
-    await expect(EventService.editEvent(eventId, actor, input)).resolves.not.toThrow();
+    await EventService.editEvent(eventId, actor, event);
 
-    if (!input.location) throw new Error('Location should be defined in this test case');
-    expect(locationDal.create).toHaveBeenCalledWith(input.location, expect.anything());
     expect((EventService as any).assertCanEdit).toHaveBeenCalledWith(eventId, actor);
-    expect(prisma.$transaction).toHaveBeenCalled();
-    expect(tagService.createAndIncrementMany).toHaveBeenCalledWith([], expect.anything());
-    expect(tagService.decrementMany).not.toHaveBeenCalled();
-    expect(tagService.deleteUnused).not.toHaveBeenCalled();
+    expect(eventDal.getEvent).toHaveBeenCalledWith(eventId);
+    expect(imageAssetDal.create).toHaveBeenCalledWith(newImageMetadata, expect.anything());
+    expect(imageAssetDal.delete).toHaveBeenCalledWith('old-image-id', expect.anything());
+    expect(locationDal.create).toHaveBeenCalledWith(event.location, expect.anything());
+    expect(tagService.applyTagDiff).toHaveBeenCalledWith(
+      originalEvent.tags,
+      event.tags,
+      expect.anything()
+    );
+    expect(onEditSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ...event,
+        imageId: 'newImageId',
+        locationId: 'new-location-id',
+        tags: ['tag-id-1', 'tag-id-2'],
+      }),
+      expect.anything()
+    );
+    expect(eventDal.edit).toHaveBeenCalledWith(eventId, mockedEditProps, expect.anything());
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('events/uid3/old-image.jpg');
 
-    const editArgs = (eventDal.edit as jest.Mock).mock.calls[0][1];
-    expect(editArgs.tags).toEqual(['id1', 'id2']);
-    expect(editArgs.imageId).toBe('image-id');
-    expect(editArgs.locationId).toBe('new-location-id');
-    expect(eventDal.edit).toHaveBeenCalledTimes(1);
-    expect(eventDal.edit).toHaveBeenCalledWith(eventId, editArgs, expect.anything());
-
-    expect(imageAssetDal.create).not.toHaveBeenCalled();
-    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+    const tx = (eventDal.edit as jest.Mock).mock.calls[0][2];
+    expect((imageAssetDal.create as jest.Mock).mock.calls[0][1]).toBe(tx);
+    expect((imageAssetDal.delete as jest.Mock).mock.calls[0][1]).toBe(tx);
+    expect((locationDal.create as jest.Mock).mock.calls[0][1]).toBe(tx);
+    expect((tagService.applyTagDiff as jest.Mock).mock.calls[0][2]).toBe(tx);
   });
 
-  it('successfully edits event with new tags and deletes old tags', async () => {
+  it('successfully edits event without new image and location', async () => {
+    const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
     const eventId = 'eventId';
-    const actor = {
-      userId: 'userId',
-      orgId: 'orgId',
-      firebaseUid: 'uid',
-    };
-    const input = editEventInputFactory({
-      image: { isNew: false, storagePath: 'events/uid/existing-image.jpg' },
-      tags: ['drag', 'community', 'newtag'],
-      location: null,
-    });
 
-    const prevEvent = buildEventRow({
+    const originalEvent = buildEventRow({
       id: eventId,
       organizationId: actor.orgId,
-      imageId: 'image-id',
-      location: undefined,
-      tags: [
-        { tag: { id: 'id1', label: 'drag' } },
-        { tag: { id: 'id2', label: 'community' } },
-        { tag: { id: 'id3', label: 'oldtag' } },
-      ],
+      imageId: 'old-image-id',
+      image: { storagePath: 'events/uid3/old-image.jpg' },
+      location: { placeId: 'old-place-id', address: 'Old address' },
+      tags: [{ tag: { id: 'id1', label: 'drag' } }, { tag: { id: 'id2', label: 'community' } }],
     });
 
-    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(prevEvent);
-    (tagService.createAndIncrementMany as jest.Mock).mockResolvedValueOnce(['id4']);
-    (tagService.decrementMany as jest.Mock).mockResolvedValueOnce(undefined);
-    (tagService.deleteUnused as jest.Mock).mockResolvedValueOnce(undefined);
+    const event = editEventInputFactory({
+      startDateTime: '2026-01-01T00:00:00+00:00[UTC]',
+      location: {
+        placeId: originalEvent.location!.placeId,
+        address: originalEvent.location!.address!,
+        lat: 44.1,
+        lng: -79.2,
+      },
+      image: {
+        isNew: false,
+        storagePath: 'events/uid3/old-image.jpg',
+      },
+      tags: ['tag1', 'tag2'],
+    });
+    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(originalEvent);
+    (tagService.applyTagDiff as jest.Mock).mockResolvedValueOnce(['tag-id-1', 'tag-id-2']);
 
-    await expect(EventService.editEvent(eventId, actor, input)).resolves.not.toThrow();
-
-    expect((EventService as any).assertCanEdit).toHaveBeenCalledWith(eventId, actor);
-    expect(prisma.$transaction).toHaveBeenCalled();
-    expect(tagService.createAndIncrementMany).toHaveBeenCalledWith(['newtag'], expect.anything());
-    expect(tagService.decrementMany).toHaveBeenCalledWith(['id3'], expect.anything());
-    expect(tagService.deleteUnused).toHaveBeenCalledWith(['id3'], expect.anything());
-
-    const editArgs = (eventDal.edit as jest.Mock).mock.calls[0][1];
-    expect(editArgs.tags).toEqual(['id1', 'id2', 'id4']);
-    expect(editArgs.imageId).toBe('image-id');
-    expect(editArgs.locationId).toBe('location-id');
-    expect(eventDal.edit).toHaveBeenCalledTimes(1);
-    expect(eventDal.edit).toHaveBeenCalledWith(eventId, editArgs, expect.anything());
+    await EventService.editEvent(eventId, actor, event);
 
     expect(imageAssetDal.create).not.toHaveBeenCalled();
     expect(locationDal.create).not.toHaveBeenCalled();
     expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+    expect(onEditSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ...event,
+        imageId: undefined,
+        locationId: undefined,
+        tags: ['tag-id-1', 'tag-id-2'],
+      }),
+      expect.anything()
+    );
+    expect(eventDal.edit).toHaveBeenCalledWith(eventId, mockedEditProps, expect.anything());
   });
 
-  it('throws error if no event found with given id', async () => {
+  it('throws and does not persist if domain validation fails', async () => {
+    const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
     const eventId = 'eventId';
-    const actor = {
-      userId: 'userId',
-      orgId: 'orgId',
-      firebaseUid: 'uid',
+    const newImageMetadata = {
+      contentType: 'image/jpeg',
+      sizeBytes: 555,
+      originalName: 'replacement.jpg',
+      storagePath: 'events/uid3/replacement.jpg',
     };
-    const input = editEventInputFactory();
+    const originalEvent = buildEventRow({
+      id: eventId,
+      organizationId: actor.orgId,
+      imageId: 'old-image-id',
+      image: { storagePath: 'events/uid3/old-image.jpg' },
+      location: { placeId: 'old-place-id', address: 'Old address' },
+      tags: [{ tag: { id: 'id1', label: 'drag' } }, { tag: { id: 'id2', label: 'community' } }],
+    });
+
+    const event = editEventInputFactory({
+      startDateTime: '2026-01-01T00:00:00+00:00[UTC]',
+      location: {
+        placeId: 'new-place-id',
+        address: '123 Updated St',
+        lat: 44.1,
+        lng: -79.2,
+      },
+      image: {
+        isNew: true,
+        metadata: newImageMetadata,
+      },
+      tags: ['tag1', 'tag2'],
+    });
+
+    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(originalEvent);
+    (locationDal.create as jest.Mock).mockResolvedValueOnce({ id: 'new-location-id' });
+    (tagService.applyTagDiff as jest.Mock).mockResolvedValueOnce(['tag-id-1', 'tag-id-2']);
+    onEditSpy.mockImplementation(() => {
+      throw new Error('Validation failed');
+    });
+
+    await expect(EventService.editEvent(eventId, actor, event)).rejects.toThrow(
+      'Validation failed'
+    );
+    expect(imageAssetDal.create).toHaveBeenCalledWith(newImageMetadata, expect.anything());
+    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+    expect(locationDal.create).toHaveBeenCalledWith(event.location, expect.anything());
+    expect(tagService.applyTagDiff).toHaveBeenCalledWith(
+      originalEvent.tags,
+      event.tags,
+      expect.anything()
+    );
+    expect(eventDal.edit).not.toHaveBeenCalled();
+  });
+
+  it("throws if user can't edit event", async () => {
+    const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
+    const eventId = 'eventId';
+    const event = editEventInputFactory();
+
+    (EventService as any).assertCanEdit.mockRejectedValueOnce(new Error('Cannot edit event'));
+    await expect(EventService.editEvent(eventId, actor, event)).rejects.toThrow(
+      'Cannot edit event'
+    );
+    expect(eventDal.getEvent).not.toHaveBeenCalled();
+    expect(imageAssetDal.create).not.toHaveBeenCalled();
+    expect(locationDal.create).not.toHaveBeenCalled();
+    expect(tagService.applyTagDiff).not.toHaveBeenCalled();
+    expect(eventDal.edit).not.toHaveBeenCalled();
+    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+  });
+
+  it('throws if event not found', async () => {
+    const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
+    const eventId = 'eventId';
+    const event = editEventInputFactory();
 
     (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(null);
-
-    await expect(EventService.editEvent(eventId, actor, input)).rejects.toMatchObject({
+    await expect(EventService.editEvent(eventId, actor, event)).rejects.toMatchObject({
       code: 'EVENT_NOT_FOUND',
     });
-    expect((EventService as any).assertCanEdit).toHaveBeenCalledWith(eventId, actor);
     expect(eventDal.getEvent).toHaveBeenCalledWith(eventId);
     expect(imageAssetDal.create).not.toHaveBeenCalled();
     expect(locationDal.create).not.toHaveBeenCalled();
-    expect(tagService.createAndIncrementMany).not.toHaveBeenCalled();
-    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+    expect(tagService.applyTagDiff).not.toHaveBeenCalled();
     expect(eventDal.edit).not.toHaveBeenCalled();
+    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
   });
+
+  it('throws error image storage path is unauthenticated and does not persist changes', async () => {
+    const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
+    const eventId = 'eventId';
+    const newImageMetadata = {
+      contentType: 'image/jpeg',
+      sizeBytes: 555,
+      originalName: 'replacement.jpg',
+      storagePath: 'events/otherUser/replacement.jpg',
+    };
+    const originalEvent = buildEventRow({
+      id: eventId,
+      organizationId: actor.orgId,
+      imageId: 'old-image-id',
+      image: { storagePath: 'events/uid3/old-image.jpg' },
+      location: { placeId: 'old-place-id', address: 'Old address' },
+      tags: [{ tag: { id: 'id1', label: 'drag' } }, { tag: { id: 'id2', label: 'community' } }],
+    });
+
+    const event = editEventInputFactory({
+      startDateTime: '2026-01-01T00:00:00+00:00[UTC]',
+      location: {
+        placeId: 'new-place-id',
+        address: '123 Updated St',
+        lat: 44.1,
+        lng: -79.2,
+      },
+      image: {
+        isNew: true,
+        metadata: newImageMetadata,
+      },
+      tags: ['tag1', 'tag2'],
+    });
+
+    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(originalEvent);
+    await expect(EventService.editEvent(eventId, actor, event)).rejects.toMatchObject({
+      code: 'AUTH_UNAUTHORIZED',
+    });
+    expect(imageAssetDal.create).not.toHaveBeenCalled();
+    expect(locationDal.create).not.toHaveBeenCalled();
+    expect(tagService.applyTagDiff).not.toHaveBeenCalled();
+    expect(eventDal.edit).not.toHaveBeenCalled();
+    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+  });
+
+  it('does not run delete if no old image exists', async () => {
+    const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
+    const eventId = 'eventId';
+    const newImageMetadata = {
+      contentType: 'image/jpeg',
+      sizeBytes: 555,
+      originalName: 'replacement.jpg',
+      storagePath: 'events/uid3/replacement.jpg',
+    };
+    const originalEvent = buildEventRow({
+      id: eventId,
+      organizationId: actor.orgId,
+      imageId: null,
+      image: null,
+      location: { placeId: 'old-place-id', address: 'Old address' },
+      tags: [{ tag: { id: 'id1', label: 'drag' } }, { tag: { id: 'id2', label: 'community' } }],
+    });
+
+    const event = editEventInputFactory({
+      startDateTime: '2026-01-01T00:00:00+00:00[UTC]',
+      location: {
+        placeId: 'new-place-id',
+        address: '123 Updated St',
+        lat: 44.1,
+        lng: -79.2,
+      },
+      image: {
+        isNew: true,
+        metadata: newImageMetadata,
+      },
+      tags: ['tag1', 'tag2'],
+    });
+
+    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(originalEvent);
+    (locationDal.create as jest.Mock).mockResolvedValueOnce({ id: 'new-location-id' });
+    (tagService.applyTagDiff as jest.Mock).mockResolvedValueOnce(['tag-id-1', 'tag-id-2']);
+
+    await EventService.editEvent(eventId, actor, event);
+
+    expect(imageAssetDal.create).toHaveBeenCalledWith(newImageMetadata, expect.anything());
+    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+    expect(locationDal.create).toHaveBeenCalledWith(event.location, expect.anything());
+    expect(tagService.applyTagDiff).toHaveBeenCalledWith(
+      originalEvent.tags,
+      event.tags,
+      expect.anything()
+    );
+    expect(onEditSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ...event,
+        imageId: 'newImageId',
+        locationId: 'new-location-id',
+        tags: ['tag-id-1', 'tag-id-2'],
+      }),
+      expect.anything()
+    );
+    expect(eventDal.edit).toHaveBeenCalledWith(eventId, mockedEditProps, expect.anything());
+  });
+
+  it('omits tags if no tags provided in input', async () => {
+    const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
+    const eventId = 'eventId';
+    const originalEvent = buildEventRow({
+      id: eventId,
+      organizationId: actor.orgId,
+      imageId: null,
+      image: null,
+      location: { placeId: 'old-place-id', address: 'Old address' },
+      tags: [{ tag: { id: 'id1', label: 'drag' } }, { tag: { id: 'id2', label: 'community' } }],
+    });
+
+    const event = editEventInputFactory({
+      startDateTime: '2026-01-01T00:00:00+00:00[UTC]',
+      location: {
+        placeId: 'new-place-id',
+        address: '123 Updated St',
+        lat: 44.1,
+        lng: -79.2,
+      },
+      image: {
+        isNew: false,
+        storagePath: 'events/uid3/old-image.jpg',
+      },
+      tags: undefined,
+    });
+
+    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(originalEvent);
+    (locationDal.create as jest.Mock).mockResolvedValueOnce({ id: 'new-location-id' });
+
+    await EventService.editEvent(eventId, actor, event);
+
+    expect(tagService.applyTagDiff).not.toHaveBeenCalled();
+    expect(onEditSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ...event,
+        imageId: undefined,
+        locationId: 'new-location-id',
+        tags: undefined,
+      }),
+      expect.anything()
+    );
+    expect(eventDal.edit).toHaveBeenCalledWith(eventId, mockedEditProps, expect.anything());
+  });
+
+
+  it("omits image update if no new image provided in input", async () => {
+    const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
+    const eventId = 'eventId';
+    const originalEvent = buildEventRow({
+      id: eventId,
+      organizationId: actor.orgId,
+      imageId: 'old-image-id',
+      image: { storagePath: 'events/uid3/old-image.jpg' },
+      location: { placeId: 'old-place-id', address: 'Old address' },
+      tags: [{ tag: { id: 'id1', label: 'drag' } }, { tag: { id: 'id2', label: 'community' } }],
+    });
+
+    const event = editEventInputFactory({
+      startDateTime: '2026-01-01T00:00:00+00:00[UTC]',
+      location: {
+        placeId: 'new-place-id',
+        address: '123 Updated St',
+        lat: 44.1,
+        lng: -79.2,
+      },
+      image: undefined,
+      tags: ['tag1', 'tag2'],
+    });
+
+    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(originalEvent);
+    (locationDal.create as jest.Mock).mockResolvedValueOnce({ id: 'new-location-id' });
+    (tagService.applyTagDiff as jest.Mock).mockResolvedValueOnce(['tag-id-1', 'tag-id-2']);
+
+    await EventService.editEvent(eventId, actor, event);
+
+    expect(imageAssetDal.create).not.toHaveBeenCalled();
+    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+    expect(locationDal.create).toHaveBeenCalledWith(event.location, expect.anything());
+    expect(tagService.applyTagDiff).toHaveBeenCalledWith(
+      originalEvent.tags,
+      event.tags,
+      expect.anything()
+    );
+    expect(onEditSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ...event,
+        imageId: undefined,
+        locationId: 'new-location-id',
+        tags: ['tag-id-1', 'tag-id-2'],
+      }),
+      expect.anything()
+    );
+    expect(eventDal.edit).toHaveBeenCalledWith(eventId, mockedEditProps, expect.anything());
+
+  })
+
+  it('ensures storage delete error is swallowed and does not impact user experience', async () => {
+    const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
+    const eventId = 'eventId';
+    const newImageMetadata = {
+      contentType: 'image/jpeg',
+      sizeBytes: 555,
+      originalName: 'replacement.jpg',
+      storagePath: 'events/uid3/replacement.jpg',
+    };
+    const originalEvent = buildEventRow({
+      id: eventId,
+      organizationId: actor.orgId,
+      imageId: 'old-image-id',
+      image: { storagePath: 'events/uid3/old-image.jpg' },
+      location: { placeId: 'old-place-id', address: 'Old address' },
+      tags: [{ tag: { id: 'id1', label: 'drag' } }, { tag: { id: 'id2', label: 'community' } }],
+    });
+
+    const event = editEventInputFactory({
+      startDateTime: '2026-01-01T00:00:00+00:00[UTC]',
+      location: {
+        placeId: 'new-place-id',
+        address: '123 Updated St',
+        lat: 44.1,
+        lng: -79.2,
+      },
+      image: {
+        isNew: true,
+        metadata: newImageMetadata,
+      },
+      tags: ['tag1', 'tag2'],
+    });
+
+    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(originalEvent);
+    (locationDal.create as jest.Mock).mockResolvedValueOnce({ id: 'new-location-id' });
+    (tagService.applyTagDiff as jest.Mock).mockResolvedValueOnce(['tag-id-1', 'tag-id-2']);
+    (ImageService.deleteByStoragePath as jest.Mock).mockRejectedValueOnce(new Error('Storage error'));
+
+    await expect(EventService.editEvent(eventId, actor, event)).resolves.not.toThrow();
+    expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('events/uid3/old-image.jpg');
+    expect(logger.error).toHaveBeenCalledWith(
+      'STORAGE_DELETE_FAILED',
+      expect.objectContaining({
+        error: expect.any(Error),
+        eventId,
+        storagePath: 'events/uid3/old-image.jpg',
+      })
+    );
+
+  })
+
 });

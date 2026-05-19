@@ -24,6 +24,9 @@ export default async function editEvent(
     return fail(GeneralErrors.InvalidFileInput(), fieldErrors);
   }
 
+
+
+  
   try {
     await EventService.editEvent(eventId, actor, sanitized.data);
   } catch (error) {

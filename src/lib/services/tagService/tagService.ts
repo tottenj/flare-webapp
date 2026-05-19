@@ -17,7 +17,6 @@ export default class tagService {
     );
   }
 
-
   static async decrementMany(tagIds: string[], tx?: Prisma.TransactionClient) {
     const client = tx ?? prisma;
     await client.tag.updateMany({
@@ -30,6 +29,43 @@ export default class tagService {
     });
   }
 
+  private static diffTags(
+    prevTags: { tag: { label: string; id: string } }[],
+    newTagLabels: string[]
+  ) {
+    const prevLabelSet = new Set(prevTags.map(({ tag }) => tag.label));
+    const newLabelSet = new Set(newTagLabels);
+
+    const toAdd = newTagLabels.filter((label) => !prevLabelSet.has(label));
+
+    const toRemove = prevTags
+      .filter(({ tag }) => !newLabelSet.has(tag.label))
+      .map(({ tag }) => tag);
+
+    return { toAdd, toRemove };
+  }
+
+  static async applyTagDiff(
+    prevTags: { tag: { label: string; id: string } }[],
+    newLabels: string[],
+    tx: Prisma.TransactionClient
+  ) {
+    const { toAdd, toRemove } = this.diffTags(prevTags, newLabels);
+    const newTagIds = await this.createAndIncrementMany(toAdd, tx);
+
+    if (toRemove.length > 0) {
+      const ids = toRemove.map((t) => t.id);
+      await this.decrementMany(ids, tx);
+      await this.deleteUnused(ids, tx);
+    }
+
+    const newLabelSet = new Set(newLabels);
+    const remainingIds = prevTags
+      .filter(({ tag }) => newLabelSet.has(tag.label))
+      .map(({ tag }) => tag.id);
+
+    return [...remainingIds, ...newTagIds];
+  }
 
   static async deleteUnused(tagIds: string[], tx?: Prisma.TransactionClient) {
     const client = tx ?? prisma;
@@ -41,4 +77,3 @@ export default class tagService {
     });
   }
 }
-
