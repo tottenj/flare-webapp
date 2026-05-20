@@ -31,11 +31,17 @@ export default function EventListCardPresentational({
   const { dateLabel } = formatDateTime(startDate);
 
   return (
-    <div className="group border-primary hover:bg-primary relative flex w-full cursor-pointer gap-4 rounded-2xl border-2 p-4 transition-all duration-200 ease-in-out hover:-translate-y-1 hover:text-white hover:shadow-lg">
+    <div
+      data-cy={`event-row-${eventId}`}
+      className="group border-primary hover:bg-primary relative flex w-full cursor-pointer gap-4 rounded-2xl border-2 p-4 transition-all duration-200 ease-in-out hover:-translate-y-1 hover:text-white hover:shadow-lg"
+    >
       <ModalLink route={`/event/${eventId}`} aria-label={title} className="absolute inset-0 z-10" />
 
       {actions && (
-        <div className="absolute top-2 right-4 z-20 hidden text-white group-hover:block">
+        <div
+          data-cy={`event-actions-${eventId}`}
+          className="absolute top-2 right-4 z-20 hidden text-white group-hover:block"
+        >
           {actions}
         </div>
       )}

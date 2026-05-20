@@ -52,7 +52,13 @@ export default function EditEventContainer({
         setData(null);
       }}
       modalProps={{ size: '5xl' }}
-      trigger={<IconButton className="absolute -top-4 -right-6 z-10" icon={faEdit} />}
+      trigger={
+        <IconButton
+          className="absolute -top-4 -right-6 z-10"
+          icon={faEdit}
+          data-cy={`edit-event-trigger-${eventId}`}
+        />
+      }
     >
       {(close) => {
         if (loading) {
