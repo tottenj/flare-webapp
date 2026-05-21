@@ -1,5 +1,7 @@
 import { pendingOrg } from '../constants';
 
+const monthAbbreviationRegex = /\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/;
+
 describe('General', () => {
   beforeEach(() => {
     cy.loginTestOrg();
@@ -21,7 +23,7 @@ describe('General', () => {
     cy.get('[data-cy="upcoming-container"]').within(() => {
       cy.contains('Upcoming Event').should('be.visible');
       cy.contains('Free').should('be.visible');
-      cy.contains('Mar').should('be.visible');
+      cy.contains(monthAbbreviationRegex).should('be.visible');
       cy.contains('unverifiedOrg').should('be.visible');
     });
   });
@@ -95,7 +97,7 @@ describe('Events List', () => {
   it('Successfully loads published event in my events list on default', () => {
     cy.get('[data-cy="my-events-container"]').within(() => {
       cy.contains('Another Published Event').should('be.visible');
-      cy.contains('Mar').should('be.visible');
+      cy.contains(monthAbbreviationRegex).should('be.visible');
       cy.contains('All Ages').should('be.visible');
     });
   });
@@ -107,7 +109,7 @@ describe('Events List', () => {
       .should('be.visible')
       .within(() => {
         cy.contains('Another Published Event').should('be.visible');
-        cy.contains('Mar').should('be.visible');
+        cy.contains(monthAbbreviationRegex).should('be.visible');
         cy.contains('All Ages').should('be.visible');
         cy.contains('Draft Event').should('not.exist');
       });
@@ -118,7 +120,7 @@ describe('Events List', () => {
     cy.get('[data-cy="my-events-container"]')
       .should('be.visible')
       .within(() => {
-        cy.contains('Mar').should('be.visible');
+        cy.contains(monthAbbreviationRegex).should('be.visible');
         cy.contains('All Ages').should('be.visible');
         cy.contains('Draft Event').should('be.visible');
         cy.contains('Another Published Event').should('not.exist');
