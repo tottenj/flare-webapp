@@ -7,7 +7,7 @@ export default function CreateEventModalWrapper({ orgName }: { orgName: string }
   return (
     <MainModal
       trigger={<SquarePlus />}
-      header={<h2 className="w-full text-center">Create New Event</h2>}
+      header={<span className="block w-full text-center">Create New Event</span>}
       modalProps={{ size: '3xl', isDismissable: false }}
     >
       {(close) => <EventFormContainer orgName={orgName} onCloseModal={close} />}
