@@ -1,6 +1,6 @@
 import { CreateEvent } from '@/lib/schemas/event/createEventFormSchema';
 import { PRICE_TYPE } from '@/lib/types/PriceType';
-import { AgeRestriction, EventCategory } from '@prisma/client';
+import { AgeRestriction, EventCategory } from '#prisma/generated/enums';
 
 export function eventInputFactory(
   overrides: Partial<CreateEvent> = {},

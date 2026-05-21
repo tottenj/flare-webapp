@@ -20,7 +20,12 @@ export default async (): Promise<Config> => {
     testEnvironment: 'jsdom',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
     coveragePathIgnorePatterns: ['node_modules', '/src/app/generated/prisma/', '/src/lib/dal/'],
-    testPathIgnorePatterns: ['/node_modules/', '/app/generated/prisma/'],
+    testPathIgnorePatterns: [
+      '/node_modules/',
+      '/app/generated/prisma/',
+      '/src/lib/auth/',
+      '/src/lib/dal/',
+    ],
   })();
 
   const apiConfig = await createJestConfig({
@@ -40,6 +45,13 @@ export default async (): Promise<Config> => {
     testEnvironment: 'node',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.integration.ts'],
   })();
+
+  // next/jest appends defaults when passed in, so override on the resolved config.
+  integrationConfig.transformIgnorePatterns = [
+    '/node_modules/(?!.pnpm)(?!(geist|@prisma/client|@prisma/debug|@prisma/engines)/)',
+    '/node_modules/.pnpm/(?!(geist|@prisma\\+client|@prisma\\+debug|@prisma\\+engines)@)',
+    '^.+\\.module\\.(css|sass|scss)$',
+  ];
 
   return {
     // ✅ top-level only

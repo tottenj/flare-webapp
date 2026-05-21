@@ -1,0 +1,90 @@
+import AuthGateway from '@/lib/auth/authGateway';
+import deleteAccount from '@/lib/serverActions/userActions/deleteAccount/deleteAccount';
+import { expectFail } from '@/lib/test/expectFail';
+import deleteUserUseCase from '@/lib/useCase/deleteUserUseCase';
+import { cookies } from 'next/headers';
+import { expect, it } from '@jest/globals';
+
+jest.mock('@/lib/services/userContextService/userContextService', () => ({
+  UserContextService: {
+    requireUser: jest.fn().mockResolvedValue({
+      user: {
+        id: 'userId',
+        firebaseUid: 'firebaseUid',
+      },
+    }),
+  },
+}));
+
+jest.mock('@/lib/useCase/deleteUserUseCase', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
+
+jest.mock('@/lib/auth/authGateway', () => ({
+  __esModule: true,
+  default: {
+    verifyIdToken: jest.fn(),
+  },
+}));
+
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(),
+}));
+
+const mockedAuthGateway = jest.mocked(AuthGateway);
+const mockedDeleteUserUseCase = jest.mocked(deleteUserUseCase);
+const mockedCookies = jest.mocked(cookies);
+const deleteCookieMock = jest.fn();
+
+describe('delete Account', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockedCookies.mockResolvedValue({ delete: deleteCookieMock } as any);
+  });
+
+  it('Successfully deletes account', async () => {
+    const idToken = 'validIdToken';
+    mockedAuthGateway.verifyIdToken.mockResolvedValue({
+      uid: 'firebaseUid',
+      email: 'email',
+      emailVerified: true,
+    });
+    mockedDeleteUserUseCase.mockResolvedValue(undefined);
+
+    const res = await deleteAccount({ idToken });
+
+    expect(mockedAuthGateway.verifyIdToken).toHaveBeenCalledWith(idToken);
+    expect(mockedDeleteUserUseCase).toHaveBeenCalledWith({
+      authenticatedUser: {
+        userId: 'userId',
+        firebaseUid: 'firebaseUid',
+      },
+      firebaseUid: 'firebaseUid',
+    });
+    expect(deleteCookieMock).toHaveBeenCalledWith('session');
+    expect(res).toEqual({ ok: true, data: null });
+  });
+
+  it('Fails with invalid input', async () => {
+    const idToken = '';
+    const res = await deleteAccount({ idToken });
+    const failed = expectFail(res);
+    expect(failed.code).toBe('AUTH_SIGNIN_FAILED');
+    expect(deleteCookieMock).not.toHaveBeenCalled();
+  });
+
+  it('Fails with unknown error', async () => {
+    mockedAuthGateway.verifyIdToken.mockResolvedValue({
+      uid: 'firebaseUid',
+      email: 'email',
+      emailVerified: true,
+    });
+    mockedDeleteUserUseCase.mockRejectedValue(new Error('Unknown error'));
+
+    const res = await deleteAccount({ idToken: 'validToken' });
+    const failed = expectFail(res);
+    expect(failed.code).toBe('UNKNOWN');
+    expect(deleteCookieMock).not.toHaveBeenCalled();
+  });
+});

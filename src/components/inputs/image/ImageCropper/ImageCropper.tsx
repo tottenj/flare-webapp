@@ -25,8 +25,8 @@ export default function ImageCropper({
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="relative h-[400px] w-full">
+    <div data-cy="image-cropper" className="flex flex-col items-center gap-4">
+      <div className="relative h-100 w-full">
         <Cropper
           image={image}
           crop={crop}
@@ -38,7 +38,7 @@ export default function ImageCropper({
         />
       </div>
 
-      <PrimaryButton click={confirmCrop} text='Confirm Crop'/>
+      <PrimaryButton click={confirmCrop} text="Confirm Crop" datacy="confirm-crop-button" />
     </div>
   );
 }

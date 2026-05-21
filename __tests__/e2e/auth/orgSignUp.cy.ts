@@ -1,3 +1,5 @@
+import { pendingOrg } from '../constants';
+
 const sampleOrg = {
   name: 'organization name',
   email: 'example@gmail.com',
@@ -29,9 +31,9 @@ describe('Org Sign Up - Successful Flow', () => {
     cy.usePlacesInput("[data-cy='location-input']");
     cy.get("[data-cy='password-input']").type(sampleOrg.password);
 
-    cy.get("[data-cy='instagram-input']").type(sampleOrg.instagram),
+    (cy.get("[data-cy='instagram-input']").type(sampleOrg.instagram),
       cy.get("[data-cy='facebook-input']").type(sampleOrg.facebook),
-      cy.get("[data-cy='twitter-input']").type(sampleOrg.twitter);
+      cy.get("[data-cy='twitter-input']").type(sampleOrg.twitter));
 
     cy.contains('Submit').click();
     cy.url().should('include', '/confirmation');
@@ -78,7 +80,7 @@ describe('Org Sign Up - Unsuccessful Flow', () => {
 
   it('shows error if user already exists', () => {
     cy.get("[data-cy='orgName-input']").type(sampleOrg.name);
-    cy.get("[data-cy='email-input']").type('unverifiedOrg@gmail.com');
+    cy.get("[data-cy='email-input']").type(pendingOrg.email);
     cy.usePlacesInput("[data-cy='location-input']");
     cy.get("[data-cy='password-input']").type(sampleOrg.password);
     cy.contains('Submit').click();

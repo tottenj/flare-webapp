@@ -1,4 +1,4 @@
-import { parseZonedDateTime } from '@internationalized/date';
+import { parseAbsolute, parseZonedDateTime, toZoned, ZonedDateTime } from '@internationalized/date';
 
 export function parseZonedToUTC(input: string): { utcDate: Date; timeZone: string } {
   const zdt = parseZonedDateTime(input);
@@ -6,6 +6,10 @@ export function parseZonedToUTC(input: string): { utcDate: Date; timeZone: strin
     utcDate: zdt.toDate(),
     timeZone: zdt.timeZone,
   };
+}
+
+export function parseISOToZoned(isoString: string, timeZone: string) {
+  return parseAbsolute(isoString, timeZone);
 }
 
 export function parseZonedToISO(

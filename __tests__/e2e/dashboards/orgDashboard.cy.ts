@@ -1,4 +1,4 @@
-import { pendingOrg } from '../constants';
+import { pendingOrg, seededEvents } from '../constants';
 
 const monthAbbreviationRegex = /\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/;
 
@@ -21,7 +21,7 @@ describe('General', () => {
 
   it('Successfully Loads Next Upcoming Event', () => {
     cy.get('[data-cy="upcoming-container"]').within(() => {
-      cy.contains('Upcoming Event').should('be.visible');
+      cy.contains(seededEvents.upcoming.title).should('be.visible');
       cy.contains('Free').should('be.visible');
       cy.contains(monthAbbreviationRegex).should('be.visible');
       cy.contains('unverifiedOrg').should('be.visible');
@@ -111,7 +111,7 @@ describe('Events List', () => {
         cy.contains('Another Published Event').should('be.visible');
         cy.contains(monthAbbreviationRegex).should('be.visible');
         cy.contains('All Ages').should('be.visible');
-        cy.contains('Draft Event').should('not.exist');
+        cy.contains(seededEvents.draft.title).should('not.exist');
       });
   });
 
@@ -122,48 +122,167 @@ describe('Events List', () => {
       .within(() => {
         cy.contains(monthAbbreviationRegex).should('be.visible');
         cy.contains('All Ages').should('be.visible');
-        cy.contains('Draft Event').should('be.visible');
-        cy.contains('Another Published Event').should('not.exist');
+        cy.contains(seededEvents.draft.title).should('be.visible');
+        cy.contains(seededEvents.published.title).should('not.exist');
       });
   });
 
   it('Loads draft events from URL filter', () => {
     cy.visit('/dashboard?status=draft');
     cy.get('[data-cy="my-events-container"]').within(() => {
-      cy.contains('Draft Event').should('be.visible');
+      cy.contains(seededEvents.draft.title).should('be.visible');
     });
   });
 
   it('Opens event modal on click', () => {
     cy.get('[data-cy="my-events-container"]').within(() => {
-      cy.contains('Another Published Event').click();
+      cy.get(`[aria-label="${seededEvents.published.title}"]`).click();
     });
     cy.url().should('include', 'event/');
-    cy.get('[data-cy="Another Published Event-event-modal"]').should('be.visible');
-    cy.get('[data-cy="Another Published Event-event-modal"]').within(() => {
-      cy.contains('Another Published Event').should('be.visible');
-      cy.contains('Another future published event').should('be.visible');
+    cy.get(`[data-cy="${seededEvents.published.title}-event-modal"]`).should('be.visible');
+    cy.get(`[data-cy="${seededEvents.published.title}-event-modal"]`).within(() => {
+      cy.contains(seededEvents.published.title).should('be.visible');
+      cy.contains(seededEvents.published.description).should('be.visible');
     });
   });
 
   it('Opens draft event modal on click', () => {
     cy.visit('/dashboard?status=draft');
     cy.get('[data-cy="my-events-container"]').within(() => {
-      cy.contains('Draft Event').click();
+      cy.get(`[aria-label="${seededEvents.draft.title}"]`).click();
     });
     cy.url().should('include', 'event/');
-    cy.get('[data-cy="Draft Event-event-modal"]').should('be.visible');
-    cy.get('[data-cy="Draft Event-event-modal"]').within(() => {
-      cy.contains('Draft Event').should('be.visible');
-      cy.contains('Draft future event').should('be.visible');
+    cy.get(`[data-cy="${seededEvents.draft.title}-event-modal"]`).should('be.visible');
+    cy.get(`[data-cy="${seededEvents.draft.title}-event-modal"]`).within(() => {
+      cy.contains(seededEvents.draft.title).should('be.visible');
+      cy.contains(seededEvents.draft.description).should('be.visible');
     });
   });
 
   it('Closes event modal when clicking close button', () => {
-    cy.contains('Another Published Event').click();
+    cy.get(`[aria-label="${seededEvents.published.title}"]`).click();
     cy.get('[data-cy="main-modal"]').should('be.visible');
     cy.get('[aria-label="Close"]').click();
     cy.url().should('not.include', '/event/');
     cy.get('[data-cy="main-modal"]').should('not.be.visible');
+  });
+});
+
+describe('Settings Modal', () => {
+  beforeEach(() => {
+    cy.loginTestOrg();
+    cy.reload();
+    cy.visit('/dashboard');
+    cy.loginTestOrgClient();
+  });
+
+  it('Opens settings modal on click', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]').should('be.visible');
+    cy.contains('Settings').should('be.visible');
+  });
+
+  it('Closes settings modal when clicking close button', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Settings').should('be.visible');
+        cy.get('[aria-label="Close"]').click();
+      });
+    cy.get('[data-cy="main-modal"]').should('not.exist');
+  });
+});
+
+describe('Delete Account Flow - Isolated', () => {
+  beforeEach(() => {
+    cy.loginTestOrg();
+    cy.reload();
+    cy.visit('/dashboard');
+    cy.loginTestOrgClient();
+  });
+
+  after(() => {
+    cy.clearAllEmulators();
+    cy.resetAndSeed();
+    cy.seedAuthEmulator();
+    cy.seedStorageEmulator();
+    cy.then(() => {
+      Cypress.session.clearAllSavedSessions();
+    });
+  });
+
+  it('Dismisses delete account form when cancel is clicked', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Delete Account').should('be.visible').click();
+      });
+
+    cy.contains('Confirm Account Deletion').should('be.visible');
+    cy.get('[data-cy="cancel-delete-account-button"]').should('be.visible').click();
+
+    cy.contains('Confirm Account Deletion').should('not.exist');
+    cy.getCookie('session').should('exist');
+    cy.window().its('auth.currentUser').should('not.be.null');
+    cy.url().should('include', '/dashboard');
+  });
+
+  it('Does not delete account with wrong password', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Delete Account').should('be.visible').click();
+      });
+
+    cy.contains('Confirm Account Deletion').should('be.visible');
+    cy.get('[data-cy="email-input"]').type('unverifiedOrg@gmail.com');
+    cy.get('[data-cy="password-input"]').type('wrongpassword123');
+    cy.get('[data-cy="delete-account-button"]').should('be.visible').click();
+
+    cy.contains('Failed to delete account. Please try again.').should('be.visible');
+    cy.getCookie('session').should('exist');
+    cy.window().its('auth.currentUser').should('not.be.null');
+    cy.url().should('include', '/dashboard');
+  });
+
+  it('Does not delete account with mismatched email', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Delete Account').should('be.visible').click();
+      });
+
+    cy.contains('Confirm Account Deletion').should('be.visible');
+    cy.get('[data-cy="email-input"]').type('not-my-email@gmail.com');
+    cy.get('[data-cy="password-input"]').type('password123');
+    cy.get('[data-cy="delete-account-button"]').should('be.visible').click();
+
+    cy.contains('Failed to delete account. Please try again.').should('be.visible');
+    cy.getCookie('session').should('exist');
+    cy.window().its('auth.currentUser').should('not.be.null');
+    cy.url().should('include', '/dashboard');
+  });
+
+  it('Deletes account successfully', () => {
+    cy.get('[data-cy="user-dashboard-settings"]').click();
+    cy.get('[data-cy="main-modal"]')
+      .should('be.visible')
+      .within(() => {
+        cy.contains('Delete Account').should('be.visible').click();
+      });
+    cy.contains('Confirm Account Deletion').should('be.visible');
+    cy.get('[data-cy="email-input"]').type('unverifiedOrg@gmail.com');
+    cy.get('[data-cy="password-input"]').type('password123');
+    cy.get('[data-cy="delete-account-button"]').should('be.visible').click();
+    cy.contains('Account successfully deleted', { timeout: 10000 }).should('be.visible');
+    cy.getCookie('session').should('not.exist');
+    cy.window().its('auth.currentUser').should('be.null');
+    cy.url().should('include', '/signin');
+    cy.visit('/dashboard');
+    cy.url().should('include', '/signin');
   });
 });

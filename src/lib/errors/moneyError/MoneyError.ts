@@ -1,6 +1,10 @@
-export class MoneyError extends Error {
+import { AppError } from "@/lib/errors/AppError";
+
+export class MoneyError extends AppError {
   constructor(message: string) {
-    super(message);
-    this.name = 'MONEY_ERROR';
+    super({
+      code: 'MONEY_ERROR',
+      clientMessage: message,
+    });
   }
 }

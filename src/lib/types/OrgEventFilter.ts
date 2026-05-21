@@ -1,5 +1,5 @@
-import { EventStatus } from "@prisma/client";
-import z from "zod";
+import { EventStatus } from '#prisma/generated/enums';
+import z from 'zod';
 
 export const OrgEventFilterSchema = z.object({
   status: z.enum(EventStatus).optional(),

@@ -1,12 +1,15 @@
-import { ActionResult } from "../types/ActionResult";
-import { AppError } from "./AppError";
+import { ActionResult } from '../types/responses/ActionResult';
+import { AppError } from './AppError';
 
-export default function fail<T>(err: AppError, fieldErrors?: Record<string, string[]>): ActionResult<T> {
+export default function fail<T>(
+  err: AppError,
+  fieldErrors?: Record<string, string[]>
+): ActionResult<T> {
   return {
     ok: false,
     error: {
-      code: err.code,
-      message: err.clientMessage,
+      code: err.code || err.name,
+      message: err.clientMessage || err.message,
       ...(fieldErrors ? { fieldErrors } : {}),
     },
   };

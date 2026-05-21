@@ -1,5 +1,13 @@
-import { Prisma, PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import 'dotenv/config';
+import { Prisma, PrismaClient } from './generated/client';
+import {
+  SEEDED_TEST_EVENTS,
+  SEEDED_TEST_IMAGES,
+  SEEDED_TEST_LOCATIONS,
+  SEEDED_TEST_ORGS,
+  SEEDED_TEST_TAGS,
+  SEEDED_TEST_USERS,
+} from "./seedTest.constants";
 
 export async function seedTest(prisma: PrismaClient) {
   function futureDate(days: number) {
@@ -17,59 +25,81 @@ export async function seedTest(prisma: PrismaClient) {
   await prisma.$executeRawUnsafe(`CREATE EXTENSION IF NOT EXISTS postgis;`);
 
   // --- Seed Location ---
-  const locationRows: any = await prisma.$queryRaw(
+  await prisma.$queryRaw(
     Prisma.sql`
-    INSERT INTO "Location" ("id", "placeId", "point")
+    INSERT INTO "Location" ("id", "placeId", "address", "point")
     VALUES (
-      gen_random_uuid(),
-      'test-place-id-1',
-      ST_SetSRID(ST_MakePoint(-79.3832, 43.6532), 4326)
+      ${SEEDED_TEST_LOCATIONS.primary.id},
+      ${SEEDED_TEST_LOCATIONS.primary.placeId},
+      ${SEEDED_TEST_LOCATIONS.primary.address},
+      ST_SetSRID(
+        ST_MakePoint(${SEEDED_TEST_LOCATIONS.primary.lng}, ${SEEDED_TEST_LOCATIONS.primary.lat}),
+        4326
+      )
     )
-    RETURNING "id";
+    ON CONFLICT ("placeId")
+    DO UPDATE SET
+      address = EXCLUDED.address;
   `
   );
 
-  const locationId = locationRows[0].id;
+  await prisma.$queryRaw(
+    Prisma.sql`
+    INSERT INTO "Location" ("id", "placeId", "address", "point")
+    VALUES (
+      ${SEEDED_TEST_LOCATIONS.editableEvent.id},
+      ${SEEDED_TEST_LOCATIONS.editableEvent.placeId},
+      ${SEEDED_TEST_LOCATIONS.editableEvent.address},
+      ST_SetSRID(
+        ST_MakePoint(${SEEDED_TEST_LOCATIONS.editableEvent.lng}, ${SEEDED_TEST_LOCATIONS.editableEvent.lat}),
+        4326
+      )
+    )
+    ON CONFLICT ("placeId")
+    DO UPDATE SET
+      address = EXCLUDED.address;
+  `
+  );
 
   // --- Seed Users ---
   const userEmailVerified = await prisma.user.upsert({
-    where: { email: 'user@gmail.com' },
+    where: { email: SEEDED_TEST_USERS.activeUser.email },
     update: {},
     create: {
-      id: '1',
-      firebaseUid: 'uid1',
-      email: 'user@gmail.com',
-      status: 'ACTIVE',
+      id: SEEDED_TEST_USERS.activeUser.id,
+      firebaseUid: SEEDED_TEST_USERS.activeUser.firebaseUid,
+      email: SEEDED_TEST_USERS.activeUser.email,
+      status: SEEDED_TEST_USERS.activeUser.status,
     },
   });
 
   const userEmailVerified2Pending = await prisma.user.upsert({
-    where: { email: 'userEmailVerified2@gmail.com' },
+    where: { email: SEEDED_TEST_USERS.pendingEmailVerifiedUser.email },
     update: {},
     create: {
-      id: '1.5',
-      firebaseUid: 'uid1.5',
-      email: 'userEmailVerified2@gmail.com',
-      status: 'PENDING',
+      id: SEEDED_TEST_USERS.pendingEmailVerifiedUser.id,
+      firebaseUid: SEEDED_TEST_USERS.pendingEmailVerifiedUser.firebaseUid,
+      email: SEEDED_TEST_USERS.pendingEmailVerifiedUser.email,
+      status: SEEDED_TEST_USERS.pendingEmailVerifiedUser.status,
     },
   });
 
   const unverifiedOrg = await prisma.user.upsert({
-    where: { email: 'unverifiedOrg@gmail.com' },
+    where: { email: SEEDED_TEST_USERS.pendingOrgUser.email },
     update: {},
     create: {
-      id: '3',
-      firebaseUid: 'uid3',
-      email: 'unverifiedOrg@gmail.com',
-      status: 'ACTIVE',
+      id: SEEDED_TEST_USERS.pendingOrgUser.id,
+      firebaseUid: SEEDED_TEST_USERS.pendingOrgUser.firebaseUid,
+      email: SEEDED_TEST_USERS.pendingOrgUser.email,
+      status: SEEDED_TEST_USERS.pendingOrgUser.status,
 
       organizationProfile: {
         create: {
-          id: 'org1',
-          orgName: 'unverifiedOrg',
-          status: 'PENDING',
+          id: SEEDED_TEST_ORGS.pendingOrg.id,
+          orgName: SEEDED_TEST_ORGS.pendingOrg.orgName,
+          status: SEEDED_TEST_ORGS.pendingOrg.status,
           location: {
-            connect: { id: locationId }, // ✅ correct
+            connect: { id: SEEDED_TEST_LOCATIONS.primary.id },
           },
         },
       },
@@ -77,47 +107,82 @@ export async function seedTest(prisma: PrismaClient) {
   });
 
   const unverifiedOrgProfileId = await prisma.organizationProfile.findUnique({
-    where: { id: 'org1' },
+    where: { id: SEEDED_TEST_ORGS.pendingOrg.id },
     select: { id: true },
   });
 
   //Image Assets
   const stockEvent = await prisma.imageAsset.upsert({
-    where: { id: 'stockEvent' },
+    where: { id: SEEDED_TEST_IMAGES.sharedEvent.id },
     update: {},
     create: {
-      id: 'stockEvent',
-      storagePath: 'events/uid3/randoCrypto/stockEvent.jpg',
+      id: SEEDED_TEST_IMAGES.sharedEvent.id,
+      storagePath: SEEDED_TEST_IMAGES.sharedEvent.storagePath,
+      contentType: SEEDED_TEST_IMAGES.sharedEvent.contentType,
+      sizeBytes: SEEDED_TEST_IMAGES.sharedEvent.sizeBytes,
+      originalName: SEEDED_TEST_IMAGES.sharedEvent.originalName,
+    },
+  });
+
+  const editableEventImage = await prisma.imageAsset.upsert({
+    where: { id: SEEDED_TEST_IMAGES.editableEvent.id },
+    update: {},
+    create: {
+      id: SEEDED_TEST_IMAGES.editableEvent.id,
+      storagePath: SEEDED_TEST_IMAGES.editableEvent.storagePath,
+      contentType: SEEDED_TEST_IMAGES.editableEvent.contentType,
+      sizeBytes: SEEDED_TEST_IMAGES.editableEvent.sizeBytes,
+      originalName: SEEDED_TEST_IMAGES.editableEvent.originalName,
     },
   });
 
   const tag1 = await prisma.tag.upsert({
-    where: { id: 'tag1' },
+    where: { id: SEEDED_TEST_TAGS.genericOne.id },
     update: {},
     create: {
-      id: 'tag1',
-      label: 'tag1',
-      usageCount: 1,
+      id: SEEDED_TEST_TAGS.genericOne.id,
+      label: SEEDED_TEST_TAGS.genericOne.label,
+      usageCount: SEEDED_TEST_TAGS.genericOne.usageCount,
     },
   });
 
   const tag2 = await prisma.tag.upsert({
-    where: { id: 'tag2' },
+    where: { id: SEEDED_TEST_TAGS.genericTwo.id },
     update: {},
     create: {
-      id: 'tag2',
-      label: 'tag2',
-      usageCount: 1,
+      id: SEEDED_TEST_TAGS.genericTwo.id,
+      label: SEEDED_TEST_TAGS.genericTwo.label,
+      usageCount: SEEDED_TEST_TAGS.genericTwo.usageCount,
     },
   });
 
   const tag3 = await prisma.tag.upsert({
-    where: { id: 'tag3' },
+    where: { id: SEEDED_TEST_TAGS.genericThree.id },
     update: {},
     create: {
-      id: 'tag3',
-      label: 'tag3',
-      usageCount: 1,
+      id: SEEDED_TEST_TAGS.genericThree.id,
+      label: SEEDED_TEST_TAGS.genericThree.label,
+      usageCount: SEEDED_TEST_TAGS.genericThree.usageCount,
+    },
+  });
+
+  const editableTagDrag = await prisma.tag.upsert({
+    where: { id: SEEDED_TEST_TAGS.editableDrag.id },
+    update: {},
+    create: {
+      id: SEEDED_TEST_TAGS.editableDrag.id,
+      label: SEEDED_TEST_TAGS.editableDrag.label,
+      usageCount: SEEDED_TEST_TAGS.editableDrag.usageCount,
+    },
+  });
+
+  const editableTagCommunity = await prisma.tag.upsert({
+    where: { id: SEEDED_TEST_TAGS.editableCommunity.id },
+    update: {},
+    create: {
+      id: SEEDED_TEST_TAGS.editableCommunity.id,
+      label: SEEDED_TEST_TAGS.editableCommunity.label,
+      usageCount: SEEDED_TEST_TAGS.editableCommunity.usageCount,
     },
   });
 
@@ -126,74 +191,101 @@ export async function seedTest(prisma: PrismaClient) {
 
   // 1️⃣ Upcoming Published Event
   await prisma.flareEvent.upsert({
-    where: { id: 'eventUpcoming' },
+    where: { id: SEEDED_TEST_EVENTS.upcoming.id },
     update: {},
     create: {
-      id: 'eventUpcoming',
+      id: SEEDED_TEST_EVENTS.upcoming.id,
       organizationId: unverifiedOrgProfileId!.id,
-      status: 'PUBLISHED',
-      title: 'Upcoming Event',
-      description: 'Future published event',
+      status: SEEDED_TEST_EVENTS.upcoming.status,
+      title: SEEDED_TEST_EVENTS.upcoming.title,
+      description: SEEDED_TEST_EVENTS.upcoming.description,
       imageId: stockEvent.id,
       startsAtUTC: futureDate(5),
-      timezone: 'America/Toronto',
-      locationId: locationId,
+      timezone: SEEDED_TEST_EVENTS.upcoming.timezone,
+      locationId: SEEDED_TEST_LOCATIONS.primary.id,
       pricingType: 'FREE',
     },
   });
 
   // 2️⃣ Past Published Event
   await prisma.flareEvent.upsert({
-    where: { id: 'eventPast' },
+    where: { id: SEEDED_TEST_EVENTS.past.id },
     update: {},
     create: {
-      id: 'eventPast',
+      id: SEEDED_TEST_EVENTS.past.id,
       organizationId: unverifiedOrgProfileId!.id,
-      status: 'PUBLISHED',
-      title: 'Past Event',
-      description: 'Past published event',
+      status: SEEDED_TEST_EVENTS.past.status,
+      title: SEEDED_TEST_EVENTS.past.title,
+      description: SEEDED_TEST_EVENTS.past.description,
       imageId: stockEvent.id,
       startsAtUTC: pastDate(5),
-      timezone: 'America/Toronto',
-      locationId: locationId,
+      timezone: SEEDED_TEST_EVENTS.past.timezone,
+      locationId: SEEDED_TEST_LOCATIONS.primary.id,
       pricingType: 'FREE',
     },
   });
 
   // 3️⃣ Draft Event (future date but not visible)
   await prisma.flareEvent.upsert({
-    where: { id: 'eventDraft' },
+    where: { id: SEEDED_TEST_EVENTS.draft.id },
     update: {},
     create: {
-      id: 'eventDraft',
+      id: SEEDED_TEST_EVENTS.draft.id,
       organizationId: unverifiedOrgProfileId!.id,
-      status: 'DRAFT',
-      title: 'Draft Event',
-      description: 'Draft future event',
+      status: SEEDED_TEST_EVENTS.draft.status,
+      title: SEEDED_TEST_EVENTS.draft.title,
+      description: SEEDED_TEST_EVENTS.draft.description,
       imageId: stockEvent.id,
       startsAtUTC: futureDate(10),
-      timezone: 'America/Toronto',
-      locationId: locationId,
+      timezone: SEEDED_TEST_EVENTS.draft.timezone,
+      locationId: SEEDED_TEST_LOCATIONS.primary.id,
       pricingType: 'FREE',
     },
   });
 
   // 4️⃣ Another Published Event (for list sorting tests)
   await prisma.flareEvent.upsert({
-    where: { id: 'eventPublished' },
+    where: { id: SEEDED_TEST_EVENTS.published.id },
     update: {},
     create: {
-      id: 'eventPublished',
+      id: SEEDED_TEST_EVENTS.published.id,
       organizationId: unverifiedOrgProfileId!.id,
-      status: 'PUBLISHED',
-      title: 'Another Published Event',
-      description: 'Another future published event',
+      status: SEEDED_TEST_EVENTS.published.status,
+      title: SEEDED_TEST_EVENTS.published.title,
+      description: SEEDED_TEST_EVENTS.published.description,
       imageId: stockEvent.id,
       startsAtUTC: futureDate(15),
-      timezone: 'America/Toronto',
-      locationId: locationId,
+      timezone: SEEDED_TEST_EVENTS.published.timezone,
+      locationId: SEEDED_TEST_LOCATIONS.primary.id,
       pricingType: 'FREE',
     },
   });
-}
 
+  await prisma.flareEvent.upsert({
+    where: { id: SEEDED_TEST_EVENTS.editable.id },
+    update: {},
+    create: {
+      id: SEEDED_TEST_EVENTS.editable.id,
+      organizationId: unverifiedOrgProfileId!.id,
+      status: SEEDED_TEST_EVENTS.editable.status,
+      title: SEEDED_TEST_EVENTS.editable.title,
+      description: SEEDED_TEST_EVENTS.editable.description,
+      category: SEEDED_TEST_EVENTS.editable.category,
+      ageRestriction: SEEDED_TEST_EVENTS.editable.ageRestriction,
+      imageId: editableEventImage.id,
+      startsAtUTC: new Date(SEEDED_TEST_EVENTS.editable.startsAtUTC),
+      endsAtUTC: new Date(SEEDED_TEST_EVENTS.editable.endsAtUTC),
+      timezone: SEEDED_TEST_EVENTS.editable.timezone,
+      locationId: SEEDED_TEST_EVENTS.editable.location.id,
+      pricingType: SEEDED_TEST_EVENTS.editable.pricingType,
+      minPriceCents: SEEDED_TEST_EVENTS.editable.minPriceCents,
+      maxPriceCents: SEEDED_TEST_EVENTS.editable.maxPriceCents,
+      tags: {
+        create: [
+          { tag: { connect: { id: editableTagDrag.id } } },
+          { tag: { connect: { id: editableTagCommunity.id } } },
+        ],
+      },
+    },
+  });
+}

@@ -1,8 +1,7 @@
 import { OrgProfileDomainProps } from '@/lib/domain/orgProfileDomain/OrgProfileDomain';
 import { prisma } from '../../../../prisma/prismaClient';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '#prisma/generated/client';
 import { UniqueConstraintError } from '@/lib/errors/DalErrors';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export class OrgProfileDal {
   async create(input: OrgProfileDomainProps, tx?: Prisma.TransactionClient) {
@@ -11,7 +10,7 @@ export class OrgProfileDal {
       const org = await client.organizationProfile.create({ data: input });
       return org;
     } catch (e) {
-      if (e instanceof PrismaClientKnownRequestError && e.code === 'P2002') {
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
         throw new UniqueConstraintError('User already exists');
       }
       throw e;
