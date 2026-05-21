@@ -75,11 +75,14 @@ export class EventDomain {
       ? parseZonedToUTC(input.startDateTime)
       : { utcDate: existing.startsAtUTC, timeZone: existing.timezone };
 
-    const end = input.endDateTime
-      ? parseZonedToUTC(input.endDateTime)
-      : existing.endsAtUTC
-        ? { utcDate: existing.endsAtUTC }
-        : null;
+    const end =
+      input.endDateTime === null
+        ? null
+        : input.endDateTime
+          ? parseZonedToUTC(input.endDateTime)
+          : existing.endsAtUTC
+            ? { utcDate: existing.endsAtUTC }
+            : null;
 
     if (end && end.utcDate <= start.utcDate) {
       throw EventErrors.InvalidTimeRange();

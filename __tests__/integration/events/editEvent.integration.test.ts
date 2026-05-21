@@ -69,6 +69,24 @@ describe('Edit Event Integration Tests', () => {
     expect(updated?.location?.address).toBe('456 New St');
   });
 
+  it('clears end time when endDateTime is explicitly null', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const originalEvent = await createEventIntegration({
+      organizationId: fakeOrg.org.id,
+      overrides: { endsAtUTC: new Date('2030-05-10T23:00:00.000Z') },
+    });
+
+    const updateData = editEventInputFactory({ endDateTime: null }, authUser.firebaseUid);
+
+    await EventService.editEvent(originalEvent.id, authUser, updateData);
+
+    const updated = await prisma.flareEvent.findUnique({
+      where: { id: originalEvent.id },
+      include: eventRowInclude,
+    });
+    expect(updated?.endsAtUTC).toBeNull();
+  });
+
   it('successfully assigns a new image and schedules old image deletion', async () => {
     const { fakeOrg, authUser } = await createAuthOrgIntegration();
     const oldImage = await createImageIntegration({

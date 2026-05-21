@@ -89,8 +89,11 @@ export default function EditEventContainer({
           return (input: CreateEvent) => {
             const originalStoragePath = original.imageDetails?.metaData?.storagePath;
             const isNew = input.image.storagePath !== originalStoragePath;
+            const endDateTime =
+              input.endDateTime === undefined && original.endDateTime ? null : input.endDateTime;
             const editInput: EditEventInput = {
               ...input,
+              endDateTime,
               image: isNew
                 ? { isNew: true, metadata: input.image }
                 : { isNew: false, storagePath: input.image.storagePath },
