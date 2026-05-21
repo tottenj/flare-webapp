@@ -42,6 +42,7 @@ export interface MainModalProps {
 
 interface MainModalTriggerProps {
   children: ReactNode;
+  __mainModalTrigger?: boolean;
 }
 
 export function MainModalTrigger({ children }: MainModalTriggerProps) {
@@ -53,6 +54,11 @@ export function MainModalTrigger({ children }: MainModalTriggerProps) {
 function isTriggerElement(node: ReactNode): node is ReactElement<MainModalTriggerProps> {
   if (!isValidElement(node)) {
     return false;
+  }
+
+  const nodeProps = node.props as { __mainModalTrigger?: boolean };
+  if (nodeProps?.__mainModalTrigger === true) {
+    return true;
   }
 
   if (node.type === MainModalTrigger) {
@@ -99,23 +105,9 @@ function bindTrigger(triggerNode: ReactNode, open: () => void): ReactNode {
     onPress?: (...args: unknown[]) => void;
   };
 
-  let skipNextClick = false;
-
   return cloneElement(triggerNode as ReactElement<Record<string, unknown>>, {
     onClick: (...args: unknown[]) => {
-      if (skipNextClick) {
-        skipNextClick = false;
-        return;
-      }
-
       triggerProps.onClick?.(...args);
-      const firstArg = args[0] as { defaultPrevented?: boolean } | undefined;
-      if (!firstArg?.defaultPrevented) {
-        open();
-      }
-    },
-    onPress: (...args: unknown[]) => {
-      skipNextClick = true;
       triggerProps.onPress?.(...args);
       const firstArg = args[0] as { defaultPrevented?: boolean } | undefined;
       if (!firstArg?.defaultPrevented) {
