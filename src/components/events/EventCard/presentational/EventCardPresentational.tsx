@@ -82,6 +82,7 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
                       sizes="100cqw"
                     />
                   </div>
+                  
                 </MainModal.Trigger>
                 <div className="relative aspect-[2/3] w-full">
                   <Image
