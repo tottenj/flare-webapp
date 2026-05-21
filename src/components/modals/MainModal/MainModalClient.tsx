@@ -197,8 +197,6 @@ export default function MainModalClient({
 
   const resolvedTrigger = trigger ?? triggerFromChildren;
   const boundTrigger = bindTrigger(resolvedTrigger, openModal);
-  const needsKeyboardFallback =
-    !isValidElement(resolvedTrigger) || resolvedTrigger.type === Fragment;
 
   const { classNames, ...restModalProps } = modalProps ?? {};
   const mergedClassNames = useMemo(
@@ -212,26 +210,7 @@ export default function MainModalClient({
   return (
     <>
       {boundTrigger && (
-        <span
-          className="inline-flex"
-          role={needsKeyboardFallback ? 'button' : undefined}
-          tabIndex={needsKeyboardFallback ? 0 : undefined}
-          onClick={(event) => {
-            if (!event.defaultPrevented) {
-              openModal();
-            }
-          }}
-          onKeyDown={(event) => {
-            if (!needsKeyboardFallback) {
-              return;
-            }
-
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              openModal();
-            }
-          }}
-        >
+        <span className="inline-flex">
           {boundTrigger}
         </span>
       )}

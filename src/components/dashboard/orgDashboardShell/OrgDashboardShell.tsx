@@ -29,11 +29,10 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
           <ProfilePictureContainer profilePicPath={ctx.user.profilePic} size={PROFILE_PIC_SIZE} />
         }
         settingsTrigger={
-          <MainModal
-            header="Settings"
-            modalProps={{ size: '2xl' }}
-            trigger={<IconButton icon={faGear} />}
-          >
+          <MainModal header="Settings" modalProps={{ size: '2xl' }}>
+            <MainModal.Trigger>
+              <IconButton icon={faGear} />
+            </MainModal.Trigger>
             <OrgSettings />
           </MainModal>
         }
