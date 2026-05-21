@@ -9,4 +9,5 @@
   3. Address ts-jest incompatibility (if needed)
 
 ---
+
 This file tracks the upgrade process and any issues found.
