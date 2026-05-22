@@ -3,7 +3,7 @@ import { seededEvents } from '../constants';
 const editableEvent = seededEvents.editable;
 const editableCategoryLabel = 'Nightlife';
 const editableAgeRestrictionLabel = '19+';
-const MODAL_LOAD_TIMEOUT_MS = 10000;
+const PREVIEW_CHANGES_TIMEOUT_MS = 10000;
 
 const updatedEvent = {
   title: 'Updated Seed Event',
@@ -55,7 +55,7 @@ function openEditForm(title: string) {
   // group-hover:block is CSS-only and not triggered by synthetic events;
   // force:true bypasses the visibility check and clicks the hidden button directly.
   cy.get('@editTrigger').click({ force: true });
-  cy.contains('Preview Changes', { timeout: MODAL_LOAD_TIMEOUT_MS })
+  cy.contains('Preview Changes', { timeout: PREVIEW_CHANGES_TIMEOUT_MS })
     .should('exist')
     .scrollIntoView();
 }
