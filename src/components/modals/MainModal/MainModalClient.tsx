@@ -73,24 +73,18 @@ function bindTrigger(triggerNode: ReactNode, open: () => void): ReactNode {
     return null;
   }
 
-  if (Array.isArray(triggerNode)) {
-    const normalizedChildren = triggerNode.filter((child) => {
-      if (child === null || child === undefined || child === false) {
-        return false;
-      }
+  const normalizedChildren = Children.toArray(triggerNode).filter(
+    (child) => typeof child !== 'string' || child.trim().length > 0
+  );
 
-      return typeof child !== 'string' || child.trim().length > 0;
-    });
+  if (normalizedChildren.length === 0) {
+    return null;
+  }
 
-    if (normalizedChildren.length === 0) {
-      return null;
-    }
-
-    if (normalizedChildren.length === 1) {
-      return bindTrigger(normalizedChildren[0], open);
-    }
-
+  if (normalizedChildren.length > 1) {
     triggerNode = <>{normalizedChildren}</>;
+  } else {
+    triggerNode = normalizedChildren[0];
   }
 
   if (!isValidElement(triggerNode)) {
