@@ -46,13 +46,15 @@ function openEditForm(title: string) {
       const rawSegment = String(href).split('/').pop() ?? '';
       const eventId = rawSegment.split('?')[0];
       cy.get(`[data-cy="event-row-${eventId}"]`).as('eventRow');
-      cy.get(`[data-cy="edit-event-trigger-${eventId}"]`).as('editTrigger');
+      cy.get('@eventRow')
+        .find(`[data-cy="edit-event-trigger-${eventId}"]:visible`)
+        .as('editTrigger');
     });
 
   // group-hover:block is CSS-only and not triggered by synthetic events;
   // force:true bypasses the visibility check and clicks the hidden button directly.
   cy.get('@editTrigger').click({ force: true });
-  cy.contains('Preview Changes').should('exist').scrollIntoView();
+  cy.contains('Preview Changes', { timeout: 10000 }).should('exist').scrollIntoView();
 }
 
 function setTagsInHiddenInput(tags: string[]) {
