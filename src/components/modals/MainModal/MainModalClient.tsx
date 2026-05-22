@@ -73,6 +73,24 @@ function bindTrigger(triggerNode: ReactNode, open: () => void): ReactNode {
     return null;
   }
 
+  if (Array.isArray(triggerNode)) {
+    const normalizedChildren = triggerNode.filter((child) => {
+      if (child === null || child === undefined || child === false) {
+        return false;
+      }
+
+      return typeof child !== 'string' || child.trim().length > 0;
+    });
+
+    if (normalizedChildren.length === 0) {
+      return null;
+    }
+
+    if (normalizedChildren.length === 1) {
+      return bindTrigger(normalizedChildren[0], open);
+    }
+  }
+
   if (!isValidElement(triggerNode)) {
     return (
       <button type="button" onClick={open}>
