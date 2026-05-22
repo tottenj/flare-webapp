@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums"
-import type * as Prisma from "../internal/prismaNamespace"
+import type * as $Enums from "../enums.js"
+import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model FlareEvent
@@ -294,7 +294,7 @@ export type FlareEventGroupByOutputType = {
   _max: FlareEventMaxAggregateOutputType | null
 }
 
-export type GetFlareEventGroupByPayload<T extends FlareEventGroupByArgs> = Prisma.PrismaPromise<
+type GetFlareEventGroupByPayload<T extends FlareEventGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<FlareEventGroupByOutputType, T['by']> &
       {
