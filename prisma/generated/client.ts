@@ -13,7 +13,8 @@
 import * as process from 'node:process'
 import * as path from 'node:path'
 import { fileURLToPath } from 'node:url'
-globalThis['__dirname'] = path.dirname(fileURLToPath(import.meta.url))
+const __prismaImportMetaUrl = typeof import.meta !== 'undefined' ? import.meta.url : undefined
+globalThis['__dirname'] = __prismaImportMetaUrl ? path.dirname(fileURLToPath(__prismaImportMetaUrl)) : process.cwd()
 
 import * as runtime from "@prisma/client/runtime/client"
 import * as $Enums from "#prisma/generated/enums"

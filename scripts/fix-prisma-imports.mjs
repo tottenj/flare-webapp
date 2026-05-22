@@ -49,6 +49,12 @@ function fixImportsInFile(filePath) {
       `export * as $Enums from '#prisma/generated/enums'`,
     ],
     [/export\s+\*\s+from\s+['"](\.\/enums\.js)['"]/, `export * from "#prisma/generated/enums"`],
+
+    // Harden Prisma-generated dirname shim for build environments where import.meta.url is absent.
+    [
+      /globalThis\['__dirname'\]\s*=\s*path\.dirname\(fileURLToPath\(import\.meta\.url\)\)/,
+      `const __prismaImportMetaUrl = typeof import.meta !== 'undefined' ? import.meta.url : undefined\nglobalThis['__dirname'] = __prismaImportMetaUrl ? path.dirname(fileURLToPath(__prismaImportMetaUrl)) : process.cwd()`,
+    ],
   ];
 
   replacements.forEach(([regex, replacement]) => {

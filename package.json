@@ -50,6 +50,9 @@
     "dev:full": "npm run kill:ports && npm run docker:up && concurrently -k -n 'NEXT,PRISMA,FIREBASE' -c 'cyan.bold,magenta.bold,yellow.bold' \"npm run dev:dev\" \"npm run prisma-studio-local\" \"npm run fbEmLocal\""
   },
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "jest-junit": {
     "outputDirectory": "./reports/jest",
     "outputName": "junit.xml"
