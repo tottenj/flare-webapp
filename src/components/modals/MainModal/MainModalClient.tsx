@@ -89,6 +89,8 @@ function bindTrigger(triggerNode: ReactNode, open: () => void): ReactNode {
     if (normalizedChildren.length === 1) {
       return bindTrigger(normalizedChildren[0], open);
     }
+
+    triggerNode = <>{normalizedChildren}</>;
   }
 
   if (!isValidElement(triggerNode)) {
