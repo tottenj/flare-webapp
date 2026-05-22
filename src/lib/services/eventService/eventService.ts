@@ -111,7 +111,13 @@ export class EventService {
     const event = mapEventRowToDto(eventRow);
     const [imageUrl, location] = await Promise.all([
       eventAssets.image?.storagePath
-        ? ImageService.getDownloadUrl(eventAssets.image.storagePath)
+        ? ImageService.getDownloadUrl(eventAssets.image.storagePath).catch((err) => {
+            logger.error('Failed to fetch image download URL', {
+              storagePath: eventAssets.image?.storagePath,
+              err,
+            });
+            return undefined;
+          })
         : Promise.resolve(undefined),
       eventAssets.locationId ? locationDal.get(eventAssets.locationId) : Promise.resolve(undefined),
     ]);
