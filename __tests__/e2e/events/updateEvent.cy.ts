@@ -48,7 +48,8 @@ function openEditForm(title: string) {
       const eventId = rawSegment.split('?')[0];
       cy.get(`[data-cy="event-row-${eventId}"]`).as('eventRow');
       cy.get('@eventRow')
-        .find(`[data-cy="edit-event-trigger-${eventId}"]:visible`)
+        .find(`[data-cy="edit-event-trigger-${eventId}"]`)
+        .should('exist')
         .as('editTrigger');
     });
 
