@@ -73,16 +73,27 @@ function bindTrigger(triggerNode: ReactNode, open: () => void): ReactNode {
     return null;
   }
 
-  if (!isValidElement(triggerNode)) {
+  const normalizedChildren = Children.toArray(triggerNode).filter(
+    (child) => typeof child !== 'string' || child.trim().length > 0
+  );
+
+  if (normalizedChildren.length === 0) {
+    return null;
+  }
+
+  const finalTriggerNode =
+    normalizedChildren.length > 1 ? <>{normalizedChildren}</> : normalizedChildren[0];
+
+  if (!isValidElement(finalTriggerNode)) {
     return (
       <button type="button" onClick={open}>
-        {triggerNode}
+        {finalTriggerNode}
       </button>
     );
   }
 
   // Fragments cannot receive handlers, so wrap them in a keyboard-accessible fallback.
-  if (triggerNode.type === Fragment) {
+  if (finalTriggerNode.type === Fragment) {
     return (
       <span
         role="button"
@@ -95,17 +106,17 @@ function bindTrigger(triggerNode: ReactNode, open: () => void): ReactNode {
           }
         }}
       >
-        {triggerNode}
+        {finalTriggerNode}
       </span>
     );
   }
 
-  const triggerProps = triggerNode.props as {
+  const triggerProps = finalTriggerNode.props as {
     onClick?: (...args: unknown[]) => void;
     onPress?: (...args: unknown[]) => void;
   };
 
-  return cloneElement(triggerNode as ReactElement<Record<string, unknown>>, {
+  return cloneElement(finalTriggerNode as ReactElement<Record<string, unknown>>, {
     onClick: (...args: unknown[]) => {
       triggerProps.onClick?.(...args);
       triggerProps.onPress?.(...args);

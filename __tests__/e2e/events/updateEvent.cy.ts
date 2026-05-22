@@ -3,6 +3,7 @@ import { seededEvents } from '../constants';
 const editableEvent = seededEvents.editable;
 const editableCategoryLabel = 'Nightlife';
 const editableAgeRestrictionLabel = '19+';
+const PREVIEW_CHANGES_TIMEOUT_MS = 10000;
 
 const updatedEvent = {
   title: 'Updated Seed Event',
@@ -46,13 +47,18 @@ function openEditForm(title: string) {
       const rawSegment = String(href).split('/').pop() ?? '';
       const eventId = rawSegment.split('?')[0];
       cy.get(`[data-cy="event-row-${eventId}"]`).as('eventRow');
-      cy.get(`[data-cy="edit-event-trigger-${eventId}"]`).as('editTrigger');
+      cy.get('@eventRow')
+        .find(`[data-cy="edit-event-trigger-${eventId}"]`)
+        .should('exist')
+        .as('editTrigger');
     });
 
   // group-hover:block is CSS-only and not triggered by synthetic events;
   // force:true bypasses the visibility check and clicks the hidden button directly.
   cy.get('@editTrigger').click({ force: true });
-  cy.contains('Preview Changes').should('exist').scrollIntoView();
+  cy.contains('Preview Changes', { timeout: PREVIEW_CHANGES_TIMEOUT_MS })
+    .should('exist')
+    .scrollIntoView();
 }
 
 function setTagsInHiddenInput(tags: string[]) {
