@@ -83,7 +83,7 @@ function bindTrigger(triggerNode: ReactNode, open: () => void): ReactNode {
 
   if (normalizedChildren.length > 1) {
     triggerNode = <>{normalizedChildren}</>;
-  } else {
+  } else if (normalizedChildren[0] !== triggerNode) {
     triggerNode = normalizedChildren[0];
   }
 
