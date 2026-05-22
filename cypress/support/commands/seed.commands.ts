@@ -15,7 +15,7 @@ Cypress.Commands.add('clearAuth', () => {
 
 // cypress/support/commands.ts
 Cypress.Commands.add('clearStorage', () => {
-  const bucket = 'flare-7091a.firebasestorage.app';
+  const bucket = 'flare-7091a.appspot.com';
   const baseUrl = `http://127.0.0.1:9199/v0/b/${bucket}/o`;
 
   // 1️⃣ List all objects (with owner auth)
