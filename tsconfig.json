@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "composite": true,
     "allowJs": false,
     "skipLibCheck": true,
@@ -18,25 +14,15 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "types": [
-      "node",
-      "jest"
-    ],
+    "types": ["node", "jest"],
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "#prisma/*": [
-        "./prisma/*"
-      ],
-      "#src/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"],
+      "#prisma/*": ["./prisma/*"]
     }
   },
   "include": [
@@ -52,7 +38,5 @@
     ".next/dev/types/**/*.ts",
     "functions/jest.config.js"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

@@ -2,6 +2,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/lib/firebase/auth/configs/clientApp';
 
 export default function MainBannerMenu({
   children,
@@ -10,6 +13,7 @@ export default function MainBannerMenu({
   children: React.ReactNode;
   isSignedIn?: boolean;
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -37,6 +41,25 @@ export default function MainBannerMenu({
         { title: 'Sign Up', href: '/signup' },
       ];
 
+  async function handleSignOut() {
+    setOpen(false);
+
+    // Clear server session so SSR auth checks stay in sync with Firebase client auth.
+    try {
+      await fetch('/api/auth/signout', { method: 'POST' });
+    } catch (error) {
+      console.error('Failed to clear server session', error);
+    }
+
+    try {
+      await signOut(auth);
+      router.push('/signin');
+      router.refresh();
+    } catch (error) {
+      console.error('Failed to sign out', error);
+    }
+  }
+
   return (
     <div ref={menuRef} className="relative flex flex-col items-end">
       <motion.div
@@ -60,9 +83,20 @@ export default function MainBannerMenu({
             <ul className="py-1 text-sm text-gray-700">
               {menuItems.map(({ title, href }) => (
                 <li key={title} className="w-full px-4 py-2 hover:bg-gray-100">
-                  <Link onClick={() => setOpen(false)} href={href}>{title}</Link>
+                  <Link onClick={() => setOpen(false)} href={href}>
+                    {title}
+                  </Link>
                 </li>
               ))}
+
+
+     
+
+              {isSignedIn && (
+                <li className="w-full px-4 py-2 hover:bg-gray-100">
+                  <button onClick={() => void handleSignOut()}>Sign Out</button>
+                </li>
+              )}
             </ul>
           </motion.div>
         )}

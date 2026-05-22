@@ -1,12 +1,13 @@
 import { GetOrgProfileSchema } from '@/lib/schemas/userContext/GetOrgProfileSchema';
+import { UserRole } from '#prisma/generated/enums';
 import z from 'zod';
 
 export const GetUserContextSchema = z.object({
   user: z.object({
     id: z.string(),
     firebaseUid: z.string(),
-    email: z.email(),
-    role: z.string(),
+    email: z.string().email(),
+    role: z.enum(UserRole),
     emailVerified: z.boolean(),
     profilePic: z.string().nullable()
   }),
@@ -20,5 +21,7 @@ export const GetUserContextSchema = z.object({
     isAdmin: z.boolean(),
   }),
 });
+
+
 
 export type GetUserContext = z.infer<typeof GetUserContextSchema>;

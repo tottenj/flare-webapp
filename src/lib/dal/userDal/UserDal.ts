@@ -61,6 +61,16 @@ export class UserDal {
     });
   }
 
+  async markOrg(userId: string, tx?: Prisma.TransactionClient): Promise<User> {
+    const client = tx ?? prisma;
+    return await client.user.update({
+      where: { id: userId },
+      data: {
+        role: 'ORG',
+      },
+    });
+  }
+
   async deleteUser(userId: string, tx?: Prisma.TransactionClient): Promise<DeletedImageAsset[]> {
     const client = tx ?? prisma;
 

@@ -17,4 +17,7 @@ export default async function DashboardPage(props: {
     const filters = mapUrlFiltersToOrgEventFilters(urlFilters);
     return <OrgDashboardShell filters={filters} />;
   }
+
+
+  
 }

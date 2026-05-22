@@ -9,6 +9,9 @@
     "dev:cypci": "next dev",
     "db:reset": "prisma migrate reset --force --skip-seed",
     "seed:test": "tsx prisma/seedTestRunner.ts",
+    "seed:firebase:dev": "node scripts/seed-firebase-emulators.mjs",
+    "seed:db:dev": "npx dotenv -e .env -e .env.dev -- npx prisma db seed",
+    "seed:dev": "npm run seed:firebase:dev && npm run seed:db:dev",
     "emulators:start": "firebase emulators:start --only auth,functions,storage",
     "emulators:integration": "export FIREBASE_AUTH_EMULATOR_HOST=localhost:9099 && export FIRESTORE_EMULATOR_HOST=localhost:8080 && export FUNCTIONS_EMULATOR=true && export STORAGE_EMULATOR_HOST=localhost:9199 && export FIREBASE_CONFIG='{\"projectId\":\"demo-project\",\"storageBucket\":\"demo-project.appspot.com\"}' && export INTERNAL_API_KEY_DEV=4d522cbb22ae4ad19fe69211623a3a6bf8e9c098a16593b0ca0e0c0359c6f2d0 && firebase emulators:start --only functions, storage",
     "emulators:e2e": "export FIREBASE_AUTH_EMULATOR_HOST=localhost:9099 && export FIRESTORE_EMULATOR_HOST=localhost:8080 && export FUNCTIONS_EMULATOR=true && export STORAGE_EMULATOR_HOST=localhost:9199 && export FIREBASE_CONFIG='{\"projectId\":\"demo-project\",\"storageBucket\":\"demo-project.appspot.com\"}' && export INTERNAL_API_KEY_DEV=4d522cbb22ae4ad19fe69211623a3a6bf8e9c098a16593b0ca0e0c0359c6f2d0 && firebase emulators:start --only auth,functions,storage",
@@ -55,10 +58,10 @@
     "outputName": "junit.xml"
   },
   "imports": {
-    "#*": [
-      "./*",
-      "./*.ts",
-      "./*.tsx"
+    "#prisma/*": [
+      "./prisma/*",
+      "./prisma/*.ts",
+      "./prisma/*.tsx"
     ]
   },
   "dependencies": {

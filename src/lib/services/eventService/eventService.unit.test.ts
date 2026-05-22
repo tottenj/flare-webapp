@@ -175,6 +175,19 @@ describe('EventService.createEvent', () => {
     expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('events/firebaseUid/image.jpg');
   });
 
+
+  it('errors if user is not authorized to create event', async () => {
+    const authUser = {userId: 'userId', firebaseUid: 'firebaseUid'};
+    const input = eventInputFactory({ image: { storagePath: 'events/firebaseUid/image.jpg' } });
+    await expect(EventService.createEvent(authUser as any, input)).rejects.toMatchObject({
+      code: 'AUTH_UNAUTHORIZED',
+    });
+    expect(eventDal.create).not.toHaveBeenCalled();
+    expect(locationDal.create).not.toHaveBeenCalled();
+    expect(imageAssetDal.create).not.toHaveBeenCalled();
+    expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
+  })
+
   it('errors on unauthenticated storage path', async () => {
     const authUser = authOrgFactory();
     const input = eventInputFactory({

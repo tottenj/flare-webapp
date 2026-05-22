@@ -34,6 +34,7 @@ export class EventService {
   }
 
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
+    if(!EventPermission.canCreate(authenticatedUser)) throw AuthErrors.Unauthorized();
     ensure(
       eventData.image.storagePath.startsWith(`events/${authenticatedUser.firebaseUid}`),
       AuthErrors.Unauthorized()

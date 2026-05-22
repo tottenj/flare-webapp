@@ -30,6 +30,7 @@ describe('AuthService.signUp (integration)', () => {
     expect(user).toBeTruthy();
     expect(user?.email).toBe('test@example.com');
     expect(user?.status).toBe('PENDING');
+    expect(user?.role).toBe('USER');
   });
 
   it('throws on duplicate emails', async () => {
