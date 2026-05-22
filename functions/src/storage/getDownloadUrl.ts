@@ -1,10 +1,10 @@
 import { onRequest, Request } from 'firebase-functions/v2/https';
-import { storage } from '../bootstrap/admin';
 import { getDownloadURL } from 'firebase-admin/storage';
 import { requireMethod } from '../utils/guards/requireMethod';
 import { requireInternalApiKey } from '../utils/guards/requireInternalApiKey';
 import { INTERNAL_API_KEY } from '../secrets';
 import { getInternalApiKey } from '../utils/guards/getInternalApiKey';
+import { resolveStorageBucket } from './resolveStorageBucket';
 
 export async function getDownloadUrlHandler(
   req: Request,
@@ -20,14 +20,14 @@ export async function getDownloadUrlHandler(
   }
 
   try {
-    const fileUrl = storage.bucket().file(storagePath);
+    const fileUrl = resolveStorageBucket().file(storagePath);
     const downloadUrl = await getDownloadURL(fileUrl);
     res.status(200).json({ downloadUrl });
-    return
+    return;
   } catch (err) {
     res.status(400).json({ code: 'STORAGE_INVALID_PATH' });
-    return 
+    return;
   }
 }
 
-export const getDownloadUrl = onRequest({secrets: [INTERNAL_API_KEY]},getDownloadUrlHandler);
+export const getDownloadUrl = onRequest({ secrets: [INTERNAL_API_KEY] }, getDownloadUrlHandler);

@@ -70,17 +70,20 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
             <>
               <MainModal
                 modalProps={{ size: '3xl', backdrop: 'blur' }}
-                trigger={
-                  <Image
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    src={imageUrl}
-                    alt={title}
-                    fill
-                    unoptimized={isDev}
-                    sizes="100cqw"
-                  />
-                }
               >
+                <MainModal.Trigger>
+                  <div className="relative block h-full w-full">
+                    <Image
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      src={imageUrl}
+                      alt={title}
+                      fill
+                      unoptimized={isDev}
+                      sizes="100cqw"
+                    />
+                  </div>
+                  
+                </MainModal.Trigger>
                 <div className="relative aspect-[2/3] w-full">
                   <Image
                     src={imageUrl}

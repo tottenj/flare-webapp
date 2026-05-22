@@ -62,7 +62,7 @@ describe('update event', () => {
     (UserContextService.requireOrg as jest.Mock).mockResolvedValue(ctx);
     (UserContextService.getOrgActor as jest.Mock).mockReturnValue(actor);
 
-    const invalidEvent = { ...editEventInputFactory(), title: '' };
+    const invalidEvent = { ...editEventInputFactory(), eventName: '' };
 
     const result = await editEvent('id', invalidEvent);
     expect(result.ok).toBe(false);

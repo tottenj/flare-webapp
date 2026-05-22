@@ -59,7 +59,7 @@ describe('EventDomain.onCreate', () => {
     const input = eventDomainCreateFactory({ endDateTime: undefined });
     const organizationId = 'org123';
     const eventDomain = EventDomain.onCreate(input, organizationId);
-    expect(eventDomain.props.endsAtUTC).toBeNull()
+    expect(eventDomain.props.endsAtUTC).toBeNull();
   });
 
   it('throws error for invalid time range', () => {
@@ -74,10 +74,41 @@ describe('EventDomain.onCreate', () => {
   });
 
   it('throws error for too many tags', () => {
-    const input = eventDomainCreateFactory({tags:['id1','id2','id3','id4','id5','id6']})
+    const input = eventDomainCreateFactory({ tags: ['id1', 'id2', 'id3', 'id4', 'id5', 'id6'] });
     const organizationId = 'org123';
     expect(() => EventDomain.onCreate(input, organizationId)).toThrow(
       EventErrors.InvalidTagNumber()
     );
+  });
+});
+
+describe('EventDomain.onEdit', () => {
+  const existing = {
+    organizationId: 'org123',
+    category: 'SOCIAL' as const,
+    title: 'Existing Event',
+    description: 'Existing description',
+    ageRestriction: 'AGE_18_PLUS' as const,
+    status: 'PUBLISHED' as const,
+    publishedAt: new Date('2024-07-01T00:00:00.000Z'),
+    imageId: 'img-1',
+    startsAtUTC: new Date('2024-07-02T00:00:00.000Z'),
+    endsAtUTC: new Date('2024-07-02T03:00:00.000Z'),
+    timezone: 'America/New_York',
+    locationId: 'loc-1',
+    pricingType: 'FREE' as const,
+    minPriceCents: null,
+    maxPriceCents: null,
+    tags: ['tag-1'],
+  };
+
+  it('clears end time when endDateTime is explicitly null', () => {
+    const eventDomain = EventDomain.onEdit({ endDateTime: null }, existing);
+    expect(eventDomain.props.endsAtUTC).toBeNull();
+  });
+
+  it('preserves end time when endDateTime is omitted', () => {
+    const eventDomain = EventDomain.onEdit({}, existing);
+    expect(eventDomain.props.endsAtUTC).toEqual(existing.endsAtUTC);
   });
 });

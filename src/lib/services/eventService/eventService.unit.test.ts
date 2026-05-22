@@ -14,6 +14,7 @@ import { prisma } from '../../../../prisma/prismaClient';
 import orgSignUpInputFactory from '../../../../__tests__/factories/service/orgSignUpInput.factory';
 import { EventDomain } from '@/lib/domain/eventDomain/EventDomain';
 import { logger } from '@/lib/logger';
+import { AppError } from '@/lib/errors/AppError';
 
 jest.mock('../../../../prisma/prismaClient', () => ({
   prisma: {
@@ -24,8 +25,9 @@ jest.mock('../../../../prisma/prismaClient', () => ({
   },
 }));
 
-jest.mock("@/lib/logger", () => ({
+jest.mock('@/lib/logger', () => ({
   logger: {
+    warn: jest.fn(),
     error: jest.fn(),
   },
 }));
@@ -497,6 +499,61 @@ describe('EventService.getEditData', () => {
     expect(locationDal.get).not.toHaveBeenCalled();
   });
 
+  it('returns edit data with placeholder image when storage file is missing', async () => {
+    const eventId = 'eventId';
+    const actor = {
+      userId: 'userId',
+      orgId: 'orgId',
+      firebaseUid: 'uid',
+    };
+    const eventRow = buildEventRow({
+      id: eventId,
+      organizationId: actor.orgId,
+      imageId: 'image-id',
+      locationId: 'location-id',
+    });
+    const eventAssets = {
+      image: {
+        storagePath: 'events/uid/missing.jpg',
+        contentType: 'image/jpeg',
+        sizeBytes: 1234,
+        originalName: 'missing.jpg',
+      },
+      locationId: 'location-id',
+    };
+    const location = {
+      address: '123 Main St, Anytown, USA',
+      placeId: 'place123',
+      latitude: 40.7128,
+      longitude: -74.006,
+    };
+
+    (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(eventRow);
+    (eventDal.getEditData as jest.Mock).mockResolvedValueOnce(eventAssets);
+    (ImageService.getDownloadUrl as jest.Mock).mockRejectedValueOnce(
+      new AppError({
+        code: 'STORAGE_MISSING_PATH',
+        clientMessage: 'No File Exists',
+        status: 400,
+      })
+    );
+    (locationDal.get as jest.Mock).mockResolvedValueOnce(location);
+
+    const res = await EventService.getEditData(eventId, actor);
+
+    expect(res.imageUrl).toBeUndefined();
+    expect(res.imageMetadata?.storagePath).toBe(eventAssets.image.storagePath);
+    expect(locationDal.get).toHaveBeenCalledWith(eventAssets.locationId);
+    expect(logger.warn).toHaveBeenCalledWith(
+      'EVENT_EDIT_IMAGE_MISSING',
+      expect.objectContaining({
+        eventId,
+        storagePath: eventAssets.image.storagePath,
+        errorCode: 'STORAGE_MISSING_PATH',
+      })
+    );
+  });
+
   it("throws error if user can't edit image", async () => {
     const eventId = 'eventId';
     const actor = {
@@ -881,8 +938,7 @@ describe('EventService.editEvent', () => {
     expect(eventDal.edit).toHaveBeenCalledWith(eventId, mockedEditProps, expect.anything());
   });
 
-
-  it("omits image update if no new image provided in input", async () => {
+  it('omits image update if no new image provided in input', async () => {
     const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
     const eventId = 'eventId';
     const originalEvent = buildEventRow({
@@ -930,8 +986,7 @@ describe('EventService.editEvent', () => {
       expect.anything()
     );
     expect(eventDal.edit).toHaveBeenCalledWith(eventId, mockedEditProps, expect.anything());
-
-  })
+  });
 
   it('ensures storage delete error is swallowed and does not impact user experience', async () => {
     const actor = authOrgFactory({ orgId: 'orgId', firebaseUid: 'uid3' });
@@ -969,7 +1024,9 @@ describe('EventService.editEvent', () => {
     (eventDal.getEvent as jest.Mock).mockResolvedValueOnce(originalEvent);
     (locationDal.create as jest.Mock).mockResolvedValueOnce({ id: 'new-location-id' });
     (tagService.applyTagDiff as jest.Mock).mockResolvedValueOnce(['tag-id-1', 'tag-id-2']);
-    (ImageService.deleteByStoragePath as jest.Mock).mockRejectedValueOnce(new Error('Storage error'));
+    (ImageService.deleteByStoragePath as jest.Mock).mockRejectedValueOnce(
+      new Error('Storage error')
+    );
 
     await expect(EventService.editEvent(eventId, actor, event)).resolves.not.toThrow();
     expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('events/uid3/old-image.jpg');
@@ -981,7 +1038,5 @@ describe('EventService.editEvent', () => {
         storagePath: 'events/uid3/old-image.jpg',
       })
     );
-
-  })
-
+  });
 });

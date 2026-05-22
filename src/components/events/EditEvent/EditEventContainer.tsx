@@ -52,7 +52,13 @@ export default function EditEventContainer({
         setData(null);
       }}
       modalProps={{ size: '5xl' }}
-      trigger={<IconButton className="absolute -top-4 -right-6 z-10" icon={faEdit} />}
+      trigger={
+        <IconButton
+          className="absolute -top-4 -right-6 z-10"
+          icon={faEdit}
+          data-cy={`edit-event-trigger-${eventId}`}
+        />
+      }
     >
       {(close) => {
         if (loading) {
@@ -83,8 +89,11 @@ export default function EditEventContainer({
           return (input: CreateEvent) => {
             const originalStoragePath = original.imageDetails?.metaData?.storagePath;
             const isNew = input.image.storagePath !== originalStoragePath;
+            const endDateTime =
+              input.endDateTime === undefined && original.endDateTime ? null : input.endDateTime;
             const editInput: EditEventInput = {
               ...input,
+              endDateTime,
               image: isNew
                 ? { isNew: true, metadata: input.image }
                 : { isNew: false, storagePath: input.image.storagePath },

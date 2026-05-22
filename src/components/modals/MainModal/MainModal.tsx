@@ -9,7 +9,11 @@ const MainModal = ((props: MainModalProps) => {
   return <MainModalClient {...props} />;
 }) as MainModalComponent;
 
-MainModal.Trigger = MainModalTrigger;
+MainModal.Trigger = ({ children }) => (
+  <MainModalTrigger __mainModalTrigger>
+    {children}
+  </MainModalTrigger>
+);
 
 export type { MainModalProps, ForwardedModalProps } from './MainModalClient';
 export default MainModal;

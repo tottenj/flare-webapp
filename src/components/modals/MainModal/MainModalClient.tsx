@@ -42,6 +42,7 @@ export interface MainModalProps {
 
 interface MainModalTriggerProps {
   children: ReactNode;
+  __mainModalTrigger?: boolean;
 }
 
 export function MainModalTrigger({ children }: MainModalTriggerProps) {
@@ -53,6 +54,11 @@ export function MainModalTrigger({ children }: MainModalTriggerProps) {
 function isTriggerElement(node: ReactNode): node is ReactElement<MainModalTriggerProps> {
   if (!isValidElement(node)) {
     return false;
+  }
+
+  const nodeProps = node.props as { __mainModalTrigger?: boolean };
+  if (nodeProps?.__mainModalTrigger === true) {
+    return true;
   }
 
   if (node.type === MainModalTrigger) {
@@ -67,16 +73,27 @@ function bindTrigger(triggerNode: ReactNode, open: () => void): ReactNode {
     return null;
   }
 
-  if (!isValidElement(triggerNode)) {
+  const normalizedChildren = Children.toArray(triggerNode).filter(
+    (child) => typeof child !== 'string' || child.trim().length > 0
+  );
+
+  if (normalizedChildren.length === 0) {
+    return null;
+  }
+
+  const finalTriggerNode =
+    normalizedChildren.length > 1 ? <>{normalizedChildren}</> : normalizedChildren[0];
+
+  if (!isValidElement(finalTriggerNode)) {
     return (
       <button type="button" onClick={open}>
-        {triggerNode}
+        {finalTriggerNode}
       </button>
     );
   }
 
   // Fragments cannot receive handlers, so wrap them in a keyboard-accessible fallback.
-  if (triggerNode.type === Fragment) {
+  if (finalTriggerNode.type === Fragment) {
     return (
       <span
         role="button"
@@ -89,33 +106,19 @@ function bindTrigger(triggerNode: ReactNode, open: () => void): ReactNode {
           }
         }}
       >
-        {triggerNode}
+        {finalTriggerNode}
       </span>
     );
   }
 
-  const triggerProps = triggerNode.props as {
+  const triggerProps = finalTriggerNode.props as {
     onClick?: (...args: unknown[]) => void;
     onPress?: (...args: unknown[]) => void;
   };
 
-  let skipNextClick = false;
-
-  return cloneElement(triggerNode as ReactElement<Record<string, unknown>>, {
+  return cloneElement(finalTriggerNode as ReactElement<Record<string, unknown>>, {
     onClick: (...args: unknown[]) => {
-      if (skipNextClick) {
-        skipNextClick = false;
-        return;
-      }
-
       triggerProps.onClick?.(...args);
-      const firstArg = args[0] as { defaultPrevented?: boolean } | undefined;
-      if (!firstArg?.defaultPrevented) {
-        open();
-      }
-    },
-    onPress: (...args: unknown[]) => {
-      skipNextClick = true;
       triggerProps.onPress?.(...args);
       const firstArg = args[0] as { defaultPrevented?: boolean } | undefined;
       if (!firstArg?.defaultPrevented) {
@@ -197,8 +200,6 @@ export default function MainModalClient({
 
   const resolvedTrigger = trigger ?? triggerFromChildren;
   const boundTrigger = bindTrigger(resolvedTrigger, openModal);
-  const needsKeyboardFallback =
-    !isValidElement(resolvedTrigger) || resolvedTrigger.type === Fragment;
 
   const { classNames, ...restModalProps } = modalProps ?? {};
   const mergedClassNames = useMemo(
@@ -212,26 +213,7 @@ export default function MainModalClient({
   return (
     <>
       {boundTrigger && (
-        <span
-          className="inline-flex"
-          role={needsKeyboardFallback ? 'button' : undefined}
-          tabIndex={needsKeyboardFallback ? 0 : undefined}
-          onClick={(event) => {
-            if (!event.defaultPrevented) {
-              openModal();
-            }
-          }}
-          onKeyDown={(event) => {
-            if (!needsKeyboardFallback) {
-              return;
-            }
-
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              openModal();
-            }
-          }}
-        >
+        <span className="inline-flex">
           {boundTrigger}
         </span>
       )}

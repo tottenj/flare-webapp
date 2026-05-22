@@ -1,18 +1,15 @@
 import EditProfilePictureButtonContainer from '@/components/buttons/editProfilePictureButton/EditProfilePictureButtonContainer';
-import IconButton from '@/components/buttons/iconButton/IconButton';
 import DashboardInfoShell from '@/components/dashboard/dashboardInfoShell/DashboardInfoShell';
-import OrgSettings from '@/components/dashboard/settings/orgSettings/OrgSettings';
+import OrgSettingsModalTrigger from '@/components/dashboard/settings/orgSettings/OrgSettingsModalTrigger';
 import EventCardOrgRecentContainer from '@/components/events/EventCard/EventCardOrgUpcomingContainer';
 import EventCardSkeleton from '@/components/events/EventCard/presentational/EventCardSkeleton';
 import EventListContainerOrg from '@/components/events/EventList/EventListContainerOrg';
 import EventListSkeleton from '@/components/events/EventList/presentational/EventListSkeleton';
 import QueryTabs from '@/components/inputs/hero/tab/QueryTabs';
-import MainModal from '@/components/modals/MainModal/MainModal';
 import ProfilePictureContainer from '@/components/profiles/profilePicture/ProfilePictureContainer';
 import CreateEventModalWrapper from '@/components/wrappers/CreateEventModalWrapper';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { Suspense } from 'react';
 
 export default async function OrgDashboardShell({ filters }: { filters?: OrgEventFilter }) {
@@ -29,13 +26,7 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
           <ProfilePictureContainer profilePicPath={ctx.user.profilePic} size={PROFILE_PIC_SIZE} />
         }
         settingsTrigger={
-          <MainModal
-            header="Settings"
-            modalProps={{ size: '2xl' }}
-            trigger={<IconButton icon={faGear} />}
-          >
-            <OrgSettings />
-          </MainModal>
+          <OrgSettingsModalTrigger />
         }
         profileInfo={
           <div>
