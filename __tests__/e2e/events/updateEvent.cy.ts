@@ -149,8 +149,7 @@ describe('Edit Event', () => {
       cy.contains(editableEvent.title).should('not.exist');
     });
 
-    cy.wait(6000); // Wait for UI to update before interacting with the updated event.
-
+    
     cy.get(`[aria-label="${updatedEvent.title}"]`).click();
     cy.get(`[data-cy="${updatedEvent.title}-event-modal"]`).within(() => {
       cy.contains(updatedEvent.title).should('be.visible');
