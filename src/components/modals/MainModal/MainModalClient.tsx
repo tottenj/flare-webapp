@@ -1,0 +1,247 @@
+'use client';
+
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalProps,
+} from '@heroui/react';
+import {
+  Children,
+  Fragment,
+  cloneElement,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import type { ReactElement, ReactNode } from 'react';
+
+type ModalRenderFn = (onClose: () => void) => ReactNode;
+export type ForwardedModalProps = Omit<
+  ModalProps,
+  'children' | 'isOpen' | 'onClose' | 'onOpenChange'
+>;
+
+export interface MainModalProps {
+  trigger?: ReactNode;
+  header?: ReactNode;
+  footer?: ReactNode | ModalRenderFn;
+  modalProps?: ForwardedModalProps;
+  isOpen?: boolean;
+  defaultOpen?: boolean;
+  onOpen?: () => void;
+  onClose?: () => void;
+  onOpenChange?: (open: boolean) => void;
+  children: ReactNode | ModalRenderFn;
+}
+
+interface MainModalTriggerProps {
+  children: ReactNode;
+  __mainModalTrigger?: boolean;
+}
+
+export function MainModalTrigger({ children }: MainModalTriggerProps) {
+  return <>{children}</>;
+}
+
+(MainModalTrigger as { __MAIN_MODAL_TRIGGER?: boolean }).__MAIN_MODAL_TRIGGER = true;
+
+function isTriggerElement(node: ReactNode): node is ReactElement<MainModalTriggerProps> {
+  if (!isValidElement(node)) {
+    return false;
+  }
+
+  const nodeProps = node.props as { __mainModalTrigger?: boolean };
+  if (nodeProps?.__mainModalTrigger === true) {
+    return true;
+  }
+
+  if (node.type === MainModalTrigger) {
+    return true;
+  }
+
+  return Boolean((node.type as { __MAIN_MODAL_TRIGGER?: boolean }).__MAIN_MODAL_TRIGGER);
+}
+
+function bindTrigger(triggerNode: ReactNode, open: () => void): ReactNode {
+  if (!triggerNode) {
+    return null;
+  }
+
+  const normalizedChildren = Children.toArray(triggerNode).filter(
+    (child) => typeof child !== 'string' || child.trim().length > 0
+  );
+
+  if (normalizedChildren.length === 0) {
+    return null;
+  }
+
+  const finalTriggerNode =
+    normalizedChildren.length > 1 ? <>{normalizedChildren}</> : normalizedChildren[0];
+
+  if (!isValidElement(finalTriggerNode)) {
+    return (
+      <button type="button" onClick={open}>
+        {finalTriggerNode}
+      </button>
+    );
+  }
+
+  // Fragments cannot receive handlers, so wrap them in a keyboard-accessible fallback.
+  if (finalTriggerNode.type === Fragment) {
+    return (
+      <span
+        role="button"
+        tabIndex={0}
+        onClick={open}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            open();
+          }
+        }}
+      >
+        {finalTriggerNode}
+      </span>
+    );
+  }
+
+  const triggerProps = finalTriggerNode.props as {
+    onClick?: (...args: unknown[]) => void;
+    onPress?: (...args: unknown[]) => void;
+  };
+
+  return cloneElement(finalTriggerNode as ReactElement<Record<string, unknown>>, {
+    onClick: (...args: unknown[]) => {
+      triggerProps.onClick?.(...args);
+      triggerProps.onPress?.(...args);
+      const firstArg = args[0] as { defaultPrevented?: boolean } | undefined;
+      if (!firstArg?.defaultPrevented) {
+        open();
+      }
+    },
+  });
+}
+
+export default function MainModalClient({
+  trigger,
+  header,
+  footer,
+  modalProps,
+  isOpen: controlledIsOpen,
+  defaultOpen = false,
+  onOpen,
+  onClose,
+  onOpenChange,
+  children,
+}: MainModalProps) {
+  const isControlled = controlledIsOpen !== undefined;
+  const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(defaultOpen);
+
+  const isOpen = isControlled ? controlledIsOpen : uncontrolledIsOpen;
+  const openStateRef = useRef(isOpen);
+
+  useEffect(() => {
+    openStateRef.current = isOpen;
+  }, [isOpen]);
+
+  const setOpen = useCallback(
+    (nextOpen: boolean) => {
+      if (openStateRef.current === nextOpen) {
+        return;
+      }
+
+      openStateRef.current = nextOpen;
+
+      if (!isControlled) {
+        setUncontrolledIsOpen(nextOpen);
+      }
+
+      onOpenChange?.(nextOpen);
+
+      if (nextOpen) {
+        onOpen?.();
+      } else {
+        onClose?.();
+      }
+    },
+    [isControlled, onClose, onOpen, onOpenChange]
+  );
+
+  const closeModal = useCallback(() => setOpen(false), [setOpen]);
+  const openModal = useCallback(() => setOpen(true), [setOpen]);
+
+  let triggerFromChildren: ReactNode = null;
+  let bodyContent: ReactNode;
+
+  if (typeof children === 'function') {
+    bodyContent = children(closeModal);
+  } else {
+    const content: ReactNode[] = [];
+
+    for (const child of Children.toArray(children)) {
+      if (isTriggerElement(child)) {
+        if (triggerFromChildren === null) {
+          triggerFromChildren = child.props.children;
+        }
+        continue;
+      }
+
+      content.push(child);
+    }
+
+    bodyContent = content;
+  }
+
+  const resolvedTrigger = trigger ?? triggerFromChildren;
+  const boundTrigger = bindTrigger(resolvedTrigger, openModal);
+
+  const { classNames, ...restModalProps } = modalProps ?? {};
+  const mergedClassNames = useMemo(
+    () => ({
+      ...classNames,
+      base: ['bg-content1 rounded-lg', classNames?.base].filter(Boolean).join(' '),
+    }),
+    [classNames]
+  );
+
+  return (
+    <>
+      {boundTrigger && (
+        <span className="inline-flex">
+          {boundTrigger}
+        </span>
+      )}
+
+      <Modal
+        data-cy="main-modal"
+        {...restModalProps}
+        isOpen={isOpen}
+        onClose={closeModal}
+        onOpenChange={setOpen}
+        classNames={mergedClassNames}
+      >
+        <ModalContent className="max-h-[90vh] overflow-hidden">
+          {() => (
+            <>
+              {header && <ModalHeader><h2>{header}</h2></ModalHeader>}
+
+              <ModalBody className="overflow-y-auto">{bodyContent}</ModalBody>
+
+              {footer && (
+                <ModalFooter>
+                  {typeof footer === 'function' ? footer(closeModal) : footer}
+                </ModalFooter>
+              )}
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}

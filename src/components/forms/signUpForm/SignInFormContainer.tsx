@@ -4,7 +4,7 @@ import SignUpFormPresentational from './SignUpFormPresentational';
 import { sendEmailVerification, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import { useFormAction } from '@/lib/hooks/useFormAction';
-import { ActionResult } from '@/lib/types/ActionResult';
+import { ActionResult } from '@/lib/types/responses/ActionResult';
 import signInAction from '@/lib/auth/signInAction';
 import mapFirebaseAuthError from '@/lib/errors/firebaseErrors/mapFirebaseAuthError';
 import GoogleSignInButton from '@/components/buttons/googleButton/SignInWithGoogleButton';
@@ -38,8 +38,6 @@ export default function SignInFormContainer() {
       return mapFirebaseAuthError(err);
     }
   }
-
-
 
   const { action, pending, error, validationErrors } = useFormAction(submitAction, {
     onSuccess: () => {

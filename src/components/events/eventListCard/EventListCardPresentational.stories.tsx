@@ -35,7 +35,19 @@ export const Default: Story = {
     args.loading ? <EventListCardSkeleton /> : <EventListCardPresentational {...args} />,
 };
 
-
 export const Loading: Story = {
-  render: () => <EventListCardSkeleton />
-}
+  render: () => <EventListCardSkeleton />,
+};
+
+export const WithActions: Story = {
+  args: {
+    eventId: 'event-123',
+    title: 'Queer Trivia Night',
+    category: 'SOCIAL',
+    description: 'Join us for games, laughs, and community vibes.',
+    ageRestriction: 'ALL_AGES',
+    startDate: '2026-02-15',
+    loading: false,
+    actions: <div></div>,
+  },
+};

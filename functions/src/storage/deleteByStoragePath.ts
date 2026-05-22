@@ -1,11 +1,11 @@
 import { onRequest, Request } from 'firebase-functions/v2/https';
-import { storage } from '../bootstrap/admin';
 import { requireMethod } from '../utils/guards/requireMethod';
 import { requireInternalApiKey } from '../utils/guards/requireInternalApiKey';
 import { INTERNAL_API_KEY } from '../secrets';
 import { getInternalApiKey } from '../utils/guards/getInternalApiKey';
+import { resolveStorageBucket } from './resolveStorageBucket';
 
-const ALLOWED_PREFIXES = ['users/', 'org/proofs/'];
+const ALLOWED_PREFIXES = ['users/', 'org/proofs/', 'events/'];
 
 export async function deleteByStoragePathHandler(
   req: Request,
@@ -31,11 +31,14 @@ export async function deleteByStoragePathHandler(
   }
 
   try {
-    await storage.bucket().file(storagePath).delete({ ignoreNotFound: true });
+    await resolveStorageBucket().file(storagePath).delete({ ignoreNotFound: true });
     res.status(200).json({ ok: true });
   } catch (err) {
     res.status(500).json({ code: 'STORAGE_DELETE_FAILED' });
   }
 }
 
-export const deleteByStoragePath = onRequest({secrets: [INTERNAL_API_KEY]}, deleteByStoragePathHandler);
+export const deleteByStoragePath = onRequest(
+  { secrets: [INTERNAL_API_KEY] },
+  deleteByStoragePathHandler
+);

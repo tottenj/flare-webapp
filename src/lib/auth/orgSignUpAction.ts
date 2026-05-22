@@ -1,4 +1,4 @@
-"use server"
+'use server';
 import AuthGateway from '@/lib/auth/authGateway';
 import { AppError } from '@/lib/errors/AppError';
 import { AuthErrors } from '@/lib/errors/authError';
@@ -7,7 +7,7 @@ import { extractFieldErrors } from '@/lib/errors/extractError';
 import fail from '@/lib/errors/fail';
 import { logger } from '@/lib/logger';
 import { OrgSignUpInput, OrgSignUpSchema } from '@/lib/schemas/auth/orgSignUpSchema';
-import { ActionResult } from '@/lib/types/ActionResult';
+import { ActionResult } from '@/lib/types/responses/ActionResult';
 import z from 'zod';
 import signUpOrgUseCase from '@/lib/useCase/signUpOrgUseCase';
 

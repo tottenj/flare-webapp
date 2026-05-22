@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import type { ActionError, ActionResult } from '@/lib/types/ActionResult';
+import type { ActionError, ActionResult } from '@/lib/types/responses/ActionResult';
 import { toast, Id } from 'react-toastify';
 
 type ToastMessages = {

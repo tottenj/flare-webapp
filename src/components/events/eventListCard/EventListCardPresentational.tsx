@@ -13,6 +13,8 @@ interface eventListCardPresentationalProps {
   description: string;
   ageRestriction: AgeRangeValue;
   startDate: string;
+
+  actions?: React.ReactNode;
 }
 
 export default function EventListCardPresentational({
@@ -22,14 +24,29 @@ export default function EventListCardPresentational({
   description,
   ageRestriction,
   startDate,
+  actions,
 }: eventListCardPresentationalProps) {
   const { color } = EVENT_CATEGORY_META[category];
   const ageRestrictionLabel = formatAgeRange(ageRestriction);
   const { dateLabel } = formatDateTime(startDate);
 
   return (
-    <ModalLink route={`/event/${eventId}`}>
-      <div className="group border-primary hover:bg-primary flex w-full gap-4 rounded-2xl border-2 p-4 transition-all duration-200 ease-in-out hover:-translate-y-1 hover:text-white hover:shadow-lg">
+    <div
+      data-cy={`event-row-${eventId}`}
+      className="group border-primary hover:bg-primary relative flex w-full cursor-pointer gap-4 rounded-2xl border-2 p-4 transition-all duration-200 ease-in-out hover:-translate-y-1 hover:text-white hover:shadow-lg"
+    >
+      <ModalLink route={`/event/${eventId}`} aria-label={title} className="absolute inset-0 z-10" />
+
+      {actions && (
+        <div
+          data-cy={`event-actions-${eventId}`}
+          className="absolute top-2 right-4 z-20 hidden text-white group-hover:block"
+        >
+          {actions}
+        </div>
+      )}
+
+      <div className="relative z-0 flex w-full gap-4">
         <div className="relative">
           <div className="group-hover:hidden">
             <SVGLogo size={45} color={tagColorValue(color)} />
@@ -43,14 +60,14 @@ export default function EventListCardPresentational({
         <div className="flex w-full justify-between">
           <div className="flex flex-col">
             <h3 className="font-nunito font-bold capitalize">{title}</h3>
-            <p>{description}</p>
+            <p className="line-clamp-2">{description}</p>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col justify-end text-right">
             <p>{ageRestrictionLabel}</p>
             <p>{dateLabel}</p>
           </div>
         </div>
       </div>
-    </ModalLink>
+    </div>
   );
 }

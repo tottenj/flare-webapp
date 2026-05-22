@@ -33,7 +33,7 @@ export default function ImageCropperInput({
     setTempUrl(null);
   }
 
-  async function handleCropComplete(croppedFile: File) {
+  function handleCropComplete(croppedFile: File) {
     const previewUrl = URL.createObjectURL(croppedFile);
     onCropped(croppedFile, previewUrl);
     handleClose()

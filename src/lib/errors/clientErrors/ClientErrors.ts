@@ -11,4 +11,8 @@ export const ClientErrors = {
   ServerRejected: (message: string, code = 'SERVER_REJECTED') => new ClientError(code, message),
 
   Network: () => new ClientError('NETWORK_ERROR', 'Network error. Please check your connection.'),
+
+  Unauthorized: () => new ClientError('UNAUTHORIZED', 'You do not have permission to perform this action.'),
+
+  NotFound: (resource = 'Resource') => new ClientError('NOT_FOUND', `${resource} not found.`),
 };

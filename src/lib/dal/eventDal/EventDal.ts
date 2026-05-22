@@ -1,10 +1,11 @@
 import 'server-only';
 import { EventDomainProps } from '@/lib/domain/eventDomain/EventDomain';
-import { Prisma } from '@prisma/client';
+
 import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
 import { EventRow, eventRowInclude } from '@/lib/types/dto/EventDto';
 import { UserEventFilter } from '@/lib/types/UserEventFilter';
+import { Prisma } from '../../../../prisma/generated/client';
 
 export class EventDal {
   async create(input: EventDomainProps, tx?: Prisma.TransactionClient) {
@@ -18,6 +19,15 @@ export class EventDal {
             tag: { connect: { id: tagId } },
           })),
         },
+      },
+    });
+  }
+
+  async getOwnerInfo(eventId: string) {
+    return await prisma.flareEvent.findUnique({
+      where: { id: eventId },
+      select: {
+        organizationId: true,
       },
     });
   }
@@ -42,6 +52,16 @@ export class EventDal {
         startsAtUTC: 'asc',
       },
       include: eventRowInclude,
+    });
+  }
+
+  async getEditData(eventId: string) {
+    return await prisma.flareEvent.findUnique({
+      where: { id: eventId },
+      select: {
+        image: true,
+        locationId: true,
+      },
     });
   }
 
@@ -79,6 +99,24 @@ export class EventDal {
         startsAtUTC: 'asc',
       },
       include: eventRowInclude,
+    });
+  }
+
+  async edit(eventId: string, input: EventDomainProps, tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    const { tags, organizationId, ...rest } = input;
+
+    return await client.flareEvent.update({
+      where: { id: eventId },
+      data: {
+        ...rest,
+        tags: {
+          deleteMany: {}, 
+          create: tags.map((tagId) => ({
+            tag: { connect: { id: tagId } },
+          })),
+        },
+      },
     });
   }
 }

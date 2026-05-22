@@ -1,6 +1,6 @@
 // src/hooks/useActionError.ts
 import { useState } from 'react';
-import { ActionError } from '../types/ActionResult';
+import { ActionError } from '../types/responses/ActionResult';
 
 export function useActionError() {
   const [error, setError] = useState<ActionError | null>(null);

@@ -3,13 +3,12 @@ import { AppError } from '@/lib/errors/AppError';
 import { extractFieldErrors } from '@/lib/errors/extractError';
 import fail from '@/lib/errors/fail';
 import { GeneralErrors } from '@/lib/errors/GeneralErrors';
-import { MoneyError } from '@/lib/errors/moneyError/MoneyError';
 import { logger } from '@/lib/logger';
 import { CreateEvent, CreateEventSchema } from '@/lib/schemas/event/createEventFormSchema';
-import { EventService } from '@/lib/services/eventService/eventService';
 import ImageService from '@/lib/services/imageService/ImageService';
+import { EventService } from '@/lib/services/eventService/eventService';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
-import { ActionResult } from '@/lib/types/ActionResult';
+import { ActionResult } from '@/lib/types/responses/ActionResult';
 import z from 'zod';
 
 export default async function createEvent(input: CreateEvent): Promise<ActionResult<null>> {
@@ -26,21 +25,13 @@ export default async function createEvent(input: CreateEvent): Promise<ActionRes
     }
     return fail(GeneralErrors.InvalidFileInput(), fieldErrors);
   }
-  const { data } = sanitized;
 
   try {
     await EventService.createEvent(
       { userId: ctx.user.id, firebaseUid: ctx.user.firebaseUid, orgId: ctx.profile.orgProfile?.id },
-      data
+      sanitized.data
     );
   } catch (error) {
-    if (error instanceof MoneyError) {
-      const appErr = new AppError({
-        code: error.name,
-        clientMessage: error.message,
-      });
-      return fail(appErr);
-    }
     if (error instanceof AppError) {
       return fail(error);
     }

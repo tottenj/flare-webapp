@@ -7,7 +7,7 @@ import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import useFileMap from '@/lib/hooks/useFileMap/useFileMap';
 import { useFormAction } from '@/lib/hooks/useFormAction';
 import { LocationInput } from '@/lib/schemas/LocationInputSchema';
-import { ActionResult } from '@/lib/types/ActionResult';
+import { ActionResult } from '@/lib/types/responses/ActionResult';
 import { FileKey, SocialPlatform } from '@/lib/utils/socialConfig';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 export default function OrgSignUpFormContainer() {
   const router = useRouter();
 
-  const { files, hasFile, setFile  } = useFileMap<FileKey>({
+  const { files, hasFile, setFile } = useFileMap<FileKey>({
     initial: {
       instagram: null,
       facebook: null,
@@ -39,7 +39,6 @@ export default function OrgSignUpFormContainer() {
     }
   }
 
-  
   const { action, pending, error, validationErrors } = useFormAction(submitAction, {
     onSuccess: () => {
       toast.success('Created Account');

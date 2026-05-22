@@ -3,9 +3,10 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env' });
 import { defineConfig } from 'cypress';
 import { execSync } from 'child_process';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { resetTestDbFast } from './__tests__/utils/restTestDb';
 import { seedTest } from './prisma/seedTest';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from './prisma/generated/client';
 
 export default defineConfig({
   projectId: 'f7wjfu',
@@ -19,7 +20,8 @@ export default defineConfig({
       if (!process.env.DATABASE_URL) {
         process.env.DATABASE_URL = config.env.DATABASE_URL || process.env.DATABASE_URL;
       }
-      const prisma = new PrismaClient();
+      const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+      const prisma = new PrismaClient({ adapter });
       on('task', {
         'db:resetAndSeed': async () => {
           await resetTestDbFast(prisma);

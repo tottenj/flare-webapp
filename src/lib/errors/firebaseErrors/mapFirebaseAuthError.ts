@@ -1,5 +1,4 @@
-
-import { ActionResult } from '@/lib/types/ActionResult';
+import { ActionResult } from '@/lib/types/responses/ActionResult';
 import { FirebaseError } from 'firebase/app';
 
 export default function mapFirebaseAuthError(err: unknown): ActionResult<null> {
@@ -85,7 +84,7 @@ export default function mapFirebaseAuthError(err: unknown): ActionResult<null> {
         ok: false,
         error: {
           code: 'AUTH_FAILED',
-          message: 'Unable to sign up. Please try again.',
+          message: 'Authentication failed. Please try again.',
         },
       };
   }

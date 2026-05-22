@@ -2,8 +2,9 @@ import { LocationInputSchema } from '@/lib/schemas/LocationInputSchema';
 import { ZonedDateTimeString } from '@/lib/schemas/zodSchemaAdditions';
 import { AGE_RANGE_VALUES } from '@/lib/types/AgeRange';
 import { PRICE_TYPE_VALUES } from '@/lib/types/PriceType';
-import { EventCategory } from '@prisma/client';
+
 import z from 'zod';
+import { EventCategory } from '../../../../prisma/generated/enums';
 
 export const CreateEventBaseSchema = z.object({
   eventName: z.string().min(1),

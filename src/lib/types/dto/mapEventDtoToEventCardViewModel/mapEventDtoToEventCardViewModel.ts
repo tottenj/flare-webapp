@@ -1,7 +1,7 @@
 'use server';
 import { EventCardViewModel } from '@/components/events/EventCard/presentational/EventCardPresentational';
+import type { EventDto } from '@/lib/schemas/event/eventDtoSchema';
 import ImageService from '@/lib/services/imageService/ImageService';
-import { EventDto } from '@/lib/types/dto/EventDto';
 import formatAgeRange from '@/lib/utils/ui/formatAgeRange/formatAgeRange';
 import { EventDateTimeLabels, formatDateTime } from '@/lib/utils/ui/formatDateTime/formatDateTime';
 import formatEventPrice from '@/lib/utils/ui/formatEventPrice/formatEventPrice';
