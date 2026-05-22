@@ -184,6 +184,7 @@ describe('Edit Event', () => {
     assertHeroDateTime('[data-cy="endDateTime-input"]', updatedEvent.endDateTime);
   });
 
+  
   it('shows validation and blocks preview when end date/time is before start date/time', () => {
     openEditForm(editableEvent.title);
 
