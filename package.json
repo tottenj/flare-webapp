@@ -90,7 +90,7 @@
     "chroma-js": "^3.1.2",
     "cookies-next": "^5.1.0",
     "cuid": "^3.0.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "^16.6.1",
     "eslint-plugin-jest-dom": "^5.5.0",
     "firebase": "^11.6.0",
     "framer-motion": "^12.16.0",

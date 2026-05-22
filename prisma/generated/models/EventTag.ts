@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model EventTag
@@ -137,7 +137,7 @@ export type EventTagGroupByOutputType = {
   _max: EventTagMaxAggregateOutputType | null
 }
 
-type GetEventTagGroupByPayload<T extends EventTagGroupByArgs> = Prisma.PrismaPromise<
+export type GetEventTagGroupByPayload<T extends EventTagGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<EventTagGroupByOutputType, T['by']> &
       {
