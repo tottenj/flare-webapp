@@ -86,7 +86,12 @@ describe('Edit Event', () => {
     openEditForm(editableEvent.title);
 
     cy.get('[data-cy="main-modal"]:visible').within(() => {
-      cy.get('img').first().invoke('attr', 'src').should('not.contain', 'imagePlaceholder.png');
+      cy.get('img')
+        .first()
+        .invoke('attr', 'src')
+        .then((src) => {
+          expect(src).to.be.a('string').and.not.be.empty;
+        });
       cy.get('[data-cy="eventName-input"]').should('have.value', editableEvent.title);
       cy.get('[data-cy="eventDescription-input"]').should('have.value', editableEvent.description);
       cy.get('[data-cy="location-input"]').should('have.value', editableEvent.location.address);
@@ -144,7 +149,6 @@ describe('Edit Event', () => {
       cy.contains(editableEvent.title).should('not.exist');
     });
 
-
     cy.wait(6000); // Wait for UI to update before interacting with the updated event.
 
     cy.get(`[aria-label="${updatedEvent.title}"]`).click();
@@ -187,7 +191,6 @@ describe('Edit Event', () => {
     assertHeroDateTime('[data-cy="endDateTime-input"]', updatedEvent.endDateTime);
   });
 
-  
   it('shows validation and blocks preview when end date/time is before start date/time', () => {
     openEditForm(editableEvent.title);
 

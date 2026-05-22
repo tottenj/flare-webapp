@@ -8,6 +8,7 @@ import {
   EventDomainProps,
 } from '@/lib/domain/eventDomain/EventDomain';
 import { AuthErrors } from '@/lib/errors/authError';
+import { AppError } from '@/lib/errors/AppError';
 import ensure from '@/lib/errors/ensure/ensure';
 import { CreateEvent } from '@/lib/schemas/event/createEventFormSchema';
 import ImageService from '@/lib/services/imageService/ImageService';
@@ -23,7 +24,6 @@ import { EventErrors } from '@/lib/errors/eventErrors/EventErrors';
 import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
 import { EditEventInput } from '@/lib/schemas/event/editEventInputSchema';
 import { logger } from '@/lib/logger';
-
 
 export class EventService {
   private static async assertCanEdit(eventId: string, actor: AuthenticatedOrganization) {
@@ -111,7 +111,20 @@ export class EventService {
     const event = mapEventRowToDto(eventRow);
     const [imageUrl, location] = await Promise.all([
       eventAssets.image?.storagePath
-        ? ImageService.getDownloadUrl(eventAssets.image.storagePath)
+        ? ImageService.getDownloadUrl(eventAssets.image.storagePath).catch((error) => {
+            if (
+              error instanceof AppError &&
+              (error.code === 'STORAGE_MISSING_PATH' || error.code === 'STORAGE_INVALID_PATH')
+            ) {
+              logger.warn('EVENT_EDIT_IMAGE_MISSING', {
+                eventId,
+                storagePath: eventAssets.image?.storagePath,
+                errorCode: error.code,
+              });
+              return undefined;
+            }
+            throw error;
+          })
         : Promise.resolve(undefined),
       eventAssets.locationId ? locationDal.get(eventAssets.locationId) : Promise.resolve(undefined),
     ]);
