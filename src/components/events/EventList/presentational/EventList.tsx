@@ -4,9 +4,11 @@ import type { EventDto } from '@/lib/schemas/event/eventDtoSchema';
 export default async function EventList({
   events,
   renderActions,
+  withDescription = true,
 }: {
   events: EventDto[];
   renderActions?: (event: EventDto) => React.ReactNode;
+  withDescription?: boolean;
 }) {
   return (
     <div className="flex flex-col gap-4">
@@ -16,7 +18,7 @@ export default async function EventList({
           eventId={event.id}
           title={event.title}
           category={event.category}
-          description={event.description}
+          description={withDescription ? event.description : undefined}
           ageRestriction={event.ageRestriction}
           startDate={event.startsAt}
           actions={renderActions?.(event)}
