@@ -1,7 +1,7 @@
 import EventCardPresentational from '@/components/events/EventCard/presentational/EventCardPresentational';
 import { EventService } from '@/lib/services/eventService/eventService';
 import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
-import mapEventDtoToEventCardViewModel from '@/lib/types/dto/mapEventDtoToEventCardViewModel/mapEventDtoToEventCardViewModel';
+import mapEventDtoToEventCardViewModel from '@/lib/types/dto/event/mapEventDtoToEventCardViewModel/mapEventDtoToEventCardViewModel';
 
 export default async function EventCardOrgRecentContainer({
   orgId,

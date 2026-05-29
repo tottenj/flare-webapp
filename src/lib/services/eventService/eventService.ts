@@ -16,7 +16,7 @@ import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization
 import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter, OrgEventFilterSchema } from '@/lib/types/OrgEventFilter';
 import type { EventDto } from '@/lib/schemas/event/eventDtoSchema';
-import { mapEventRowToDto } from '@/lib/types/dto/EventDto';
+import { mapEventRowToDto } from '@/lib/types/dto/event/EventDto';
 import { UserEventFilter, userEventFilterSchema } from '@/lib/types/UserEventFilter';
 import tagService from '@/lib/services/tagService/tagService';
 import EventPermission from '@/lib/permissions/eventPermission/EventPermission';
@@ -34,7 +34,7 @@ export class EventService {
   }
 
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
-    if(!EventPermission.canCreate(authenticatedUser)) throw AuthErrors.Unauthorized();
+    if (!EventPermission.canCreate(authenticatedUser)) throw AuthErrors.Unauthorized();
     ensure(
       eventData.image.storagePath.startsWith(`events/${authenticatedUser.firebaseUid}`),
       AuthErrors.Unauthorized()

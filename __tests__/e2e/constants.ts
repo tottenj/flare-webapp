@@ -28,6 +28,12 @@ export const userNotEmailVerified: basicUser = {
   password: 'password123',
 };
 
+export const admin: basicUser = {
+  uid: SEEDED_TEST_USERS.adminUser.firebaseUid,
+  email: SEEDED_TEST_USERS.adminUser.email,
+  password: SEEDED_TEST_USERS.adminUser.password,
+};
+
 export const pendingOrg = {
   uid: SEEDED_TEST_USERS.pendingOrgUser.firebaseUid,
   email: SEEDED_TEST_USERS.pendingOrgUser.email,

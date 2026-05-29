@@ -3,7 +3,7 @@ import { EventDomainProps } from '@/lib/domain/eventDomain/EventDomain';
 
 import { prisma } from '../../../../prisma/prismaClient';
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
-import { EventRow, eventRowInclude } from '@/lib/types/dto/EventDto';
+import { EventRow, eventRowInclude } from '@/lib/types/dto/event/EventDto';
 import { UserEventFilter } from '@/lib/types/UserEventFilter';
 import { Prisma } from '../../../../prisma/generated/client';
 
@@ -111,7 +111,7 @@ export class EventDal {
       data: {
         ...rest,
         tags: {
-          deleteMany: {}, 
+          deleteMany: {},
           create: tags.map((tagId) => ({
             tag: { connect: { id: tagId } },
           })),

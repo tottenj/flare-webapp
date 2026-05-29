@@ -1,6 +1,6 @@
 'use client';
 
-import mapEventPreviewFormToEventCardViewModel from '@/lib/types/dto/mapEventPreviewFormToEventCardViewModel';
+import mapEventPreviewFormToEventCardViewModel from '@/lib/types/dto/event/mapEventPreviewFormToEventCardViewModel';
 import EventCardPresentational from './presentational/EventCardPresentational';
 import { CreateEventPreviewForm } from '@/lib/schemas/event/createEventPreviewFormSchema';
 

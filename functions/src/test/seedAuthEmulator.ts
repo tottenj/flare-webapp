@@ -33,7 +33,7 @@ export const seedAuthEmulator = onRequest(async (req: any, res: any) => {
         password: 'password123',
         emailVerified: true,
       },
-      { uid: 'uid4', email: 'verifiedOrg@gmail.com', password: 'password123', emailVerified: true },
+      {uid: 'uid4', email: 'admin@gmail.com', password: 'password123', emailVerified: true},
     ];
     const createdUsers = await Promise.all(usersToCreate.map((u) => auth.createUser(u)));
     res.json({

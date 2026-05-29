@@ -4,14 +4,13 @@ import { locationDal } from '@/lib/dal/locationDal/LocationDal';
 import { expect } from '@jest/globals';
 import { EventService } from '@/lib/services/eventService/eventService';
 import ImageService from '@/lib/services/imageService/ImageService';
-import { mapEventRowToDto } from '@/lib/types/dto/EventDto';
+import { mapEventRowToDto } from '@/lib/types/dto/event/EventDto';
 import { buildEventRow } from '../../../../__tests__/factories/dal/eventRow.builder';
 import tagService from '@/lib/services/tagService/tagService';
 import { eventInputFactory } from '../../../../__tests__/factories/service/eventInput.factory';
 import { editEventInputFactory } from '../../../../__tests__/factories/service/editEventInput.factory';
 import { authOrgFactory } from '../../../../__tests__/factories/auth/authOrg.factory';
-import { prisma } from '../../../../prisma/prismaClient';
-import orgSignUpInputFactory from '../../../../__tests__/factories/service/orgSignUpInput.factory';
+
 import { EventDomain } from '@/lib/domain/eventDomain/EventDomain';
 import { logger } from '@/lib/logger';
 import { AppError } from '@/lib/errors/AppError';
@@ -75,7 +74,7 @@ jest.mock('@/lib/services/imageService/ImageService', () => ({
   },
 }));
 
-jest.mock('@/lib/types/dto/EventDto');
+jest.mock('@/lib/types/dto/event/EventDto');
 
 (tagService.applyTagDiff as jest.Mock).mockImplementation(async (prevTags, newLabels, tx) => {
   const prevLabelSet = new Set(prevTags.map(({ tag }: any) => tag.label));
@@ -175,9 +174,8 @@ describe('EventService.createEvent', () => {
     expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('events/firebaseUid/image.jpg');
   });
 
-
   it('errors if user is not authorized to create event', async () => {
-    const authUser = {userId: 'userId', firebaseUid: 'firebaseUid'};
+    const authUser = { userId: 'userId', firebaseUid: 'firebaseUid' };
     const input = eventInputFactory({ image: { storagePath: 'events/firebaseUid/image.jpg' } });
     await expect(EventService.createEvent(authUser as any, input)).rejects.toMatchObject({
       code: 'AUTH_UNAUTHORIZED',
@@ -186,7 +184,7 @@ describe('EventService.createEvent', () => {
     expect(locationDal.create).not.toHaveBeenCalled();
     expect(imageAssetDal.create).not.toHaveBeenCalled();
     expect(ImageService.deleteByStoragePath).not.toHaveBeenCalled();
-  })
+  });
 
   it('errors on unauthenticated storage path', async () => {
     const authUser = authOrgFactory();

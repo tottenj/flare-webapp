@@ -4,6 +4,7 @@ export interface SeededBasicUser {
   email: string;
   password: string;
   status: 'ACTIVE' | 'PENDING';
+  role: 'USER' | 'ORG' | 'ADMIN';
 }
 
 export interface SeededOrganization {
@@ -49,6 +50,7 @@ export const SEEDED_TEST_USERS = {
     email: 'user@gmail.com',
     password: 'password123',
     status: 'ACTIVE',
+    role: 'USER',
   },
   pendingEmailVerifiedUser: {
     id: '1.5',
@@ -56,6 +58,7 @@ export const SEEDED_TEST_USERS = {
     email: 'userEmailVerified2@gmail.com',
     password: 'password123',
     status: 'PENDING',
+    role: 'USER',
   },
   pendingOrgUser: {
     id: '3',
@@ -63,7 +66,16 @@ export const SEEDED_TEST_USERS = {
     email: 'unverifiedOrg@gmail.com',
     password: 'password123',
     status: 'ACTIVE',
+    role: 'ORG',
   },
+  adminUser: {
+    id: '4',
+    firebaseUid: 'uid4',
+    email: 'admin@gmail.com',
+    password: 'password123',
+    status: 'ACTIVE',
+    role: 'ADMIN'
+  }
 } as const satisfies Record<string, SeededBasicUser>;
 
 export const SEEDED_TEST_ORGS = {

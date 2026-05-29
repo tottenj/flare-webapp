@@ -70,6 +70,7 @@ export async function seedTest(prisma: PrismaClient) {
       firebaseUid: SEEDED_TEST_USERS.activeUser.firebaseUid,
       email: SEEDED_TEST_USERS.activeUser.email,
       status: SEEDED_TEST_USERS.activeUser.status,
+      role: SEEDED_TEST_USERS.activeUser.role,
     },
   });
 
@@ -81,6 +82,7 @@ export async function seedTest(prisma: PrismaClient) {
       firebaseUid: SEEDED_TEST_USERS.pendingEmailVerifiedUser.firebaseUid,
       email: SEEDED_TEST_USERS.pendingEmailVerifiedUser.email,
       status: SEEDED_TEST_USERS.pendingEmailVerifiedUser.status,
+      role: SEEDED_TEST_USERS.pendingEmailVerifiedUser.role,
     },
   });
 
@@ -92,6 +94,7 @@ export async function seedTest(prisma: PrismaClient) {
       firebaseUid: SEEDED_TEST_USERS.pendingOrgUser.firebaseUid,
       email: SEEDED_TEST_USERS.pendingOrgUser.email,
       status: SEEDED_TEST_USERS.pendingOrgUser.status,
+      role: SEEDED_TEST_USERS.pendingOrgUser.role,
 
       organizationProfile: {
         create: {
@@ -103,6 +106,18 @@ export async function seedTest(prisma: PrismaClient) {
           },
         },
       },
+    },
+  });
+
+  const adminUser = await prisma.user.upsert({
+    where: { email: SEEDED_TEST_USERS.adminUser.email },
+    update: {},
+    create: {
+      id: SEEDED_TEST_USERS.adminUser.id,
+      firebaseUid: SEEDED_TEST_USERS.adminUser.firebaseUid,
+      email: SEEDED_TEST_USERS.adminUser.email,
+      status: SEEDED_TEST_USERS.adminUser.status,
+      role: SEEDED_TEST_USERS.adminUser.role,
     },
   });
 

@@ -24,6 +24,7 @@ declare namespace Cypress {
     loginTestUser(): Chainable<void>;
     loginTestOrg(): Chainable<void>;
     loginVerifiedOrg(): Chainable<void>;
+    loginTestAdmin(): Chainable<void>;
     usePlacesInput(
       selector: string,
       loc: string = verifiedOrg.location.name,

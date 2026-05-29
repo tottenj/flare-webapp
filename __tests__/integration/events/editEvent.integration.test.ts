@@ -5,7 +5,7 @@ import { createImageIntegration } from '../../factories/integration/image.factor
 import { createAuthOrgIntegration } from '../../factories/integration/helpers/createAuthOrgIntegration';
 import { EventService } from '@/lib/services/eventService/eventService';
 import { editEventInputFactory } from '../../factories/service/editEventInput.factory';
-import { eventRowInclude } from '@/lib/types/dto/EventDto';
+import { eventRowInclude } from '@/lib/types/dto/event/EventDto';
 
 jest.mock('@/lib/services/imageService/ImageService', () => ({
   __esModule: true,

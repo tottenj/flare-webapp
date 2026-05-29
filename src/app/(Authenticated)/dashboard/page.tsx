@@ -1,3 +1,4 @@
+import AdminDashboardShell from '@/components/dashboard/adminDashboardShell/AdminDashboardShell';
 import OrgDashboardShell from '@/components/dashboard/orgDashboardShell/OrgDashboardShell';
 import { mapUrlFiltersToOrgEventFilters } from '@/lib/mappers/mapUrlFiltersToOrgEventFilters/mapUrlFiltersToOrgEventFilters';
 import { OrgEventUrlFilterSchema } from '@/lib/schemas/event/orgEventUrlFilterSchema';
@@ -16,8 +17,9 @@ export default async function DashboardPage(props: {
     const urlFilters = parsed.success ? parsed.data : OrgEventUrlFilterSchema.parse({}); // fallback defaults
     const filters = mapUrlFiltersToOrgEventFilters(urlFilters);
     return <OrgDashboardShell filters={filters} />;
+  }else if (ctx.flags.isAdmin) {
+    return <AdminDashboardShell />;
+  } else {
+    return <div>User Dashboard Coming Soon</div>;
   }
-
-
-  
 }
