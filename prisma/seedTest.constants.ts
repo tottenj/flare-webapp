@@ -68,14 +68,22 @@ export const SEEDED_TEST_USERS = {
     status: 'ACTIVE',
     role: 'ORG',
   },
+  verifiedOrgUser: {
+    id: '5',
+    firebaseUid: 'uid5',
+    email: 'verifiedOrg@gmail.com',
+    password: 'password123',
+    status: 'ACTIVE',
+    role: 'ORG',
+  },
   adminUser: {
     id: '4',
     firebaseUid: 'uid4',
     email: 'admin@gmail.com',
     password: 'password123',
     status: 'ACTIVE',
-    role: 'ADMIN'
-  }
+    role: 'ADMIN',
+  },
 } as const satisfies Record<string, SeededBasicUser>;
 
 export const SEEDED_TEST_ORGS = {
@@ -83,6 +91,11 @@ export const SEEDED_TEST_ORGS = {
     id: 'org1',
     orgName: 'unverifiedOrg',
     status: 'PENDING',
+  },
+  verifiedOrg: {
+    id: 'org2',
+    orgName: 'verifiedOrg',
+    status: 'VERIFIED',
   },
 } as const satisfies Record<string, SeededOrganization>;
 
@@ -194,5 +207,26 @@ export const SEEDED_TEST_EVENTS = {
     location: SEEDED_TEST_LOCATIONS.editableEvent,
     image: SEEDED_TEST_IMAGES.editableEvent,
     tags: [SEEDED_TEST_TAGS.editableDrag, SEEDED_TEST_TAGS.editableCommunity],
+  },
+  verifiedUpcoming: {
+    id: 'eventVerifiedUpcoming',
+    title: 'Verified Org Upcoming Event',
+    description: 'Future published event for verified org',
+    status: 'PUBLISHED',
+    timezone: 'America/Toronto',
+  },
+  verifiedPublished: {
+    id: 'eventVerifiedPublished',
+    title: 'Verified Org Published Event',
+    description: 'Another future published event for verified org',
+    status: 'PUBLISHED',
+    timezone: 'America/Toronto',
+  },
+  verifiedDraft: {
+    id: 'eventVerifiedDraft',
+    title: 'Verified Org Draft Event',
+    description: 'Draft future event for verified org',
+    status: 'DRAFT',
+    timezone: 'America/Toronto',
   },
 } as const;

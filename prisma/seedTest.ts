@@ -7,7 +7,7 @@ import {
   SEEDED_TEST_ORGS,
   SEEDED_TEST_TAGS,
   SEEDED_TEST_USERS,
-} from "./seedTest.constants";
+} from './seedTest.constants';
 
 export async function seedTest(prisma: PrismaClient) {
   function futureDate(days: number) {
@@ -109,6 +109,29 @@ export async function seedTest(prisma: PrismaClient) {
     },
   });
 
+  const verifiedOrg = await prisma.user.upsert({
+    where: { email: SEEDED_TEST_USERS.verifiedOrgUser.email },
+    update: {},
+    create: {
+      id: SEEDED_TEST_USERS.verifiedOrgUser.id,
+      firebaseUid: SEEDED_TEST_USERS.verifiedOrgUser.firebaseUid,
+      email: SEEDED_TEST_USERS.verifiedOrgUser.email,
+      status: SEEDED_TEST_USERS.verifiedOrgUser.status,
+      role: SEEDED_TEST_USERS.verifiedOrgUser.role,
+
+      organizationProfile: {
+        create: {
+          id: SEEDED_TEST_ORGS.verifiedOrg.id,
+          orgName: SEEDED_TEST_ORGS.verifiedOrg.orgName,
+          status: SEEDED_TEST_ORGS.verifiedOrg.status,
+          location: {
+            connect: { id: SEEDED_TEST_LOCATIONS.primary.id },
+          },
+        },
+      },
+    },
+  });
+
   const adminUser = await prisma.user.upsert({
     where: { email: SEEDED_TEST_USERS.adminUser.email },
     update: {},
@@ -123,6 +146,11 @@ export async function seedTest(prisma: PrismaClient) {
 
   const unverifiedOrgProfileId = await prisma.organizationProfile.findUnique({
     where: { id: SEEDED_TEST_ORGS.pendingOrg.id },
+    select: { id: true },
+  });
+
+  const verifiedOrgProfileId = await prisma.organizationProfile.findUnique({
+    where: { id: SEEDED_TEST_ORGS.verifiedOrg.id },
     select: { id: true },
   });
 
@@ -301,6 +329,58 @@ export async function seedTest(prisma: PrismaClient) {
           { tag: { connect: { id: editableTagCommunity.id } } },
         ],
       },
+    },
+  });
+
+  // Verified org events
+  await prisma.flareEvent.upsert({
+    where: { id: SEEDED_TEST_EVENTS.verifiedUpcoming.id },
+    update: {},
+    create: {
+      id: SEEDED_TEST_EVENTS.verifiedUpcoming.id,
+      organizationId: verifiedOrgProfileId!.id,
+      status: SEEDED_TEST_EVENTS.verifiedUpcoming.status,
+      title: SEEDED_TEST_EVENTS.verifiedUpcoming.title,
+      description: SEEDED_TEST_EVENTS.verifiedUpcoming.description,
+      imageId: stockEvent.id,
+      startsAtUTC: futureDate(7),
+      timezone: SEEDED_TEST_EVENTS.verifiedUpcoming.timezone,
+      locationId: SEEDED_TEST_LOCATIONS.primary.id,
+      pricingType: 'FREE',
+    },
+  });
+
+  await prisma.flareEvent.upsert({
+    where: { id: SEEDED_TEST_EVENTS.verifiedPublished.id },
+    update: {},
+    create: {
+      id: SEEDED_TEST_EVENTS.verifiedPublished.id,
+      organizationId: verifiedOrgProfileId!.id,
+      status: SEEDED_TEST_EVENTS.verifiedPublished.status,
+      title: SEEDED_TEST_EVENTS.verifiedPublished.title,
+      description: SEEDED_TEST_EVENTS.verifiedPublished.description,
+      imageId: stockEvent.id,
+      startsAtUTC: futureDate(20),
+      timezone: SEEDED_TEST_EVENTS.verifiedPublished.timezone,
+      locationId: SEEDED_TEST_LOCATIONS.primary.id,
+      pricingType: 'FREE',
+    },
+  });
+
+  await prisma.flareEvent.upsert({
+    where: { id: SEEDED_TEST_EVENTS.verifiedDraft.id },
+    update: {},
+    create: {
+      id: SEEDED_TEST_EVENTS.verifiedDraft.id,
+      organizationId: verifiedOrgProfileId!.id,
+      status: SEEDED_TEST_EVENTS.verifiedDraft.status,
+      title: SEEDED_TEST_EVENTS.verifiedDraft.title,
+      description: SEEDED_TEST_EVENTS.verifiedDraft.description,
+      imageId: stockEvent.id,
+      startsAtUTC: futureDate(30),
+      timezone: SEEDED_TEST_EVENTS.verifiedDraft.timezone,
+      locationId: SEEDED_TEST_LOCATIONS.primary.id,
+      pricingType: 'FREE',
     },
   });
 }
