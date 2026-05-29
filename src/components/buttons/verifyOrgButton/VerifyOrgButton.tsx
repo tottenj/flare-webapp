@@ -18,11 +18,21 @@ export default function VerifyOrgButton({ orgId }: { orgId: string }) {
   });
 
   return (
-    <div className="flex flex-col gap-2">
-      <Button className='bg-primary' isLoading={pending} isDisabled={pending} onPress={() => action(orgId)}>
+    <div data-cy="verify-org-container" className="flex flex-col gap-2">
+      <Button
+        data-cy="verify-org-button"
+        className="bg-foreground text-background"
+        isLoading={pending}
+        isDisabled={pending}
+        onPress={() => action(orgId)}
+      >
         Verify Organization
       </Button>
-      {error?.message ? <p className="text-danger text-sm">{error.message}</p> : null}
+      {error?.message ? (
+        <p data-cy="verify-org-error" className="text-danger text-sm">
+          {error.message}
+        </p>
+      ) : null}
     </div>
   );
 }

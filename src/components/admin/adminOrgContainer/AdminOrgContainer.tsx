@@ -39,7 +39,7 @@ export default async function AdminOrgContainer({
 }) {
   const orgDetails = await AdminService.getUnverifiedOrgDetails(actor, orgId);
   if (!orgDetails) {
-    return <div>Organization not found in pending queue.</div>;
+    return <div data-cy="admin-org-not-found">Organization not found in pending queue.</div>;
   }
 
   const proofs = await mapProofsWithUrls(orgDetails.proofs);

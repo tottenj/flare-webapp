@@ -6,8 +6,11 @@ export default async function AdminOrgListWrapper({ actor }: { actor: Authentica
   const cards = await AdminService.getUnverifiedOrgCards(actor);
 
   return (
-    <div className="bg-default flex flex-col gap-4 rounded-lg p-4">
-      <h1>Unverified Organizations</h1>
+    <div
+      data-cy="admin-unverified-orgs-section"
+      className="bg-default flex flex-col gap-4 rounded-lg p-4"
+    >
+      <h1 data-cy="admin-unverified-orgs-title">Unverified Organizations</h1>
       <AdminOrgList cards={cards} />
     </div>
   );
