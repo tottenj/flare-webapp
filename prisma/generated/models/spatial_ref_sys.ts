@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model spatial_ref_sys
@@ -196,7 +196,7 @@ export type Spatial_ref_sysGroupByOutputType = {
   _max: Spatial_ref_sysMaxAggregateOutputType | null
 }
 
-type GetSpatial_ref_sysGroupByPayload<T extends spatial_ref_sysGroupByArgs> = Prisma.PrismaPromise<
+export type GetSpatial_ref_sysGroupByPayload<T extends spatial_ref_sysGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<Spatial_ref_sysGroupByOutputType, T['by']> &
       {

@@ -23,6 +23,7 @@ describe('signUpOrgUseCase (integration)', () => {
       where: { email: baseData.org.email },
     });
     expect(user).not.toBeNull();
+    expect(user!.role).toBe('ORG');
     const org = await prisma.organizationProfile.findUnique({
       where: { userId: user!.id },
     });

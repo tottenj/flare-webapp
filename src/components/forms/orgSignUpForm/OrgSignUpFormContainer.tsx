@@ -8,7 +8,7 @@ import useFileMap from '@/lib/hooks/useFileMap/useFileMap';
 import { useFormAction } from '@/lib/hooks/useFormAction';
 import { LocationInput } from '@/lib/schemas/LocationInputSchema';
 import { ActionResult } from '@/lib/types/responses/ActionResult';
-import { FileKey, SocialPlatform } from '@/lib/utils/socialConfig';
+import { FileKey } from '@/lib/utils/socialConfig';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

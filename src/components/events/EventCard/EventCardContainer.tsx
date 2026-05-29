@@ -4,7 +4,7 @@ import EventCardPresentational, {
 import { logger } from '@/lib/logger';
 import { EventService } from '@/lib/services/eventService/eventService';
 import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
-import mapEventDtoToEventCardViewModel from '@/lib/types/dto/mapEventDtoToEventCardViewModel/mapEventDtoToEventCardViewModel';
+import mapEventDtoToEventCardViewModel from '@/lib/types/dto/event/mapEventDtoToEventCardViewModel/mapEventDtoToEventCardViewModel';
 
 export default async function EventCardContainer({
   eventId,

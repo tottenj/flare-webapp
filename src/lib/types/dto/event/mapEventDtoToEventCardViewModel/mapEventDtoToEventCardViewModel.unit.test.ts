@@ -2,8 +2,8 @@ import ImageService from '@/lib/services/imageService/ImageService';
 import formatAgeRange from '@/lib/utils/ui/formatAgeRange/formatAgeRange';
 import { formatDateTime } from '@/lib/utils/ui/formatDateTime/formatDateTime';
 import formatEventPrice from '@/lib/utils/ui/formatEventPrice/formatEventPrice';
-import { eventDtoFactory } from '../../../../../__tests__/factories/dto/eventDto.factory';
-import mapEventDtoToEventCardViewModel from '@/lib/types/dto/mapEventDtoToEventCardViewModel/mapEventDtoToEventCardViewModel';
+import { eventDtoFactory } from '../../../../../../__tests__/factories/dto/eventDto.factory';
+import mapEventDtoToEventCardViewModel from '@/lib/types/dto/event/mapEventDtoToEventCardViewModel/mapEventDtoToEventCardViewModel';
 import { expect } from '@jest/globals';
 
 jest.mock('@/lib/services/imageService/ImageService', () => ({

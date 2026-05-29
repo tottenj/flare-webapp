@@ -28,6 +28,12 @@ export const userNotEmailVerified: basicUser = {
   password: 'password123',
 };
 
+export const admin: basicUser = {
+  uid: SEEDED_TEST_USERS.adminUser.firebaseUid,
+  email: SEEDED_TEST_USERS.adminUser.email,
+  password: SEEDED_TEST_USERS.adminUser.password,
+};
+
 export const pendingOrg = {
   uid: SEEDED_TEST_USERS.pendingOrgUser.firebaseUid,
   email: SEEDED_TEST_USERS.pendingOrgUser.email,
@@ -37,9 +43,9 @@ export const pendingOrg = {
 };
 
 export const nonPendingOrg: basicUser = {
-  uid: 'uid4',
-  email: 'verifiedOrg@gmail.com',
-  password: 'password123',
+  uid: SEEDED_TEST_USERS.verifiedOrgUser.firebaseUid,
+  email: SEEDED_TEST_USERS.verifiedOrgUser.email,
+  password: SEEDED_TEST_USERS.verifiedOrgUser.password,
 };
 
 export const seededEvents = SEEDED_TEST_EVENTS;

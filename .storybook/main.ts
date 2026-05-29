@@ -25,6 +25,10 @@ const config: StorybookConfig = {
         ...config.resolve.alias,
         '@/lib/firebase/auth/configs/clientApp':
           '@/lib/firebase/auth/configs/__mocks__/clientApp.ts',
+        '@/components/profiles/profilePicture/ProfilePictureContainer':
+          '@/components/profiles/profilePicture/__mocks__/ProfilePictureContainer.tsx',
+        '@/components/buttons/verifyOrgButton/VerifyOrgButton':
+          '@/components/buttons/verifyOrgButton/__mocks__/VerifyOrgButton.tsx',
       };
     }
     return config;

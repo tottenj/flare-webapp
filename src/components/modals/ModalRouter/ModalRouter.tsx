@@ -1,6 +1,7 @@
 'use client';
 
 import MainModal from '@/components/modals/MainModal/MainModal';
+import { coerceSafeReturnToPath } from '@/lib/schemas/routes/returnToSchema';
 import { ModalProps } from '@heroui/modal';
 import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
@@ -29,7 +30,7 @@ export default function ModalRouter({
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
-    router.replace(returnTo ?? returnToFallback);
+    router.replace(coerceSafeReturnToPath(returnTo, returnToFallback));
   }, [returnTo, returnToFallback, router]);
 
   return (
