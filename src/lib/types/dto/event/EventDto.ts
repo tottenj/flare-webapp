@@ -1,5 +1,5 @@
 import type { EventDto } from '@/lib/schemas/event/eventDtoSchema';
-import { Prisma } from '../../../../prisma/generated/client';
+import { Prisma } from '../../../../../prisma/generated/client';
 
 export type EventRow = Prisma.FlareEventGetPayload<{
   include: typeof eventRowInclude;

@@ -5,6 +5,7 @@ import {
   GetUserContextSchema,
 } from '@/lib/schemas/userContext/GetUserContextSchema';
 import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
+import { AuthenticatedUser } from '@/lib/types/AuthenticatedUser';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 
@@ -24,7 +25,7 @@ export class UserContextService {
     const user = await userDal.findContextByFirebaseUid(authUser.uid);
     if (!user) return null;
 
-    const isOrg = !!user.organizationProfile;
+    const isOrg = user.role === 'ORG';
     const isOrgVerified = user.organizationProfile?.status === 'VERIFIED';
     const isAdmin = user.role === 'ADMIN';
 
@@ -79,6 +80,20 @@ export class UserContextService {
     const ctx = await this.requireOrg();
     if (!ctx.flags.isOrgVerified) redirect('/org/pending');
     return ctx;
+  }
+
+  static async requireAdmin(): Promise<GetUserContext> {
+    const ctx = await this.requireUser();
+    if (!ctx.flags.isAdmin) redirect('/');
+    return ctx;
+  }
+
+
+  static getUserActor(ctx: GetUserContext): AuthenticatedUser{
+    return {
+      userId: ctx.user.id,
+      firebaseUid: ctx.user.firebaseUid,
+    };
   }
 
   static getOrgActor(ctx: OrgUserContext): AuthenticatedOrganization {

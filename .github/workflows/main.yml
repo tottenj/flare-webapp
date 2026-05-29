@@ -130,8 +130,14 @@ jobs:
       - name: Start Postgres
         run: |
           docker compose -f compose.test.yaml up -d
-          until docker exec $(docker ps -qf "name=flare-test") pg_isready -U test; do sleep 2; done
 
+          echo "Waiting for Postgres container to become healthy..."
+          until [ "$(docker inspect -f '{{.State.Health.Status}}' flare-test)" = "healthy" ]; do
+            sleep 2
+          done
+
+          echo "Postgres is healthy"
+          
       - run: npx prisma migrate deploy && npm run seed:test
       - run: npx jest --selectProjects integration
 

@@ -13,10 +13,10 @@
  * 🟢 You can import this file directly.
  */
 
-import * as Prisma from './internal/prismaNamespaceBrowser.js'
+import * as Prisma from './internal/prismaNamespaceBrowser'
 export { Prisma }
-export * as $Enums from '#prisma/generated/enums'
-export * from "#prisma/generated/enums";
+export * as $Enums from './enums'
+export * from './enums';
 /**
  * Model User
  * 
