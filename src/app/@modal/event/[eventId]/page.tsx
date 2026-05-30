@@ -35,7 +35,7 @@ export default async function Page({
         <Suspense
           fallback={<EventCardSkeleton/>}
         >
-          <EventCardContainer eventId={eventId} actor={actor} />
+          <EventCardContainer eventId={eventId} actor={actor} viewerUserId={ctx?.user.id} />
         </Suspense>
       </ModalRouter>
     </>

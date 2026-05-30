@@ -11,6 +11,7 @@ export default function mapEventPreviewFormToEventCardViewModel(
   const startLabels = formatDateTime(event.startDateTime);
   const endLabels = event.endDateTime ? formatDateTime(event.endDateTime) : undefined;
   return {
+    id: 'preview-event',
     title: event.eventName,
     organizerName: orgName ?? 'Your Organization',
     imageUrl: imgUrl ?? null,
@@ -30,5 +31,7 @@ export default function mapEventPreviewFormToEventCardViewModel(
     ageRestrictionLabel: formatAgeRange(event.ageRestriction),
 
     description: event.eventDescription,
+    canSave: false,
+    isSaved: false,
   };
 }

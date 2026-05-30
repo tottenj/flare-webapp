@@ -145,6 +145,23 @@ export class EventDal {
       });
     }
   }
+
+  async isSavedByUser(eventId: string, userId: string, tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    const saved = await client.savedEvent.findUnique({
+      where: {
+        userId_eventId: {
+          userId,
+          eventId,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return Boolean(saved);
+  }
 }
 
 export const eventDal = new EventDal();

@@ -7,7 +7,11 @@ import { EventDateTimeLabels, formatDateTime } from '@/lib/utils/ui/formatDateTi
 import formatEventPrice from '@/lib/utils/ui/formatEventPrice/formatEventPrice';
 
 export default async function mapEventDtoToEventCardViewModel(
-  event: EventDto
+  event: EventDto,
+  viewer?: {
+    userId?: string;
+    orgId?: string;
+  }
 ): Promise<EventCardViewModel> {
   let imgUrl: string | null = null;
   if (event.imagePath) {
@@ -49,5 +53,7 @@ export default async function mapEventDtoToEventCardViewModel(
     }),
     ageRestrictionLabel: formatAgeRange(event.ageRestriction),
     description: event.description,
+    canSave: Boolean(viewer?.userId) && viewer?.orgId !== event.organization.id,
+    isSaved: event.viewer?.isSaved ?? false,
   };
 }

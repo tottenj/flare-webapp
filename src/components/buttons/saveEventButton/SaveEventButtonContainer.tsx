@@ -44,5 +44,7 @@ export default function SaveEventButtonContainer({
     await action({ eventId, save: nextFilled });
   };
 
-  return <SaveEventButtonPresentational disabled={pending} filled={filled} onClick={onClick} />;
+  return (
+    <SaveEventButtonPresentational disabled={pending} filled={filled} onClickAction={onClick} />
+  );
 }

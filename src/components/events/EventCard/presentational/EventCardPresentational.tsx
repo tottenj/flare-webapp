@@ -33,6 +33,9 @@ export type EventCardViewModel = {
 
   description: string;
   ticketLink?: string;
+
+  canSave: boolean;
+  isSaved: boolean;
 };
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -50,6 +53,8 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
     ageRestrictionLabel,
     description,
     ticketLink,
+    canSave,
+    isSaved,
   } = event;
 
   type MetadataItem = {
@@ -66,9 +71,11 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
   return (
     <div data-cy={`${title}-event-modal`} className="@container relative">
       <div className="grid gap-6 rounded-2xl p-4 pt-2 pb-2 @md:grid-cols-[2.5fr_3fr] @lg:grid-rows-[auto_auto]">
-        <div className="absolute right-4">
-          <SaveEventButtonContainer eventId={event.id} />
-        </div>
+        {canSave && (
+          <div className="absolute right-4">
+            <SaveEventButtonContainer eventId={event.id} initialSaved={isSaved} />
+          </div>
+        )}
         <div className="group relative mx-auto aspect-[2/3] w-full max-w-[70cqw] overflow-hidden rounded-md shadow-md @md:max-w-[100cqw]">
           {imageUrl && (
             <>

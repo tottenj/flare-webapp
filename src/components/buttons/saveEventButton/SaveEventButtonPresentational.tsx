@@ -6,19 +6,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export default function SaveEventButtonPresentational({
   filled,
   disabled,
-  onClick,
+  onClickAction,
 }: {
   filled: boolean;
   disabled?: boolean;
-  onClick?: () => void;
+  onClickAction?: () => void;
 }) {
   return (
     <button
+      data-cy="save-event-button"
       aria-label={filled ? 'Remove from saved events' : 'Save event'}
       aria-pressed={filled}
       className="w-fit bg-transparent"
       disabled={disabled}
-      onClick={onClick}
+      onClick={onClickAction}
       type="button"
     >
       <FontAwesomeIcon

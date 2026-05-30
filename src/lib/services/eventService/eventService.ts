@@ -34,6 +34,15 @@ export class EventService {
       throw AuthErrors.Unauthorized();
   }
 
+  private static async attatchSavedStatus(dto: EventDto, viewerUserId?: string): Promise<EventDto> {
+    if (viewerUserId) {
+      dto.viewer = {
+        isSaved: await eventDal.isSavedByUser(dto.id, viewerUserId),
+      };
+    }
+    return dto;
+  }
+
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
     if (!EventPermission.canCreate(authenticatedUser)) throw AuthErrors.Unauthorized();
     ensure(
@@ -84,22 +93,32 @@ export class EventService {
 
   static async getEventById(
     eventId: string,
-    actor?: AuthenticatedOrganization
+    actor?: AuthenticatedOrganization,
+    viewerUserId?: string
   ): Promise<EventDto | null> {
     const event = await eventDal.getEvent(eventId);
     if (!event) return null;
     if (!EventPermission.canView(event, actor)) return null;
-    return mapEventRowToDto(event);
+    const dto = mapEventRowToDto(event);
+    if (viewerUserId) {
+      await this.attatchSavedStatus(dto, viewerUserId);
+    }
+    return dto;
   }
 
   static async getOrgUpcomingEvent(
     orgId: string,
-    actor?: AuthenticatedOrganization
+    actor?: AuthenticatedOrganization,
+    viewerUserId?: string
   ): Promise<EventDto | null> {
     const event = await eventDal.getUpcomingOrgEvent(orgId);
     if (!event) return null;
     if (!EventPermission.canView(event, actor)) return null;
-    return mapEventRowToDto(event);
+    const dto = mapEventRowToDto(event);
+    if (viewerUserId) {
+      await this.attatchSavedStatus(dto, viewerUserId);
+    }
+    return dto;
   }
 
   static async getEditData(eventId: string, actor: AuthenticatedOrganization) {
