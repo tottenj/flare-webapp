@@ -7,6 +7,7 @@ import firebaseConfig from '../../../../../firebaseconfig'; // Assuming this con
 
 export const fireBaseApp = initializeApp(firebaseConfig);
 
+
 // Get service instances BEFORE attempting to connect emulators
 export const auth = getAuth(fireBaseApp);
 export const db = initializeFirestore(fireBaseApp, { ignoreUndefinedProperties: true });
