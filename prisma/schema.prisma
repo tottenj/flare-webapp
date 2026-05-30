@@ -19,6 +19,7 @@ model User {
   updatedAt     DateTime @updatedAt
   organizationProfile OrganizationProfile?
   profilePic    ProfilePic?
+  savedEvents   SavedEvent[]
   
 
   @@index([role])
@@ -107,6 +108,8 @@ model FlareEvent{
 
   tags EventTag[]
 
+  savedByUsers SavedEvent[]
+
   @@index([startsAtUTC])
   @@index([organizationId])
 }
@@ -119,6 +122,20 @@ model Tag{
   createdAt   DateTime @default(now())
   events EventTag[]
 
+}
+
+
+model SavedEvent {
+  id        String @id @default(cuid())
+  userId    String
+  eventId   String
+  createdAt DateTime @default(now())
+
+  user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     FlareEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@index([eventId])
 }
 
 model EventTag {

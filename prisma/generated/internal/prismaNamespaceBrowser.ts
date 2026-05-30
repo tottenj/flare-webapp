@@ -58,6 +58,7 @@ export const ModelName = {
   ProfilePic: 'ProfilePic',
   FlareEvent: 'FlareEvent',
   Tag: 'Tag',
+  SavedEvent: 'SavedEvent',
   EventTag: 'EventTag',
   ImageAsset: 'ImageAsset',
   Location: 'Location',
@@ -171,6 +172,16 @@ export const TagScalarFieldEnum = {
 } as const
 
 export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
+
+
+export const SavedEventScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  eventId: 'eventId',
+  createdAt: 'createdAt'
+} as const
+
+export type SavedEventScalarFieldEnum = (typeof SavedEventScalarFieldEnum)[keyof typeof SavedEventScalarFieldEnum]
 
 
 export const EventTagScalarFieldEnum = {

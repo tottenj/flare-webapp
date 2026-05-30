@@ -24,6 +24,7 @@ import { EventErrors } from '@/lib/errors/eventErrors/EventErrors';
 import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
 import { EditEventInput } from '@/lib/schemas/event/editEventInputSchema';
 import { logger } from '@/lib/logger';
+import { AuthenticatedUser } from '@/lib/types/AuthenticatedUser';
 
 export class EventService {
   private static async assertCanEdit(eventId: string, actor: AuthenticatedOrganization) {
@@ -233,5 +234,20 @@ export class EventService {
         });
       });
     }
+  }
+
+  static async saveEvent(
+    eventId: string,
+    actor: AuthenticatedOrganization | AuthenticatedUser,
+    save: boolean
+  ) {
+    const event = await eventDal.getEvent(eventId);
+    if (!event) throw EventErrors.EventNotFound();
+
+    if ('orgId' in actor && event.organizationId === actor.orgId) {
+      throw EventErrors.CannotSaveOwnEvent();
+    }
+
+    await eventDal.saveEvent(eventId, actor.userId, save);
   }
 }

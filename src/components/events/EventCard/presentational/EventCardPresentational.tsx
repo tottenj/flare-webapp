@@ -1,4 +1,5 @@
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
+import SaveEventButtonContainer from '@/components/buttons/saveEventButton/SaveEventButtonContainer';
 import IconText from '@/components/misc/iconText/IconText';
 import MainModal from '@/components/modals/MainModal/MainModal';
 import TagChip from '@/components/ui/TagChip/TagChip';
@@ -13,7 +14,7 @@ import {
 import Image from 'next/image';
 
 export type EventCardViewModel = {
-  id?: string;
+  id: string;
   title: string;
   organizerName: string;
   imageUrl?: string | null;
@@ -63,14 +64,15 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
     { text: priceLabel, icon: faDollarSign },
   ];
   return (
-    <div data-cy={`${title}-event-modal`} className="@container">
+    <div data-cy={`${title}-event-modal`} className="@container relative">
       <div className="grid gap-6 rounded-2xl p-4 pt-2 pb-2 @md:grid-cols-[2.5fr_3fr] @lg:grid-rows-[auto_auto]">
+        <div className="absolute right-4">
+          <SaveEventButtonContainer eventId={event.id} />
+        </div>
         <div className="group relative mx-auto aspect-[2/3] w-full max-w-[70cqw] overflow-hidden rounded-md shadow-md @md:max-w-[100cqw]">
           {imageUrl && (
             <>
-              <MainModal
-                modalProps={{ size: '3xl', backdrop: 'blur' }}
-              >
+              <MainModal modalProps={{ size: '3xl', backdrop: 'blur' }}>
                 <MainModal.Trigger>
                   <div className="relative block h-full w-full">
                     <Image
@@ -82,7 +84,6 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
                       sizes="100cqw"
                     />
                   </div>
-                  
                 </MainModal.Trigger>
                 <div className="relative aspect-[2/3] w-full">
                   <Image

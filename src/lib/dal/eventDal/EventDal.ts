@@ -119,6 +119,32 @@ export class EventDal {
       },
     });
   }
+
+  async saveEvent(eventId: string, userId: string, save: boolean, tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    if (save) {
+      await client.savedEvent.upsert({
+        where: {
+          userId_eventId: {
+            userId,
+            eventId,
+          },
+        },
+        update: {},
+        create: {
+          eventId,
+          userId,
+        },
+      });
+    } else {
+      await client.savedEvent.deleteMany({
+        where: {
+          eventId,
+          userId,
+        },
+      });
+    }
+  }
 }
 
 export const eventDal = new EventDal();

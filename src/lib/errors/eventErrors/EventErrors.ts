@@ -45,6 +45,13 @@ export const EventErrors = {
     new AppError({
       code: 'EVENT_NOT_FOUND',
       clientMessage: 'Unable to find event with that id',
-      status: 500,
+      status: 404,
+    }),
+
+  CannotSaveOwnEvent: () =>
+    new AppError({
+      code: 'CANNOT_SAVE_OWN_EVENT',
+      clientMessage: 'You cannot save your own event',
+      status: 400,
     }),
 };
