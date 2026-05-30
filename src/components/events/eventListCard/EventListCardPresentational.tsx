@@ -10,7 +10,7 @@ interface eventListCardPresentationalProps {
   eventId: string;
   title: string;
   category: EventCategory;
-  description: string;
+  description?: string;
   ageRestriction: AgeRangeValue;
   startDate: string;
 
@@ -60,7 +60,7 @@ export default function EventListCardPresentational({
         <div className="flex w-full justify-between">
           <div className="flex flex-col">
             <h3 className="font-nunito font-bold capitalize">{title}</h3>
-            <p className="line-clamp-2">{description}</p>
+            {description && <p className="line-clamp-2">{description}</p>}
           </div>
           <div className="flex flex-col justify-end text-right">
             <p>{ageRestrictionLabel}</p>

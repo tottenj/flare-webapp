@@ -10,7 +10,7 @@ export default async function EventListContainerEvents() {
   try {
     events = await EventService.listEventsUser();
   } catch (error) {
-    logger.error('Error fetching event page evetns', error);
+    logger.error('Error fetching event page events', error);
   }
-  return <EventList events={events} />;
+  return <EventList events={events} withDescription={false} />;
 }
