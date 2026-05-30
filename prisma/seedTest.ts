@@ -335,13 +335,16 @@ export async function seedTest(prisma: PrismaClient) {
   // Verified org events
   await prisma.flareEvent.upsert({
     where: { id: SEEDED_TEST_EVENTS.verifiedUpcoming.id },
-    update: {},
+    update: {
+      category: 'NIGHTLIFE',
+    },
     create: {
       id: SEEDED_TEST_EVENTS.verifiedUpcoming.id,
       organizationId: verifiedOrgProfileId!.id,
       status: SEEDED_TEST_EVENTS.verifiedUpcoming.status,
       title: SEEDED_TEST_EVENTS.verifiedUpcoming.title,
       description: SEEDED_TEST_EVENTS.verifiedUpcoming.description,
+      category: 'NIGHTLIFE',
       imageId: stockEvent.id,
       startsAtUTC: futureDate(7),
       timezone: SEEDED_TEST_EVENTS.verifiedUpcoming.timezone,
