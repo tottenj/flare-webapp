@@ -9,9 +9,9 @@ describe('Save Event', () => {
 
   it('lets a non-owner user save and unsave a published event', () => {
     cy.loginTestUser();
-    cy.visit(`/event/${seededEvents.published.id}?returnTo=/events`);
+    cy.visit(`/event/${seededEvents.verifiedPublished.id}?returnTo=/events`);
 
-    cy.get(`[data-cy="${seededEvents.published.title}-event-modal"]`).should('be.visible');
+    cy.get(`[data-cy="${seededEvents.verifiedPublished.title}-event-modal"]`).should('be.visible');
     cy.get('[data-cy="save-event-button"]')
       .should('be.visible')
       .and('have.attr', 'aria-label', 'Save event')
@@ -52,9 +52,9 @@ describe('Save Event', () => {
   });
 
   it('hides the save button for logged out users', () => {
-    cy.visit(`/event/${seededEvents.published.id}?returnTo=/events`);
+    cy.visit(`/event/${seededEvents.verifiedPublished.id}?returnTo=/events`);
 
-    cy.get(`[data-cy="${seededEvents.published.title}-event-modal"]`).should('be.visible');
+    cy.get(`[data-cy="${seededEvents.verifiedPublished.title}-event-modal"]`).should('be.visible');
     cy.get('[data-cy="save-event-button"]').should('not.exist');
   });
 });
