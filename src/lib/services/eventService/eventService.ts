@@ -24,6 +24,7 @@ import { EventErrors } from '@/lib/errors/eventErrors/EventErrors';
 import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
 import { EditEventInput } from '@/lib/schemas/event/editEventInputSchema';
 import { logger } from '@/lib/logger';
+import { AuthenticatedUser } from '@/lib/types/AuthenticatedUser';
 
 export class EventService {
   private static async assertCanEdit(eventId: string, actor: AuthenticatedOrganization) {
@@ -31,6 +32,15 @@ export class EventService {
     if (!event) throw EventErrors.EventNotFound();
     if (!EventPermission.canEdit({ organizationId: event.organizationId }, actor))
       throw AuthErrors.Unauthorized();
+  }
+
+  private static async attatchSavedStatus(dto: EventDto, viewerUserId?: string): Promise<EventDto> {
+    if (viewerUserId) {
+      dto.viewer = {
+        isSaved: await eventDal.isSavedByUser(dto.id, viewerUserId),
+      };
+    }
+    return dto;
   }
 
   static async createEvent(authenticatedUser: AuthenticatedOrganization, eventData: CreateEvent) {
@@ -83,22 +93,32 @@ export class EventService {
 
   static async getEventById(
     eventId: string,
-    actor?: AuthenticatedOrganization
+    actor?: AuthenticatedOrganization,
+    viewerUserId?: string
   ): Promise<EventDto | null> {
     const event = await eventDal.getEvent(eventId);
     if (!event) return null;
     if (!EventPermission.canView(event, actor)) return null;
-    return mapEventRowToDto(event);
+    const dto = mapEventRowToDto(event);
+    if (viewerUserId) {
+      await this.attatchSavedStatus(dto, viewerUserId);
+    }
+    return dto;
   }
 
   static async getOrgUpcomingEvent(
     orgId: string,
-    actor?: AuthenticatedOrganization
+    actor?: AuthenticatedOrganization,
+    viewerUserId?: string
   ): Promise<EventDto | null> {
     const event = await eventDal.getUpcomingOrgEvent(orgId);
     if (!event) return null;
     if (!EventPermission.canView(event, actor)) return null;
-    return mapEventRowToDto(event);
+    const dto = mapEventRowToDto(event);
+    if (viewerUserId) {
+      await this.attatchSavedStatus(dto, viewerUserId);
+    }
+    return dto;
   }
 
   static async getEditData(eventId: string, actor: AuthenticatedOrganization) {
@@ -233,5 +253,20 @@ export class EventService {
         });
       });
     }
+  }
+
+  static async saveEvent(
+    eventId: string,
+    actor: AuthenticatedOrganization | AuthenticatedUser,
+    save: boolean
+  ) {
+    const event = await eventDal.getEvent(eventId);
+    if (!event) throw EventErrors.EventNotFound();
+
+    if ('orgId' in actor && event.organizationId === actor.orgId) {
+      throw EventErrors.CannotSaveOwnEvent();
+    }
+
+    await eventDal.saveEvent(eventId, actor.userId, save);
   }
 }

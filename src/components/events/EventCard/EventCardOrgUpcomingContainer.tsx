@@ -10,9 +10,12 @@ export default async function EventCardOrgRecentContainer({
   orgId: string;
   actor?: AuthenticatedOrganization;
 }) {
-  const eventDto = await EventService.getOrgUpcomingEvent(orgId, actor);
+  const eventDto = await EventService.getOrgUpcomingEvent(orgId, actor, actor?.userId);
   if (!eventDto) return null;
-  const event = await mapEventDtoToEventCardViewModel(eventDto);
+  const event = await mapEventDtoToEventCardViewModel(eventDto, {
+    userId: actor?.userId,
+    orgId: actor?.orgId,
+  });
   if (!event) return null;
   return <EventCardPresentational event={event} />;
 }

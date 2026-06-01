@@ -29,11 +29,13 @@ const sampleEvent: EventCardViewModel = {
 
   description:
     "Join us for a fabulous drag night with performances, dancing, and community celebration. Don't miss the fiercest queens and the hottest beats in town!",
+  canSave: true,
+  isSaved: false,
 };
 
 export const Default: Story = {
   decorators: [
-    (Story:Story, context:any) => (
+    (Story: Story, context: any) => (
       <div className="max-w-5xl">{context.args.loading ? <EventCardSkeleton /> : <Story />}</div>
     ),
   ],
@@ -45,7 +47,7 @@ export const Default: Story = {
 
 export const Loading: Story = {
   render: () => <EventCardSkeleton />,
-}
+};
 
 export const RealFlyer: Story = {
   decorators: [
@@ -75,6 +77,8 @@ export const RealFlyer: Story = {
         'Welcome to the funnest Drag Night possible! Drag Bingo ft. TroyBoy Entertainment — prizes, laughs, and community vibes while raising money for Minto Pride!',
 
       ticketLink: 'https://example.com/tickets',
+      canSave: true,
+      isSaved: false,
     },
   },
 };

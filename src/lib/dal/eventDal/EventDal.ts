@@ -119,6 +119,49 @@ export class EventDal {
       },
     });
   }
+
+  async saveEvent(eventId: string, userId: string, save: boolean, tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    if (save) {
+      await client.savedEvent.upsert({
+        where: {
+          userId_eventId: {
+            userId,
+            eventId,
+          },
+        },
+        update: {},
+        create: {
+          eventId,
+          userId,
+        },
+      });
+    } else {
+      await client.savedEvent.deleteMany({
+        where: {
+          eventId,
+          userId,
+        },
+      });
+    }
+  }
+
+  async isSavedByUser(eventId: string, userId: string, tx?: Prisma.TransactionClient) {
+    const client = tx ?? prisma;
+    const saved = await client.savedEvent.findUnique({
+      where: {
+        userId_eventId: {
+          userId,
+          eventId,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    return Boolean(saved);
+  }
 }
 
 export const eventDal = new EventDal();

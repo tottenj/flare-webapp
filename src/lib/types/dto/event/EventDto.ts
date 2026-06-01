@@ -48,6 +48,7 @@ export function mapEventRowToDto(row: EventRow): EventDto {
     ageRestriction: row.ageRestriction,
     imagePath: row.image?.storagePath ?? null,
     organization: {
+      id: row.organizationId,
       name: row.organization.orgName,
     },
     location: {
@@ -59,6 +60,7 @@ export function mapEventRowToDto(row: EventRow): EventDto {
       minCents: row.minPriceCents ?? null,
       maxCents: row.maxPriceCents ?? null,
     },
+    viewer: undefined,
     tags: row.tags.map((eventTag) => ({ id: eventTag.tag.id, label: eventTag.tag.label })),
   };
 }

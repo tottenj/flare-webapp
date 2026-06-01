@@ -19,6 +19,7 @@ export function eventDtoFactory(overrides: Partial<EventDto> = {}): EventDto {
     timezone: 'America/Toronto',
 
     organization: {
+      id: 'org-1',
       name: 'Test Org',
     },
 

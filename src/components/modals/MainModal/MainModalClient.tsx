@@ -213,7 +213,7 @@ export default function MainModalClient({
   return (
     <>
       {boundTrigger && (
-        <span className="inline-flex">
+        <span className="inline-flex w-full h-full">
           {boundTrigger}
         </span>
       )}
