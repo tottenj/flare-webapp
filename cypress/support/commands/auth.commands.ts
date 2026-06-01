@@ -51,17 +51,15 @@ function assertVerifyEmailOobSent(
           (c) => c.requestType === 'VERIFY_EMAIL' && c.email?.toLowerCase() === normalizedEmail
         );
 
-        if (code) {
-          return;
-        }
-
-        if (remaining <= 0) {
+        if (code || remaining <= 0) {
           expect(code, `Expected VERIFY_EMAIL OOB code to be sent for ${normalizedEmail}`).to.exist;
           return;
         }
 
-        return cy.wait(waitMs).then(() => poll(remaining - 1));
-      });
+        cy.wait(waitMs, { log: false });
+        return poll(remaining - 1);
+      })
+      .then(() => undefined) as unknown as Cypress.Chainable<void>;
   };
 
   return poll(retries);
@@ -78,7 +76,7 @@ function applyOobCode(oobCode: string) {
 }
 
 Cypress.Commands.add('recivedOobCode', (email: string) => {
-  assertVerifyEmailOobSent(email);
+  return assertVerifyEmailOobSent(email);
 });
 
 Cypress.Commands.add(
