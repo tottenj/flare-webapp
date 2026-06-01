@@ -29,6 +29,8 @@ const config: StorybookConfig = {
           '@/components/profiles/profilePicture/__mocks__/ProfilePictureContainer.tsx',
         '@/components/buttons/verifyOrgButton/VerifyOrgButton':
           '@/components/buttons/verifyOrgButton/__mocks__/VerifyOrgButton.tsx',
+        '@/components/buttons/saveEventButton/SaveEventButtonContainer':
+          '@/components/buttons/saveEventButton/__mocks__/SaveEventButtonContainer.tsx',
       };
     }
     return config;

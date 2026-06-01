@@ -190,13 +190,6 @@ describe('Settings Modal', () => {
 
 describe('Delete Account Flow - Isolated', () => {
   beforeEach(() => {
-    cy.loginTestOrg();
-    cy.reload();
-    cy.visit('/dashboard');
-    cy.loginTestOrgClient();
-  });
-
-  after(() => {
     cy.clearAllEmulators();
     cy.resetAndSeed();
     cy.seedAuthEmulator();
@@ -204,6 +197,11 @@ describe('Delete Account Flow - Isolated', () => {
     cy.then(() => {
       Cypress.session.clearAllSavedSessions();
     });
+
+    cy.loginTestOrg();
+    cy.reload();
+    cy.visit('/dashboard');
+    cy.loginTestOrgClient();
   });
 
   it('Dismisses delete account form when cancel is clicked', () => {

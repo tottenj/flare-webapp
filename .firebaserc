@@ -1,10 +1,14 @@
 {
   "projects": {
-    "default": "flare-7091a"
+    "default": "flare-7091a",
+    "beta": "flare-beta-6dc7e"
   },
   "targets": {},
   "etags": {
     "flare-7091a": {
+      "extensionInstances": {}
+    },
+    "flare-beta-6dc7e": {
       "extensionInstances": {}
     }
   }

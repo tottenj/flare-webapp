@@ -15,8 +15,14 @@ export const eventDtoSchema = z.object({
   endsAt: z.string().nullable(),
   timezone: z.string(),
   organization: z.object({
+    id: z.string(),
     name: z.string(),
   }),
+  viewer: z
+    .object({
+      isSaved: z.boolean(),
+    })
+    .optional(),
   location: z.object({
     address: z.string().nullable(),
     placeId: z.string().nullable(),

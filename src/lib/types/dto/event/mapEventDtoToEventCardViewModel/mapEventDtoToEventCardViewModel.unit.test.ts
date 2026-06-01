@@ -67,6 +67,8 @@ describe('mapEventDtoToEventCardViewModel', () => {
       priceLabel: 'eventPrice',
       ageRestrictionLabel: 'ageRangeLabel',
       description: 'Test Description',
+      canSave: false,
+      isSaved: false,
     });
   });
 
@@ -77,5 +79,41 @@ describe('mapEventDtoToEventCardViewModel', () => {
     });
     const res = await mapEventDtoToEventCardViewModel(input);
     expect(res.imageUrl).toBeNull();
+  });
+
+  it('allows saving for authenticated non-owner viewers and maps saved state', async () => {
+    const input = eventDtoFactory({
+      organization: {
+        id: 'owner-org',
+        name: 'Owner Org',
+      },
+      viewer: {
+        isSaved: true,
+      },
+    });
+
+    const res = await mapEventDtoToEventCardViewModel(input, {
+      userId: 'user-1',
+      orgId: 'different-org',
+    });
+
+    expect(res.canSave).toBe(true);
+    expect(res.isSaved).toBe(true);
+  });
+
+  it('disables saving for owner organizations', async () => {
+    const input = eventDtoFactory({
+      organization: {
+        id: 'owner-org',
+        name: 'Owner Org',
+      },
+    });
+
+    const res = await mapEventDtoToEventCardViewModel(input, {
+      userId: 'user-1',
+      orgId: 'owner-org',
+    });
+
+    expect(res.canSave).toBe(false);
   });
 });

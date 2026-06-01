@@ -200,6 +200,7 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   organizationProfile?: Prisma.XOR<Prisma.OrganizationProfileNullableScalarRelationFilter, Prisma.OrganizationProfileWhereInput> | null
   profilePic?: Prisma.XOR<Prisma.ProfilePicNullableScalarRelationFilter, Prisma.ProfilePicWhereInput> | null
+  savedEvents?: Prisma.SavedEventListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -212,6 +213,7 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   organizationProfile?: Prisma.OrganizationProfileOrderByWithRelationInput
   profilePic?: Prisma.ProfilePicOrderByWithRelationInput
+  savedEvents?: Prisma.SavedEventOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -227,6 +229,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   organizationProfile?: Prisma.XOR<Prisma.OrganizationProfileNullableScalarRelationFilter, Prisma.OrganizationProfileWhereInput> | null
   profilePic?: Prisma.XOR<Prisma.ProfilePicNullableScalarRelationFilter, Prisma.ProfilePicWhereInput> | null
+  savedEvents?: Prisma.SavedEventListRelationFilter
 }, "id" | "firebaseUid" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -265,6 +268,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   organizationProfile?: Prisma.OrganizationProfileCreateNestedOneWithoutUserInput
   profilePic?: Prisma.ProfilePicCreateNestedOneWithoutUserInput
+  savedEvents?: Prisma.SavedEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -277,6 +281,7 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   organizationProfile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutUserInput
   profilePic?: Prisma.ProfilePicUncheckedCreateNestedOneWithoutUserInput
+  savedEvents?: Prisma.SavedEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -289,6 +294,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizationProfile?: Prisma.OrganizationProfileUpdateOneWithoutUserNestedInput
   profilePic?: Prisma.ProfilePicUpdateOneWithoutUserNestedInput
+  savedEvents?: Prisma.SavedEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -301,6 +307,7 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizationProfile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutUserNestedInput
   profilePic?: Prisma.ProfilePicUncheckedUpdateOneWithoutUserNestedInput
+  savedEvents?: Prisma.SavedEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -412,6 +419,20 @@ export type UserUpdateOneRequiredWithoutProfilePicNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProfilePicInput, Prisma.UserUpdateWithoutProfilePicInput>, Prisma.UserUncheckedUpdateWithoutProfilePicInput>
 }
 
+export type UserCreateNestedOneWithoutSavedEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedEventsInput, Prisma.UserUncheckedCreateWithoutSavedEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSavedEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedEventsInput, Prisma.UserUncheckedCreateWithoutSavedEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedEventsInput
+  upsert?: Prisma.UserUpsertWithoutSavedEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSavedEventsInput, Prisma.UserUpdateWithoutSavedEventsInput>, Prisma.UserUncheckedUpdateWithoutSavedEventsInput>
+}
+
 export type UserCreateWithoutOrganizationProfileInput = {
   id?: string
   firebaseUid: string
@@ -421,6 +442,7 @@ export type UserCreateWithoutOrganizationProfileInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePic?: Prisma.ProfilePicCreateNestedOneWithoutUserInput
+  savedEvents?: Prisma.SavedEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrganizationProfileInput = {
@@ -432,6 +454,7 @@ export type UserUncheckedCreateWithoutOrganizationProfileInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePic?: Prisma.ProfilePicUncheckedCreateNestedOneWithoutUserInput
+  savedEvents?: Prisma.SavedEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrganizationProfileInput = {
@@ -459,6 +482,7 @@ export type UserUpdateWithoutOrganizationProfileInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePic?: Prisma.ProfilePicUpdateOneWithoutUserNestedInput
+  savedEvents?: Prisma.SavedEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrganizationProfileInput = {
@@ -470,6 +494,7 @@ export type UserUncheckedUpdateWithoutOrganizationProfileInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePic?: Prisma.ProfilePicUncheckedUpdateOneWithoutUserNestedInput
+  savedEvents?: Prisma.SavedEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProfilePicInput = {
@@ -481,6 +506,7 @@ export type UserCreateWithoutProfilePicInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organizationProfile?: Prisma.OrganizationProfileCreateNestedOneWithoutUserInput
+  savedEvents?: Prisma.SavedEventCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProfilePicInput = {
@@ -492,6 +518,7 @@ export type UserUncheckedCreateWithoutProfilePicInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organizationProfile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutUserInput
+  savedEvents?: Prisma.SavedEventUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProfilePicInput = {
@@ -519,6 +546,7 @@ export type UserUpdateWithoutProfilePicInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizationProfile?: Prisma.OrganizationProfileUpdateOneWithoutUserNestedInput
+  savedEvents?: Prisma.SavedEventUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProfilePicInput = {
@@ -530,8 +558,102 @@ export type UserUncheckedUpdateWithoutProfilePicInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizationProfile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutUserNestedInput
+  savedEvents?: Prisma.SavedEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
+export type UserCreateWithoutSavedEventsInput = {
+  id?: string
+  firebaseUid: string
+  email: string
+  status?: $Enums.UserStatus
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organizationProfile?: Prisma.OrganizationProfileCreateNestedOneWithoutUserInput
+  profilePic?: Prisma.ProfilePicCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSavedEventsInput = {
+  id?: string
+  firebaseUid: string
+  email: string
+  status?: $Enums.UserStatus
+  role?: $Enums.UserRole
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organizationProfile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutUserInput
+  profilePic?: Prisma.ProfilePicUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSavedEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedEventsInput, Prisma.UserUncheckedCreateWithoutSavedEventsInput>
+}
+
+export type UserUpsertWithoutSavedEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSavedEventsInput, Prisma.UserUncheckedUpdateWithoutSavedEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedEventsInput, Prisma.UserUncheckedCreateWithoutSavedEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSavedEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSavedEventsInput, Prisma.UserUncheckedUpdateWithoutSavedEventsInput>
+}
+
+export type UserUpdateWithoutSavedEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUid?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationProfile?: Prisma.OrganizationProfileUpdateOneWithoutUserNestedInput
+  profilePic?: Prisma.ProfilePicUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSavedEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  firebaseUid?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizationProfile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutUserNestedInput
+  profilePic?: Prisma.ProfilePicUncheckedUpdateOneWithoutUserNestedInput
+}
+
+
+/**
+ * Count Type UserCountOutputType
+ */
+
+export type UserCountOutputType = {
+  savedEvents: number
+}
+
+export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  savedEvents?: boolean | UserCountOutputTypeCountSavedEventsArgs
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserCountOutputType
+   */
+  select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSavedEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedEventWhereInput
+}
 
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -544,6 +666,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   organizationProfile?: boolean | Prisma.User$organizationProfileArgs<ExtArgs>
   profilePic?: boolean | Prisma.User$profilePicArgs<ExtArgs>
+  savedEvents?: boolean | Prisma.User$savedEventsArgs<ExtArgs>
+  _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -580,6 +704,8 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organizationProfile?: boolean | Prisma.User$organizationProfileArgs<ExtArgs>
   profilePic?: boolean | Prisma.User$profilePicArgs<ExtArgs>
+  savedEvents?: boolean | Prisma.User$savedEventsArgs<ExtArgs>
+  _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -589,6 +715,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     organizationProfile: Prisma.$OrganizationProfilePayload<ExtArgs> | null
     profilePic: Prisma.$ProfilePicPayload<ExtArgs> | null
+    savedEvents: Prisma.$SavedEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -994,6 +1121,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organizationProfile<T extends Prisma.User$organizationProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$organizationProfileArgs<ExtArgs>>): Prisma.Prisma__OrganizationProfileClient<runtime.Types.Result.GetResult<Prisma.$OrganizationProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   profilePic<T extends Prisma.User$profilePicArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profilePicArgs<ExtArgs>>): Prisma.Prisma__ProfilePicClient<runtime.Types.Result.GetResult<Prisma.$ProfilePicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  savedEvents<T extends Prisma.User$savedEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1458,6 +1586,30 @@ export type User$profilePicArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   include?: Prisma.ProfilePicInclude<ExtArgs> | null
   where?: Prisma.ProfilePicWhereInput
+}
+
+/**
+ * User.savedEvents
+ */
+export type User$savedEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedEvent
+   */
+  select?: Prisma.SavedEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedEvent
+   */
+  omit?: Prisma.SavedEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedEventInclude<ExtArgs> | null
+  where?: Prisma.SavedEventWhereInput
+  orderBy?: Prisma.SavedEventOrderByWithRelationInput | Prisma.SavedEventOrderByWithRelationInput[]
+  cursor?: Prisma.SavedEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedEventScalarFieldEnum | Prisma.SavedEventScalarFieldEnum[]
 }
 
 /**

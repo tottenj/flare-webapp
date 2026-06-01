@@ -77,6 +77,11 @@ export type FlareEvent = Prisma.FlareEventModel
  */
 export type Tag = Prisma.TagModel
 /**
+ * Model SavedEvent
+ * 
+ */
+export type SavedEvent = Prisma.SavedEventModel
+/**
  * Model EventTag
  * 
  */
