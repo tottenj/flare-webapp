@@ -44,7 +44,7 @@ describe('Save Event', () => {
 
   it('hides the save button for the owner org viewing its own event', () => {
     cy.loginTestOrg();
-    cy.loginTestOrgClient();
+    cy.reload();
     cy.visit(`/event/${seededEvents.upcoming.id}?returnTo=/dashboard`);
 
     cy.get(`[data-cy="${seededEvents.upcoming.title}-event-modal"]`).should('be.visible');
