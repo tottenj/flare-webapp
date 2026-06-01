@@ -336,6 +336,7 @@ export type FlareEventWhereInput = {
   image?: Prisma.XOR<Prisma.ImageAssetNullableScalarRelationFilter, Prisma.ImageAssetWhereInput> | null
   location?: Prisma.XOR<Prisma.LocationNullableScalarRelationFilter, Prisma.LocationWhereInput> | null
   tags?: Prisma.EventTagListRelationFilter
+  savedByUsers?: Prisma.SavedEventListRelationFilter
 }
 
 export type FlareEventOrderByWithRelationInput = {
@@ -362,6 +363,7 @@ export type FlareEventOrderByWithRelationInput = {
   image?: Prisma.ImageAssetOrderByWithRelationInput
   location?: Prisma.LocationOrderByWithRelationInput
   tags?: Prisma.EventTagOrderByRelationAggregateInput
+  savedByUsers?: Prisma.SavedEventOrderByRelationAggregateInput
 }
 
 export type FlareEventWhereUniqueInput = Prisma.AtLeast<{
@@ -391,6 +393,7 @@ export type FlareEventWhereUniqueInput = Prisma.AtLeast<{
   image?: Prisma.XOR<Prisma.ImageAssetNullableScalarRelationFilter, Prisma.ImageAssetWhereInput> | null
   location?: Prisma.XOR<Prisma.LocationNullableScalarRelationFilter, Prisma.LocationWhereInput> | null
   tags?: Prisma.EventTagListRelationFilter
+  savedByUsers?: Prisma.SavedEventListRelationFilter
 }, "id">
 
 export type FlareEventOrderByWithAggregationInput = {
@@ -466,6 +469,7 @@ export type FlareEventCreateInput = {
   image?: Prisma.ImageAssetCreateNestedOneWithoutEventsInput
   location?: Prisma.LocationCreateNestedOneWithoutEventsInput
   tags?: Prisma.EventTagCreateNestedManyWithoutEventInput
+  savedByUsers?: Prisma.SavedEventCreateNestedManyWithoutEventInput
 }
 
 export type FlareEventUncheckedCreateInput = {
@@ -489,6 +493,7 @@ export type FlareEventUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   tags?: Prisma.EventTagUncheckedCreateNestedManyWithoutEventInput
+  savedByUsers?: Prisma.SavedEventUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type FlareEventUpdateInput = {
@@ -512,6 +517,7 @@ export type FlareEventUpdateInput = {
   image?: Prisma.ImageAssetUpdateOneWithoutEventsNestedInput
   location?: Prisma.LocationUpdateOneWithoutEventsNestedInput
   tags?: Prisma.EventTagUpdateManyWithoutEventNestedInput
+  savedByUsers?: Prisma.SavedEventUpdateManyWithoutEventNestedInput
 }
 
 export type FlareEventUncheckedUpdateInput = {
@@ -535,6 +541,7 @@ export type FlareEventUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.EventTagUncheckedUpdateManyWithoutEventNestedInput
+  savedByUsers?: Prisma.SavedEventUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type FlareEventCreateManyInput = {
@@ -761,6 +768,20 @@ export type NullableIntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type FlareEventCreateNestedOneWithoutSavedByUsersInput = {
+  create?: Prisma.XOR<Prisma.FlareEventCreateWithoutSavedByUsersInput, Prisma.FlareEventUncheckedCreateWithoutSavedByUsersInput>
+  connectOrCreate?: Prisma.FlareEventCreateOrConnectWithoutSavedByUsersInput
+  connect?: Prisma.FlareEventWhereUniqueInput
+}
+
+export type FlareEventUpdateOneRequiredWithoutSavedByUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.FlareEventCreateWithoutSavedByUsersInput, Prisma.FlareEventUncheckedCreateWithoutSavedByUsersInput>
+  connectOrCreate?: Prisma.FlareEventCreateOrConnectWithoutSavedByUsersInput
+  upsert?: Prisma.FlareEventUpsertWithoutSavedByUsersInput
+  connect?: Prisma.FlareEventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FlareEventUpdateToOneWithWhereWithoutSavedByUsersInput, Prisma.FlareEventUpdateWithoutSavedByUsersInput>, Prisma.FlareEventUncheckedUpdateWithoutSavedByUsersInput>
+}
+
 export type FlareEventCreateNestedOneWithoutTagsInput = {
   create?: Prisma.XOR<Prisma.FlareEventCreateWithoutTagsInput, Prisma.FlareEventUncheckedCreateWithoutTagsInput>
   connectOrCreate?: Prisma.FlareEventCreateOrConnectWithoutTagsInput
@@ -865,6 +886,7 @@ export type FlareEventCreateWithoutOrganizationInput = {
   image?: Prisma.ImageAssetCreateNestedOneWithoutEventsInput
   location?: Prisma.LocationCreateNestedOneWithoutEventsInput
   tags?: Prisma.EventTagCreateNestedManyWithoutEventInput
+  savedByUsers?: Prisma.SavedEventCreateNestedManyWithoutEventInput
 }
 
 export type FlareEventUncheckedCreateWithoutOrganizationInput = {
@@ -887,6 +909,7 @@ export type FlareEventUncheckedCreateWithoutOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   tags?: Prisma.EventTagUncheckedCreateNestedManyWithoutEventInput
+  savedByUsers?: Prisma.SavedEventUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type FlareEventCreateOrConnectWithoutOrganizationInput = {
@@ -940,6 +963,114 @@ export type FlareEventScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"FlareEvent"> | Date | string
 }
 
+export type FlareEventCreateWithoutSavedByUsersInput = {
+  id?: string
+  status?: $Enums.EventStatus
+  publishedAt?: Date | string | null
+  title: string
+  description: string
+  ageRestriction?: $Enums.AgeRestriction
+  category?: $Enums.EventCategory
+  startsAtUTC: Date | string
+  endsAtUTC?: Date | string | null
+  timezone: string
+  pricingType: $Enums.EventPricingType
+  minPriceCents?: number | null
+  maxPriceCents?: number | null
+  currency?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationProfileCreateNestedOneWithoutEventsInput
+  image?: Prisma.ImageAssetCreateNestedOneWithoutEventsInput
+  location?: Prisma.LocationCreateNestedOneWithoutEventsInput
+  tags?: Prisma.EventTagCreateNestedManyWithoutEventInput
+}
+
+export type FlareEventUncheckedCreateWithoutSavedByUsersInput = {
+  id?: string
+  organizationId: string
+  status?: $Enums.EventStatus
+  publishedAt?: Date | string | null
+  title: string
+  description: string
+  ageRestriction?: $Enums.AgeRestriction
+  category?: $Enums.EventCategory
+  imageId?: string | null
+  startsAtUTC: Date | string
+  endsAtUTC?: Date | string | null
+  timezone: string
+  locationId?: string | null
+  pricingType: $Enums.EventPricingType
+  minPriceCents?: number | null
+  maxPriceCents?: number | null
+  currency?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tags?: Prisma.EventTagUncheckedCreateNestedManyWithoutEventInput
+}
+
+export type FlareEventCreateOrConnectWithoutSavedByUsersInput = {
+  where: Prisma.FlareEventWhereUniqueInput
+  create: Prisma.XOR<Prisma.FlareEventCreateWithoutSavedByUsersInput, Prisma.FlareEventUncheckedCreateWithoutSavedByUsersInput>
+}
+
+export type FlareEventUpsertWithoutSavedByUsersInput = {
+  update: Prisma.XOR<Prisma.FlareEventUpdateWithoutSavedByUsersInput, Prisma.FlareEventUncheckedUpdateWithoutSavedByUsersInput>
+  create: Prisma.XOR<Prisma.FlareEventCreateWithoutSavedByUsersInput, Prisma.FlareEventUncheckedCreateWithoutSavedByUsersInput>
+  where?: Prisma.FlareEventWhereInput
+}
+
+export type FlareEventUpdateToOneWithWhereWithoutSavedByUsersInput = {
+  where?: Prisma.FlareEventWhereInput
+  data: Prisma.XOR<Prisma.FlareEventUpdateWithoutSavedByUsersInput, Prisma.FlareEventUncheckedUpdateWithoutSavedByUsersInput>
+}
+
+export type FlareEventUpdateWithoutSavedByUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  ageRestriction?: Prisma.EnumAgeRestrictionFieldUpdateOperationsInput | $Enums.AgeRestriction
+  category?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  startsAtUTC?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAtUTC?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
+  minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationProfileUpdateOneRequiredWithoutEventsNestedInput
+  image?: Prisma.ImageAssetUpdateOneWithoutEventsNestedInput
+  location?: Prisma.LocationUpdateOneWithoutEventsNestedInput
+  tags?: Prisma.EventTagUpdateManyWithoutEventNestedInput
+}
+
+export type FlareEventUncheckedUpdateWithoutSavedByUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+  publishedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  ageRestriction?: Prisma.EnumAgeRestrictionFieldUpdateOperationsInput | $Enums.AgeRestriction
+  category?: Prisma.EnumEventCategoryFieldUpdateOperationsInput | $Enums.EventCategory
+  imageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startsAtUTC?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endsAtUTC?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
+  minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tags?: Prisma.EventTagUncheckedUpdateManyWithoutEventNestedInput
+}
+
 export type FlareEventCreateWithoutTagsInput = {
   id?: string
   status?: $Enums.EventStatus
@@ -960,6 +1091,7 @@ export type FlareEventCreateWithoutTagsInput = {
   organization: Prisma.OrganizationProfileCreateNestedOneWithoutEventsInput
   image?: Prisma.ImageAssetCreateNestedOneWithoutEventsInput
   location?: Prisma.LocationCreateNestedOneWithoutEventsInput
+  savedByUsers?: Prisma.SavedEventCreateNestedManyWithoutEventInput
 }
 
 export type FlareEventUncheckedCreateWithoutTagsInput = {
@@ -982,6 +1114,7 @@ export type FlareEventUncheckedCreateWithoutTagsInput = {
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  savedByUsers?: Prisma.SavedEventUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type FlareEventCreateOrConnectWithoutTagsInput = {
@@ -1020,6 +1153,7 @@ export type FlareEventUpdateWithoutTagsInput = {
   organization?: Prisma.OrganizationProfileUpdateOneRequiredWithoutEventsNestedInput
   image?: Prisma.ImageAssetUpdateOneWithoutEventsNestedInput
   location?: Prisma.LocationUpdateOneWithoutEventsNestedInput
+  savedByUsers?: Prisma.SavedEventUpdateManyWithoutEventNestedInput
 }
 
 export type FlareEventUncheckedUpdateWithoutTagsInput = {
@@ -1042,6 +1176,7 @@ export type FlareEventUncheckedUpdateWithoutTagsInput = {
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  savedByUsers?: Prisma.SavedEventUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type FlareEventCreateWithoutImageInput = {
@@ -1064,6 +1199,7 @@ export type FlareEventCreateWithoutImageInput = {
   organization: Prisma.OrganizationProfileCreateNestedOneWithoutEventsInput
   location?: Prisma.LocationCreateNestedOneWithoutEventsInput
   tags?: Prisma.EventTagCreateNestedManyWithoutEventInput
+  savedByUsers?: Prisma.SavedEventCreateNestedManyWithoutEventInput
 }
 
 export type FlareEventUncheckedCreateWithoutImageInput = {
@@ -1086,6 +1222,7 @@ export type FlareEventUncheckedCreateWithoutImageInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   tags?: Prisma.EventTagUncheckedCreateNestedManyWithoutEventInput
+  savedByUsers?: Prisma.SavedEventUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type FlareEventCreateOrConnectWithoutImageInput = {
@@ -1134,6 +1271,7 @@ export type FlareEventCreateWithoutLocationInput = {
   organization: Prisma.OrganizationProfileCreateNestedOneWithoutEventsInput
   image?: Prisma.ImageAssetCreateNestedOneWithoutEventsInput
   tags?: Prisma.EventTagCreateNestedManyWithoutEventInput
+  savedByUsers?: Prisma.SavedEventCreateNestedManyWithoutEventInput
 }
 
 export type FlareEventUncheckedCreateWithoutLocationInput = {
@@ -1156,6 +1294,7 @@ export type FlareEventUncheckedCreateWithoutLocationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   tags?: Prisma.EventTagUncheckedCreateNestedManyWithoutEventInput
+  savedByUsers?: Prisma.SavedEventUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type FlareEventCreateOrConnectWithoutLocationInput = {
@@ -1225,6 +1364,7 @@ export type FlareEventUpdateWithoutOrganizationInput = {
   image?: Prisma.ImageAssetUpdateOneWithoutEventsNestedInput
   location?: Prisma.LocationUpdateOneWithoutEventsNestedInput
   tags?: Prisma.EventTagUpdateManyWithoutEventNestedInput
+  savedByUsers?: Prisma.SavedEventUpdateManyWithoutEventNestedInput
 }
 
 export type FlareEventUncheckedUpdateWithoutOrganizationInput = {
@@ -1247,6 +1387,7 @@ export type FlareEventUncheckedUpdateWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.EventTagUncheckedUpdateManyWithoutEventNestedInput
+  savedByUsers?: Prisma.SavedEventUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type FlareEventUncheckedUpdateManyWithoutOrganizationInput = {
@@ -1311,6 +1452,7 @@ export type FlareEventUpdateWithoutImageInput = {
   organization?: Prisma.OrganizationProfileUpdateOneRequiredWithoutEventsNestedInput
   location?: Prisma.LocationUpdateOneWithoutEventsNestedInput
   tags?: Prisma.EventTagUpdateManyWithoutEventNestedInput
+  savedByUsers?: Prisma.SavedEventUpdateManyWithoutEventNestedInput
 }
 
 export type FlareEventUncheckedUpdateWithoutImageInput = {
@@ -1333,6 +1475,7 @@ export type FlareEventUncheckedUpdateWithoutImageInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.EventTagUncheckedUpdateManyWithoutEventNestedInput
+  savedByUsers?: Prisma.SavedEventUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type FlareEventUncheckedUpdateManyWithoutImageInput = {
@@ -1376,6 +1519,7 @@ export type FlareEventUpdateWithoutLocationInput = {
   organization?: Prisma.OrganizationProfileUpdateOneRequiredWithoutEventsNestedInput
   image?: Prisma.ImageAssetUpdateOneWithoutEventsNestedInput
   tags?: Prisma.EventTagUpdateManyWithoutEventNestedInput
+  savedByUsers?: Prisma.SavedEventUpdateManyWithoutEventNestedInput
 }
 
 export type FlareEventUncheckedUpdateWithoutLocationInput = {
@@ -1398,6 +1542,7 @@ export type FlareEventUncheckedUpdateWithoutLocationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tags?: Prisma.EventTagUncheckedUpdateManyWithoutEventNestedInput
+  savedByUsers?: Prisma.SavedEventUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type FlareEventCreateManyLocationInput = {
@@ -1449,10 +1594,12 @@ export type FlareEventUncheckedUpdateManyWithoutLocationInput = {
 
 export type FlareEventCountOutputType = {
   tags: number
+  savedByUsers: number
 }
 
 export type FlareEventCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tags?: boolean | FlareEventCountOutputTypeCountTagsArgs
+  savedByUsers?: boolean | FlareEventCountOutputTypeCountSavedByUsersArgs
 }
 
 /**
@@ -1470,6 +1617,13 @@ export type FlareEventCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.E
  */
 export type FlareEventCountOutputTypeCountTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EventTagWhereInput
+}
+
+/**
+ * FlareEventCountOutputType without action
+ */
+export type FlareEventCountOutputTypeCountSavedByUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedEventWhereInput
 }
 
 
@@ -1497,6 +1651,7 @@ export type FlareEventSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   image?: boolean | Prisma.FlareEvent$imageArgs<ExtArgs>
   location?: boolean | Prisma.FlareEvent$locationArgs<ExtArgs>
   tags?: boolean | Prisma.FlareEvent$tagsArgs<ExtArgs>
+  savedByUsers?: boolean | Prisma.FlareEvent$savedByUsersArgs<ExtArgs>
   _count?: boolean | Prisma.FlareEventCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["flareEvent"]>
 
@@ -1578,6 +1733,7 @@ export type FlareEventInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   image?: boolean | Prisma.FlareEvent$imageArgs<ExtArgs>
   location?: boolean | Prisma.FlareEvent$locationArgs<ExtArgs>
   tags?: boolean | Prisma.FlareEvent$tagsArgs<ExtArgs>
+  savedByUsers?: boolean | Prisma.FlareEvent$savedByUsersArgs<ExtArgs>
   _count?: boolean | Prisma.FlareEventCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FlareEventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1598,6 +1754,7 @@ export type $FlareEventPayload<ExtArgs extends runtime.Types.Extensions.Internal
     image: Prisma.$ImageAssetPayload<ExtArgs> | null
     location: Prisma.$LocationPayload<ExtArgs> | null
     tags: Prisma.$EventTagPayload<ExtArgs>[]
+    savedByUsers: Prisma.$SavedEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2017,6 +2174,7 @@ export interface Prisma__FlareEventClient<T, Null = never, ExtArgs extends runti
   image<T extends Prisma.FlareEvent$imageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FlareEvent$imageArgs<ExtArgs>>): Prisma.Prisma__ImageAssetClient<runtime.Types.Result.GetResult<Prisma.$ImageAssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   location<T extends Prisma.FlareEvent$locationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FlareEvent$locationArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   tags<T extends Prisma.FlareEvent$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FlareEvent$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  savedByUsers<T extends Prisma.FlareEvent$savedByUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FlareEvent$savedByUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2525,6 +2683,30 @@ export type FlareEvent$tagsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.EventTagScalarFieldEnum | Prisma.EventTagScalarFieldEnum[]
+}
+
+/**
+ * FlareEvent.savedByUsers
+ */
+export type FlareEvent$savedByUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedEvent
+   */
+  select?: Prisma.SavedEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedEvent
+   */
+  omit?: Prisma.SavedEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedEventInclude<ExtArgs> | null
+  where?: Prisma.SavedEventWhereInput
+  orderBy?: Prisma.SavedEventOrderByWithRelationInput | Prisma.SavedEventOrderByWithRelationInput[]
+  cursor?: Prisma.SavedEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedEventScalarFieldEnum | Prisma.SavedEventScalarFieldEnum[]
 }
 
 /**

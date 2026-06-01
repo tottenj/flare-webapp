@@ -9,21 +9,26 @@ import mapEventDtoToEventCardViewModel from '@/lib/types/dto/event/mapEventDtoTo
 export default async function EventCardContainer({
   eventId,
   actor,
+  viewerUserId,
 }: {
   eventId: string;
   actor?: AuthenticatedOrganization;
+  viewerUserId?: string;
 }) {
   let event: EventCardViewModel | null;
   let eventDto;
   try {
-    eventDto = await EventService.getEventById(eventId, actor);
+    eventDto = await EventService.getEventById(eventId, actor, viewerUserId);
   } catch (error) {
     logger.error('Error fetching event by ID', { eventId, error });
     return null;
   }
   if (!eventDto) return null;
   try {
-    event = await mapEventDtoToEventCardViewModel(eventDto);
+    event = await mapEventDtoToEventCardViewModel(eventDto, {
+      userId: viewerUserId,
+      orgId: actor?.orgId,
+    });
   } catch (error) {
     logger.error('Error mapping EventDto to EventCardViewModel', { eventId, error });
     return null;
