@@ -31,18 +31,40 @@ function getOobCode(email: string) {
   });
 }
 
-function assertVerifyEmailOobSent(email: string): void {
+function assertVerifyEmailOobSent(
+  email: string,
+  retries = 10,
+  waitMs = 500
+): Cypress.Chainable<void> {
   const normalizedEmail = email.toLowerCase();
 
-  cy.request('GET', `${AUTH_ADMIN}/oobCodes`)
-    .its('body.oobCodes')
-    .should((oobCodes: any[]) => {
-      const code = oobCodes.find(
-        (c) => c.requestType === 'VERIFY_EMAIL' && c.email?.toLowerCase() === normalizedEmail
-      );
+  const poll = (remaining: number): Cypress.Chainable<void> => {
+    return cy
+      .request({
+        method: 'GET',
+        url: `${AUTH_ADMIN}/oobCodes`,
+        failOnStatusCode: false,
+      })
+      .then((response) => {
+        const oobCodes: any[] = response.body?.oobCodes ?? [];
+        const code = oobCodes.find(
+          (c) => c.requestType === 'VERIFY_EMAIL' && c.email?.toLowerCase() === normalizedEmail
+        );
 
-      expect(code, `Expected VERIFY_EMAIL OOB code to be sent for ${normalizedEmail}`).to.exist;
-    });
+        if (code) {
+          return;
+        }
+
+        if (remaining <= 0) {
+          expect(code, `Expected VERIFY_EMAIL OOB code to be sent for ${normalizedEmail}`).to.exist;
+          return;
+        }
+
+        return cy.wait(waitMs).then(() => poll(remaining - 1));
+      });
+  };
+
+  return poll(retries);
 }
 
 function applyOobCode(oobCode: string) {
@@ -112,11 +134,11 @@ Cypress.Commands.add('clientLogin', (email: string, password: string) => {
     await win.signInWithEmailAndPassword(win.auth, email, password);
   });
 
- cy.window({ timeout: 10000 }).then((win: any) => {
-   const user = win.auth?.currentUser;
-   expect(user).to.not.be.null;
-   cy.log(`UID: ${user.uid}`);
- });
+  cy.window({ timeout: 10000 }).then((win: any) => {
+    const user = win.auth?.currentUser;
+    expect(user).to.not.be.null;
+    cy.log(`UID: ${user.uid}`);
+  });
 });
 
 Cypress.Commands.add('logoutUser', (): Cypress.Chainable => {
