@@ -9,6 +9,7 @@ import { auth } from '@/lib/firebase/auth/configs/clientApp';
 import { ActionResult } from '@/lib/types/responses/ActionResult';
 import mapFirebaseAuthError from '@/lib/errors/firebaseErrors/mapFirebaseAuthError';
 import { toast } from 'react-toastify';
+import GoogleSignInButton from '@/components/buttons/googleButton/SignInWithGoogleButton';
 
 export default function SignUpFormContainer() {
   const router = useRouter();
@@ -50,6 +51,7 @@ export default function SignUpFormContainer() {
       error={error?.message}
       validationErrors={validationErrors}
       onSubmit={action}
+      googleButton={<GoogleSignInButton signIn={false} />}
     />
   );
 }
