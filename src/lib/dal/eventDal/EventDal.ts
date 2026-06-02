@@ -102,6 +102,19 @@ export class EventDal {
     });
   }
 
+  async listSavedEvents(userId: string): Promise<EventRow[]> {
+    return await prisma.flareEvent.findMany({
+      where: {
+        savedByUsers: {
+          some: {
+            userId,
+          },
+        },
+      },
+      include: eventRowInclude,
+    });
+  }
+
   async edit(eventId: string, input: EventDomainProps, tx?: Prisma.TransactionClient) {
     const client = tx ?? prisma;
     const { tags, organizationId, ...rest } = input;

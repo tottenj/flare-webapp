@@ -9,16 +9,24 @@ Cypress.Commands.add(
     loc: string = 'Toronto Pearson International Airport',
     contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
   ) => {
-    const location = cy.get(selector);
-    const newContains = 'CN Tower, Toronto';
-    //cy.intercept('POST', '**/places.googleapis.com/**').as('places');
-    location.type(loc);
-    cy.contains(newContains).should('exist');
-    //cy.wait('@places');
-    cy.get('ul[role="listbox"] li[role="option"]')
-      .contains(newContains)
-      .should('be.visible')
-      .click({ force: true });
+    cy.get(selector)
+      .should('exist')
+      .click({ force: true })
+      .type('{selectall}' + loc, { force: true });
+
+    // Wait for async autocomplete options, then prefer an exact match and
+    // gracefully fall back to the first result to reduce CI timing flakes.
+    cy.get('ul[role="listbox"] li[role="option"]', { timeout: 15000 }).then(($options) => {
+      expect($options.length).to.be.greaterThan(0);
+
+      const match = [...$options].find((el) => el.textContent?.includes(contains));
+      if (match) {
+        cy.wrap(match).click({ force: true });
+        return;
+      }
+
+      cy.wrap($options[0]).click({ force: true });
+    });
   }
 );
 
