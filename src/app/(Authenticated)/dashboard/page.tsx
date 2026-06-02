@@ -15,6 +15,7 @@ export default async function DashboardPage(props: {
 
   if (ctx.flags.isOrg) {
     const parsed = OrgEventUrlFilterSchema.safeParse(params ?? {});
+    
     const urlFilters = parsed.success ? parsed.data : OrgEventUrlFilterSchema.parse({}); // fallback defaults
     const filters = mapUrlFiltersToOrgEventFilters(urlFilters);
     return <OrgDashboardShell filters={filters} />;
