@@ -1,7 +1,29 @@
 // middleware.ts
-import { NextResponse, NextRequest } from 'next/server';
 import { cookies } from 'next/headers';
+import { NextResponse, NextRequest } from 'next/server';
 
+async function isSessionCookieValid(sessionCookie: string): Promise<boolean> {
+  const functionUrl = process.env.FIREBASE_FUNCTION_URL;
+  if (!functionUrl) return false;
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 3000);
+
+  try {
+    const res = await fetch(`${functionUrl}/verifySession`, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionCookie }),
+      cache: 'no-store',
+    });
+    return res.ok;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -25,7 +47,16 @@ export async function proxy(request: NextRequest) {
 
   // 4. Redirect authenticated users away from auth routes
   if (isAuthRoute && session) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    const validSession = await isSessionCookieValid(session);
+
+    if (validSession) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+
+    // Clear stale cookies to prevent signin<->dashboard redirect loops.
+    const res = NextResponse.next();
+    res.cookies.delete('session');
+    return res;
   }
 
   return NextResponse.next();
