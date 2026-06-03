@@ -149,3 +149,9 @@
     min-height: 88px;
   }
 }
+
+@media (max-width: 768px) {
+  .calendarShell {
+    height: auto;
+  }
+}
