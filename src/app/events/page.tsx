@@ -4,7 +4,6 @@ import { EventDto } from '@/lib/schemas/event/eventDtoSchema';
 import { EventService } from '@/lib/services/eventService/eventService';
 import { connection } from 'next/server';
 
-
 export default async function page() {
   await connection();
   let events: EventDto[] = [];
@@ -15,8 +14,8 @@ export default async function page() {
   }
 
   return (
-    <div className="flex h-full w-full gap-8">
-      <div className="w-3/5">
+    <div className="flex h-auto w-full flex-col gap-8 md:h-full md:flex-row">
+      <div className="w-full md:w-3/5">
         <EventCalendar events={events} />
       </div>
       <div className="flex flex-1 flex-col gap-4 rounded-2xl bg-white p-4 shadow-2xl">
