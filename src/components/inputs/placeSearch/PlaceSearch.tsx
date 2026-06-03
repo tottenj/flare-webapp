@@ -29,6 +29,8 @@ export default function PlaceSearch({
   const [getPlaces, setGetPlaces] = useState<null | Function>(null);
   const [getPlaceDetails, setGetPlaceDetails] = useState<null | Function>(null);
   const [locationSelect, setLocationSelect] = useState<null | LocationInput>(value ?? null);
+  const [selectedKey, setSelectedKey] = useState<string | null>(value?.placeId ?? null);
+  const [selectedLabel, setSelectedLabel] = useState<string>(value?.address ?? '');
 
   // Get user location once
   useEffect(() => {
@@ -66,6 +68,8 @@ export default function PlaceSearch({
   useEffect(() => {
     if (value) {
       setLocationSelect(value);
+      setSelectedKey(value.placeId);
+      setSelectedLabel(value.address);
       list.setFilterText(value.address);
     }
   }, [value]);
@@ -89,14 +93,22 @@ export default function PlaceSearch({
     if (!key || !getPlaceDetails) return;
     const selected = list.items.find((item) => item.value === key);
     if (!selected) return;
+
+    setSelectedKey(String(key));
+    setSelectedLabel(selected.label);
+    list.setFilterText(selected.label);
+
     const place = await getPlaceDetails(selected.value);
     if (!place || !place.place.location) return;
+
     const location: LocationInput = {
       placeId: place.place.id,
-      address: place.place.displayName,
+      // Keep the selected suggestion text in the input for a stable UX.
+      address: selected.label,
       lat: place.place.location.lat(),
       lng: place.place.location.lng(),
     };
+
     setLocationSelect(location);
     onChange(location);
   }
@@ -112,9 +124,14 @@ export default function PlaceSearch({
         items={list.items}
         variant="flat"
         data-cy={'location-input'}
-        selectedKey={locationSelect?.placeId ?? null}
+        selectedKey={selectedKey}
         onInputChange={(val) => {
           list.setFilterText(val);
+          if (val === selectedLabel) {
+            return;
+          }
+          setSelectedKey(null);
+          setSelectedLabel('');
           setLocationSelect(null);
         }}
         onSelectionChange={handleSelection}
