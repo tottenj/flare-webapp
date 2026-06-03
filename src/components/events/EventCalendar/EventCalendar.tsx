@@ -110,6 +110,7 @@ export default function EventCalendar({ events }: { events: EventDto[] }) {
         buttonText={{
           today: 'Today',
         }}
+        height="auto"
         fixedWeekCount={false}
         showNonCurrentDates={true}
         dayMaxEventRows={3}
