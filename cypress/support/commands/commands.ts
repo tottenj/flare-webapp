@@ -7,18 +7,15 @@ Cypress.Commands.add(
   (
     selector: string,
     loc: string = 'Toronto Pearson International Airport',
-    contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
+    contains: string = 'CN Tower, Toronto'
   ) => {
-    const location = cy.get(selector);
-    const newContains = 'CN Tower, Toronto';
-    //cy.intercept('POST', '**/places.googleapis.com/**').as('places');
-    location.type(loc);
-    cy.contains(newContains).should('exist');
-    //cy.wait('@places');
+    cy.get(selector).should('be.visible').click().clear().type(loc, { delay: 0 });
     cy.get('ul[role="listbox"] li[role="option"]')
-      .contains(newContains)
+      .contains(contains)
       .should('be.visible')
       .click({ force: true });
+    cy.get('ul[role="listbox"]').should('not.exist');
+    cy.get(selector).should('have.value', contains);
   }
 );
 
