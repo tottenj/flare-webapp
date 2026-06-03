@@ -65,6 +65,41 @@ function assertVerifyEmailOobSent(
   return poll(retries);
 }
 
+function assertPasswordResetOobSent(
+  email: string,
+  retries = 10,
+  waitMs = 500
+): Cypress.Chainable<void> {
+  const normalizedEmail = email.toLowerCase();
+
+  const poll = (remaining: number): Cypress.Chainable<void> => {
+    return cy
+      .request({
+        method: 'GET',
+        url: `${AUTH_ADMIN}/oobCodes`,
+        failOnStatusCode: false,
+      })
+      .then((response) => {
+        const oobCodes: any[] = response.body?.oobCodes ?? [];
+        const code = oobCodes.find(
+          (c) => c.requestType === 'PASSWORD_RESET' && c.email?.toLowerCase() === normalizedEmail
+        );
+
+        if (code || remaining <= 0) {
+          expect(code, `Expected PASSWORD_RESET OOB code to be sent for ${normalizedEmail}`).to
+            .exist;
+          return;
+        }
+
+        cy.wait(waitMs, { log: false });
+        return poll(remaining - 1);
+      })
+      .then(() => undefined) as unknown as Cypress.Chainable<void>;
+  };
+
+  return poll(retries);
+}
+
 function applyOobCode(oobCode: string) {
   return cy
     .request({
@@ -77,6 +112,10 @@ function applyOobCode(oobCode: string) {
 
 Cypress.Commands.add('recivedOobCode', (email: string) => {
   return assertVerifyEmailOobSent(email);
+});
+
+Cypress.Commands.add('receivedPasswordResetOobCode', (email: string) => {
+  return assertPasswordResetOobSent(email);
 });
 
 Cypress.Commands.add(
