@@ -3,6 +3,7 @@ import OrgSettingsModalTrigger from '@/components/dashboard/settings/orgSettings
 import EventCardOrgRecentContainer from '@/components/events/EventCard/EventCardOrgUpcomingContainer';
 import EventCardSkeleton from '@/components/events/EventCard/presentational/EventCardSkeleton';
 import EventListContainerOrg from '@/components/events/EventList/EventListContainerOrg';
+import EventListContainerSaved from '@/components/events/EventList/EventListContainerSaved';
 import EventListSkeleton from '@/components/events/EventList/presentational/EventListSkeleton';
 import QueryTabs from '@/components/inputs/hero/tab/QueryTabs';
 import CreateEventModalWrapper from '@/components/wrappers/CreateEventModalWrapper';
@@ -15,7 +16,7 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
   const actor = UserContextService.getOrgActor(ctx);
 
   return (
-    <div className="grid h-full w-full grid-cols-1 grid-rows-[1fr_3fr] gap-4 md:grid-cols-2">
+    <div className="grid h-full w-full grid-cols-1 grid-rows-[1fr_2fr_2fr] gap-4 md:grid-cols-2">
       <DashboardInfoShellContainer
         profilePicPath={ctx.user.profilePic}
         settingsTrigger={<OrgSettingsModalTrigger />}
@@ -30,7 +31,7 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
 
       <div
         data-cy="my-events-container"
-        className="row-span-2 h-full w-full rounded-2xl bg-white p-8 shadow-2xl"
+        className="row-span-3 h-full w-full rounded-2xl bg-white p-8 shadow-2xl"
       >
         <div className="flex items-center justify-between pb-4">
           <h2>My Events</h2>
@@ -62,6 +63,17 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
         <h2 className="pb-8 text-center">Next Upcoming Event</h2>
         <Suspense fallback={<EventCardSkeleton />}>
           <EventCardOrgRecentContainer orgId={ctx.profile.orgProfile.id} actor={actor} />
+        </Suspense>
+      </div>
+      <div
+        data-cy="saved-events-container"
+        className="h-full w-full rounded-2xl bg-white p-8 shadow-2xl"
+      >
+        <div className="flex items-center justify-between pb-4">
+          <h2>Saved Events</h2>
+        </div>
+        <Suspense fallback={<EventListSkeleton />}>
+          <EventListContainerSaved actor={actor} />
         </Suspense>
       </div>
     </div>

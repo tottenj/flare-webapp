@@ -269,4 +269,10 @@ export class EventService {
 
     await eventDal.saveEvent(eventId, actor.userId, save);
   }
+
+
+  static async listSavedEvents(actor: AuthenticatedUser) {
+    const events = await eventDal.listSavedEvents(actor.userId);
+    return events.map((event) => mapEventRowToDto(event));
+  }
 }

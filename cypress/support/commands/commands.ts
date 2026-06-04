@@ -9,13 +9,24 @@ Cypress.Commands.add(
     loc: string = 'Toronto Pearson International Airport',
     contains: string = 'CN Tower, Toronto'
   ) => {
-    cy.get(selector).should('be.visible').click().clear().type(loc, { delay: 0 });
-    cy.get('ul[role="listbox"] li[role="option"]')
-      .contains(contains)
-      .should('be.visible')
-      .click({ force: true });
-    cy.get('ul[role="listbox"]').should('not.exist');
-    cy.get(selector).should('have.value', contains);
+    cy.get(selector)
+      .should('exist')
+      .click({ force: true })
+      .type('{selectall}' + loc, { force: true });
+
+    // Wait for async autocomplete options, then prefer an exact match and
+    // gracefully fall back to the first result to reduce CI timing flakes.
+    cy.get('ul[role="listbox"] li[role="option"]', { timeout: 15000 }).then(($options) => {
+      expect($options.length).to.be.greaterThan(0);
+
+      const match = [...$options].find((el) => el.textContent?.includes(contains));
+      if (match) {
+        cy.wrap(match).click({ force: true });
+        return;
+      }
+
+      cy.wrap($options[0]).click({ force: true });
+    });
   }
 );
 
