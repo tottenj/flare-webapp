@@ -7,7 +7,7 @@ Cypress.Commands.add(
   (
     selector: string,
     loc: string = 'Toronto Pearson International Airport',
-    contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
+    contains: string = 'CN Tower, Toronto'
   ) => {
     cy.get(selector)
       .should('exist')
