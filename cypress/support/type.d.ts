@@ -27,8 +27,8 @@ declare namespace Cypress {
     loginTestAdmin(): Chainable<void>;
     usePlacesInput(
       selector: string,
-      loc: string = verifiedOrg.location.name,
-      contains: string = 'Toronto Pearson International Airport (YYZ), Silver Dart Drive, Mississauga, ON, Canada'
+      loc: string = 'Toronto Pearson International Airport',
+      contains: string = 'CN Tower, Toronto'
     ): Chainable<void>;
     userExists(email: string, password: string, org: boolean = true): Chainable<any>;
     getDocument(path: string, idToken: string): Chainable<{ [k: string]: any }>;
