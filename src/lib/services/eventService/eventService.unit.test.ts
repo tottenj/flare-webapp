@@ -42,6 +42,7 @@ jest.mock('@/lib/dal/locationDal/LocationDal', () => ({
   locationDal: {
     create: jest.fn().mockResolvedValue({ id: 'locationId' }),
     get: jest.fn(),
+    getByPlaceId: jest.fn(),
   },
 }));
 
@@ -581,6 +582,7 @@ describe('EventService.getEditData', () => {
     expect(locationDal.get).not.toHaveBeenCalled();
   });
 });
+
 
 describe('EventService.editEvent', () => {
   const cleanupUploadedImageOnFailure = jest.fn();

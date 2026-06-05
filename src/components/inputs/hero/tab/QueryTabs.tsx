@@ -8,24 +8,31 @@ interface TabOption {
   label: string;
 }
 
-interface QueryTabProps extends TabsProps {
-  param: string;
+interface QueryTabProps<T extends string> extends TabsProps {
+  param: T;
   defaultValue: string;
   tabs: TabOption[];
 }
 
-export default function QueryTabs({ tabs, param, defaultValue, ...props }: QueryTabProps) {
-  const { filters, setFilters } = useQueryFilters();
+export default function QueryTabs<T extends string>({
+  tabs,
+  param,
+  defaultValue,
+  ...props
+}: QueryTabProps<T>) {
+  const { filters, setFilters } = useQueryFilters<T>();
 
   const selected = filters[param] ?? defaultValue;
 
   return (
     <Tabs
-      onSelectionChange={(key) => setFilters({ [param]: String(key) })}
+      onSelectionChange={(key) =>
+        setFilters({ [param]: String(key) } as Partial<Record<T, string | null>>)
+      }
       selectedKey={selected}
       classNames={{
-        'base': "w-full",
-        'tabList': "w-full"
+        base: 'w-full',
+        tabList: 'w-full',
       }}
       {...props}
     >

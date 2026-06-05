@@ -1,17 +1,23 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-export default function useQueryFilters() {
+type FilterType = string | Record<string, unknown>;
+type FilterKey<T extends FilterType> = T extends string ? T : Extract<keyof T, string>;
+type QueryFilterMap<T extends FilterType> = Partial<Record<FilterKey<T>, string>>;
+type QueryFilterUpdates<T extends FilterType> = Partial<Record<FilterKey<T>, string | null>>;
+
+export default function useQueryFilters<T extends FilterType = string>() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathName = usePathname();
 
-  const filters = Object.fromEntries(searchParams);
-  
-  function setFilters(updates: Record<string, string | null>) {
+  const filters = Object.fromEntries(searchParams) as QueryFilterMap<T>;
+
+  function setFilters(updates: QueryFilterUpdates<T>) {
     const params = new URLSearchParams(searchParams);
-    Object.entries(updates).forEach(([key, value]) => {
-      if (value === null) {
+    (Object.entries(updates) as [string, string | null | undefined][]).forEach(([key, value]) => {
+      if (value == null) {
         params.delete(key);
       } else {
         params.set(key, value);
@@ -20,8 +26,14 @@ export default function useQueryFilters() {
 
     router.replace(`?${params.toString()}`, { scroll: false });
   }
+
+  function clearFilters() {
+    router.replace(pathName, { scroll: false });
+  }
+
   return {
     filters,
     setFilters,
+    clearFilters,
   };
 }

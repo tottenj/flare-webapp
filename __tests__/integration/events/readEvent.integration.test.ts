@@ -9,6 +9,7 @@ import { EventStatus } from '#prisma/generated/enums';
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
 import { prisma } from '../../../prisma/prismaClient';
 import { eventInputFactory } from '../../factories/service/eventInput.factory';
+import { expectOnlyEventIds } from './filterAssertions';
 
 jest.mock('@/lib/services/imageService/ImageService', () => ({
   __esModule: true,
@@ -247,6 +248,57 @@ describe('EventService.listEventsOrg (integration)', () => {
   });
 });
 
+describe('EventService.listEventsUser category filter (integration)', () => {
+  it('returns only events matching selected category from verified orgs', async () => {
+    const { org } = await createOrgIntegration({ org: { status: 'VERIFIED' } });
+
+    const nightlifeEvent = await createEventIntegration({
+      organizationId: org.id,
+      overrides: {
+        category: 'NIGHTLIFE',
+        title: 'Nightlife Result',
+      },
+    });
+
+    await createEventIntegration({
+      organizationId: org.id,
+      overrides: {
+        category: 'SOCIAL',
+        title: 'Social Non Match',
+      },
+    });
+
+    const results = await EventService.listEventsUser({ category: 'NIGHTLIFE' });
+
+    expectOnlyEventIds(results, [nightlifeEvent.id]);
+  });
+
+  it('excludes matching-category events from unverified orgs', async () => {
+    const verified = await createOrgIntegration({ org: { status: 'VERIFIED' } });
+    const pending = await createOrgIntegration({ org: { status: 'PENDING' } });
+
+    const verifiedEvent = await createEventIntegration({
+      organizationId: verified.org.id,
+      overrides: {
+        category: 'NIGHTLIFE',
+        title: 'Verified Nightlife Event',
+      },
+    });
+
+    await createEventIntegration({
+      organizationId: pending.org.id,
+      overrides: {
+        category: 'NIGHTLIFE',
+        title: 'Pending Org Nightlife Event',
+      },
+    });
+
+    const results = await EventService.listEventsUser({ category: 'NIGHTLIFE' });
+
+    expectOnlyEventIds(results, [verifiedEvent.id]);
+  });
+});
+
 describe('EventService.getEditData (integration)', () => {
   it('returns edit data with event, image metadata, and location for owner', async () => {
     const { authUser, fakeOrg } = await createAuthOrgIntegration();
@@ -336,14 +388,18 @@ describe('EventService.getEditData (integration)', () => {
     expect(createdEvent).not.toBeNull();
     if (!createdEvent) throw new Error('Expected created event');
 
-    await expect(EventService.getEditData(createdEvent.id, otherOrg.authUser)).rejects.toThrow(expect.objectContaining({ code: 'AUTH_UNAUTHORIZED' }));
+    await expect(EventService.getEditData(createdEvent.id, otherOrg.authUser)).rejects.toThrow(
+      expect.objectContaining({ code: 'AUTH_UNAUTHORIZED' })
+    );
     expect(ImageService.getDownloadUrl).not.toHaveBeenCalled();
   });
 
   it('throws if event does not exist', async () => {
     const { authUser } = await createAuthOrgIntegration();
 
-    await expect(EventService.getEditData('missing-event-id', authUser)).rejects.toThrow(expect.objectContaining({ code: 'EVENT_NOT_FOUND' }));
+    await expect(EventService.getEditData('missing-event-id', authUser)).rejects.toThrow(
+      expect.objectContaining({ code: 'EVENT_NOT_FOUND' })
+    );
     expect(ImageService.getDownloadUrl).not.toHaveBeenCalled();
   });
 });

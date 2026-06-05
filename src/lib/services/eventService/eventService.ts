@@ -25,6 +25,10 @@ import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
 import { EditEventInput } from '@/lib/schemas/event/editEventInputSchema';
 import { logger } from '@/lib/logger';
 import { AuthenticatedUser } from '@/lib/types/AuthenticatedUser';
+import {
+  EventFilterDataDto,
+  mapEventFilterDataToDto,
+} from '@/lib/types/dto/event/EventFilterDataDto';
 
 export class EventService {
   private static async assertCanEdit(eventId: string, actor: AuthenticatedOrganization) {
@@ -255,6 +259,16 @@ export class EventService {
     }
   }
 
+  static async getPublicFilterData(
+    filters: Pick<UserEventFilter, 'placeId'>
+  ): Promise<EventFilterDataDto> {
+    let location = null;
+    if (filters.placeId) {
+      location = await locationDal.getByPlaceId(filters.placeId);
+    }
+    return mapEventFilterDataToDto({ location });
+  }
+
   static async saveEvent(
     eventId: string,
     actor: AuthenticatedOrganization | AuthenticatedUser,
@@ -269,7 +283,6 @@ export class EventService {
 
     await eventDal.saveEvent(eventId, actor.userId, save);
   }
-
 
   static async listSavedEvents(actor: AuthenticatedUser) {
     const events = await eventDal.listSavedEvents(actor.userId);
