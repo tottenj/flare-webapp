@@ -8,6 +8,7 @@ const PREVIEW_CHANGES_TIMEOUT_MS = 10000;
 const updatedEvent = {
   title: 'Updated Seed Event',
   description: 'Updated seeded event description',
+  ticketLink: 'https://tickets.example.com/updated-seed-event',
   startDateTime: {
     month: '06',
     day: '15',
@@ -106,6 +107,7 @@ describe('Edit Event', () => {
       cy.get('[data-cy="maxPrice-input"]')
         .invoke('val')
         .should('contain', editableEvent.maxPriceCents / 100);
+      cy.get('[data-cy="ticketLink-input"]').should('have.value', editableEvent.ticketLink);
     });
 
     assertHeroDateTime('[data-cy="startDateTime-input"]', {
@@ -128,6 +130,7 @@ describe('Edit Event', () => {
 
     cy.get('[data-cy="eventName-input"]').clear().type(updatedEvent.title);
     cy.get('[data-cy="eventDescription-input"]').clear().type(updatedEvent.description);
+    cy.get('[data-cy="ticketLink-input"]').clear().type(updatedEvent.ticketLink);
     cy.get('[data-cy="location-input"]').clear();
     cy.usePlacesInput('[data-cy="location-input"]');
     cy.get('[data-cy="image-input"]').selectFile('cypress/fixtures/stockEvent.jpg', {
@@ -149,12 +152,15 @@ describe('Edit Event', () => {
       cy.contains(editableEvent.title).should('not.exist');
     });
 
-    
     cy.get(`[aria-label="${updatedEvent.title}"]`).click();
     cy.get(`[data-cy="${updatedEvent.title}-event-modal"]`).within(() => {
       cy.contains(updatedEvent.title).should('be.visible');
       cy.contains(updatedEvent.description).should('be.visible');
       cy.contains('CN Tower, Toronto').should('be.visible');
+      cy.contains('Get Tickets')
+        .should('be.visible')
+        .closest('a')
+        .should('have.attr', 'href', updatedEvent.ticketLink);
     });
 
     // Close the event modal using its close control before reopening the edit form.
@@ -178,6 +184,7 @@ describe('Edit Event', () => {
       cy.get('[data-cy="maxPrice-input"]')
         .invoke('val')
         .should('contain', editableEvent.maxPriceCents / 100);
+      cy.get('[data-cy="ticketLink-input"]').should('have.value', updatedEvent.ticketLink);
       cy.get('img')
         .first()
         .invoke('attr', 'src')
@@ -246,6 +253,7 @@ describe('Edit Event', () => {
       cy.get('[data-cy="maxPrice-input"]')
         .invoke('val')
         .should('contain', editableEvent.maxPriceCents / 100);
+      cy.get('[data-cy="ticketLink-input"]').should('have.value', editableEvent.ticketLink);
     });
 
     assertHeroDateTime('[data-cy="startDateTime-input"]', {

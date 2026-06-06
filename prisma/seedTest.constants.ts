@@ -217,6 +217,7 @@ export const SEEDED_TEST_EVENTS = {
     title: 'Editable Seed Event',
     description: 'Seeded event with every edit field populated',
     status: 'PUBLISHED',
+    ticketLink: 'https://tickets.example.com/editable-seed-event',
     timezone: 'America/Toronto',
     startsAtUTC: '2030-05-10T23:30:00.000Z',
     endsAtUTC: '2030-05-11T01:00:00.000Z',
@@ -241,6 +242,7 @@ export const SEEDED_TEST_EVENTS = {
     title: 'Verified Org Published Event',
     description: 'Another future published event for verified org',
     status: 'PUBLISHED',
+    ticketLink: 'https://tickets.example.com/verified-published',
     timezone: 'America/Toronto',
   },
   verifiedDraft: {

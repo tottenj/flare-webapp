@@ -101,6 +101,7 @@ model FlareEvent{
   pricingType       EventPricingType
   minPriceCents     Int?
   maxPriceCents     Int?
+  ticketLink        String?
   currency          String @default("CAD")
 
   createdAt         DateTime @default(now())

@@ -1401,6 +1401,7 @@ export const FlareEventScalarFieldEnum = {
   pricingType: 'pricingType',
   minPriceCents: 'minPriceCents',
   maxPriceCents: 'maxPriceCents',
+  ticketLink: 'ticketLink',
   currency: 'currency',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

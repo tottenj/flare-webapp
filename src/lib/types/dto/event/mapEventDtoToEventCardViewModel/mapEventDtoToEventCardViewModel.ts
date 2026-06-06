@@ -55,5 +55,6 @@ export default async function mapEventDtoToEventCardViewModel(
     description: event.description,
     canSave: Boolean(viewer?.userId) && viewer?.orgId !== event.organization.id,
     isSaved: event.viewer?.isSaved ?? false,
+    ticketLink: event.ticketLink ?? undefined,
   };
 }

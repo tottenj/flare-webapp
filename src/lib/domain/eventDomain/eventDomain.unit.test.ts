@@ -55,6 +55,12 @@ describe('EventDomain.onCreate', () => {
     expect(eventDomain.props.publishedAt).toBeInstanceOf(Date);
   });
 
+  it('defaults ticketLink to null when not provided', () => {
+    const input = eventDomainCreateFactory({ ticketLink: undefined });
+    const eventDomain = EventDomain.onCreate(input, 'org123');
+    expect(eventDomain.props.ticketLink).toBeNull();
+  });
+
   it('creates an event with no end time', () => {
     const input = eventDomainCreateFactory({ endDateTime: undefined });
     const organizationId = 'org123';
@@ -100,6 +106,7 @@ describe('EventDomain.onEdit', () => {
     minPriceCents: null,
     maxPriceCents: null,
     tags: ['tag-1'],
+    ticketLink: 'https://existing.example/tickets',
   };
 
   it('clears end time when endDateTime is explicitly null', () => {
@@ -110,5 +117,18 @@ describe('EventDomain.onEdit', () => {
   it('preserves end time when endDateTime is omitted', () => {
     const eventDomain = EventDomain.onEdit({}, existing);
     expect(eventDomain.props.endsAtUTC).toEqual(existing.endsAtUTC);
+  });
+
+  it('preserves ticketLink when ticketLink is omitted in edit input', () => {
+    const eventDomain = EventDomain.onEdit({}, existing);
+    expect(eventDomain.props.ticketLink).toBe(existing.ticketLink);
+  });
+
+  it('updates ticketLink when ticketLink is provided in edit input', () => {
+    const eventDomain = EventDomain.onEdit(
+      { ticketLink: 'https://updated.example/tickets' },
+      existing
+    );
+    expect(eventDomain.props.ticketLink).toBe('https://updated.example/tickets');
   });
 });

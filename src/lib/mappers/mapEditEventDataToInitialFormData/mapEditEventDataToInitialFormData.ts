@@ -19,9 +19,6 @@ export default function mapEditEventDataToInitialFormData(
       ? undefined
       : Money.fromCents(event.pricing.maxCents).toDollars();
 
-
-  
-
   return {
     eventName: event.title,
     eventDescription: event.description,
@@ -34,6 +31,7 @@ export default function mapEditEventDataToInitialFormData(
     minPrice,
     maxPrice,
     tags: event.tags.map((tag) => tag.label),
+    ticketLink: event.ticketLink ?? undefined,
     imageDetails:
       imageUrl || imageMetadata
         ? {

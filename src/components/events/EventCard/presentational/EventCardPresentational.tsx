@@ -12,6 +12,7 @@ import {
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export type EventCardViewModel = {
   id: string;
@@ -68,6 +69,10 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
     ageRestrictionLabel && { text: ageRestrictionLabel, icon: faBan },
     { text: priceLabel, icon: faDollarSign },
   ];
+
+
+  console.log("Imge URL in EventCardPresentational:", imageUrl);
+
   return (
     <div data-cy={`${title}-event-modal`} className="@container relative">
       <div className="grid gap-6 rounded-2xl p-4 pt-2 pb-2 @md:grid-cols-[2.5fr_3fr] @lg:grid-rows-[auto_auto]">
@@ -79,8 +84,9 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
         <div className="group relative mx-auto aspect-[2/3] w-full max-w-[70cqw] overflow-hidden rounded-md shadow-md @md:max-w-[100cqw]">
           {imageUrl && (
             <>
-              <MainModal modalProps={{ size: '3xl', backdrop: 'blur' }}>
-                <MainModal.Trigger>
+              <MainModal
+                modalProps={{ size: '3xl', backdrop: 'blur' }}
+                trigger={
                   <div className="relative block h-full w-full">
                     <Image
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -91,7 +97,9 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
                       sizes="100cqw"
                     />
                   </div>
-                </MainModal.Trigger>
+                }
+              >
+             
                 <div className="relative aspect-[2/3] w-full">
                   <Image
                     src={imageUrl}
@@ -135,8 +143,10 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
             </p>
           </div>
           {ticketLink && (
-            <div className="mt-auto flex justify-center">
-              <PrimaryButton text="Get Tickets" />
+            <div className="mt-auto flex items-center justify-center">
+              <Link className="flex w-full justify-center" href={ticketLink}>
+                <PrimaryButton text="Get Tickets" />
+              </Link>
             </div>
           )}
         </div>

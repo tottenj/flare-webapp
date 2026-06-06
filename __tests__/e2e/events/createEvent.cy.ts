@@ -101,6 +101,33 @@ describe('Create Event', () => {
     cy.contains('Created Event').should('be.visible');
     cy.contains('Test Event').should('be.visible');
   });
+
+  it('creates an event with ticket link and shows it on the event modal', () => {
+    const eventTitle = 'Ticket Link Event';
+    const ticketLink = 'https://tickets.example.com/create-flow';
+
+    cy.get("[data-cy='eventName-input']").type(eventTitle);
+    cy.get("[data-cy='eventDescription-input']").type('This event has ticket link');
+    cy.usePlacesInput("[data-cy='location-input']");
+    cy.get("[data-cy='ticketLink-input']").type(ticketLink);
+
+    cy.get("[data-cy='image-input']").selectFile('cypress/fixtures/stockEvent.jpg', {
+      force: true,
+    });
+    cy.contains('Confirm Crop').should('be.visible').click();
+
+    cy.contains('Preview Event').click();
+    cy.contains('Publish Event').should('exist').click();
+    cy.contains('Created Event').should('be.visible');
+
+    cy.get(`[aria-label="${eventTitle}"]`).click();
+    cy.get(`[data-cy="${eventTitle}-event-modal"]`).within(() => {
+      cy.contains('Get Tickets')
+        .should('be.visible')
+        .closest('a')
+        .should('have.attr', 'href', ticketLink);
+    });
+  });
 });
 
 describe('Create Event - Unsuccessful Flows', () => {
