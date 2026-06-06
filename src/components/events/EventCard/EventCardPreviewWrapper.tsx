@@ -17,6 +17,8 @@ export default function EventCardPreviewWrapper({
 }: EventCardPreviewWrapperProps) {
   const event = mapEventPreviewFormToEventCardViewModel(preview, orgName, imgUrl);
 
+  console.log('Mapped EventCardViewModel for preview:', event);
+
   return (
     <div className="p-4">
       <EventCardPresentational event={event} />
