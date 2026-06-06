@@ -45,6 +45,15 @@ export class LocationDal {
       `);
     return location ?? null;
   }
+
+  async getByPlaceId(placeId: string): Promise<FlareLocation | null> {
+    const [location] = await prisma.$queryRaw<FlareLocation[]>(Prisma.sql`
+        SELECT id, "placeId", address, ST_X(point::geometry) AS longitude, ST_Y(point::geometry) AS latitude
+        FROM "Location"
+        WHERE "placeId" = ${placeId}
+      `);
+    return location ?? null;
+  }
 }
 
 export const locationDal = new LocationDal();

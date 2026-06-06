@@ -1,6 +1,7 @@
 import { EventErrors } from '@/lib/errors/eventErrors/EventErrors';
 import { MoneyError } from '@/lib/errors/moneyError/MoneyError';
 import { logger } from '@/lib/logger';
+import { updateTag } from 'next/cache';
 import createEvent from '@/lib/serverActions/events/createEvent/createEvent';
 import ImageService from '@/lib/services/imageService/ImageService';
 import { EventService } from '@/lib/services/eventService/eventService';
@@ -37,6 +38,10 @@ jest.mock('@/lib/services/eventService/eventService', () => ({
   EventService: {
     createEvent: jest.fn(),
   },
+}));
+
+jest.mock('next/cache', () => ({
+  updateTag: jest.fn(),
 }));
 
 describe('createEvent', () => {
@@ -82,6 +87,7 @@ describe('createEvent', () => {
       { userId: 'userId', firebaseUid: 'uid123', orgId: 'orgId' },
       input
     );
+    expect(updateTag).toHaveBeenCalledWith('public-events');
   });
 
   it('returns invalid input failure and deletes uploaded image when owned by user', async () => {
@@ -93,6 +99,7 @@ describe('createEvent', () => {
     expect(expectFail(result as ActionResult<null>).code).toBe('INVALID_INPUT');
     expect(ImageService.deleteByStoragePath).toHaveBeenCalledWith('events/uid123/image.jpg');
     expect(EventService.createEvent).not.toHaveBeenCalled();
+    expect(updateTag).not.toHaveBeenCalled();
   });
 
   it('does not delete image when storage path does not belong to user', async () => {
@@ -129,6 +136,7 @@ describe('createEvent', () => {
     const error = expectFail(await createEvent(input));
 
     expect(error.code).toBe('UNKNOWN');
+    expect(updateTag).not.toHaveBeenCalled();
   });
 
   it('handles MoneyError correctly', async () => {

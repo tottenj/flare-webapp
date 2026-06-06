@@ -47,6 +47,60 @@ export async function seedTest(prisma: PrismaClient) {
     Prisma.sql`
     INSERT INTO "Location" ("id", "placeId", "address", "point")
     VALUES (
+      ${SEEDED_TEST_LOCATIONS.harbourfront.id},
+      ${SEEDED_TEST_LOCATIONS.harbourfront.placeId},
+      ${SEEDED_TEST_LOCATIONS.harbourfront.address},
+      ST_SetSRID(
+        ST_MakePoint(${SEEDED_TEST_LOCATIONS.harbourfront.lng}, ${SEEDED_TEST_LOCATIONS.harbourfront.lat}),
+        4326
+      )
+    )
+    ON CONFLICT ("placeId")
+    DO UPDATE SET
+      address = EXCLUDED.address;
+  `
+  );
+
+  await prisma.$queryRaw(
+    Prisma.sql`
+    INSERT INTO "Location" ("id", "placeId", "address", "point")
+    VALUES (
+      ${SEEDED_TEST_LOCATIONS.northYork.id},
+      ${SEEDED_TEST_LOCATIONS.northYork.placeId},
+      ${SEEDED_TEST_LOCATIONS.northYork.address},
+      ST_SetSRID(
+        ST_MakePoint(${SEEDED_TEST_LOCATIONS.northYork.lng}, ${SEEDED_TEST_LOCATIONS.northYork.lat}),
+        4326
+      )
+    )
+    ON CONFLICT ("placeId")
+    DO UPDATE SET
+      address = EXCLUDED.address;
+  `
+  );
+
+  await prisma.$queryRaw(
+    Prisma.sql`
+    INSERT INTO "Location" ("id", "placeId", "address", "point")
+    VALUES (
+      ${SEEDED_TEST_LOCATIONS.scarborough.id},
+      ${SEEDED_TEST_LOCATIONS.scarborough.placeId},
+      ${SEEDED_TEST_LOCATIONS.scarborough.address},
+      ST_SetSRID(
+        ST_MakePoint(${SEEDED_TEST_LOCATIONS.scarborough.lng}, ${SEEDED_TEST_LOCATIONS.scarborough.lat}),
+        4326
+      )
+    )
+    ON CONFLICT ("placeId")
+    DO UPDATE SET
+      address = EXCLUDED.address;
+  `
+  );
+
+  await prisma.$queryRaw(
+    Prisma.sql`
+    INSERT INTO "Location" ("id", "placeId", "address", "point")
+    VALUES (
       ${SEEDED_TEST_LOCATIONS.editableEvent.id},
       ${SEEDED_TEST_LOCATIONS.editableEvent.placeId},
       ${SEEDED_TEST_LOCATIONS.editableEvent.address},
@@ -384,6 +438,143 @@ export async function seedTest(prisma: PrismaClient) {
       timezone: SEEDED_TEST_EVENTS.verifiedDraft.timezone,
       locationId: SEEDED_TEST_LOCATIONS.primary.id,
       pricingType: 'FREE',
+    },
+  });
+
+  // Matrix fixtures for filter coverage (category/location/age/pricing variety)
+  await prisma.flareEvent.upsert({
+    where: { id: SEEDED_TEST_EVENTS.filterSocialHarbourfront.id },
+    update: {
+      title: SEEDED_TEST_EVENTS.filterSocialHarbourfront.title,
+      description: SEEDED_TEST_EVENTS.filterSocialHarbourfront.description,
+      category: SEEDED_TEST_EVENTS.filterSocialHarbourfront.category,
+      ageRestriction: SEEDED_TEST_EVENTS.filterSocialHarbourfront.ageRestriction,
+      pricingType: SEEDED_TEST_EVENTS.filterSocialHarbourfront.pricingType,
+      locationId: SEEDED_TEST_EVENTS.filterSocialHarbourfront.location.id,
+    },
+    create: {
+      id: SEEDED_TEST_EVENTS.filterSocialHarbourfront.id,
+      organizationId: verifiedOrgProfileId!.id,
+      status: SEEDED_TEST_EVENTS.filterSocialHarbourfront.status,
+      title: SEEDED_TEST_EVENTS.filterSocialHarbourfront.title,
+      description: SEEDED_TEST_EVENTS.filterSocialHarbourfront.description,
+      category: SEEDED_TEST_EVENTS.filterSocialHarbourfront.category,
+      ageRestriction: SEEDED_TEST_EVENTS.filterSocialHarbourfront.ageRestriction,
+      imageId: stockEvent.id,
+      startsAtUTC: futureDate(9),
+      timezone: SEEDED_TEST_EVENTS.filterSocialHarbourfront.timezone,
+      locationId: SEEDED_TEST_EVENTS.filterSocialHarbourfront.location.id,
+      pricingType: SEEDED_TEST_EVENTS.filterSocialHarbourfront.pricingType,
+    },
+  });
+
+  await prisma.flareEvent.upsert({
+    where: { id: SEEDED_TEST_EVENTS.filterCultureNorthYork.id },
+    update: {
+      title: SEEDED_TEST_EVENTS.filterCultureNorthYork.title,
+      description: SEEDED_TEST_EVENTS.filterCultureNorthYork.description,
+      category: SEEDED_TEST_EVENTS.filterCultureNorthYork.category,
+      ageRestriction: SEEDED_TEST_EVENTS.filterCultureNorthYork.ageRestriction,
+      pricingType: SEEDED_TEST_EVENTS.filterCultureNorthYork.pricingType,
+      minPriceCents: SEEDED_TEST_EVENTS.filterCultureNorthYork.minPriceCents,
+      maxPriceCents: SEEDED_TEST_EVENTS.filterCultureNorthYork.maxPriceCents,
+      locationId: SEEDED_TEST_EVENTS.filterCultureNorthYork.location.id,
+    },
+    create: {
+      id: SEEDED_TEST_EVENTS.filterCultureNorthYork.id,
+      organizationId: verifiedOrgProfileId!.id,
+      status: SEEDED_TEST_EVENTS.filterCultureNorthYork.status,
+      title: SEEDED_TEST_EVENTS.filterCultureNorthYork.title,
+      description: SEEDED_TEST_EVENTS.filterCultureNorthYork.description,
+      category: SEEDED_TEST_EVENTS.filterCultureNorthYork.category,
+      ageRestriction: SEEDED_TEST_EVENTS.filterCultureNorthYork.ageRestriction,
+      imageId: stockEvent.id,
+      startsAtUTC: futureDate(11),
+      timezone: SEEDED_TEST_EVENTS.filterCultureNorthYork.timezone,
+      locationId: SEEDED_TEST_EVENTS.filterCultureNorthYork.location.id,
+      pricingType: SEEDED_TEST_EVENTS.filterCultureNorthYork.pricingType,
+      minPriceCents: SEEDED_TEST_EVENTS.filterCultureNorthYork.minPriceCents,
+      maxPriceCents: SEEDED_TEST_EVENTS.filterCultureNorthYork.maxPriceCents,
+    },
+  });
+
+  await prisma.flareEvent.upsert({
+    where: { id: SEEDED_TEST_EVENTS.filterWellnessScarborough.id },
+    update: {
+      title: SEEDED_TEST_EVENTS.filterWellnessScarborough.title,
+      description: SEEDED_TEST_EVENTS.filterWellnessScarborough.description,
+      category: SEEDED_TEST_EVENTS.filterWellnessScarborough.category,
+      ageRestriction: SEEDED_TEST_EVENTS.filterWellnessScarborough.ageRestriction,
+      pricingType: SEEDED_TEST_EVENTS.filterWellnessScarborough.pricingType,
+      minPriceCents: SEEDED_TEST_EVENTS.filterWellnessScarborough.minPriceCents,
+      locationId: SEEDED_TEST_EVENTS.filterWellnessScarborough.location.id,
+    },
+    create: {
+      id: SEEDED_TEST_EVENTS.filterWellnessScarborough.id,
+      organizationId: verifiedOrgProfileId!.id,
+      status: SEEDED_TEST_EVENTS.filterWellnessScarborough.status,
+      title: SEEDED_TEST_EVENTS.filterWellnessScarborough.title,
+      description: SEEDED_TEST_EVENTS.filterWellnessScarborough.description,
+      category: SEEDED_TEST_EVENTS.filterWellnessScarborough.category,
+      ageRestriction: SEEDED_TEST_EVENTS.filterWellnessScarborough.ageRestriction,
+      imageId: stockEvent.id,
+      startsAtUTC: futureDate(13),
+      timezone: SEEDED_TEST_EVENTS.filterWellnessScarborough.timezone,
+      locationId: SEEDED_TEST_EVENTS.filterWellnessScarborough.location.id,
+      pricingType: SEEDED_TEST_EVENTS.filterWellnessScarborough.pricingType,
+      minPriceCents: SEEDED_TEST_EVENTS.filterWellnessScarborough.minPriceCents,
+    },
+  });
+
+  await prisma.flareEvent.upsert({
+    where: { id: SEEDED_TEST_EVENTS.filterAdvocacyPearson.id },
+    update: {
+      title: SEEDED_TEST_EVENTS.filterAdvocacyPearson.title,
+      description: SEEDED_TEST_EVENTS.filterAdvocacyPearson.description,
+      category: SEEDED_TEST_EVENTS.filterAdvocacyPearson.category,
+      ageRestriction: SEEDED_TEST_EVENTS.filterAdvocacyPearson.ageRestriction,
+      pricingType: SEEDED_TEST_EVENTS.filterAdvocacyPearson.pricingType,
+      locationId: SEEDED_TEST_EVENTS.filterAdvocacyPearson.location.id,
+    },
+    create: {
+      id: SEEDED_TEST_EVENTS.filterAdvocacyPearson.id,
+      organizationId: verifiedOrgProfileId!.id,
+      status: SEEDED_TEST_EVENTS.filterAdvocacyPearson.status,
+      title: SEEDED_TEST_EVENTS.filterAdvocacyPearson.title,
+      description: SEEDED_TEST_EVENTS.filterAdvocacyPearson.description,
+      category: SEEDED_TEST_EVENTS.filterAdvocacyPearson.category,
+      ageRestriction: SEEDED_TEST_EVENTS.filterAdvocacyPearson.ageRestriction,
+      imageId: stockEvent.id,
+      startsAtUTC: futureDate(17),
+      timezone: SEEDED_TEST_EVENTS.filterAdvocacyPearson.timezone,
+      locationId: SEEDED_TEST_EVENTS.filterAdvocacyPearson.location.id,
+      pricingType: SEEDED_TEST_EVENTS.filterAdvocacyPearson.pricingType,
+    },
+  });
+
+  await prisma.flareEvent.upsert({
+    where: { id: SEEDED_TEST_EVENTS.filterOtherPendingOrg.id },
+    update: {
+      title: SEEDED_TEST_EVENTS.filterOtherPendingOrg.title,
+      description: SEEDED_TEST_EVENTS.filterOtherPendingOrg.description,
+      category: SEEDED_TEST_EVENTS.filterOtherPendingOrg.category,
+      ageRestriction: SEEDED_TEST_EVENTS.filterOtherPendingOrg.ageRestriction,
+      pricingType: SEEDED_TEST_EVENTS.filterOtherPendingOrg.pricingType,
+      locationId: SEEDED_TEST_EVENTS.filterOtherPendingOrg.location.id,
+    },
+    create: {
+      id: SEEDED_TEST_EVENTS.filterOtherPendingOrg.id,
+      organizationId: unverifiedOrgProfileId!.id,
+      status: SEEDED_TEST_EVENTS.filterOtherPendingOrg.status,
+      title: SEEDED_TEST_EVENTS.filterOtherPendingOrg.title,
+      description: SEEDED_TEST_EVENTS.filterOtherPendingOrg.description,
+      category: SEEDED_TEST_EVENTS.filterOtherPendingOrg.category,
+      ageRestriction: SEEDED_TEST_EVENTS.filterOtherPendingOrg.ageRestriction,
+      imageId: stockEvent.id,
+      startsAtUTC: futureDate(19),
+      timezone: SEEDED_TEST_EVENTS.filterOtherPendingOrg.timezone,
+      locationId: SEEDED_TEST_EVENTS.filterOtherPendingOrg.location.id,
+      pricingType: SEEDED_TEST_EVENTS.filterOtherPendingOrg.pricingType,
     },
   });
 }
