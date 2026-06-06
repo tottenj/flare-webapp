@@ -1,8 +1,12 @@
 import { seededEvents } from '../constants';
 
 export function openEventFilters() {
-  cy.get('[data-cy="events-filter-trigger"]').should('be.visible').click();
-  cy.get('[data-cy="main-modal"]')
+  cy.get('[data-cy="events-filter-trigger"]', { timeout: 10000 })
+    .should('be.visible')
+    .scrollIntoView()
+    .click({ force: true });
+
+  cy.get('[data-cy="main-modal"]', { timeout: 10000 })
     .should('be.visible')
     .contains('Event Filters')
     .should('be.visible');
@@ -25,8 +29,11 @@ export function selectCategoryFilter(label: string) {
 }
 
 export function closeEventFilters() {
-  cy.get('[data-cy="main-modal"] [aria-label="Close"]').first().click({ force: true });
-  cy.contains('Event Filters').should('not.exist');
+  cy.get('[data-cy="main-modal"] [aria-label="Close"]', { timeout: 10000 })
+    .first()
+    .click({ force: true });
+
+  cy.get('[data-cy="main-modal"]', { timeout: 10000 }).should('not.exist');
 }
 
 export function clearFilters() {

@@ -6,6 +6,7 @@ import { GeneralErrors } from '@/lib/errors/GeneralErrors';
 import { AdminService } from '@/lib/services/adminService/AdminService';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
 import { ActionResult } from '@/lib/types/responses/ActionResult';
+import { updateTag } from 'next/cache';
 import z from 'zod';
 
 export default async function verifyOrganization(orgId: string): Promise<ActionResult<null>> {
@@ -24,6 +25,7 @@ export default async function verifyOrganization(orgId: string): Promise<ActionR
 
   try {
     await AdminService.verifyOrg(actor, sanitized.data.orgId);
+    updateTag('public-events');
     return { ok: true, data: null };
   } catch (error) {
     if (error instanceof AppError) {

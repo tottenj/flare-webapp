@@ -9,6 +9,7 @@ import { UserContextService } from '@/lib/services/userContextService/userContex
 import { ActionResult } from '@/lib/types/responses/ActionResult';
 import z from 'zod';
 import cleanupUploadedImageOnFailure from '@/lib/storage/cleanupUploadedImageOnFailure';
+import { updateTag } from 'next/cache';
 
 export default async function editEvent(
   eventId: string,
@@ -24,11 +25,9 @@ export default async function editEvent(
     return fail(GeneralErrors.InvalidFileInput(), fieldErrors);
   }
 
-
-
-  
   try {
     await EventService.editEvent(eventId, actor, sanitized.data);
+    updateTag('public-events');
   } catch (error) {
     await cleanupUploadedImageOnFailure(input, ctx.user.firebaseUid);
     if (error instanceof AppError) {

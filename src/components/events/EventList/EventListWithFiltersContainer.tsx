@@ -5,12 +5,19 @@ import { EventDto } from '@/lib/schemas/event/eventDtoSchema';
 import { EventService } from '@/lib/services/eventService/eventService';
 import { EventFilterDataDto } from '@/lib/types/dto/event/EventFilterDataDto';
 import { UserEventFilter } from '@/lib/types/UserEventFilter';
+import { cacheLife, cacheTag } from 'next/cache';
 
 export default async function EventListWithFiltersContainer({
   filters,
 }: {
   filters: UserEventFilter;
 }) {
+
+  "use cache"
+  cacheLife('minutes');
+  cacheTag('public-events');
+
+
   let events: EventDto[] = [];
   let filterData: EventFilterDataDto = {};
   try {

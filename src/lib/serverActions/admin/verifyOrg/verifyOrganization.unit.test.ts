@@ -5,6 +5,7 @@ import { authUserFactory } from '../../../../../__tests__/factories/auth/authUse
 import { expect } from '@jest/globals';
 import { expectFail } from '@/lib/test/expectFail';
 import { AppError } from '@/lib/errors/AppError';
+import { updateTag } from 'next/cache';
 
 jest.mock('@/lib/services/adminService/AdminService', () => ({
   AdminService: {
@@ -17,6 +18,10 @@ jest.mock('@/lib/services/userContextService/userContextService', () => ({
     requireAdmin: jest.fn(),
     getUserActor: jest.fn(),
   },
+}));
+
+jest.mock('next/cache', () => ({
+  updateTag: jest.fn(),
 }));
 
 describe('verifyOrganization', () => {
@@ -36,6 +41,7 @@ describe('verifyOrganization', () => {
 
     expect(AdminService.verifyOrg).toHaveBeenCalledWith(adminActor, orgId);
     expect(result).toMatchObject({ ok: true, data: null });
+    expect(updateTag).toHaveBeenCalledWith('public-events');
   });
 
   it('returns a fail when wrong data passed in', async () => {
@@ -46,6 +52,7 @@ describe('verifyOrganization', () => {
     expect(error).toBeDefined();
     expect(error?.code).toBe('INVALID_INPUT');
     expect(AdminService.verifyOrg).not.toHaveBeenCalled();
+    expect(updateTag).not.toHaveBeenCalled();
   });
 
   it('returns a fail when admin service throws an App Error', async () => {
@@ -65,6 +72,7 @@ describe('verifyOrganization', () => {
     expect(error).toBeDefined();
     expect(error?.code).toBe('APP_ERROR');
     expect(AdminService.verifyOrg).toHaveBeenCalledWith(adminActor, orgId);
+    expect(updateTag).not.toHaveBeenCalled();
   });
 
   it('returns a fail with unknown error when admin service throws an unknown error', async () => {
@@ -82,5 +90,6 @@ describe('verifyOrganization', () => {
     expect(error).toBeDefined();
     expect(error?.code).toBe('UNKNOWN');
     expect(AdminService.verifyOrg).toHaveBeenCalledWith(adminActor, orgId);
+    expect(updateTag).not.toHaveBeenCalled();
   });
 });
