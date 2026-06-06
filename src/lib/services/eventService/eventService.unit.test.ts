@@ -1058,7 +1058,7 @@ describe('EventService.getPublicFilterData', () => {
     jest.clearAllMocks();
   });
 
-  it('successfully retrieves location data if placeid passed in', () => {
+  it('successfully retrieves location data if placeid passed in', async () => {
     const filters = { placeId: 'placeId123' };
     const locationData = {
       placeId: 'placeId123',
@@ -1076,10 +1076,10 @@ describe('EventService.getPublicFilterData', () => {
 
     (locationDal.getByPlaceId as jest.Mock).mockResolvedValueOnce(locationData);
 
-    expect(EventService.getPublicFilterData(filters)).resolves.toEqual({
+    await expect(EventService.getPublicFilterData(filters)).resolves.toEqual({
       location: expectedData,
     });
-    expect(locationDal.getByPlaceId).toHaveBeenCalled();
+    expect(locationDal.getByPlaceId).toHaveBeenCalledWith(filters.placeId);
   });
 
   it("returns null for location if placeid doesn't return data", () => {
