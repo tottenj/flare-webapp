@@ -38,6 +38,7 @@ export const eventDtoSchema = z.object({
       label: z.string(),
     })
   ),
+  ticketLink: z.url().nullable(),
 });
 
 export type EventDto = z.infer<typeof eventDtoSchema>;

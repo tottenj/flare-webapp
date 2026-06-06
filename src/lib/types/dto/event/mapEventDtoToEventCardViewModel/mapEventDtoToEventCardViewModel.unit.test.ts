@@ -36,6 +36,7 @@ describe('mapEventDtoToEventCardViewModel', () => {
       title: 'Test Event',
       description: 'Test Description',
       imagePath: 'images/test.png',
+      ticketLink: 'https://example.com/tickets',
       tags: [
         { id: '1', label: 'Party' },
         { id: '2', label: 'Queer' },
@@ -67,6 +68,7 @@ describe('mapEventDtoToEventCardViewModel', () => {
       priceLabel: 'eventPrice',
       ageRestrictionLabel: 'ageRangeLabel',
       description: 'Test Description',
+      ticketLink: 'https://example.com/tickets',
       canSave: false,
       isSaved: false,
     });

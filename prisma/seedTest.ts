@@ -360,7 +360,9 @@ export async function seedTest(prisma: PrismaClient) {
 
   await prisma.flareEvent.upsert({
     where: { id: SEEDED_TEST_EVENTS.editable.id },
-    update: {},
+    update: {
+      ticketLink: SEEDED_TEST_EVENTS.editable.ticketLink,
+    },
     create: {
       id: SEEDED_TEST_EVENTS.editable.id,
       organizationId: unverifiedOrgProfileId!.id,
@@ -377,6 +379,7 @@ export async function seedTest(prisma: PrismaClient) {
       pricingType: SEEDED_TEST_EVENTS.editable.pricingType,
       minPriceCents: SEEDED_TEST_EVENTS.editable.minPriceCents,
       maxPriceCents: SEEDED_TEST_EVENTS.editable.maxPriceCents,
+      ticketLink: SEEDED_TEST_EVENTS.editable.ticketLink,
       tags: {
         create: [
           { tag: { connect: { id: editableTagDrag.id } } },
@@ -409,7 +412,9 @@ export async function seedTest(prisma: PrismaClient) {
 
   await prisma.flareEvent.upsert({
     where: { id: SEEDED_TEST_EVENTS.verifiedPublished.id },
-    update: {},
+    update: {
+      ticketLink: SEEDED_TEST_EVENTS.verifiedPublished.ticketLink,
+    },
     create: {
       id: SEEDED_TEST_EVENTS.verifiedPublished.id,
       organizationId: verifiedOrgProfileId!.id,
@@ -421,6 +426,7 @@ export async function seedTest(prisma: PrismaClient) {
       timezone: SEEDED_TEST_EVENTS.verifiedPublished.timezone,
       locationId: SEEDED_TEST_LOCATIONS.primary.id,
       pricingType: 'FREE',
+      ticketLink: SEEDED_TEST_EVENTS.verifiedPublished.ticketLink,
     },
   });
 

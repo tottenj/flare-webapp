@@ -12,6 +12,7 @@ import {
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export type EventCardViewModel = {
   id: string;
@@ -136,7 +137,9 @@ export default function EventCardPresentational({ event }: { event: EventCardVie
           </div>
           {ticketLink && (
             <div className="mt-auto flex justify-center">
-              <PrimaryButton text="Get Tickets" />
+              <Link href={ticketLink}>
+                <PrimaryButton text="Get Tickets" />
+              </Link>
             </div>
           )}
         </div>

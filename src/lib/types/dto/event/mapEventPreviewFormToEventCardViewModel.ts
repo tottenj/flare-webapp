@@ -31,6 +31,7 @@ export default function mapEventPreviewFormToEventCardViewModel(
     ageRestrictionLabel: formatAgeRange(event.ageRestriction),
 
     description: event.eventDescription,
+    ticketLink: event.ticketLink,
     canSave: false,
     isSaved: false,
   };

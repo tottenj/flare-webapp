@@ -21,6 +21,11 @@ export const CreateEventBaseSchema = z.object({
   priceType: z.enum(PRICE_TYPE_VALUES),
   minPrice: z.number().optional(),
   maxPrice: z.number().optional(),
+
+  ticketLink: z.preprocess((val) => {
+    if (typeof val === 'string' && val.trim() === '') return undefined;
+    return val;
+  }, z.url().optional()),
 });
 
 export type CreateEventBase = z.infer<typeof CreateEventBaseSchema>;

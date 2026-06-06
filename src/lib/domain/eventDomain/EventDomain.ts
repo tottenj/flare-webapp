@@ -24,6 +24,7 @@ export type EventDomainProps = {
   minPriceCents?: number | null;
   maxPriceCents?: number | null;
   tags: string[];
+  ticketLink?: string | null;
 };
 
 export type CreateEventResolved = Omit<CreateEvent, 'image' | 'location'> & {
@@ -61,6 +62,7 @@ export class EventDomain {
       pricingType: pricing.type,
       ageRestriction: input.ageRestriction,
       tags: input.tags,
+      ticketLink: input.ticketLink ?? null,
     });
   }
 
@@ -114,6 +116,7 @@ export class EventDomain {
       minPriceCents: pricing?.min?.cents,
       maxPriceCents: pricing?.max?.cents,
       tags: tags !== undefined ? tags : existing.tags,
+      ticketLink: input.ticketLink !== undefined ? input.ticketLink : existing.ticketLink,
     });
   }
 }
