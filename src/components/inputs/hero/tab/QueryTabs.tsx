@@ -21,14 +21,18 @@ export default function QueryTabs<T extends string>({
   ...props
 }: QueryTabProps<T>) {
   const { filters, setFilters } = useQueryFilters<T>();
+  const queryParam = param as keyof typeof filters;
 
-  const selected = filters[param] ?? defaultValue;
+  const selected = filters[queryParam] ?? defaultValue;
 
   return (
     <Tabs
-      onSelectionChange={(key) =>
-        setFilters({ [param]: String(key) } as Partial<Record<T, string | null>>)
-      }
+      onSelectionChange={(key) => {
+        const updates: Parameters<typeof setFilters>[0] = {
+          [param]: String(key),
+        } as Parameters<typeof setFilters>[0];
+        setFilters(updates);
+      }}
       selectedKey={selected}
       classNames={{
         base: 'w-full',
