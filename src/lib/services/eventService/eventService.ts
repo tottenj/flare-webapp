@@ -113,9 +113,10 @@ export class EventService {
   static async getOrgUpcomingEvent(
     orgId: string,
     actor?: AuthenticatedOrganization,
-    viewerUserId?: string
+    viewerUserId?: string,
+    startsAfter: Date = new Date()
   ): Promise<EventDto | null> {
-    const event = await eventDal.getUpcomingOrgEvent(orgId);
+    const event = await eventDal.getUpcomingOrgEvent(orgId, startsAfter);
     if (!event) return null;
     if (!EventPermission.canView(event, actor)) return null;
     const dto = mapEventRowToDto(event);

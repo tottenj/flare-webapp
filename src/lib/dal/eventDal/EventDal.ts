@@ -39,13 +39,13 @@ export class EventDal {
     });
   }
 
-  async getUpcomingOrgEvent(orgId: string) {
+  async getUpcomingOrgEvent(orgId: string, startsAfter: Date = new Date()) {
     return await prisma.flareEvent.findFirst({
       where: {
         organizationId: orgId,
         status: 'PUBLISHED',
         startsAtUTC: {
-          gt: new Date(),
+          gt: startsAfter,
         },
       },
       orderBy: {

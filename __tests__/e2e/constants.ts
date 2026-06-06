@@ -1,5 +1,6 @@
 import {
   SEEDED_TEST_EVENTS,
+  SEEDED_TEST_LOCATIONS,
   SEEDED_TEST_ORGS,
   SEEDED_TEST_USERS,
 } from '../../prisma/seedTest.constants';
@@ -49,3 +50,4 @@ export const nonPendingOrg: basicUser = {
 };
 
 export const seededEvents = SEEDED_TEST_EVENTS;
+export const seededLocations = SEEDED_TEST_LOCATIONS;

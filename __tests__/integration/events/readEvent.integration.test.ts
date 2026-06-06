@@ -10,6 +10,7 @@ import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
 import { prisma } from '../../../prisma/prismaClient';
 import { eventInputFactory } from '../../factories/service/eventInput.factory';
 import { expectOnlyEventIds } from './filterAssertions';
+import { createLocationIntegration } from '../../factories/integration/location.factory';
 
 jest.mock('@/lib/services/imageService/ImageService', () => ({
   __esModule: true,
@@ -296,6 +297,94 @@ describe('EventService.listEventsUser category filter (integration)', () => {
     const results = await EventService.listEventsUser({ category: 'NIGHTLIFE' });
 
     expectOnlyEventIds(results, [verifiedEvent.id]);
+  });
+});
+
+describe('EventService.listEventsUser location filter (integration)', () => {
+  it('returns only events within requested distance of selected place', async () => {
+    const { org } = await createOrgIntegration({ org: { status: 'VERIFIED' } });
+
+    const searchLocation = await createLocationIntegration({
+      placeId: 'search-place-id-location-filter',
+      address: 'Search Centre',
+      lat: 43.6777,
+      lng: -79.6248,
+    });
+
+    const nearbyLocation = await createLocationIntegration({
+      placeId: 'nearby-place-id-location-filter',
+      address: 'Nearby Result',
+      lat: 43.685,
+      lng: -79.61,
+    });
+
+    const farLocation = await createLocationIntegration({
+      placeId: 'far-place-id-location-filter',
+      address: 'Far Result',
+      lat: 43.95,
+      lng: -79.2,
+    });
+
+    const nearbyEvent = await createEventIntegration({
+      organizationId: org.id,
+      overrides: {
+        title: 'Nearby Event Match',
+        location: {
+          connect: { id: nearbyLocation.id },
+        },
+      },
+    });
+
+    await createEventIntegration({
+      organizationId: org.id,
+      overrides: {
+        title: 'Far Event Non Match',
+        location: {
+          connect: { id: farLocation.id },
+        },
+      },
+    });
+
+    const results = await EventService.listEventsUser({
+      placeId: searchLocation.placeId as string,
+      distance: 10,
+    });
+
+    expectOnlyEventIds(results, [nearbyEvent.id]);
+  });
+});
+
+describe('EventService.getPublicFilterData (integration)', () => {
+  it('returns mapped location data when placeId exists', async () => {
+    const location = await createLocationIntegration({
+      placeId: 'public-filter-place-id',
+      address: '123 Filter Data St',
+      lat: 43.7001,
+      lng: -79.4163,
+    });
+
+    const result = await EventService.getPublicFilterData({
+      placeId: location.placeId as string,
+    });
+
+    expect(result).toEqual({
+      location: {
+        placeId: location.placeId,
+        address: location.address,
+        lat: 43.7001,
+        lng: -79.4163,
+      },
+    });
+  });
+
+  it('returns null location when placeId is missing or unknown', async () => {
+    const noPlaceId = await EventService.getPublicFilterData({ placeId: undefined });
+    expect(noPlaceId).toEqual({ location: null });
+
+    const unknownPlaceId = await EventService.getPublicFilterData({
+      placeId: 'non-existent-public-filter-place-id',
+    });
+    expect(unknownPlaceId).toEqual({ location: null });
   });
 });
 

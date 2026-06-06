@@ -24,29 +24,175 @@ export function selectCategoryFilter(label: string) {
     });
 }
 
-export function clearFilters() {
-  cy.contains('button', 'Clear Filters').click({ force: true });
+export function closeEventFilters() {
   cy.get('[data-cy="main-modal"] [aria-label="Close"]').first().click({ force: true });
   cy.contains('Event Filters').should('not.exist');
 }
 
+export function clearFilters() {
+  cy.contains('button', 'Clear Filters').click({ force: true });
+  closeEventFilters();
+}
+
+export function setDistanceFilter(kilometers: number) {
+  cy.get('[data-cy="main-modal"]').should('be.visible');
+  cy.get('[data-cy="main-modal"]').then(($modal) => {
+    const rangeInput = $modal.find('input[type="range"]');
+
+    if (rangeInput.length > 0) {
+      cy.wrap(rangeInput[0])
+        .invoke('val')
+        .then((current) => {
+          const currentNumber = Number(current ?? '10');
+          const delta = kilometers - currentNumber;
+          if (delta === 0) return;
+
+          const keyStroke = delta > 0 ? '{rightarrow}' : '{leftarrow}';
+          const steps = Math.abs(delta);
+          const keys = Array.from({ length: steps }, () => keyStroke).join('');
+
+          cy.wrap(rangeInput[0]).focus().type(keys, { force: true });
+        });
+      return;
+    }
+
+    cy.get('[data-cy="main-modal"] [role="slider"]').first().as('distanceSlider');
+
+    cy.get('@distanceSlider')
+      .invoke('attr', 'aria-valuenow')
+      .then((current) => {
+        const currentNumber = Number(current ?? '10');
+        const delta = kilometers - currentNumber;
+        if (delta === 0) return;
+
+        const keyStroke = delta > 0 ? '{rightarrow}' : '{leftarrow}';
+        const steps = Math.abs(delta);
+        const keys = Array.from({ length: steps }, () => keyStroke).join('');
+
+        cy.get('@distanceSlider').focus().type(keys, { force: true });
+      });
+  });
+}
+
+export function expectFilterChip(key: string, expectedText?: string) {
+  const chipSelector = `[data-cy="events-filter-chip-${key}"]`;
+  cy.get(chipSelector).should('be.visible');
+
+  if (expectedText) {
+    cy.get(chipSelector)
+      .invoke('text')
+      .then((text) => {
+        expect(text.toLowerCase()).to.contain(expectedText.toLowerCase());
+      });
+  }
+}
+
+export function expectNoFilterChip(key: string) {
+  cy.get(`[data-cy="events-filter-chip-${key}"]`).should('not.exist');
+}
+
+export function closeFilterChip(key: string) {
+  const chipSelector = `[data-cy="events-filter-chip-${key}"]`;
+  cy.get(chipSelector)
+    .should('be.visible')
+    .within(() => {
+      cy.get('[aria-label="close chip"]').first().click({ force: true });
+    });
+}
+
 export function expectCategoryFilteredList() {
-  cy.get(`[data-cy="event-row-${seededEvents.verifiedUpcoming.id}"]`).should('exist');
-  cy.get(`[data-cy="event-row-${seededEvents.verifiedPublished.id}"]`).should('not.exist');
-  cy.get(`[data-cy="event-row-${seededEvents.filterSocialHarbourfront.id}"]`).should('not.exist');
-  cy.get(`[data-cy="event-row-${seededEvents.filterCultureNorthYork.id}"]`).should('not.exist');
-  cy.get(`[data-cy="event-row-${seededEvents.filterWellnessScarborough.id}"]`).should('not.exist');
-  cy.get(`[data-cy="event-row-${seededEvents.filterAdvocacyPearson.id}"]`).should('not.exist');
+  cy.get(`[data-cy="event-row-${seededEvents.verifiedUpcoming.id}"]`, { timeout: 12000 }).should(
+    'exist'
+  );
+  cy.get(`[data-cy="event-row-${seededEvents.verifiedPublished.id}"]`, { timeout: 12000 }).should(
+    'not.exist'
+  );
+  cy.get(`[data-cy="event-row-${seededEvents.filterSocialHarbourfront.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterCultureNorthYork.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterWellnessScarborough.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterAdvocacyPearson.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
 }
 
 export function expectDefaultUnfilteredList() {
-  cy.get(`[data-cy="event-row-${seededEvents.verifiedUpcoming.id}"]`).should('exist');
-  cy.get(`[data-cy="event-row-${seededEvents.verifiedPublished.id}"]`).should('exist');
-  cy.get(`[data-cy="event-row-${seededEvents.filterSocialHarbourfront.id}"]`).should('exist');
-  cy.get(`[data-cy="event-row-${seededEvents.filterCultureNorthYork.id}"]`).should('exist');
-  cy.get(`[data-cy="event-row-${seededEvents.filterWellnessScarborough.id}"]`).should('exist');
-  cy.get(`[data-cy="event-row-${seededEvents.filterAdvocacyPearson.id}"]`).should('exist');
+  cy.get(`[data-cy="event-row-${seededEvents.verifiedUpcoming.id}"]`, { timeout: 12000 }).should(
+    'exist'
+  );
+  cy.get(`[data-cy="event-row-${seededEvents.verifiedPublished.id}"]`, { timeout: 12000 }).should(
+    'exist'
+  );
+  cy.get(`[data-cy="event-row-${seededEvents.filterSocialHarbourfront.id}"]`, {
+    timeout: 12000,
+  }).should('exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterCultureNorthYork.id}"]`, {
+    timeout: 12000,
+  }).should('exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterWellnessScarborough.id}"]`, {
+    timeout: 12000,
+  }).should('exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterAdvocacyPearson.id}"]`, {
+    timeout: 12000,
+  }).should('exist');
 
   // Pending org fixtures should never appear in public events.
-  cy.get(`[data-cy="event-row-${seededEvents.filterOtherPendingOrg.id}"]`).should('not.exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterOtherPendingOrg.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
+}
+
+export function expectPearsonDistanceFilteredList() {
+  cy.get(`[data-cy="event-row-${seededEvents.verifiedUpcoming.id}"]`, { timeout: 12000 }).should(
+    'exist'
+  );
+  cy.get(`[data-cy="event-row-${seededEvents.verifiedPublished.id}"]`, { timeout: 12000 }).should(
+    'exist'
+  );
+  cy.get(`[data-cy="event-row-${seededEvents.filterSocialHarbourfront.id}"]`, {
+    timeout: 12000,
+  }).should('exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterCultureNorthYork.id}"]`, {
+    timeout: 12000,
+  }).should('exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterAdvocacyPearson.id}"]`, {
+    timeout: 12000,
+  }).should('exist');
+
+  cy.get(`[data-cy="event-row-${seededEvents.filterWellnessScarborough.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterOtherPendingOrg.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
+}
+
+export function expectNightlifePearsonDistanceFilteredList() {
+  cy.get(`[data-cy="event-row-${seededEvents.verifiedUpcoming.id}"]`, { timeout: 12000 }).should(
+    'exist'
+  );
+
+  cy.get(`[data-cy="event-row-${seededEvents.verifiedPublished.id}"]`, { timeout: 12000 }).should(
+    'not.exist'
+  );
+  cy.get(`[data-cy="event-row-${seededEvents.filterAdvocacyPearson.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterSocialHarbourfront.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterCultureNorthYork.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterWellnessScarborough.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
+  cy.get(`[data-cy="event-row-${seededEvents.filterOtherPendingOrg.id}"]`, {
+    timeout: 12000,
+  }).should('not.exist');
 }
