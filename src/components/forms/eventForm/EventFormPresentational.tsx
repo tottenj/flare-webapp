@@ -149,6 +149,9 @@ export default function EventFormPresentational({
             />
           </div>
         )}
+
+        <HeroInput type='url' label="Optional Ticket Link" name="ticketLink" defaultValue={initialEvent?.ticketLink} />
+
         <PrimaryButton type="submit" text={submitText} />
       </Form>
     </>

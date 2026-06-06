@@ -60,6 +60,7 @@ describe('createEvent', () => {
     category: EventCategory.SOCIAL,
     priceType: PRICE_TYPE.Free,
     tags: [],
+    ticketLink: 'https://example.com/tickets',
   };
 
   const ctx = {
@@ -88,6 +89,16 @@ describe('createEvent', () => {
       input
     );
     expect(updateTag).toHaveBeenCalledWith('public-events');
+  });
+
+  it('accepts empty ticketLink input and normalizes it to undefined', async () => {
+    const result = await createEvent({ ...input, ticketLink: '' });
+
+    expect(result).toEqual({ ok: true, data: null });
+    expect(EventService.createEvent).toHaveBeenCalledWith(
+      { userId: 'userId', firebaseUid: 'uid123', orgId: 'orgId' },
+      expect.objectContaining({ ticketLink: undefined })
+    );
   });
 
   it('returns invalid input failure and deletes uploaded image when owned by user', async () => {
