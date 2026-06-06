@@ -71,7 +71,13 @@ export default function PlaceSearch({
       setSelectedKey(value.placeId);
       setSelectedLabel(value.address);
       list.setFilterText(value.address);
+      return;
     }
+
+    setLocationSelect(null);
+    setSelectedKey(null);
+    setSelectedLabel('');
+    list.setFilterText('');
   }, [value]);
 
   // Async list for autocomplete

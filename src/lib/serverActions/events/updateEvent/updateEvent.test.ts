@@ -7,6 +7,7 @@ import { expect } from '@jest/globals';
 import cleanupUploadedImageOnFailure from '@/lib/storage/cleanupUploadedImageOnFailure';
 import { AppError } from '@/lib/errors/AppError';
 import { expectFail } from '@/lib/test/expectFail';
+import { updateTag } from 'next/cache';
 
 jest.mock('@/lib/services/userContextService/userContextService', () => ({
   UserContextService: {
@@ -24,6 +25,10 @@ jest.mock('@/lib/services/eventService/eventService', () => ({
 jest.mock('@/lib/storage/cleanupUploadedImageOnFailure', () => ({
   __esModule: true,
   default: jest.fn(),
+}));
+
+jest.mock('next/cache', () => ({
+  updateTag: jest.fn(),
 }));
 
 describe('update event', () => {
@@ -52,6 +57,7 @@ describe('update event', () => {
       expect.objectContaining(event)
     );
     expect(cleanupUploadedImageOnFailure).not.toHaveBeenCalled();
+    expect(updateTag).toHaveBeenCalledWith('public-events');
   });
 
   it('fails with invalid input and cleans up uploaded image', async () => {
@@ -67,6 +73,7 @@ describe('update event', () => {
     const result = await editEvent('id', invalidEvent);
     expect(result.ok).toBe(false);
     expect(cleanupUploadedImageOnFailure).toHaveBeenCalledWith(invalidEvent, actor.firebaseUid);
+    expect(updateTag).not.toHaveBeenCalled();
   });
 
   it('fails with service error and cleans up uploaded image', async () => {
@@ -83,6 +90,7 @@ describe('update event', () => {
     const result = await editEvent('id', event);
     expect(result.ok).toBe(false);
     expect(cleanupUploadedImageOnFailure).toHaveBeenCalledWith(event, actor.firebaseUid);
+    expect(updateTag).not.toHaveBeenCalled();
   });
 
   it('fails with AppError and cleans up uploaded image', async () => {
@@ -104,5 +112,6 @@ describe('update event', () => {
     expect(error.code).toBe('APP_ERROR');
     expect(error.message).toBe('App error');
     expect(cleanupUploadedImageOnFailure).toHaveBeenCalledWith(event, actor.firebaseUid);
+    expect(updateTag).not.toHaveBeenCalled();
   });
 });

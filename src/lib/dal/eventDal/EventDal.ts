@@ -39,13 +39,13 @@ export class EventDal {
     });
   }
 
-  async getUpcomingOrgEvent(orgId: string) {
+  async getUpcomingOrgEvent(orgId: string, startsAfter: Date = new Date()) {
     return await prisma.flareEvent.findFirst({
       where: {
         organizationId: orgId,
         status: 'PUBLISHED',
         startsAtUTC: {
-          gt: new Date(),
+          gt: startsAfter,
         },
       },
       orderBy: {
@@ -67,14 +67,40 @@ export class EventDal {
 
   async listEventsUser(filters?: UserEventFilter, tx?: Prisma.TransactionClient) {
     const client = tx ?? prisma;
+
+    let nearbyEventIds: string[] | undefined;
+
+    if (filters?.placeId && filters?.distance) {
+      const radiusMeters = filters.distance * 1000;
+
+      const rows = await client.$queryRaw<{ id: string }[]>(Prisma.sql`
+      SELECT e.id
+      FROM "FlareEvent" e
+      JOIN "Location" event_location ON event_location.id = e."locationId"
+      JOIN "Location" search_location ON search_location."placeId" = ${filters.placeId}
+      WHERE ST_DWithin(
+        event_location.point,
+        search_location.point,
+        ${radiusMeters}
+      )
+    `);
+
+      nearbyEventIds = rows.map((row) => row.id);
+
+      if (nearbyEventIds.length === 0) {
+        return [];
+      }
+    }
+
     return await client.flareEvent.findMany({
       where: {
         organization: { status: 'VERIFIED' },
         status: 'PUBLISHED',
-        ...(filters?.placeId && {
-          location: {
-            placeId: filters.placeId,
-          },
+        ...(filters?.category && {
+          category: filters.category,
+        }),
+        ...(nearbyEventIds && {
+          id: { in: nearbyEventIds },
         }),
       },
       orderBy: {
