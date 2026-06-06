@@ -60,6 +60,7 @@ export function mapEventRowToDto(row: EventRow): EventDto {
       minCents: row.minPriceCents ?? null,
       maxCents: row.maxPriceCents ?? null,
     },
+    ticketLink: row.ticketLink ?? null,
     viewer: undefined,
     tags: row.tags.map((eventTag) => ({ id: eventTag.tag.id, label: eventTag.tag.label })),
   };

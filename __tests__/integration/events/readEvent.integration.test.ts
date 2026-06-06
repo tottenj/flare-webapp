@@ -128,6 +128,21 @@ describe('EventService.getEventById', () => {
     expect(res?.organization.name).toBe(org.org.orgName);
   });
 
+  it('returns ticketLink when present', async () => {
+    const org = await createOrgIntegration();
+    const event = await createEventIntegration({
+      organizationId: org.org.id,
+      overrides: {
+        ticketLink: 'https://tickets.example.com/event-123',
+      },
+    });
+
+    const res = await EventService.getEventById(event.id);
+
+    expect(res).not.toBeNull();
+    expect(res?.ticketLink).toBe('https://tickets.example.com/event-123');
+  });
+
   it('returns draft event to owner', async () => {
     const org = await createAuthOrgIntegration();
     const event = await createEventIntegration({

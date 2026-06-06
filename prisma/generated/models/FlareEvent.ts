@@ -53,6 +53,7 @@ export type FlareEventMinAggregateOutputType = {
   pricingType: $Enums.EventPricingType | null
   minPriceCents: number | null
   maxPriceCents: number | null
+  ticketLink: string | null
   currency: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -75,6 +76,7 @@ export type FlareEventMaxAggregateOutputType = {
   pricingType: $Enums.EventPricingType | null
   minPriceCents: number | null
   maxPriceCents: number | null
+  ticketLink: string | null
   currency: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -97,6 +99,7 @@ export type FlareEventCountAggregateOutputType = {
   pricingType: number
   minPriceCents: number
   maxPriceCents: number
+  ticketLink: number
   currency: number
   createdAt: number
   updatedAt: number
@@ -131,6 +134,7 @@ export type FlareEventMinAggregateInputType = {
   pricingType?: true
   minPriceCents?: true
   maxPriceCents?: true
+  ticketLink?: true
   currency?: true
   createdAt?: true
   updatedAt?: true
@@ -153,6 +157,7 @@ export type FlareEventMaxAggregateInputType = {
   pricingType?: true
   minPriceCents?: true
   maxPriceCents?: true
+  ticketLink?: true
   currency?: true
   createdAt?: true
   updatedAt?: true
@@ -175,6 +180,7 @@ export type FlareEventCountAggregateInputType = {
   pricingType?: true
   minPriceCents?: true
   maxPriceCents?: true
+  ticketLink?: true
   currency?: true
   createdAt?: true
   updatedAt?: true
@@ -284,6 +290,7 @@ export type FlareEventGroupByOutputType = {
   pricingType: $Enums.EventPricingType
   minPriceCents: number | null
   maxPriceCents: number | null
+  ticketLink: string | null
   currency: string
   createdAt: Date
   updatedAt: Date
@@ -329,6 +336,7 @@ export type FlareEventWhereInput = {
   pricingType?: Prisma.EnumEventPricingTypeFilter<"FlareEvent"> | $Enums.EventPricingType
   minPriceCents?: Prisma.IntNullableFilter<"FlareEvent"> | number | null
   maxPriceCents?: Prisma.IntNullableFilter<"FlareEvent"> | number | null
+  ticketLink?: Prisma.StringNullableFilter<"FlareEvent"> | string | null
   currency?: Prisma.StringFilter<"FlareEvent"> | string
   createdAt?: Prisma.DateTimeFilter<"FlareEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FlareEvent"> | Date | string
@@ -356,6 +364,7 @@ export type FlareEventOrderByWithRelationInput = {
   pricingType?: Prisma.SortOrder
   minPriceCents?: Prisma.SortOrderInput | Prisma.SortOrder
   maxPriceCents?: Prisma.SortOrderInput | Prisma.SortOrder
+  ticketLink?: Prisma.SortOrderInput | Prisma.SortOrder
   currency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -386,6 +395,7 @@ export type FlareEventWhereUniqueInput = Prisma.AtLeast<{
   pricingType?: Prisma.EnumEventPricingTypeFilter<"FlareEvent"> | $Enums.EventPricingType
   minPriceCents?: Prisma.IntNullableFilter<"FlareEvent"> | number | null
   maxPriceCents?: Prisma.IntNullableFilter<"FlareEvent"> | number | null
+  ticketLink?: Prisma.StringNullableFilter<"FlareEvent"> | string | null
   currency?: Prisma.StringFilter<"FlareEvent"> | string
   createdAt?: Prisma.DateTimeFilter<"FlareEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FlareEvent"> | Date | string
@@ -413,6 +423,7 @@ export type FlareEventOrderByWithAggregationInput = {
   pricingType?: Prisma.SortOrder
   minPriceCents?: Prisma.SortOrderInput | Prisma.SortOrder
   maxPriceCents?: Prisma.SortOrderInput | Prisma.SortOrder
+  ticketLink?: Prisma.SortOrderInput | Prisma.SortOrder
   currency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -443,6 +454,7 @@ export type FlareEventScalarWhereWithAggregatesInput = {
   pricingType?: Prisma.EnumEventPricingTypeWithAggregatesFilter<"FlareEvent"> | $Enums.EventPricingType
   minPriceCents?: Prisma.IntNullableWithAggregatesFilter<"FlareEvent"> | number | null
   maxPriceCents?: Prisma.IntNullableWithAggregatesFilter<"FlareEvent"> | number | null
+  ticketLink?: Prisma.StringNullableWithAggregatesFilter<"FlareEvent"> | string | null
   currency?: Prisma.StringWithAggregatesFilter<"FlareEvent"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FlareEvent"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FlareEvent"> | Date | string
@@ -462,6 +474,7 @@ export type FlareEventCreateInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -489,6 +502,7 @@ export type FlareEventUncheckedCreateInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -510,6 +524,7 @@ export type FlareEventUpdateInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -537,6 +552,7 @@ export type FlareEventUncheckedUpdateInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -561,6 +577,7 @@ export type FlareEventCreateManyInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -580,6 +597,7 @@ export type FlareEventUpdateManyMutationInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -602,6 +620,7 @@ export type FlareEventUncheckedUpdateManyInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -634,6 +653,7 @@ export type FlareEventCountOrderByAggregateInput = {
   pricingType?: Prisma.SortOrder
   minPriceCents?: Prisma.SortOrder
   maxPriceCents?: Prisma.SortOrder
+  ticketLink?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -661,6 +681,7 @@ export type FlareEventMaxOrderByAggregateInput = {
   pricingType?: Prisma.SortOrder
   minPriceCents?: Prisma.SortOrder
   maxPriceCents?: Prisma.SortOrder
+  ticketLink?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -683,6 +704,7 @@ export type FlareEventMinOrderByAggregateInput = {
   pricingType?: Prisma.SortOrder
   minPriceCents?: Prisma.SortOrder
   maxPriceCents?: Prisma.SortOrder
+  ticketLink?: Prisma.SortOrder
   currency?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -880,6 +902,7 @@ export type FlareEventCreateWithoutOrganizationInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -905,6 +928,7 @@ export type FlareEventUncheckedCreateWithoutOrganizationInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -958,6 +982,7 @@ export type FlareEventScalarWhereInput = {
   pricingType?: Prisma.EnumEventPricingTypeFilter<"FlareEvent"> | $Enums.EventPricingType
   minPriceCents?: Prisma.IntNullableFilter<"FlareEvent"> | number | null
   maxPriceCents?: Prisma.IntNullableFilter<"FlareEvent"> | number | null
+  ticketLink?: Prisma.StringNullableFilter<"FlareEvent"> | string | null
   currency?: Prisma.StringFilter<"FlareEvent"> | string
   createdAt?: Prisma.DateTimeFilter<"FlareEvent"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FlareEvent"> | Date | string
@@ -977,6 +1002,7 @@ export type FlareEventCreateWithoutSavedByUsersInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1003,6 +1029,7 @@ export type FlareEventUncheckedCreateWithoutSavedByUsersInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1039,6 +1066,7 @@ export type FlareEventUpdateWithoutSavedByUsersInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1065,6 +1093,7 @@ export type FlareEventUncheckedUpdateWithoutSavedByUsersInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1085,6 +1114,7 @@ export type FlareEventCreateWithoutTagsInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1111,6 +1141,7 @@ export type FlareEventUncheckedCreateWithoutTagsInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1147,6 +1178,7 @@ export type FlareEventUpdateWithoutTagsInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1173,6 +1205,7 @@ export type FlareEventUncheckedUpdateWithoutTagsInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1193,6 +1226,7 @@ export type FlareEventCreateWithoutImageInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1218,6 +1252,7 @@ export type FlareEventUncheckedCreateWithoutImageInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1265,6 +1300,7 @@ export type FlareEventCreateWithoutLocationInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1290,6 +1326,7 @@ export type FlareEventUncheckedCreateWithoutLocationInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1339,6 +1376,7 @@ export type FlareEventCreateManyOrganizationInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1358,6 +1396,7 @@ export type FlareEventUpdateWithoutOrganizationInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1383,6 +1422,7 @@ export type FlareEventUncheckedUpdateWithoutOrganizationInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1406,6 +1446,7 @@ export type FlareEventUncheckedUpdateManyWithoutOrganizationInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1427,6 +1468,7 @@ export type FlareEventCreateManyImageInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1446,6 +1488,7 @@ export type FlareEventUpdateWithoutImageInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1471,6 +1514,7 @@ export type FlareEventUncheckedUpdateWithoutImageInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1494,6 +1538,7 @@ export type FlareEventUncheckedUpdateManyWithoutImageInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1513,6 +1558,7 @@ export type FlareEventUpdateWithoutLocationInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1538,6 +1584,7 @@ export type FlareEventUncheckedUpdateWithoutLocationInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1561,6 +1608,7 @@ export type FlareEventCreateManyLocationInput = {
   pricingType: $Enums.EventPricingType
   minPriceCents?: number | null
   maxPriceCents?: number | null
+  ticketLink?: string | null
   currency?: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1582,6 +1630,7 @@ export type FlareEventUncheckedUpdateManyWithoutLocationInput = {
   pricingType?: Prisma.EnumEventPricingTypeFieldUpdateOperationsInput | $Enums.EventPricingType
   minPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   maxPriceCents?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ticketLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   currency?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1644,6 +1693,7 @@ export type FlareEventSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   pricingType?: boolean
   minPriceCents?: boolean
   maxPriceCents?: boolean
+  ticketLink?: boolean
   currency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1672,6 +1722,7 @@ export type FlareEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   pricingType?: boolean
   minPriceCents?: boolean
   maxPriceCents?: boolean
+  ticketLink?: boolean
   currency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1697,6 +1748,7 @@ export type FlareEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   pricingType?: boolean
   minPriceCents?: boolean
   maxPriceCents?: boolean
+  ticketLink?: boolean
   currency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1722,12 +1774,13 @@ export type FlareEventSelectScalar = {
   pricingType?: boolean
   minPriceCents?: boolean
   maxPriceCents?: boolean
+  ticketLink?: boolean
   currency?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FlareEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "status" | "publishedAt" | "title" | "description" | "ageRestriction" | "category" | "imageId" | "startsAtUTC" | "endsAtUTC" | "timezone" | "locationId" | "pricingType" | "minPriceCents" | "maxPriceCents" | "currency" | "createdAt" | "updatedAt", ExtArgs["result"]["flareEvent"]>
+export type FlareEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "status" | "publishedAt" | "title" | "description" | "ageRestriction" | "category" | "imageId" | "startsAtUTC" | "endsAtUTC" | "timezone" | "locationId" | "pricingType" | "minPriceCents" | "maxPriceCents" | "ticketLink" | "currency" | "createdAt" | "updatedAt", ExtArgs["result"]["flareEvent"]>
 export type FlareEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationProfileDefaultArgs<ExtArgs>
   image?: boolean | Prisma.FlareEvent$imageArgs<ExtArgs>
@@ -1773,6 +1826,7 @@ export type $FlareEventPayload<ExtArgs extends runtime.Types.Extensions.Internal
     pricingType: $Enums.EventPricingType
     minPriceCents: number | null
     maxPriceCents: number | null
+    ticketLink: string | null
     currency: string
     createdAt: Date
     updatedAt: Date
@@ -2220,6 +2274,7 @@ export interface FlareEventFieldRefs {
   readonly pricingType: Prisma.FieldRef<"FlareEvent", 'EventPricingType'>
   readonly minPriceCents: Prisma.FieldRef<"FlareEvent", 'Int'>
   readonly maxPriceCents: Prisma.FieldRef<"FlareEvent", 'Int'>
+  readonly ticketLink: Prisma.FieldRef<"FlareEvent", 'String'>
   readonly currency: Prisma.FieldRef<"FlareEvent", 'String'>
   readonly createdAt: Prisma.FieldRef<"FlareEvent", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FlareEvent", 'DateTime'>

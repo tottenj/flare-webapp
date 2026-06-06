@@ -23,4 +23,5 @@ export interface EventFormInitialData {
     url?: string;
     metaData?: ImageMetadata;
   };
+  ticketLink?: string;
 }

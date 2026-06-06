@@ -236,6 +236,7 @@ export class EventService {
         minPriceCents: prevEvent.minPriceCents,
         maxPriceCents: prevEvent.maxPriceCents,
         tags: prevEvent.tags.map((t) => t.tag.id),
+        ticketLink: prevEvent.ticketLink,
       };
 
       const eventEditInput = EventDomain.onEdit(

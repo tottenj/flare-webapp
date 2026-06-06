@@ -57,4 +57,15 @@ describe('Save Event', () => {
     cy.get(`[data-cy="${seededEvents.verifiedPublished.title}-event-modal"]`).should('be.visible');
     cy.get('[data-cy="save-event-button"]').should('not.exist');
   });
+
+  it('shows ticket link in read view for published events that have one', () => {
+    cy.visit(`/event/${seededEvents.verifiedPublished.id}?returnTo=/events`);
+
+    cy.get(`[data-cy="${seededEvents.verifiedPublished.title}-event-modal"]`).within(() => {
+      cy.contains('Get Tickets')
+        .should('be.visible')
+        .closest('a')
+        .should('have.attr', 'href', seededEvents.verifiedPublished.ticketLink);
+    });
+  });
 });

@@ -35,6 +35,7 @@ export function eventDtoFactory(overrides: Partial<EventDto> = {}): EventDto {
     },
 
     tags: [],
+    ticketLink: null,
   };
 
   return {
