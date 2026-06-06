@@ -42,6 +42,7 @@ jest.mock('@/lib/dal/locationDal/LocationDal', () => ({
   locationDal: {
     create: jest.fn().mockResolvedValue({ id: 'locationId' }),
     get: jest.fn(),
+    getByPlaceId: jest.fn(),
   },
 }));
 
@@ -347,7 +348,7 @@ describe('EventService.getOrgUpcomingEvent', () => {
     (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(mockRow);
     (mapEventRowToDto as jest.Mock).mockReturnValue(mappedDto);
     const res = await EventService.getOrgUpcomingEvent(orgId);
-    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
+    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId, expect.any(Date));
     expect(mapEventRowToDto).toHaveBeenCalledWith(mockRow);
     expect(res).toEqual(mappedDto);
   });
@@ -355,7 +356,7 @@ describe('EventService.getOrgUpcomingEvent', () => {
   it('returns null if no event found', async () => {
     (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(null);
     const res = await EventService.getOrgUpcomingEvent(orgId);
-    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
+    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId, expect.any(Date));
     expect(mapEventRowToDto).not.toHaveBeenCalled();
     expect(res).toBeNull();
   });
@@ -377,7 +378,7 @@ describe('EventService.getOrgUpcomingEvent', () => {
     (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(mockRow);
     (mapEventRowToDto as jest.Mock).mockReturnValue(mappedDto);
     const res = await EventService.getOrgUpcomingEvent(orgId, actor);
-    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
+    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId, expect.any(Date));
     expect(mapEventRowToDto).toHaveBeenCalledWith(mockRow);
     expect(res).toEqual(mappedDto);
   });
@@ -394,7 +395,7 @@ describe('EventService.getOrgUpcomingEvent', () => {
     (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(mockRow);
     (mapEventRowToDto as jest.Mock).mockReturnValue(mappedDto);
     const res = await EventService.getOrgUpcomingEvent(orgId);
-    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
+    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId, expect.any(Date));
     expect(mapEventRowToDto).not.toHaveBeenCalled();
     expect(res).toBeNull();
   });
@@ -417,7 +418,7 @@ describe('EventService.getOrgUpcomingEvent', () => {
     (eventDal.getUpcomingOrgEvent as jest.Mock).mockResolvedValue(mockRow);
     (mapEventRowToDto as jest.Mock).mockReturnValue(mappedDto);
     const res = await EventService.getOrgUpcomingEvent(orgId, actor);
-    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId);
+    expect(eventDal.getUpcomingOrgEvent).toHaveBeenCalledWith(orgId, expect.any(Date));
     expect(mapEventRowToDto).not.toHaveBeenCalled();
     expect(res).toBeNull();
   });
@@ -1049,5 +1050,55 @@ describe('EventService.editEvent', () => {
         storagePath: 'events/uid3/old-image.jpg',
       })
     );
+  });
+});
+
+describe('EventService.getPublicFilterData', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('successfully retrieves location data if placeid passed in', async () => {
+    const filters = { placeId: 'placeId123' };
+    const locationData = {
+      placeId: 'placeId123',
+      address: '123 Main St, Anytown, USA',
+      latitude: 40.7128,
+      longitude: -74.006,
+    };
+
+    const expectedData = {
+      placeId: locationData.placeId,
+      address: locationData.address,
+      lat: locationData.latitude,
+      lng: locationData.longitude,
+    };
+
+    (locationDal.getByPlaceId as jest.Mock).mockResolvedValueOnce(locationData);
+
+    await expect(EventService.getPublicFilterData(filters)).resolves.toEqual({
+      location: expectedData,
+    });
+    expect(locationDal.getByPlaceId).toHaveBeenCalledWith(filters.placeId);
+  });
+
+  it("returns null for location if placeid doesn't return data", () => {
+    const filters = { placeId: 'placeId123' };
+
+    (locationDal.getByPlaceId as jest.Mock).mockResolvedValueOnce(null);
+
+    expect(EventService.getPublicFilterData(filters)).resolves.toEqual({
+      location: null,
+    });
+    expect(locationDal.getByPlaceId).toHaveBeenCalled();
+  });
+
+  it('returns null for location if placeid not provided', () => {
+    const filters = { placeId: undefined };
+
+    expect(EventService.getPublicFilterData(filters)).resolves.toEqual({
+      location: null,
+    });
+    expect(locationDal.getByPlaceId).not.toHaveBeenCalled();
   });
 });

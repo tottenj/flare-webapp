@@ -8,24 +8,35 @@ interface TabOption {
   label: string;
 }
 
-interface QueryTabProps extends TabsProps {
-  param: string;
+interface QueryTabProps<T extends string> extends TabsProps {
+  param: T;
   defaultValue: string;
   tabs: TabOption[];
 }
 
-export default function QueryTabs({ tabs, param, defaultValue, ...props }: QueryTabProps) {
-  const { filters, setFilters } = useQueryFilters();
+export default function QueryTabs<T extends string>({
+  tabs,
+  param,
+  defaultValue,
+  ...props
+}: QueryTabProps<T>) {
+  const { filters, setFilters } = useQueryFilters<T>();
+  const queryParam = param as keyof typeof filters;
 
-  const selected = filters[param] ?? defaultValue;
+  const selected = filters[queryParam] ?? defaultValue;
 
   return (
     <Tabs
-      onSelectionChange={(key) => setFilters({ [param]: String(key) })}
+      onSelectionChange={(key) => {
+        const updates: Parameters<typeof setFilters>[0] = {
+          [param]: String(key),
+        } as Parameters<typeof setFilters>[0];
+        setFilters(updates);
+      }}
       selectedKey={selected}
       classNames={{
-        'base': "w-full",
-        'tabList': "w-full"
+        base: 'w-full',
+        tabList: 'w-full',
       }}
       {...props}
     >
