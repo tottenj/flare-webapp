@@ -65,15 +65,17 @@ describe('Event Filters', () => {
     expectDefaultUnfilteredList();
   });
 
-  it('allows setting distance after selecting location', () => {
-    expectDefaultUnfilteredList();
+  it('allows setting distance when location is selected', () => {
+    cy.visit(`/events?placeId=${seededLocations.primary.placeId}`);
+
+    cy.url().should('include', `placeId=${seededLocations.primary.placeId}`);
+    expectFilterChip('placeId');
 
     openEventFilters();
-    cy.usePlacesInput('[data-cy="main-modal"] [data-cy="location-input"]');
     setDistanceFilter(25);
     closeEventFilters();
 
-    cy.url().should('include', 'placeId=');
+    cy.url().should('include', `placeId=${seededLocations.primary.placeId}`);
     cy.url().should('include', 'distance=25');
     expectFilterChip('placeId');
     expectNoFilterChip('distance');

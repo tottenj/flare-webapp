@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 type FilterType = string | Record<string, unknown>;
@@ -11,11 +12,16 @@ export default function useQueryFilters<T extends FilterType = string>() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathName = usePathname();
+  const paramsRef = useRef<URLSearchParams>(new URLSearchParams(searchParams.toString()));
+
+  useEffect(() => {
+    paramsRef.current = new URLSearchParams(searchParams.toString());
+  }, [searchParams]);
 
   const filters = Object.fromEntries(searchParams) as QueryFilterMap<T>;
 
   function setFilters(updates: QueryFilterUpdates<T>) {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(paramsRef.current.toString());
     (Object.entries(updates) as [string, string | null | undefined][]).forEach(([key, value]) => {
       if (value == null) {
         params.delete(key);
@@ -23,6 +29,8 @@ export default function useQueryFilters<T extends FilterType = string>() {
         params.set(key, value);
       }
     });
+
+    paramsRef.current = params;
 
     router.replace(`?${params.toString()}`, { scroll: false });
   }
