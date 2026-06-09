@@ -9,6 +9,7 @@ import {
   expectNoFilterChip,
   openEventFilters,
   selectCategoryFilter,
+  setDistanceFilter,
   expectNightlifePearsonDistanceFilteredList,
 } from './filterTestHelpers';
 import { seededLocations } from '../constants';
@@ -62,6 +63,21 @@ describe('Event Filters', () => {
     expectFilterChip('placeId');
     expectNoFilterChip('distance');
     expectDefaultUnfilteredList();
+  });
+
+  it('allows setting distance after selecting location', () => {
+    expectDefaultUnfilteredList();
+
+    openEventFilters();
+    cy.usePlacesInput('[data-cy="main-modal"] [data-cy="location-input"]');
+    setDistanceFilter(25);
+    closeEventFilters();
+
+    cy.url().should('include', 'placeId=');
+    cy.url().should('include', 'distance=25');
+    expectFilterChip('placeId');
+    expectNoFilterChip('distance');
+    expectPearsonDistanceFilteredList();
   });
 
   it('keeps location chip and does not expose distance chip in current distance flow', () => {
