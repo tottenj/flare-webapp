@@ -1,6 +1,9 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  experimental: {
+    agentUpgrade: 'security',
+  },
   images: {
     remotePatterns: [
       {
@@ -16,6 +19,7 @@ const nextConfig: NextConfig = {
     ],
   },
   cacheComponents: true,
+  partialPrefetching: true
 };
 
 export default nextConfig;
