@@ -1,6 +1,6 @@
 import { heroui } from '@heroui/react';
 
-export default heroui({
+const heroConfig: ReturnType<typeof heroui> = heroui({
   prefix: 'app',
   themes: {
     light: {
@@ -96,3 +96,5 @@ export default heroui({
     },
   },
 });
+
+export default heroConfig;
