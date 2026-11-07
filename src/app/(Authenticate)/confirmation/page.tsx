@@ -9,6 +9,8 @@ export default function Confirmation() {
           <Logo size={100} />
         </div>
 
+
+
         
         <div>
           <h1>Thank You For Signing Up!</h1>
