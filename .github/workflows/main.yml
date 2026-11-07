@@ -142,14 +142,11 @@ jobs:
 
       - name: Start Postgres
         run: |
-          docker compose -f compose.test.yaml up -d
-
-          echo "Waiting for Postgres container to become healthy..."
-          until [ "$(docker inspect -f '{{.State.Health.Status}}' flare-test)" = "healthy" ]; do
-            sleep 2
-          done
-
-          echo "Postgres is healthy"
+          if ! docker compose -f compose.test.yaml up -d --wait --wait-timeout 120; then
+            docker compose -f compose.test.yaml ps -a
+            docker logs --tail 200 flare-test || true
+            exit 1
+          fi
 
       - run: pnpm exec prisma migrate deploy && pnpm run seed:test
       - run: pnpm exec jest --selectProjects integration
@@ -227,14 +224,11 @@ jobs:
 
       - name: Start Postgres (Docker)
         run: |
-          docker compose -f compose.test.yaml up -d
-
-          echo "Waiting for Postgres container to become healthy..."
-          until [ "$(docker inspect -f '{{.State.Health.Status}}' flare-test)" = "healthy" ]; do
-            sleep 2
-          done
-
-          echo "Postgres is healthy"
+          if ! docker compose -f compose.test.yaml up -d --wait --wait-timeout 120; then
+            docker compose -f compose.test.yaml ps -a
+            docker logs --tail 200 flare-test || true
+            exit 1
+          fi
 
       - name: Apply Prisma migrations + seed DB
         run: pnpm run e2e:setupci
