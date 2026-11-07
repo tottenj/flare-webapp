@@ -95,6 +95,9 @@ importers:
       chroma-js:
         specifier: ^3.1.2
         version: 3.2.0
+      clsx:
+        specifier: 2.1.1
+        version: 2.1.1
       cookies-next:
         specifier: ^5.1.0
         version: 5.1.0(next@16.4.5(@babel/core@7.29.0(supports-color@8.1.1))(@types/node@22.19.13)(babel-plugin-macros@3.1.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react@19.2.4)
@@ -219,6 +222,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.14)
+      axios:
+        specifier: 1.16.1
+        version: 1.16.1(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
       chromatic:
         specifier: ^11.28.2
         version: 11.29.0
