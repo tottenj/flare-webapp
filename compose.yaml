@@ -1,17 +1,17 @@
 services:
   db:
-    image: postgis/postgis:latest
+    image: postgis/postgis:17-3.5
     platform: linux/amd64
     container_name: flare-dev
     restart: always
     env_file:
       - ${ENV_FILE:-.env.dev}
     environment:
-      POSTGRES_USER: "josh"
-      POSTGRES_PASSWORD: "dev"
-      POSTGRES_DB: "flare_dev"
+      POSTGRES_USER: 'josh'
+      POSTGRES_PASSWORD: 'dev'
+      POSTGRES_DB: 'flare_dev'
     ports:
-      - "5433:5432"
+      - '5433:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
 
