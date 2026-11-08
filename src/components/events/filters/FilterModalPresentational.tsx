@@ -37,19 +37,7 @@ export default function FilterModalPresentational({
       <h2>Event Filters</h2>
 
       <div data-cy="filter-category-select">
-        <EventCategorySelect
-          required={false}
-          selectedKey={category}
-          onSelectionChange={(key) => {
-            if (!key || key === 'all') {
-              onCategoryChange(null);
-              return;
-            }
-
-            const selected = Array.from(key as Set<React.Key>)[0];
-            onCategoryChange(selected ? (String(selected) as EventCategory) : null);
-          }}
-        />
+        <EventCategorySelect required={false} selectedKey={category} onChange={onCategoryChange} />
       </div>
 
       <div className="flex flex-col">

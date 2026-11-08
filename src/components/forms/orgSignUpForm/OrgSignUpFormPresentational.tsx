@@ -9,7 +9,6 @@ import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import { FileKey } from '@/lib/hooks/useFileChange/useFileChange';
 import { LocationInput } from '@/lib/schemas/LocationInputSchema';
 import { SOCIAL_CONFIG, SocialPlatform } from '@/lib/utils/socialConfig';
-import { Form } from '@heroui/react';
 
 type Props = {
   pending: boolean;
@@ -44,7 +43,14 @@ export default function OrgSignUpFormPresentational({
         inclusive and trustworthy!
       </p>
 
-      <Form action={onSubmit} validationErrors={validationErrors} className="w-full">
+      <form action={onSubmit} className="w-full">
+        {Object.values(validationErrors ?? {})
+          .flat()
+          .map((message) => (
+            <p key={message} className="text-sm text-red-700">
+              {message}
+            </p>
+          ))}
         <FormError error={error} />
         <FormSection text="General Information">
           <div className="flex w-full flex-col gap-4">
@@ -94,7 +100,7 @@ export default function OrgSignUpFormPresentational({
           </div>
         </FormSection>
         <PrimaryButton disabled={pending} type="submit" centered />
-      </Form>
+      </form>
     </div>
   );
 }

@@ -1,10 +1,10 @@
 allowBuilds:
   '@firebase/util': true
-  '@heroui/shared-utils': true
   '@prisma/engines': true
   cypress: true
   esbuild: true
   msw: true
   prisma: true
   protobufjs: true
+  re2: true
   sharp: true

@@ -1,7 +1,6 @@
 'use client';
 import { useFormAction } from '@/lib/hooks/useFormAction';
 import verifyOrganization from '@/lib/serverActions/admin/verifyOrg/veirfyOrginization';
-import { Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 
 export default function VerifyOrgButton({ orgId }: { orgId: string }) {
@@ -19,15 +18,15 @@ export default function VerifyOrgButton({ orgId }: { orgId: string }) {
 
   return (
     <div data-cy="verify-org-container" className="flex flex-col gap-2">
-      <Button
+      <button
+        type="button"
         data-cy="verify-org-button"
-        className="bg-foreground text-background"
-        isLoading={pending}
-        isDisabled={pending}
-        onPress={() => action(orgId)}
+        className="rounded-xl bg-neutral-900 px-4 py-2 text-white disabled:opacity-60"
+        disabled={pending}
+        onClick={() => action(orgId)}
       >
-        Verify Organization
-      </Button>
+        {pending ? 'Verifying…' : 'Verify Organization'}
+      </button>
       {error?.message ? (
         <p data-cy="verify-org-error" className="text-danger text-sm">
           {error.message}

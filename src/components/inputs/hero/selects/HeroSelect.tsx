@@ -1,22 +1,31 @@
-import { Select, SelectItem, SelectProps } from '@heroui/react';
+import type { ReactElement, ReactNode, SelectHTMLAttributes } from 'react';
 
-export interface HeroSelectProps<T extends object> extends SelectProps<T> {}
-
-export default function HeroSelect<T extends object>({ children, ...props }: HeroSelectProps<T>) {
-  return (
-    <Select
-      classNames={{
-        innerWrapper: 'rounded-none !pt-0',
-        base: 'rounded-none',
-        trigger: 'rounded-2xl h-auto',
-        popoverContent: 'rounded-sm',
-       
-      }}
-      {...props}
-    >
-      {children}
-    </Select>
-  );
+export interface HeroSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+  label?: string;
+  children?: ReactNode;
+  isRequired?: boolean;
 }
 
-HeroSelect.Item = SelectItem;
+interface HeroSelectComponent {
+  (props: HeroSelectProps): ReactElement;
+  Item: (props: { children?: ReactNode; value?: string; textValue?: string }) => ReactElement;
+}
+
+const HeroSelect = (({ label, isRequired, children, ...props }: HeroSelectProps) => (
+  <label className="flex w-full flex-col gap-1">
+    {label && <span>{label}</span>}
+    <select
+      required={props.required ?? isRequired}
+      {...props}
+      className={`min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 ${props.className ?? ''}`}
+    >
+      {children}
+    </select>
+  </label>
+)) as HeroSelectComponent;
+
+HeroSelect.Item = ({ children, value, textValue }) => (
+  <option value={value ?? textValue}>{children}</option>
+);
+
+export default HeroSelect;

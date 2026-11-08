@@ -84,3 +84,26 @@
 - Use domain objects for complex logic (e.g., Money).
 - Avoid implementing price or currency formatting directly in services or UI.
 - Prefer domain utilities in `src/lib/domain/`.
+
+
+## Brand and design
+- Flare is a platform for discovering events from legitimate LGBTQ+ organizations. Its brand is **Electric Rose** and its tagline is **Ignite Community**.
+- Before changing public-facing UI or adding UI components, read `docs/BRAND_GUIDE.md`. The visual PDF is at `docs/Flare_Basic_Brand_Guide.pdf` for human design review.
+- Preserve the recognizable eight-ray spark motif and lowercase `flare` wordmark direction. Do not replace the brand with a generic flame, gradient, or rainbow motif.
+- Use **Geist** for body/UI text and **Plus Jakarta Sans** for headings. Prefer HeroUI v3 components and semantic theme tokens, not one-off hex values in JSX.
+- Design light and dark themes with equal care. Respect responsive mobile layouts, accessibility, text contrast, keyboard focus, and reduced motion.
+- Don't invent event or organization verification, accessibility claims, tickets, availability, or pricing in actual product UI.
+
+## Approved interface direction
+- Explore: clean split-editorial hero, immediately useful search/filter controls, event results with informative cards.
+- Event detail: dark contrast header, bold heading, compact optional portrait poster that can expand, clear date/location/organizer, subtle dividers, About / Good to know / Organizer tabs, and one ticket price in the purchase footer (sticky on mobile).
+- Never use an oversized image column with empty space. Never make poorly designed external artwork responsible for Flare's visual quality.
+- If an event has no image, use a deterministic branded date/typographic fallback, not stock photos or an empty rectangle.
+- Prefer a mobile layout designed for mobile, not just a compressed desktop layout.
+
+## Engineering guidance
+- Inspect existing app architecture, component APIs, authentication flows, and Prisma schema before edits. Do not rewrite backend or role models just to implement visual changes.
+- Follow the installed HeroUI **v3** docs and check component APIs before coding; don't copy v2 patterns.
+- Use Next.js App Router conventions and preserve existing working routes; intercepted/parallel routes are the approved pattern for opening a shareable event detail as a modal on in-app navigation, while direct navigation renders a standalone page.
+- Reuse event view models/components across published pages and organizer previews; keep form data and published presentation separate.
+- Do not edit database structure or authorization behavior as part of styling work without explicit approval.

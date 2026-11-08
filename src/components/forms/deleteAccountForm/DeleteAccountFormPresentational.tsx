@@ -3,7 +3,6 @@ import HeroButton from '@/components/buttons/heroButton/HeroButton';
 import FormError from '@/components/errors/Formerror/FormError';
 import HeroInput from '@/components/inputs/hero/input/HeroInput';
 import BaseFormProps from '@/lib/types/BaseFormProps';
-import { Form } from '@heroui/form';
 
 interface DeleteAccountFormProps extends BaseFormProps {
   onSubmit: (formData: FormData) => void;
@@ -22,7 +21,14 @@ export default function DeleteAccountFormPresentational({
   onGoogleReauth,
 }: DeleteAccountFormProps) {
   return (
-    <Form className="flex flex-col gap-4" action={onSubmit} validationErrors={validationErrors}>
+    <form className="flex flex-col gap-4" action={onSubmit}>
+      {Object.values(validationErrors ?? {})
+        .flat()
+        .map((message) => (
+          <p key={message} className="text-sm text-red-700">
+            {message}
+          </p>
+        ))}
       <h2 className="mr-auto ml-auto text-center">Confirm Account Deletion</h2>
       {useGoogleReauth ? (
         <p className="text-center">
@@ -90,6 +96,6 @@ export default function DeleteAccountFormPresentational({
           </HeroButton>
         )}
       </div>
-    </Form>
+    </form>
   );
 }

@@ -3,7 +3,6 @@
 import PrimaryButton from '@/components/buttons/primaryButton/PrimaryButton';
 
 import HeroInput from '@/components/inputs/hero/input/HeroInput';
-import { Form } from '@heroui/react';
 import Link from 'next/link';
 import LogoWithText from '../../flare/logoWithText/LogoWithText';
 import FormError from '@/components/errors/Formerror/FormError';
@@ -28,11 +27,14 @@ export default function ForgotPasswordFormPresentational({
 
       <FormError error={error} />
 
-      <Form
-        validationErrors={validationErrors}
-        action={onSubmit}
-        className="flex w-full flex-col gap-4 sm:w-5/6 @lg:w-2/3"
-      >
+      <form action={onSubmit} className="flex w-full flex-col gap-4 sm:w-5/6 @lg:w-2/3">
+        {Object.values(validationErrors ?? {})
+          .flat()
+          .map((message) => (
+            <p key={message} className="text-sm text-red-700">
+              {message}
+            </p>
+          ))}
         <HeroInput label="Email" name="email" placeholder="example@gmail.com" />
 
         <PrimaryButton
@@ -43,7 +45,7 @@ export default function ForgotPasswordFormPresentational({
           size="full"
           datacy="submit-button"
         />
-      </Form>
+      </form>
 
       <Link
         className="font-nunito mt-4 text-center font-bold text-balance underline"

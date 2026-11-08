@@ -15,12 +15,13 @@ import createEvent from '@/lib/serverActions/events/createEvent/createEvent';
 import { ActionResult } from '@/lib/types/responses/ActionResult';
 import { EventFormInitialData, EventFormMode } from '@/lib/types/EventForm/EventForm';
 import { basicFileUpload } from '@/lib/utils/other/basicFileUpload';
-import { Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 export type EventFileKey = 'eventImg';
 
-type EventSubmitAction = (input: CreateEvent) => Promise<ActionResult<void>> | Promise<ActionResult<null>>;
+type EventSubmitAction = (
+  input: CreateEvent
+) => Promise<ActionResult<void>> | Promise<ActionResult<null>>;
 type ModeCopy = Record<
   EventFormMode,
   {
@@ -179,12 +180,13 @@ export default function EventFormContainer({
             orgName={orgName}
           />
           <div className="mr-auto ml-auto flex h-full w-full flex-col items-center justify-center md:w-3/4 md:flex-row md:gap-8">
-            <Button
-              onPress={() => confirmSubmit(true)}
-              className="bg-secondary mt-4 w-full p-6 text-white md:w-1/2"
+            <button
+              type="button"
+              onClick={() => confirmSubmit(true)}
+              className="mt-4 w-full rounded-xl bg-pink-700 p-6 text-white md:w-1/2"
             >
               {copy.draftText}
-            </Button>
+            </button>
             <div className="w-full md:w-1/2">
               <PrimaryButton
                 centered

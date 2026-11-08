@@ -1,7 +1,6 @@
 'use client';
 import { useAsyncList } from '@react-stately/data';
 import { useMemo, useState } from 'react';
-import { AutocompleteProps, Button, Chip } from '@heroui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import AutoCompletePresentational from '@/components/inputs/hero/autocomplete/AutocompletePresentational';
@@ -13,15 +12,17 @@ export type AutoCompleteItem = {
   description?: string;
 };
 
-interface TagAutoCompleteContainerProps extends Omit<
-  AutocompleteProps<AutoCompleteItem>,
-  'selectedKey' | 'onSelectionChange' | 'list' | 'children'
-> {
+interface TagAutoCompleteContainerProps {
   loadFunc: (filterText: string) => Promise<AutoCompleteItem[]>;
   withChips?: boolean;
   name?: string;
   maxNum?: number;
   initialValues?: string[];
+  label?: string;
+  description?: string;
+  allowsCustomValue?: boolean;
+  placeholder?: string;
+  required?: boolean;
 }
 
 export default function AutoCompleteContainer({
@@ -35,8 +36,6 @@ export default function AutoCompleteContainer({
   const [selectedTags, setSelectedTags] = useState<Map<string, string>>(
     () => new Map((initialValues ?? []).map((value) => [value, value]))
   );
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
-
   const list = useAsyncList<AutoCompleteItem>({
     async load({ filterText }) {
       return { items: await loadFunc(filterText ?? '') };
@@ -49,11 +48,9 @@ export default function AutoCompleteContainer({
     return map;
   }, [list.items]);
 
-  const onSelectionChange = (key: React.Key | null) => {
+  const onSelectionChange = (key: string) => {
     if (!key) return;
     const strKey = String(key);
-    const label = labelByKey.get(strKey) ?? strKey;
-    setSelectedKey(strKey);
     addTag(strKey);
   };
 
@@ -78,7 +75,6 @@ export default function AutoCompleteContainer({
     });
 
     if (withChips) {
-      setSelectedKey(null);
       list.setFilterText('');
     }
   };
@@ -89,7 +85,6 @@ export default function AutoCompleteContainer({
         <AutoCompletePresentational
           {...props}
           disabled={Boolean(maxNum && selectedTags.size >= maxNum)}
-          selectedKey={selectedKey}
           onSelectionChange={onSelectionChange}
           list={list}
         />
@@ -101,9 +96,13 @@ export default function AutoCompleteContainer({
           ></input>
         )}
         {props.allowsCustomValue && (
-          <Button className="hover:bg-success" onPress={() => addTag(list.filterText)}>
+          <button
+            type="button"
+            className="rounded-lg border px-3 py-2 hover:bg-neutral-100"
+            onClick={() => addTag(list.filterText)}
+          >
             <FontAwesomeIcon icon={faPlus} />
-          </Button>
+          </button>
         )}
       </div>
       {withChips && (

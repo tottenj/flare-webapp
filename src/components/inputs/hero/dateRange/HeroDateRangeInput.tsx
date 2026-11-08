@@ -1,31 +1,18 @@
-import { DateRangePicker, DateRangePickerProps, DateValue, RangeValue } from '@heroui/react';
-import { now, ZonedDateTime } from '@internationalized/date';
+import type { InputHTMLAttributes } from 'react';
 
-interface HeroDateRangeProps extends DateRangePickerProps {}
-export default function HeroDateRangeInput(props: HeroDateRangeProps) {
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const today: ZonedDateTime = now(timeZone);
-  const defaultRange = {
-    start: today,
-    end: today,
-  };
+interface HeroDateRangeProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  label?: string;
+}
 
+export default function HeroDateRangeInput({ label, ...props }: HeroDateRangeProps) {
   return (
-    <>
-      {/*@ts-ignore */}
-      <DateRangePicker labelPlacement={props.labelPlacement || "inside"} defaultValue={props.defaultValue || defaultRange}
-        classNames={{
-          inputWrapper:
-            ' focus-within:ring-2 focus-within:ring-secondary focus-within:ring-offset-0 focus-within:outline-none',
-          input: 'outline-none focus:outline-none',
-          popoverContent: "rounded-none",
-       
-          calendar: "rounded-none"
-        }}
-        radius={props.radius || "sm"}
-        hideTimeZone={props.hideTimeZone ?? true}
+    <label className="flex flex-col gap-1">
+      {label && <span>{label}</span>}
+      <input
+        type="date"
         {...props}
+        className={`min-h-11 rounded-xl border border-neutral-300 bg-white px-3 py-2 ${props.className ?? ''}`}
       />
-    </>
+    </label>
   );
 }

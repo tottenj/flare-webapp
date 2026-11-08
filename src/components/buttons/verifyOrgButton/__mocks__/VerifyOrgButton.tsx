@@ -1,5 +1,3 @@
-import { Button } from '@heroui/react';
-
 export default function VerifyOrgButton({
   orgId,
   error,
@@ -9,7 +7,9 @@ export default function VerifyOrgButton({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <Button className="bg-primary">Verify Organization</Button>
+      <button type="button" className="rounded-xl bg-neutral-900 px-4 py-2 text-white">
+        Verify Organization
+      </button>
       {error?.message ? <p className="text-danger text-sm">{error.message}</p> : null}
     </div>
   );

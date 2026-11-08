@@ -1,12 +1,11 @@
 'use client';
 
 import MainModal from '@/components/modals/MainModal/MainModal';
+import type { ForwardedModalProps } from '@/components/modals/MainModal/MainModalClient';
 import { coerceSafeReturnToPath } from '@/lib/schemas/routes/returnToSchema';
-import { ModalProps } from '@heroui/modal';
 import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 
-type ForwardedModalProps = Omit<ModalProps, 'isOpen' | 'onClose' | 'children'>;
 interface RouteModalProps {
   returnTo?: string;
   returnToFallback: string;

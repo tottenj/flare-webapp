@@ -3,7 +3,6 @@ import { AuthenticatedUser } from '@/lib/types/AuthenticatedUser';
 import { expect } from '@jest/globals';
 import { createAdminIntegration } from '../../factories/integration/admin.factory';
 import { createOrgIntegration } from '../../factories/integration/org.factory';
-import { card } from '@heroui/react';
 
 describe('AdminService admin read operations (integration)', () => {
   describe('getUnverifiedOrgCards', () => {

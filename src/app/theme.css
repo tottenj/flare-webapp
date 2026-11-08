@@ -1,0 +1,193 @@
+/*
+ * FLARE — ELECTRIC ROSE
+ * Ignite Community
+ *
+ * HeroUI v3 + Tailwind CSS v4
+ *
+ * Typography:
+ *   Geist — UI and body text
+ *   Plus Jakarta Sans — headings
+ *
+ * Colors:
+ *   OKLCH conversions of the approved
+ *   Electric Rose brand palette.
+ */
+
+/* ========================================
+   LIGHT MODE
+   ======================================== */
+
+:root,
+.light,
+.default,
+[data-theme='light'],
+[data-theme='default'] {
+  color-scheme: light;
+
+  /* Core */
+  --background: oklch(97.969% 0.00264 286.35);
+  --foreground: oklch(20.687% 0.00984 285.51);
+
+  /* Brand */
+  --accent: oklch(54.881% 0.20377 5.5);
+  --accent-foreground: oklch(100% 0 0);
+  --focus: oklch(54.881% 0.20377 5.5);
+
+  /* Surfaces */
+  --surface: oklch(100% 0 0);
+  --surface-foreground: oklch(20.687% 0.00984 285.51);
+
+  --surface-secondary: oklch(95.9% 0.00399 286.32);
+  --surface-secondary-foreground: oklch(20.687% 0.00984 285.51);
+
+  --surface-tertiary: oklch(93.546% 0.0067 286.27);
+  --surface-tertiary-foreground: oklch(20.687% 0.00984 285.51);
+
+  /* Neutral interactive elements */
+  --default: oklch(95.9% 0.00399 286.32);
+  --default-foreground: oklch(20.687% 0.00984 285.51);
+
+  /* Secondary text */
+  --muted: oklch(50.23% 0.01581 281.26);
+
+  /* Borders and separators */
+  --border: oklch(89.653% 0.00948 286.21);
+  --separator: oklch(92.609% 0.00537 286.29);
+
+  /* Dialogs and popovers */
+  --overlay: oklch(100% 0 0);
+  --overlay-foreground: oklch(20.687% 0.00984 285.51);
+
+  /* Form fields */
+  --field-background: oklch(100% 0 0);
+  --field-foreground: oklch(20.687% 0.00984 285.51);
+  --field-placeholder: oklch(50.23% 0.01581 281.26);
+  --field-border: oklch(89.653% 0.00948 286.21);
+
+  /* Segmented controls */
+  --segment: oklch(100% 0 0);
+  --segment-foreground: oklch(20.687% 0.00984 285.51);
+
+  /* Scrollbar */
+  --scrollbar: oklch(81.364% 0.0125 286.12);
+
+  /* Status colours */
+  --success: oklch(51.886% 0.09911 162.21);
+  --success-foreground: oklch(100% 0 0);
+
+  --warning: oklch(55.138% 0.12606 58.07);
+  --warning-foreground: oklch(100% 0 0);
+
+  --danger: oklch(54.777% 0.18954 17.48);
+  --danger-foreground: oklch(100% 0 0);
+
+  /* Component shape */
+  --radius: 0.75rem;
+  --field-radius: 0.75rem;
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+.dark,
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Core */
+  --background: oklch(17.491% 0.00821 285.52);
+  --foreground: oklch(98.045% 0.00284 308.43);
+
+  /* Brand */
+  --accent: oklch(71.392% 0.19606 0.29);
+  --accent-foreground: oklch(20.698% 0.03803 346.79);
+  --focus: oklch(71.392% 0.19606 0.29);
+
+  /* Surfaces */
+  --surface: oklch(22.957% 0.01344 285.29);
+  --surface-foreground: oklch(98.045% 0.00284 308.43);
+
+  --surface-secondary: oklch(28.473% 0.01637 285.31);
+  --surface-secondary-foreground: oklch(98.045% 0.00284 308.43);
+
+  --surface-tertiary: oklch(32.907% 0.01753 285.4);
+  --surface-tertiary-foreground: oklch(98.045% 0.00284 308.43);
+
+  /* Neutral interactive elements */
+  --default: oklch(28.473% 0.01637 285.31);
+  --default-foreground: oklch(98.045% 0.00284 308.43);
+
+  /* Secondary text */
+  --muted: oklch(76.286% 0.01847 293.03);
+
+  /* Borders and separators */
+  --border: oklch(40.129% 0.01498 285.71);
+  --separator: oklch(33.255% 0.01573 285.51);
+
+  /* Dialogs and popovers */
+  --overlay: oklch(25.543% 0.01495 285.29);
+  --overlay-foreground: oklch(98.045% 0.00284 308.43);
+
+  /* Form fields */
+  --field-background: oklch(28.473% 0.01637 285.31);
+  --field-foreground: oklch(98.045% 0.00284 308.43);
+  --field-placeholder: oklch(76.286% 0.01847 293.03);
+  --field-border: oklch(40.129% 0.01498 285.71);
+
+  /* Segmented controls */
+  --segment: oklch(32.907% 0.01753 285.4);
+  --segment-foreground: oklch(98.045% 0.00284 308.43);
+
+  /* Scrollbar */
+  --scrollbar: oklch(51.097% 0.01881 285.72);
+
+  /* Status colours */
+  --success: oklch(79.115% 0.12602 162.01);
+  --success-foreground: oklch(24.32% 0.03354 161.82);
+
+  --warning: oklch(82.502% 0.12316 75.41);
+  --warning-foreground: oklch(25.809% 0.04232 72.56);
+
+  --danger: oklch(73.684% 0.16519 10.96);
+  --danger-foreground: oklch(22.917% 0.05781 5.02);
+}
+
+/* ========================================
+   FLARE EVENT HEADER
+   ======================================== */
+
+/*
+ * Contrast header used in Event Details.
+ * Deliberately stays dark in both themes.
+ */
+
+:root {
+  --flare-event-header-background: oklch(20.524% 0.02042 302.91);
+
+  --flare-event-header-foreground: oklch(100% 0 0);
+
+  --flare-event-header-muted: oklch(82.395% 0.02075 308.18);
+
+  --flare-event-header-accent: oklch(71.392% 0.19606 0.29);
+}
+
+/* ========================================
+   TAILWIND CUSTOM THEME
+   ======================================== */
+
+@theme inline {
+  /* Geist — body and interface text */
+  --font-sans: var(--font-geist-sans);
+
+  /* Plus Jakarta Sans — headings */
+  --font-display: var(--font-plus-jakarta-sans);
+
+  /* Custom Flare event header colours */
+  --color-flare-event-header: var(--flare-event-header-background);
+
+  --color-flare-event-header-foreground: var(--flare-event-header-foreground);
+
+  --color-flare-event-header-muted: var(--flare-event-header-muted);
+
+  --color-flare-event-header-accent: var(--flare-event-header-accent);
+}

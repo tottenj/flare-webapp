@@ -1,17 +1,17 @@
 'use client';
 
 import useQueryFilters from '@/lib/hooks/useQueryFilters';
-import { Tab, Tabs, TabsProps } from '@heroui/tabs';
 
 interface TabOption {
   key: string;
   label: string;
 }
 
-interface QueryTabProps<T extends string> extends TabsProps {
+interface QueryTabProps<T extends string> {
   param: T;
   defaultValue: string;
   tabs: TabOption[];
+  color?: string;
 }
 
 export default function QueryTabs<T extends string>({
@@ -26,23 +26,25 @@ export default function QueryTabs<T extends string>({
   const selected = filters[queryParam] ?? defaultValue;
 
   return (
-    <Tabs
-      onSelectionChange={(key) => {
-        const updates: Parameters<typeof setFilters>[0] = {
-          [param]: String(key),
-        } as Parameters<typeof setFilters>[0];
-        setFilters(updates);
-      }}
-      selectedKey={selected}
-      classNames={{
-        base: 'w-full',
-        tabList: 'w-full',
-      }}
-      {...props}
-    >
+    <div role="tablist" className="flex w-full gap-2">
       {tabs.map((tab) => (
-        <Tab data-cy={`tab-${tab.key}`} key={tab.key} title={tab.label} />
+        <button
+          type="button"
+          role="tab"
+          aria-selected={selected === tab.key}
+          data-cy={`tab-${tab.key}`}
+          key={tab.key}
+          className="rounded-full border px-4 py-2"
+          onClick={() => {
+            const updates: Parameters<typeof setFilters>[0] = {
+              [param]: tab.key,
+            } as Parameters<typeof setFilters>[0];
+            setFilters(updates);
+          }}
+        >
+          {tab.label}
+        </button>
       ))}
-    </Tabs>
+    </div>
   );
 }

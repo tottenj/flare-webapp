@@ -1,5 +1,4 @@
 import HeroSelect from '@/components/inputs/hero/selects/HeroSelect';
-import BasicSelectItem from '@/components/inputs/hero/selects/Items/basicSelectItem/BasicSelectItem';
 
 type BasicOption<T> = {
   label: string;
@@ -19,7 +18,6 @@ interface HeroBasicSelectProps<T> extends BasicSelectExtender<T> {
   defaultValue?: T;
 }
 
-
 export default function HeroBasicSelect<T>({
   items,
   name,
@@ -31,23 +29,20 @@ export default function HeroBasicSelect<T>({
 }: HeroBasicSelectProps<T>) {
   return (
     <HeroSelect
-      items={items}
       name={name}
       label={label}
       data-cy={`${name}-input`}
       required={required}
-      selectedKeys={value ? [String(value)] : undefined}
-      defaultSelectedKeys={!value ? [String(defaultValue ?? items[0].value)] : undefined}
-      onSelectionChange={(keys) => {
-        const selected = Array.from(keys)[0];
-        if (selected && onChange) {
-          onChange(selected as T);
-        }
+      value={value === undefined ? undefined : String(value)}
+      defaultValue={String(defaultValue ?? items[0]?.value ?? '')}
+      onChange={(event) => {
+        const selected = items.find((item) => String(item.value) === event.currentTarget.value);
+        if (selected) onChange?.(selected.value);
       }}
     >
       {items.map((opt) => (
-        <HeroSelect.Item key={String(opt.value)} textValue={opt.label}>
-          <BasicSelectItem label={opt.label} />
+        <HeroSelect.Item key={String(opt.value)} value={String(opt.value)} textValue={opt.label}>
+          {opt.label}
         </HeroSelect.Item>
       ))}
     </HeroSelect>

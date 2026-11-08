@@ -1,7 +1,13 @@
-import { RangeCalendar, RangeCalendarProps } from '@heroui/react';
+import type { InputHTMLAttributes } from 'react';
 
-interface heroRangeCalendar extends RangeCalendarProps {}
+interface HeroRangeCalendarProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {}
 
-export default function HeroRangeCalendar({ ...props }: heroRangeCalendar) {
-  return <RangeCalendar className='bg-default-50'  classNames={{base: "rounded-2xl", pickerWrapper:"bg-red-50"}} {...props} />;
+export default function HeroRangeCalendar(props: HeroRangeCalendarProps) {
+  return (
+    <input
+      type="date"
+      {...props}
+      className={`rounded-xl border border-neutral-300 bg-white px-3 py-2 ${props.className ?? ''}`}
+    />
+  );
 }

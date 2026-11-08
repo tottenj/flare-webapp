@@ -9,7 +9,6 @@ import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import EventCategorySelect from '@/components/inputs/hero/selects/eventCategorySelect/EventCategorySelect';
 import FileFormProps from '@/lib/types/FileFormProps';
 import LocationFormProps from '@/lib/types/location/LocationFormProps';
-import { Form } from '@heroui/react';
 import TagAutoComplete from '@/components/inputs/hero/autocomplete/tagAutocomplete/TagAutoComplete';
 import HeroCheckBox from '@/components/inputs/hero/checkbox/HeroCheckBox';
 import HeroDateInput from '@/components/inputs/hero/date/HeroDateInput';
@@ -51,7 +50,7 @@ export default function EventFormPresentational({
 }: EventFormPresentationalProps) {
   return (
     <>
-      <Form
+      <form
         onSubmit={(e) => {
           e.preventDefault();
           if (!eventImgPreview) {
@@ -63,9 +62,15 @@ export default function EventFormPresentational({
           const fd = new FormData(e.currentTarget);
           handlePreview(fd);
         }}
-        validationErrors={validationErrors}
         className="flex flex-col items-center gap-4 p-4"
       >
+        {Object.values(validationErrors ?? {})
+          .flat()
+          .map((message) => (
+            <p key={message} className="text-sm text-red-700">
+              {message}
+            </p>
+          ))}
         <img
           src={eventImgPreview || '/imagePlaceholder.png'}
           className="w-full max-w-3xs rounded-xl"
@@ -150,10 +155,15 @@ export default function EventFormPresentational({
           </div>
         )}
 
-        <HeroInput type='url' label="Optional Ticket Link" name="ticketLink" defaultValue={initialEvent?.ticketLink} />
+        <HeroInput
+          type="url"
+          label="Optional Ticket Link"
+          name="ticketLink"
+          defaultValue={initialEvent?.ticketLink}
+        />
 
         <PrimaryButton type="submit" text={submitText} />
-      </Form>
+      </form>
     </>
   );
 }

@@ -1,16 +1,6 @@
 import HeroNumberInput from '@/components/inputs/hero/number/HeroNumberInput';
-import { NumberInputProps } from '@heroui/react';
+import type { ComponentProps } from 'react';
 
-export default function PriceInput({ ...props }: NumberInputProps) {
-  return (
-    <HeroNumberInput
-      minValue={1}
-      {...props}
-      placeholder="$1.00"
-      formatOptions={{
-        style: 'currency',
-        currency: 'USD',
-      }}
-    />
-  );
+export default function PriceInput({ ...props }: ComponentProps<typeof HeroNumberInput>) {
+  return <HeroNumberInput minValue={1} {...props} placeholder="$1.00" />;
 }
