@@ -7,6 +7,7 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css'; // Import the CSS
 import MainBanner from '@/components/banners/mainBanner/MainBanner';
 import { Suspense } from 'react';
+import { Providers } from './providers';
 
 config.autoAddCss = false;
 
@@ -27,19 +28,21 @@ export default async function RootLayout({
   modal,
 }: Readonly<{ children: React.ReactNode; modal: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geist.variable} ${plusJakartaSans.variable} antialiased`}>
-        <main className="flex min-h-dvh flex-col">
-          <Suspense fallback={'Loading'}>
-            <MainBanner />
-          </Suspense>
-          <div className="gradient flex min-h-0 flex-1">
-            <div className="webGrid mt-4 mr-auto mb-4 ml-auto flex flex-1 flex-col">
-              {children}
-              {modal}
+        <Providers>
+          <main className="flex min-h-dvh flex-col">
+            <Suspense fallback={'Loading'}>
+              <MainBanner />
+            </Suspense>
+            <div className="gradient flex min-h-0 flex-1">
+              <div className="webGrid mt-4 mr-auto mb-4 ml-auto flex flex-1 flex-col">
+                {children}
+                {modal}
+              </div>
             </div>
-          </div>
-        </main>
+          </main>
+        </Providers>
         <Analytics />
         <SpeedInsights />
         <ToastContainer position="bottom-right" />

@@ -1,12 +1,10 @@
 'use server';
+import { ThemeToggle } from '@/components/ui/ThemeToggle/ThemeToggle';
 import ProfilePictureSkeleton from '@/components/profiles/profilePicture/presentational/ProfilePictureSkeleton';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import MainBannerMenu from './MainBannerMenu';
 import GradientLink from '@/components/Links/GradientLink/GradientLink';
 import LogoWithText from '@/components/flare/logoWithText/LogoWithText';
-import { UserContextService } from '@/lib/services/userContextService/userContextService';
-import ProfilePictureContainer from '@/components/profiles/profilePicture/ProfilePictureContainer';
 import MainBannerMenuContainer from '@/components/banners/mainBanner/MainBannerMenuContainer';
 
 export default async function MainBanner() {
@@ -15,6 +13,8 @@ export default async function MainBanner() {
       <Link href={'/'}>
         <LogoWithText size="small" />
       </Link>
+
+      <ThemeToggle />
 
       <div className="flex items-center justify-center gap-4">
         <GradientLink link="flare-signup" linkText="Become a Flare" />
