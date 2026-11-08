@@ -1,8 +1,26 @@
 import mapFirebaseAuthError from '@/lib/errors/firebaseErrors/mapFirebaseAuthError';
 import { FirebaseError } from 'firebase/app';
-import {expect} from "@jest/globals"
+import { expect } from '@jest/globals';
 
 describe('mapFirebaseAuthError', () => {
+  it('explains when an email is already registered with another provider', () => {
+    const err = new FirebaseError(
+      'auth/account-exists-with-different-credential',
+      'account exists with another provider'
+    );
+
+    const result = mapFirebaseAuthError(err);
+
+    expect(result).toEqual({
+      ok: false,
+      error: {
+        code: 'ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL',
+        message:
+          'An account with this email already exists. Please sign in with the provider you originally used.',
+      },
+    });
+  });
+
   it('maps invalid credential errors', () => {
     const err = new FirebaseError('auth/invalid-credential', 'bad credentials');
 

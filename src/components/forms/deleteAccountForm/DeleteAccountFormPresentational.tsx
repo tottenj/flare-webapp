@@ -65,8 +65,8 @@ export default function DeleteAccountFormPresentational({
       <div className="mt-4 flex w-full gap-4">
         <HeroButton
           type="button"
-          disabled={pending}
-          color="default"
+          isDisabled={pending}
+          variant="secondary"
           className="w-full"
           onPress={onCancel}
           data-cy="cancel-delete-account-button"
@@ -77,8 +77,8 @@ export default function DeleteAccountFormPresentational({
           <HeroButton
             type="button"
             data-cy="delete-account-button"
-            disabled={pending}
-            color="danger"
+            isDisabled={pending}
+            variant="danger"
             className="w-full"
             onPress={onGoogleReauth}
           >
@@ -88,8 +88,8 @@ export default function DeleteAccountFormPresentational({
           <HeroButton
             type="submit"
             data-cy="delete-account-button"
-            disabled={pending}
-            color="danger"
+            isDisabled={pending}
+            variant="danger"
             className="w-full"
           >
             Delete Account

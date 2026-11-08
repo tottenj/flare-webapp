@@ -2,8 +2,15 @@
 @import '@heroui/styles';
 @import './theme.css';
 
+@layer components {
+  .button {
+    @apply rounded-md;
+  }
+}
+
 html {
   min-height: 100%;
+  font-family: var(--font-sans);
 }
 
 body {
@@ -35,6 +42,6 @@ h6 {
 
 /* Tailwind font utility */
 @theme inline {
-  --font-display: var(--font-plus-jakarta-sans);
+  --font-heading: var(--font-plus-jakarta-sans);
   --font-sans: var(--font-geist-sans);
 }

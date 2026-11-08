@@ -2,13 +2,12 @@
 import { AppError } from './AppError';
 
 export const AuthErrors = {
-  Unauthorized: () => 
+  Unauthorized: () =>
     new AppError({
-      code: "AUTH_UNAUTHORIZED",
-      clientMessage: "Sorry you are not authorized to complete this action",
-      status: 401
+      code: 'AUTH_UNAUTHORIZED',
+      clientMessage: 'Sorry you are not authorized to complete this action',
+      status: 401,
     }),
-
 
   InvalidInput: () =>
     new AppError({
@@ -24,17 +23,17 @@ export const AuthErrors = {
       status: 401,
     }),
 
-
-  InvalidSession: () => 
+  InvalidSession: () =>
     new AppError({
-      code: "INVALID_SESSION",
-      clientMessage: "Invalid Session"
+      code: 'INVALID_SESSION',
+      clientMessage: 'Invalid Session',
     }),
 
   UserAlreadyExists: () =>
     new AppError({
       code: 'AUTH_USER_EXISTS',
-      clientMessage: 'A User Already Exists With These Credentials',
+      clientMessage:
+        'An account with this email is already linked to a different login. Please sign in with the account previously linked to Flare or contact support.',
       status: 400,
     }),
 
@@ -48,7 +47,8 @@ export const AuthErrors = {
   EmailUnverified: () =>
     new AppError({
       code: 'UNVERIFIED_EMAIL',
-      clientMessage: 'Email Address Is Unverified, Please Check Your Email For Verification Instructions',
+      clientMessage:
+        'Email Address Is Unverified, Please Check Your Email For Verification Instructions',
       status: 403,
     }),
 

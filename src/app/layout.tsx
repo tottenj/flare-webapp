@@ -1,13 +1,12 @@
 import { Geist, Plus_Jakarta_Sans } from 'next/font/google';
-import './globals.css';
-import { ToastContainer } from 'react-toastify';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { config } from '@fortawesome/fontawesome-svg-core';
-import '@fortawesome/fontawesome-svg-core/styles.css'; // Import the CSS
-import MainBanner from '@/components/banners/mainBanner/MainBanner';
-import { Suspense } from 'react';
+
 import { Providers } from './providers';
+
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import './globals.css';
 
 config.autoAddCss = false;
 
@@ -23,29 +22,23 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   display: 'swap',
 });
 
-export default async function RootLayout({
-  children,
-  modal,
-}: Readonly<{ children: React.ReactNode; modal: React.ReactNode }>) {
+type RootLayoutProps = Readonly<{
+  children: React.ReactNode;
+  modal: React.ReactNode;
+}>;
+
+export default function RootLayout({ children, modal }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geist.variable} ${plusJakartaSans.variable} antialiased`}>
+      <body
+        className={`${geist.variable} ${plusJakartaSans.variable} flex min-h-dvh flex-col antialiased`}
+      >
         <Providers>
-          <main className="flex min-h-dvh flex-col">
-            <Suspense fallback={'Loading'}>
-              <MainBanner />
-            </Suspense>
-            <div className="gradient flex min-h-0 flex-1">
-              <div className="webGrid mt-4 mr-auto mb-4 ml-auto flex flex-1 flex-col">
-                {children}
-                {modal}
-              </div>
-            </div>
-          </main>
+          {children}
+          {modal}
         </Providers>
         <Analytics />
         <SpeedInsights />
-        <ToastContainer position="bottom-right" />
       </body>
     </html>
   );

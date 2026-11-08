@@ -13,6 +13,16 @@ export default function mapFirebaseAuthError(err: unknown): ActionResult<null> {
   }
 
   switch (err.code) {
+    case 'auth/account-exists-with-different-credential':
+      return {
+        ok: false,
+        error: {
+          code: 'ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL',
+          message:
+            'An account with this email already exists. Please sign in with the provider you originally used.',
+        },
+      };
+
     case 'auth/email-already-in-use':
       return {
         ok: false,

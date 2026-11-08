@@ -7,7 +7,7 @@ export default function OrgSettings() {
   return (
     <MainModal
       trigger={
-        <HeroButton className="mr-auto ml-auto w-11/12" color="danger">
+        <HeroButton className="mr-auto ml-auto w-11/12" variant="danger">
           Delete Account
         </HeroButton>
       }

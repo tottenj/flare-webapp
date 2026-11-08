@@ -2,11 +2,13 @@
 
 import signInAction from '@/lib/auth/signInAction';
 import { signUpAction } from '@/lib/auth/signUpAction';
+import HeroButton from '@/components/buttons/heroButton/HeroButton';
+import { toast } from '@heroui/react';
 import mapFirebaseAuthError from '@/lib/errors/firebaseErrors/mapFirebaseAuthError';
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+import Image from 'next/image';
 
 interface googleSignInButtonProps {
   signIn: boolean;
@@ -20,9 +22,9 @@ export default function GoogleSignInButton({ signIn }: googleSignInButtonProps) 
     if (pending) return;
     setPending(true);
 
-    const provider = new GoogleAuthProvider();
-    const auth = getAuth();
     try {
+      const { auth } = await import('@/lib/firebase/auth/configs/clientApp');
+      const provider = new GoogleAuthProvider();
       const res = await signInWithPopup(auth, provider);
       const idToken = await res.user.getIdToken(true);
 
@@ -30,23 +32,24 @@ export default function GoogleSignInButton({ signIn }: googleSignInButtonProps) 
 
       if (signIn && !result.ok && result.error.code === 'AUTH_SIGNIN_FAILED') {
         const signUpResult = await signUpAction({ idToken });
-        if (!signUpResult.ok && signUpResult.error.code !== 'AUTH_USER_EXISTS') {
-          toast.error(signUpResult.error.message);
+        if (!signUpResult.ok) {
+          toast.danger(signUpResult.error.message);
           return;
         }
+
         result = await signInAction({ idToken });
       }
 
       if (!signIn) {
-        if (!result.ok && result.error.code !== 'AUTH_USER_EXISTS') {
-          toast.error(result.error.message);
+        if (!result.ok) {
+          toast.danger(result.error.message);
           return;
         }
         result = await signInAction({ idToken });
       }
 
       if (!result.ok) {
-        toast.error(result.error.message);
+        toast.danger(result.error.message);
         return;
       }
 
@@ -54,26 +57,30 @@ export default function GoogleSignInButton({ signIn }: googleSignInButtonProps) 
       return;
     } catch (error) {
       const mapped = mapFirebaseAuthError(error);
-      if (!mapped.ok) toast.error(mapped.error.message);
+      if (!mapped.ok) toast.danger(mapped.error.message);
     } finally {
       setPending(false);
     }
   }
 
   return (
-    <button
+    <HeroButton
+      fullWidth
       data-testid="google-signin-button"
       type="button"
-      onClick={handleClick}
-      disabled={pending}
-      className="flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 shadow-sm transition duration-300 hover:bg-gray-100"
+      variant="outline"
+      onPress={handleClick}
+      isDisabled={pending}
+      className="flex items-center justify-center gap-3 font-medium"
     >
-      <img
-        src="https://developers.google.com/identity/images/g-logo.png"
+      <Image
+        src="/GoogleLogo.webp"
         alt="Google logo"
-        className="mr-3 h-5 w-5"
+        className="h-5 w-5"
+        width={20}
+        height={20}
       />
       {pending ? 'Please wait...' : `Sign ${signIn ? 'In' : 'Up'} With Google`}
-    </button>
+    </HeroButton>
   );
 }

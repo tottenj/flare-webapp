@@ -1,4 +1,5 @@
-'use server';
+ 'use server';
+
 import { ThemeToggle } from '@/components/ui/ThemeToggle/ThemeToggle';
 import ProfilePictureSkeleton from '@/components/profiles/profilePicture/presentational/ProfilePictureSkeleton';
 import Link from 'next/link';
@@ -6,6 +7,7 @@ import { Suspense } from 'react';
 import GradientLink from '@/components/Links/GradientLink/GradientLink';
 import LogoWithText from '@/components/flare/logoWithText/LogoWithText';
 import MainBannerMenuContainer from '@/components/banners/mainBanner/MainBannerMenuContainer';
+import FlareLogo from '@/components/flare/configurableLogo/ConfigurableLogo';
 
 export default async function MainBanner() {
   return (
@@ -13,6 +15,8 @@ export default async function MainBanner() {
       <Link href={'/'}>
         <LogoWithText size="small" />
       </Link>
+
+      <FlareLogo size={60} showTagline />
 
       <ThemeToggle />
 

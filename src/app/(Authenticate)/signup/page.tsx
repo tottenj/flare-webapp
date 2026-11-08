@@ -1,9 +1,9 @@
-import SignUpFormContainer from '@/components/forms/signUpForm/SignUpFormContainer';
+import UserAuthPresentational from '@/components/auth/user/userAuthPresentational/UserAuthPresentational';
 
-export default async function Login() {
+export default async function SignUp() {
   return (
-    <div className="flex h-full w-full items-center justify-center">
-      <SignUpFormContainer />
+    <div className="flex h-full w-full flex-1 items-center justify-center">
+      <UserAuthPresentational isSignup={true} />
     </div>
   );
 }

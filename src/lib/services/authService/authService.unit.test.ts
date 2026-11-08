@@ -16,7 +16,7 @@ jest.mock('@/lib/auth/authGateway', () => ({
   __esModule: true,
   default: {
     createSession: jest.fn(),
-    verifyIdToken: jest.fn()
+    verifyIdToken: jest.fn(),
   },
 }));
 
@@ -40,8 +40,9 @@ describe('AuthService.signUp', () => {
       expect.objectContaining({
         firebaseUid: 'uid123',
         email: 'test@test.com',
-        status: "PENDING"
-      }), undefined
+        status: 'PENDING',
+      }),
+      undefined
     );
     expect(userDal.createIfNotExists).toHaveBeenCalledTimes(1);
   });
@@ -77,9 +78,11 @@ describe('AuthService.signUp', () => {
       emailVerified: false,
     });
     (userDal.createIfNotExists as jest.Mock).mockRejectedValueOnce(new UniqueConstraintError());
-    await expect(AuthService.signUp({ idToken: mockToken })).rejects.toEqual(
-      AuthErrors.UserAlreadyExists()
-    );
+    await expect(AuthService.signUp({ idToken: mockToken })).rejects.toMatchObject({
+      code: 'AUTH_USER_EXISTS',
+      clientMessage:
+        'An account with this email is already linked to a different login. Please sign in with the account previously linked to Flare or contact support.',
+    });
   });
 
   it('throws on other error', async () => {
@@ -89,23 +92,26 @@ describe('AuthService.signUp', () => {
       emailVerified: false,
     });
     (userDal.createIfNotExists as jest.Mock).mockRejectedValueOnce(new Error());
-    await expect(AuthService.signUp({ idToken: mockToken })).rejects.toBeInstanceOf(RequiresCleanupError);
+    await expect(AuthService.signUp({ idToken: mockToken })).rejects.toBeInstanceOf(
+      RequiresCleanupError
+    );
   });
 });
 
-
-
 describe('AuthService.signIn', () => {
-    it('returns session token on success', async () => {
-      (AuthGateway.createSession as jest.Mock).mockResolvedValue({sessionCookie: 'cookie', uid: "uid123"});
-      const result = await AuthService.signIn({ idToken: 'token' });
-      expect(result).toEqual({ sessionToken: 'cookie', uid: "uid123" });
+  it('returns session token on success', async () => {
+    (AuthGateway.createSession as jest.Mock).mockResolvedValue({
+      sessionCookie: 'cookie',
+      uid: 'uid123',
     });
+    const result = await AuthService.signIn({ idToken: 'token' });
+    expect(result).toEqual({ sessionToken: 'cookie', uid: 'uid123' });
+  });
 
-    it('propagates EmailUnverified error', async () => {
-      (AuthGateway.createSession as jest.Mock).mockRejectedValue(AuthErrors.EmailUnverified());
-      await expect(AuthService.signIn({ idToken: 'token' })).rejects.toMatchObject({
-        code: 'UNVERIFIED_EMAIL',
-      });
+  it('propagates EmailUnverified error', async () => {
+    (AuthGateway.createSession as jest.Mock).mockRejectedValue(AuthErrors.EmailUnverified());
+    await expect(AuthService.signIn({ idToken: 'token' })).rejects.toMatchObject({
+      code: 'UNVERIFIED_EMAIL',
     });
-})
+  });
+});

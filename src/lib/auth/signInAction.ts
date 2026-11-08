@@ -27,6 +27,7 @@ export default async function signInAction(input: unknown): Promise<ActionResult
       sameSite: 'lax',
       path: '/',
     });
+
     return { ok: true, data: null };
   } catch (err) {
     if (err instanceof AppError) {
