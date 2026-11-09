@@ -59,8 +59,7 @@ export type OrgStatus = (typeof OrgStatus)[keyof typeof OrgStatus]
 
 export const UserRole = {
   USER: 'USER',
-  ADMIN: 'ADMIN',
-  ORG: 'ORG'
+  ADMIN: 'ADMIN'
 } as const
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]

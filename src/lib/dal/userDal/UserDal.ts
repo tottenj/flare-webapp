@@ -20,7 +20,19 @@ export class UserDal {
     return await client.user.findUnique({
       where: { firebaseUid },
       include: {
-        organizationProfile: true,
+        organizationMemberships: {
+          select: {
+            role: true,
+            organization: {
+              select: {
+                id: true,
+                orgName: true,
+                status: true,
+                locationId: true,
+              },
+            },
+          },
+        },
         profilePic: {
           include: { imageAsset: true },
         },

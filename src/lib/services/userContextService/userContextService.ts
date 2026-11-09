@@ -9,14 +9,7 @@ import { AuthenticatedUser } from '@/lib/types/AuthenticatedUser';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
 
-export type OrgUserContext = GetUserContext & {
-  profile: {
-    orgProfile: NonNullable<GetUserContext['profile']['orgProfile']>;
-  };
-  flags: {
-    isOrg: true;
-  };
-};
+export type OrganizationMembership = GetUserContext['organizationMemberships'][number];
 
 export class UserContextService {
   private static resolve = cache(async (): Promise<GetUserContext | null> => {
@@ -25,11 +18,9 @@ export class UserContextService {
     const user = await userDal.findContextByFirebaseUid(authUser.uid);
     if (!user) return null;
 
-    const isOrg = user.role === 'ORG';
-    const isOrgVerified = user.organizationProfile?.status === 'VERIFIED';
     const isAdmin = user.role === 'ADMIN';
 
-    const ctx: GetUserContext = {
+    return GetUserContextSchema.parse({
       user: {
         id: user.id,
         firebaseUid: user.firebaseUid,
@@ -38,26 +29,12 @@ export class UserContextService {
         emailVerified: authUser.emailVerified,
         profilePic: user.profilePic?.imageAsset?.storagePath ?? null,
       },
-      profile: {
-        orgProfile: user.organizationProfile
-          ? {
-              id: user.organizationProfile.id,
-              orgName: user.organizationProfile.orgName,
-              status: user.organizationProfile.status,
-              locationId: user.organizationProfile.locationId,
-            }
-          : null,
-      },
+      organizationMemberships: user.organizationMemberships,
       flags: {
         isAuthenticated: true,
-        isOrg,
-        isOrgVerified,
         isAdmin,
       },
-    };
-
-    GetUserContextSchema.parse(ctx);
-    return ctx;
+    });
   });
 
   static async requireNone(): Promise<GetUserContext | null> {
@@ -70,16 +47,13 @@ export class UserContextService {
     return ctx;
   }
 
-  static async requireOrg(): Promise<OrgUserContext> {
+  static async requireOrg(organizationId: string) {
     const ctx = await this.requireUser();
-    if (!ctx.flags.isOrg || !ctx.profile.orgProfile) redirect('/dashboard');
-    return ctx as OrgUserContext;
-  }
+    const membership = this.getMembership(ctx, organizationId);
 
-  static async requireVerifiedOrg(): Promise<OrgUserContext> {
-    const ctx = await this.requireOrg();
-    if (!ctx.flags.isOrgVerified) redirect('/org/pending');
-    return ctx;
+    if (!membership) redirect('/dashboard');
+
+    return { ctx, membership };
   }
 
   static async requireAdmin(): Promise<GetUserContext> {
@@ -88,17 +62,24 @@ export class UserContextService {
     return ctx;
   }
 
+  static getMembership(ctx: GetUserContext, organizationId: string) {
+    return ctx.organizationMemberships.find(
+      ({ organization }) => organization.id === organizationId
+    );
+  }
 
-  static getUserActor(ctx: GetUserContext): AuthenticatedUser{
+  static getOrgActor(
+    ctx: GetUserContext,
+    membership: OrganizationMembership
+  ): AuthenticatedOrganization {
     return {
-      userId: ctx.user.id,
-      firebaseUid: ctx.user.firebaseUid,
+      ...this.getUserActor(ctx),
+      orgId: membership.organization.id,
     };
   }
 
-  static getOrgActor(ctx: OrgUserContext): AuthenticatedOrganization {
+  static getUserActor(ctx: GetUserContext): AuthenticatedUser {
     return {
-      orgId: ctx.profile.orgProfile.id,
       userId: ctx.user.id,
       firebaseUid: ctx.user.firebaseUid,
     };

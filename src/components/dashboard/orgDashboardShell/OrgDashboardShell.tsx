@@ -11,9 +11,16 @@ import { UserContextService } from '@/lib/services/userContextService/userContex
 import { OrgEventFilter } from '@/lib/types/OrgEventFilter';
 import { Suspense } from 'react';
 
-export default async function OrgDashboardShell({ filters }: { filters?: OrgEventFilter }) {
-  const ctx = await UserContextService.requireOrg();
-  const actor = UserContextService.getOrgActor(ctx);
+export default async function OrgDashboardShell({
+  filters,
+  organizationId,
+}: {
+  filters?: OrgEventFilter;
+  organizationId: string;
+}) {
+  const { ctx, membership } = await UserContextService.requireOrg(organizationId);
+  const { organization } = membership;
+  const actor = UserContextService.getOrgActor(ctx, membership);
 
   return (
     <div className="grid h-full w-full grid-cols-1 grid-rows-[1fr_2fr_2fr] gap-4 md:grid-cols-2">
@@ -22,9 +29,9 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
         settingsTrigger={<OrgSettingsModalTrigger />}
         profileInfo={
           <div>
-            <p>{ctx.profile.orgProfile.orgName}</p>
+            <p>{organization.orgName}</p>
             <p>{ctx.user.email}</p>
-            <p> {ctx.profile.orgProfile.status}</p>
+            <p> {organization.status}</p>
           </div>
         }
       />
@@ -35,7 +42,7 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
       >
         <div className="flex items-center justify-between pb-4">
           <h2>My Events</h2>
-          <CreateEventModalWrapper orgName={ctx.profile.orgProfile.orgName} />
+          <CreateEventModalWrapper orgName={organization.orgName} />
         </div>
         <div className="mb-4 w-full">
           <QueryTabs
@@ -52,7 +59,7 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
           <EventListContainerOrg
             actor={actor}
             filters={filters}
-            orgName={ctx.profile.orgProfile.orgName}
+            orgName={organization.orgName}
           />
         </Suspense>
       </div>
@@ -62,7 +69,7 @@ export default async function OrgDashboardShell({ filters }: { filters?: OrgEven
       >
         <h2 className="pb-8 text-center">Next Upcoming Event</h2>
         <Suspense fallback={<EventCardSkeleton />}>
-          <EventCardOrgRecentContainer orgId={ctx.profile.orgProfile.id} actor={actor} />
+          <EventCardOrgRecentContainer orgId={organization.id} actor={actor} />
         </Suspense>
       </div>
       <div
