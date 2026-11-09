@@ -251,11 +251,6 @@ export type LocationUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type LocationScalarRelationFilter = {
-  is?: Prisma.LocationWhereInput
-  isNot?: Prisma.LocationWhereInput
-}
-
 export type LocationNullableScalarRelationFilter = {
   is?: Prisma.LocationWhereInput | null
   isNot?: Prisma.LocationWhereInput | null
@@ -286,7 +281,9 @@ export type LocationCreateNestedOneWithoutOrganizationProfilesInput = {
   connect?: Prisma.LocationWhereUniqueInput
 }
 
-export type LocationUpdateOneRequiredWithoutOrganizationProfilesNestedInput = {
+export type LocationUpdateOneWithoutOrganizationProfilesNestedInput = {
+  disconnect?: Prisma.LocationWhereInput | boolean
+  delete?: Prisma.LocationWhereInput | boolean
   connect?: Prisma.LocationWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.LocationUpdateToOneWithWhereWithoutOrganizationProfilesInput, Prisma.LocationUpdateWithoutOrganizationProfilesInput>, Prisma.LocationUncheckedUpdateWithoutOrganizationProfilesInput>
 }

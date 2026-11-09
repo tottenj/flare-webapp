@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   OrganizationProfile: 'OrganizationProfile',
+  OrganizationMember: 'OrganizationMember',
   OrgSocial: 'OrgSocial',
   OrgProofFile: 'OrgProofFile',
   ProfilePic: 'ProfilePic',
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "organizationProfile" | "orgSocial" | "orgProofFile" | "profilePic" | "flareEvent" | "tag" | "savedEvent" | "eventTag" | "imageAsset" | "location" | "spatial_ref_sys"
+    modelProps: "user" | "organizationProfile" | "organizationMember" | "orgSocial" | "orgProofFile" | "profilePic" | "flareEvent" | "tag" | "savedEvent" | "eventTag" | "imageAsset" | "location" | "spatial_ref_sys"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -560,6 +561,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.OrganizationProfileCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.OrganizationProfileCountAggregateOutputType> | number
+        }
+      }
+    }
+    OrganizationMember: {
+      payload: Prisma.$OrganizationMemberPayload<ExtArgs>
+      fields: Prisma.OrganizationMemberFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OrganizationMemberFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMemberPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OrganizationMemberFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMemberPayload>
+        }
+        findFirst: {
+          args: Prisma.OrganizationMemberFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMemberPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OrganizationMemberFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMemberPayload>
+        }
+        findMany: {
+          args: Prisma.OrganizationMemberFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMemberPayload>[]
+        }
+        create: {
+          args: Prisma.OrganizationMemberCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMemberPayload>
+        }
+        createMany: {
+          args: Prisma.OrganizationMemberCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OrganizationMemberCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMemberPayload>[]
+        }
+        delete: {
+          args: Prisma.OrganizationMemberDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMemberPayload>
+        }
+        update: {
+          args: Prisma.OrganizationMemberUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMemberPayload>
+        }
+        deleteMany: {
+          args: Prisma.OrganizationMemberDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OrganizationMemberUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OrganizationMemberUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMemberPayload>[]
+        }
+        upsert: {
+          args: Prisma.OrganizationMemberUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrganizationMemberPayload>
+        }
+        aggregate: {
+          args: Prisma.OrganizationMemberAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOrganizationMember>
+        }
+        groupBy: {
+          args: Prisma.OrganizationMemberGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrganizationMemberGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OrganizationMemberCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OrganizationMemberCountAggregateOutputType> | number
         }
       }
     }
@@ -1341,7 +1416,6 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const OrganizationProfileScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
   orgName: 'orgName',
   status: 'status',
   locationId: 'locationId',
@@ -1350,6 +1424,16 @@ export const OrganizationProfileScalarFieldEnum = {
 } as const
 
 export type OrganizationProfileScalarFieldEnum = (typeof OrganizationProfileScalarFieldEnum)[keyof typeof OrganizationProfileScalarFieldEnum]
+
+
+export const OrganizationMemberScalarFieldEnum = {
+  userId: 'userId',
+  organizationId: 'organizationId',
+  role: 'role',
+  createdAt: 'createdAt'
+} as const
+
+export type OrganizationMemberScalarFieldEnum = (typeof OrganizationMemberScalarFieldEnum)[keyof typeof OrganizationMemberScalarFieldEnum]
 
 
 export const OrgSocialScalarFieldEnum = {
@@ -1572,6 +1656,20 @@ export type ListEnumOrgStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 
 
 /**
+ * Reference to a field of type 'OrganizationMemberRole'
+ */
+export type EnumOrganizationMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrganizationMemberRole'>
+    
+
+
+/**
+ * Reference to a field of type 'OrganizationMemberRole[]'
+ */
+export type ListEnumOrganizationMemberRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrganizationMemberRole[]'>
+    
+
+
+/**
  * Reference to a field of type 'ProofPlatform'
  */
 export type EnumProofPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProofPlatform'>
@@ -1780,6 +1878,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   organizationProfile?: Prisma.OrganizationProfileOmit
+  organizationMember?: Prisma.OrganizationMemberOmit
   orgSocial?: Prisma.OrgSocialOmit
   orgProofFile?: Prisma.OrgProofFileOmit
   profilePic?: Prisma.ProfilePicOmit

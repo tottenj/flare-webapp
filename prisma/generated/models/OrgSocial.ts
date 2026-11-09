@@ -366,10 +366,6 @@ export type OrgSocialUncheckedUpdateOneWithoutOrganizationNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrgSocialUpdateToOneWithWhereWithoutOrganizationInput, Prisma.OrgSocialUpdateWithoutOrganizationInput>, Prisma.OrgSocialUncheckedUpdateWithoutOrganizationInput>
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type OrgSocialCreateWithoutOrganizationInput = {
   id?: string
   instagramHandle?: string | null

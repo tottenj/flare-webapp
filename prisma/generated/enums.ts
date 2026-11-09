@@ -48,6 +48,7 @@ export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 
 export const OrgStatus = {
+  DRAFT: 'DRAFT',
   PENDING: 'PENDING',
   VERIFIED: 'VERIFIED',
   REJECTED: 'REJECTED'
@@ -85,3 +86,12 @@ export const EventCategory = {
 } as const
 
 export type EventCategory = (typeof EventCategory)[keyof typeof EventCategory]
+
+
+export const OrganizationMemberRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  EDITOR: 'EDITOR'
+} as const
+
+export type OrganizationMemberRole = (typeof OrganizationMemberRole)[keyof typeof OrganizationMemberRole]

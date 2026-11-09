@@ -10,6 +10,7 @@
  */
 export type * from './models/User'
 export type * from './models/OrganizationProfile'
+export type * from './models/OrganizationMember'
 export type * from './models/OrgSocial'
 export type * from './models/OrgProofFile'
 export type * from './models/ProfilePic'

@@ -198,7 +198,7 @@ export type UserWhereInput = {
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  organizationProfile?: Prisma.XOR<Prisma.OrganizationProfileNullableScalarRelationFilter, Prisma.OrganizationProfileWhereInput> | null
+  organizationMemberships?: Prisma.OrganizationMemberListRelationFilter
   profilePic?: Prisma.XOR<Prisma.ProfilePicNullableScalarRelationFilter, Prisma.ProfilePicWhereInput> | null
   savedEvents?: Prisma.SavedEventListRelationFilter
 }
@@ -211,7 +211,7 @@ export type UserOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  organizationProfile?: Prisma.OrganizationProfileOrderByWithRelationInput
+  organizationMemberships?: Prisma.OrganizationMemberOrderByRelationAggregateInput
   profilePic?: Prisma.ProfilePicOrderByWithRelationInput
   savedEvents?: Prisma.SavedEventOrderByRelationAggregateInput
 }
@@ -227,7 +227,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  organizationProfile?: Prisma.XOR<Prisma.OrganizationProfileNullableScalarRelationFilter, Prisma.OrganizationProfileWhereInput> | null
+  organizationMemberships?: Prisma.OrganizationMemberListRelationFilter
   profilePic?: Prisma.XOR<Prisma.ProfilePicNullableScalarRelationFilter, Prisma.ProfilePicWhereInput> | null
   savedEvents?: Prisma.SavedEventListRelationFilter
 }, "id" | "firebaseUid" | "email">
@@ -266,7 +266,7 @@ export type UserCreateInput = {
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  organizationProfile?: Prisma.OrganizationProfileCreateNestedOneWithoutUserInput
+  organizationMemberships?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   profilePic?: Prisma.ProfilePicCreateNestedOneWithoutUserInput
   savedEvents?: Prisma.SavedEventCreateNestedManyWithoutUserInput
 }
@@ -279,7 +279,7 @@ export type UserUncheckedCreateInput = {
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  organizationProfile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutUserInput
+  organizationMemberships?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   profilePic?: Prisma.ProfilePicUncheckedCreateNestedOneWithoutUserInput
   savedEvents?: Prisma.SavedEventUncheckedCreateNestedManyWithoutUserInput
 }
@@ -292,7 +292,7 @@ export type UserUpdateInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organizationProfile?: Prisma.OrganizationProfileUpdateOneWithoutUserNestedInput
+  organizationMemberships?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   profilePic?: Prisma.ProfilePicUpdateOneWithoutUserNestedInput
   savedEvents?: Prisma.SavedEventUpdateManyWithoutUserNestedInput
 }
@@ -305,7 +305,7 @@ export type UserUncheckedUpdateInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organizationProfile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutUserNestedInput
+  organizationMemberships?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   profilePic?: Prisma.ProfilePicUncheckedUpdateOneWithoutUserNestedInput
   savedEvents?: Prisma.SavedEventUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -391,18 +391,18 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type UserCreateNestedOneWithoutOrganizationProfileInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationProfileInput, Prisma.UserUncheckedCreateWithoutOrganizationProfileInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationProfileInput
+export type UserCreateNestedOneWithoutOrganizationMembershipsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedCreateWithoutOrganizationMembershipsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationMembershipsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutOrganizationProfileNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationProfileInput, Prisma.UserUncheckedCreateWithoutOrganizationProfileInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationProfileInput
-  upsert?: Prisma.UserUpsertWithoutOrganizationProfileInput
+export type UserUpdateOneRequiredWithoutOrganizationMembershipsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedCreateWithoutOrganizationMembershipsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrganizationMembershipsInput
+  upsert?: Prisma.UserUpsertWithoutOrganizationMembershipsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrganizationProfileInput, Prisma.UserUpdateWithoutOrganizationProfileInput>, Prisma.UserUncheckedUpdateWithoutOrganizationProfileInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrganizationMembershipsInput, Prisma.UserUpdateWithoutOrganizationMembershipsInput>, Prisma.UserUncheckedUpdateWithoutOrganizationMembershipsInput>
 }
 
 export type UserCreateNestedOneWithoutProfilePicInput = {
@@ -433,7 +433,7 @@ export type UserUpdateOneRequiredWithoutSavedEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSavedEventsInput, Prisma.UserUpdateWithoutSavedEventsInput>, Prisma.UserUncheckedUpdateWithoutSavedEventsInput>
 }
 
-export type UserCreateWithoutOrganizationProfileInput = {
+export type UserCreateWithoutOrganizationMembershipsInput = {
   id?: string
   firebaseUid: string
   email: string
@@ -445,7 +445,7 @@ export type UserCreateWithoutOrganizationProfileInput = {
   savedEvents?: Prisma.SavedEventCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutOrganizationProfileInput = {
+export type UserUncheckedCreateWithoutOrganizationMembershipsInput = {
   id?: string
   firebaseUid: string
   email: string
@@ -457,23 +457,23 @@ export type UserUncheckedCreateWithoutOrganizationProfileInput = {
   savedEvents?: Prisma.SavedEventUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutOrganizationProfileInput = {
+export type UserCreateOrConnectWithoutOrganizationMembershipsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutOrganizationProfileInput, Prisma.UserUncheckedCreateWithoutOrganizationProfileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedCreateWithoutOrganizationMembershipsInput>
 }
 
-export type UserUpsertWithoutOrganizationProfileInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutOrganizationProfileInput, Prisma.UserUncheckedUpdateWithoutOrganizationProfileInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutOrganizationProfileInput, Prisma.UserUncheckedCreateWithoutOrganizationProfileInput>
+export type UserUpsertWithoutOrganizationMembershipsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedUpdateWithoutOrganizationMembershipsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedCreateWithoutOrganizationMembershipsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutOrganizationProfileInput = {
+export type UserUpdateToOneWithWhereWithoutOrganizationMembershipsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutOrganizationProfileInput, Prisma.UserUncheckedUpdateWithoutOrganizationProfileInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOrganizationMembershipsInput, Prisma.UserUncheckedUpdateWithoutOrganizationMembershipsInput>
 }
 
-export type UserUpdateWithoutOrganizationProfileInput = {
+export type UserUpdateWithoutOrganizationMembershipsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firebaseUid?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -485,7 +485,7 @@ export type UserUpdateWithoutOrganizationProfileInput = {
   savedEvents?: Prisma.SavedEventUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutOrganizationProfileInput = {
+export type UserUncheckedUpdateWithoutOrganizationMembershipsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   firebaseUid?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -505,7 +505,7 @@ export type UserCreateWithoutProfilePicInput = {
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  organizationProfile?: Prisma.OrganizationProfileCreateNestedOneWithoutUserInput
+  organizationMemberships?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   savedEvents?: Prisma.SavedEventCreateNestedManyWithoutUserInput
 }
 
@@ -517,7 +517,7 @@ export type UserUncheckedCreateWithoutProfilePicInput = {
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  organizationProfile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutUserInput
+  organizationMemberships?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   savedEvents?: Prisma.SavedEventUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -545,7 +545,7 @@ export type UserUpdateWithoutProfilePicInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organizationProfile?: Prisma.OrganizationProfileUpdateOneWithoutUserNestedInput
+  organizationMemberships?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   savedEvents?: Prisma.SavedEventUpdateManyWithoutUserNestedInput
 }
 
@@ -557,7 +557,7 @@ export type UserUncheckedUpdateWithoutProfilePicInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organizationProfile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutUserNestedInput
+  organizationMemberships?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   savedEvents?: Prisma.SavedEventUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -569,7 +569,7 @@ export type UserCreateWithoutSavedEventsInput = {
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  organizationProfile?: Prisma.OrganizationProfileCreateNestedOneWithoutUserInput
+  organizationMemberships?: Prisma.OrganizationMemberCreateNestedManyWithoutUserInput
   profilePic?: Prisma.ProfilePicCreateNestedOneWithoutUserInput
 }
 
@@ -581,7 +581,7 @@ export type UserUncheckedCreateWithoutSavedEventsInput = {
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
-  organizationProfile?: Prisma.OrganizationProfileUncheckedCreateNestedOneWithoutUserInput
+  organizationMemberships?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutUserInput
   profilePic?: Prisma.ProfilePicUncheckedCreateNestedOneWithoutUserInput
 }
 
@@ -609,7 +609,7 @@ export type UserUpdateWithoutSavedEventsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organizationProfile?: Prisma.OrganizationProfileUpdateOneWithoutUserNestedInput
+  organizationMemberships?: Prisma.OrganizationMemberUpdateManyWithoutUserNestedInput
   profilePic?: Prisma.ProfilePicUpdateOneWithoutUserNestedInput
 }
 
@@ -621,7 +621,7 @@ export type UserUncheckedUpdateWithoutSavedEventsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  organizationProfile?: Prisma.OrganizationProfileUncheckedUpdateOneWithoutUserNestedInput
+  organizationMemberships?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutUserNestedInput
   profilePic?: Prisma.ProfilePicUncheckedUpdateOneWithoutUserNestedInput
 }
 
@@ -631,10 +631,12 @@ export type UserUncheckedUpdateWithoutSavedEventsInput = {
  */
 
 export type UserCountOutputType = {
+  organizationMemberships: number
   savedEvents: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  organizationMemberships?: boolean | UserCountOutputTypeCountOrganizationMembershipsArgs
   savedEvents?: boolean | UserCountOutputTypeCountSavedEventsArgs
 }
 
@@ -646,6 +648,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Select specific fields to fetch from the UserCountOutputType
    */
   select?: Prisma.UserCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOrganizationMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrganizationMemberWhereInput
 }
 
 /**
@@ -664,7 +673,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  organizationProfile?: boolean | Prisma.User$organizationProfileArgs<ExtArgs>
+  organizationMemberships?: boolean | Prisma.User$organizationMembershipsArgs<ExtArgs>
   profilePic?: boolean | Prisma.User$profilePicArgs<ExtArgs>
   savedEvents?: boolean | Prisma.User$savedEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -702,7 +711,7 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firebaseUid" | "email" | "status" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  organizationProfile?: boolean | Prisma.User$organizationProfileArgs<ExtArgs>
+  organizationMemberships?: boolean | Prisma.User$organizationMembershipsArgs<ExtArgs>
   profilePic?: boolean | Prisma.User$profilePicArgs<ExtArgs>
   savedEvents?: boolean | Prisma.User$savedEventsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -713,7 +722,7 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    organizationProfile: Prisma.$OrganizationProfilePayload<ExtArgs> | null
+    organizationMemberships: Prisma.$OrganizationMemberPayload<ExtArgs>[]
     profilePic: Prisma.$ProfilePicPayload<ExtArgs> | null
     savedEvents: Prisma.$SavedEventPayload<ExtArgs>[]
   }
@@ -1119,7 +1128,7 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  organizationProfile<T extends Prisma.User$organizationProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$organizationProfileArgs<ExtArgs>>): Prisma.Prisma__OrganizationProfileClient<runtime.Types.Result.GetResult<Prisma.$OrganizationProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  organizationMemberships<T extends Prisma.User$organizationMembershipsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$organizationMembershipsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   profilePic<T extends Prisma.User$profilePicArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profilePicArgs<ExtArgs>>): Prisma.Prisma__ProfilePicClient<runtime.Types.Result.GetResult<Prisma.$ProfilePicPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   savedEvents<T extends Prisma.User$savedEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1551,22 +1560,27 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.organizationProfile
+ * User.organizationMemberships
  */
-export type User$organizationProfileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$organizationMembershipsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the OrganizationProfile
+   * Select specific fields to fetch from the OrganizationMember
    */
-  select?: Prisma.OrganizationProfileSelect<ExtArgs> | null
+  select?: Prisma.OrganizationMemberSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the OrganizationProfile
+   * Omit specific fields from the OrganizationMember
    */
-  omit?: Prisma.OrganizationProfileOmit<ExtArgs> | null
+  omit?: Prisma.OrganizationMemberOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.OrganizationProfileInclude<ExtArgs> | null
-  where?: Prisma.OrganizationProfileWhereInput
+  include?: Prisma.OrganizationMemberInclude<ExtArgs> | null
+  where?: Prisma.OrganizationMemberWhereInput
+  orderBy?: Prisma.OrganizationMemberOrderByWithRelationInput | Prisma.OrganizationMemberOrderByWithRelationInput[]
+  cursor?: Prisma.OrganizationMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrganizationMemberScalarFieldEnum | Prisma.OrganizationMemberScalarFieldEnum[]
 }
 
 /**

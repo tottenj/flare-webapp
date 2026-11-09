@@ -26,7 +26,6 @@ export type AggregateOrganizationProfile = {
 
 export type OrganizationProfileMinAggregateOutputType = {
   id: string | null
-  userId: string | null
   orgName: string | null
   status: $Enums.OrgStatus | null
   locationId: string | null
@@ -36,7 +35,6 @@ export type OrganizationProfileMinAggregateOutputType = {
 
 export type OrganizationProfileMaxAggregateOutputType = {
   id: string | null
-  userId: string | null
   orgName: string | null
   status: $Enums.OrgStatus | null
   locationId: string | null
@@ -46,7 +44,6 @@ export type OrganizationProfileMaxAggregateOutputType = {
 
 export type OrganizationProfileCountAggregateOutputType = {
   id: number
-  userId: number
   orgName: number
   status: number
   locationId: number
@@ -58,7 +55,6 @@ export type OrganizationProfileCountAggregateOutputType = {
 
 export type OrganizationProfileMinAggregateInputType = {
   id?: true
-  userId?: true
   orgName?: true
   status?: true
   locationId?: true
@@ -68,7 +64,6 @@ export type OrganizationProfileMinAggregateInputType = {
 
 export type OrganizationProfileMaxAggregateInputType = {
   id?: true
-  userId?: true
   orgName?: true
   status?: true
   locationId?: true
@@ -78,7 +73,6 @@ export type OrganizationProfileMaxAggregateInputType = {
 
 export type OrganizationProfileCountAggregateInputType = {
   id?: true
-  userId?: true
   orgName?: true
   status?: true
   locationId?: true
@@ -161,10 +155,9 @@ export type OrganizationProfileGroupByArgs<ExtArgs extends runtime.Types.Extensi
 
 export type OrganizationProfileGroupByOutputType = {
   id: string
-  userId: string
   orgName: string
   status: $Enums.OrgStatus
-  locationId: string
+  locationId: string | null
   createdAt: Date
   updatedAt: Date
   _count: OrganizationProfileCountAggregateOutputType | null
@@ -192,14 +185,13 @@ export type OrganizationProfileWhereInput = {
   OR?: Prisma.OrganizationProfileWhereInput[]
   NOT?: Prisma.OrganizationProfileWhereInput | Prisma.OrganizationProfileWhereInput[]
   id?: Prisma.StringFilter<"OrganizationProfile"> | string
-  userId?: Prisma.StringFilter<"OrganizationProfile"> | string
   orgName?: Prisma.StringFilter<"OrganizationProfile"> | string
   status?: Prisma.EnumOrgStatusFilter<"OrganizationProfile"> | $Enums.OrgStatus
-  locationId?: Prisma.StringFilter<"OrganizationProfile"> | string
+  locationId?: Prisma.StringNullableFilter<"OrganizationProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"OrganizationProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OrganizationProfile"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  location?: Prisma.XOR<Prisma.LocationScalarRelationFilter, Prisma.LocationWhereInput>
+  members?: Prisma.OrganizationMemberListRelationFilter
+  location?: Prisma.XOR<Prisma.LocationNullableScalarRelationFilter, Prisma.LocationWhereInput> | null
   socials?: Prisma.XOR<Prisma.OrgSocialNullableScalarRelationFilter, Prisma.OrgSocialWhereInput> | null
   proofs?: Prisma.OrgProofFileListRelationFilter
   events?: Prisma.FlareEventListRelationFilter
@@ -207,13 +199,12 @@ export type OrganizationProfileWhereInput = {
 
 export type OrganizationProfileOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   orgName?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  locationId?: Prisma.SortOrder
+  locationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
+  members?: Prisma.OrganizationMemberOrderByRelationAggregateInput
   location?: Prisma.LocationOrderByWithRelationInput
   socials?: Prisma.OrgSocialOrderByWithRelationInput
   proofs?: Prisma.OrgProofFileOrderByRelationAggregateInput
@@ -222,28 +213,26 @@ export type OrganizationProfileOrderByWithRelationInput = {
 
 export type OrganizationProfileWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  userId?: string
   AND?: Prisma.OrganizationProfileWhereInput | Prisma.OrganizationProfileWhereInput[]
   OR?: Prisma.OrganizationProfileWhereInput[]
   NOT?: Prisma.OrganizationProfileWhereInput | Prisma.OrganizationProfileWhereInput[]
   orgName?: Prisma.StringFilter<"OrganizationProfile"> | string
   status?: Prisma.EnumOrgStatusFilter<"OrganizationProfile"> | $Enums.OrgStatus
-  locationId?: Prisma.StringFilter<"OrganizationProfile"> | string
+  locationId?: Prisma.StringNullableFilter<"OrganizationProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"OrganizationProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OrganizationProfile"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  location?: Prisma.XOR<Prisma.LocationScalarRelationFilter, Prisma.LocationWhereInput>
+  members?: Prisma.OrganizationMemberListRelationFilter
+  location?: Prisma.XOR<Prisma.LocationNullableScalarRelationFilter, Prisma.LocationWhereInput> | null
   socials?: Prisma.XOR<Prisma.OrgSocialNullableScalarRelationFilter, Prisma.OrgSocialWhereInput> | null
   proofs?: Prisma.OrgProofFileListRelationFilter
   events?: Prisma.FlareEventListRelationFilter
-}, "id" | "userId">
+}, "id">
 
 export type OrganizationProfileOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   orgName?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  locationId?: Prisma.SortOrder
+  locationId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.OrganizationProfileCountOrderByAggregateInput
@@ -256,10 +245,9 @@ export type OrganizationProfileScalarWhereWithAggregatesInput = {
   OR?: Prisma.OrganizationProfileScalarWhereWithAggregatesInput[]
   NOT?: Prisma.OrganizationProfileScalarWhereWithAggregatesInput | Prisma.OrganizationProfileScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"OrganizationProfile"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"OrganizationProfile"> | string
   orgName?: Prisma.StringWithAggregatesFilter<"OrganizationProfile"> | string
   status?: Prisma.EnumOrgStatusWithAggregatesFilter<"OrganizationProfile"> | $Enums.OrgStatus
-  locationId?: Prisma.StringWithAggregatesFilter<"OrganizationProfile"> | string
+  locationId?: Prisma.StringNullableWithAggregatesFilter<"OrganizationProfile"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"OrganizationProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"OrganizationProfile"> | Date | string
 }
@@ -270,8 +258,8 @@ export type OrganizationProfileCreateInput = {
   status?: $Enums.OrgStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutOrganizationProfileInput
-  location: Prisma.LocationCreateNestedOneWithoutOrganizationProfilesInput
+  members?: Prisma.OrganizationMemberCreateNestedManyWithoutOrganizationInput
+  location?: Prisma.LocationCreateNestedOneWithoutOrganizationProfilesInput
   socials?: Prisma.OrgSocialCreateNestedOneWithoutOrganizationInput
   proofs?: Prisma.OrgProofFileCreateNestedManyWithoutOrganizationInput
   events?: Prisma.FlareEventCreateNestedManyWithoutOrganizationInput
@@ -279,12 +267,12 @@ export type OrganizationProfileCreateInput = {
 
 export type OrganizationProfileUncheckedCreateInput = {
   id?: string
-  userId: string
   orgName: string
   status?: $Enums.OrgStatus
-  locationId: string
+  locationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  members?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutOrganizationInput
   socials?: Prisma.OrgSocialUncheckedCreateNestedOneWithoutOrganizationInput
   proofs?: Prisma.OrgProofFileUncheckedCreateNestedManyWithoutOrganizationInput
   events?: Prisma.FlareEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -296,8 +284,8 @@ export type OrganizationProfileUpdateInput = {
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutOrganizationProfileNestedInput
-  location?: Prisma.LocationUpdateOneRequiredWithoutOrganizationProfilesNestedInput
+  members?: Prisma.OrganizationMemberUpdateManyWithoutOrganizationNestedInput
+  location?: Prisma.LocationUpdateOneWithoutOrganizationProfilesNestedInput
   socials?: Prisma.OrgSocialUpdateOneWithoutOrganizationNestedInput
   proofs?: Prisma.OrgProofFileUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.FlareEventUpdateManyWithoutOrganizationNestedInput
@@ -305,12 +293,12 @@ export type OrganizationProfileUpdateInput = {
 
 export type OrganizationProfileUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   orgName?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
-  locationId?: Prisma.StringFieldUpdateOperationsInput | string
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutOrganizationNestedInput
   socials?: Prisma.OrgSocialUncheckedUpdateOneWithoutOrganizationNestedInput
   proofs?: Prisma.OrgProofFileUncheckedUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.FlareEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -318,10 +306,9 @@ export type OrganizationProfileUncheckedUpdateInput = {
 
 export type OrganizationProfileCreateManyInput = {
   id?: string
-  userId: string
   orgName: string
   status?: $Enums.OrgStatus
-  locationId: string
+  locationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -336,22 +323,15 @@ export type OrganizationProfileUpdateManyMutationInput = {
 
 export type OrganizationProfileUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   orgName?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
-  locationId?: Prisma.StringFieldUpdateOperationsInput | string
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type OrganizationProfileNullableScalarRelationFilter = {
-  is?: Prisma.OrganizationProfileWhereInput | null
-  isNot?: Prisma.OrganizationProfileWhereInput | null
-}
-
 export type OrganizationProfileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   orgName?: Prisma.SortOrder
   status?: Prisma.SortOrder
   locationId?: Prisma.SortOrder
@@ -361,7 +341,6 @@ export type OrganizationProfileCountOrderByAggregateInput = {
 
 export type OrganizationProfileMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   orgName?: Prisma.SortOrder
   status?: Prisma.SortOrder
   locationId?: Prisma.SortOrder
@@ -371,7 +350,6 @@ export type OrganizationProfileMaxOrderByAggregateInput = {
 
 export type OrganizationProfileMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
   orgName?: Prisma.SortOrder
   status?: Prisma.SortOrder
   locationId?: Prisma.SortOrder
@@ -394,40 +372,26 @@ export type OrganizationProfileOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type OrganizationProfileCreateNestedOneWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.OrganizationProfileCreateWithoutUserInput, Prisma.OrganizationProfileUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.OrganizationProfileCreateOrConnectWithoutUserInput
-  connect?: Prisma.OrganizationProfileWhereUniqueInput
-}
-
-export type OrganizationProfileUncheckedCreateNestedOneWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.OrganizationProfileCreateWithoutUserInput, Prisma.OrganizationProfileUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.OrganizationProfileCreateOrConnectWithoutUserInput
-  connect?: Prisma.OrganizationProfileWhereUniqueInput
-}
-
-export type OrganizationProfileUpdateOneWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.OrganizationProfileCreateWithoutUserInput, Prisma.OrganizationProfileUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.OrganizationProfileCreateOrConnectWithoutUserInput
-  upsert?: Prisma.OrganizationProfileUpsertWithoutUserInput
-  disconnect?: Prisma.OrganizationProfileWhereInput | boolean
-  delete?: Prisma.OrganizationProfileWhereInput | boolean
-  connect?: Prisma.OrganizationProfileWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationProfileUpdateToOneWithWhereWithoutUserInput, Prisma.OrganizationProfileUpdateWithoutUserInput>, Prisma.OrganizationProfileUncheckedUpdateWithoutUserInput>
-}
-
-export type OrganizationProfileUncheckedUpdateOneWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.OrganizationProfileCreateWithoutUserInput, Prisma.OrganizationProfileUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.OrganizationProfileCreateOrConnectWithoutUserInput
-  upsert?: Prisma.OrganizationProfileUpsertWithoutUserInput
-  disconnect?: Prisma.OrganizationProfileWhereInput | boolean
-  delete?: Prisma.OrganizationProfileWhereInput | boolean
-  connect?: Prisma.OrganizationProfileWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationProfileUpdateToOneWithWhereWithoutUserInput, Prisma.OrganizationProfileUpdateWithoutUserInput>, Prisma.OrganizationProfileUncheckedUpdateWithoutUserInput>
-}
-
 export type EnumOrgStatusFieldUpdateOperationsInput = {
   set?: $Enums.OrgStatus
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type OrganizationProfileCreateNestedOneWithoutMembersInput = {
+  create?: Prisma.XOR<Prisma.OrganizationProfileCreateWithoutMembersInput, Prisma.OrganizationProfileUncheckedCreateWithoutMembersInput>
+  connectOrCreate?: Prisma.OrganizationProfileCreateOrConnectWithoutMembersInput
+  connect?: Prisma.OrganizationProfileWhereUniqueInput
+}
+
+export type OrganizationProfileUpdateOneRequiredWithoutMembersNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationProfileCreateWithoutMembersInput, Prisma.OrganizationProfileUncheckedCreateWithoutMembersInput>
+  connectOrCreate?: Prisma.OrganizationProfileCreateOrConnectWithoutMembersInput
+  upsert?: Prisma.OrganizationProfileUpsertWithoutMembersInput
+  connect?: Prisma.OrganizationProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationProfileUpdateToOneWithWhereWithoutMembersInput, Prisma.OrganizationProfileUpdateWithoutMembersInput>, Prisma.OrganizationProfileUncheckedUpdateWithoutMembersInput>
 }
 
 export type OrganizationProfileCreateNestedOneWithoutSocialsInput = {
@@ -500,23 +464,23 @@ export type OrganizationProfileUncheckedUpdateManyWithoutLocationNestedInput = {
   deleteMany?: Prisma.OrganizationProfileScalarWhereInput | Prisma.OrganizationProfileScalarWhereInput[]
 }
 
-export type OrganizationProfileCreateWithoutUserInput = {
+export type OrganizationProfileCreateWithoutMembersInput = {
   id?: string
   orgName: string
   status?: $Enums.OrgStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  location: Prisma.LocationCreateNestedOneWithoutOrganizationProfilesInput
+  location?: Prisma.LocationCreateNestedOneWithoutOrganizationProfilesInput
   socials?: Prisma.OrgSocialCreateNestedOneWithoutOrganizationInput
   proofs?: Prisma.OrgProofFileCreateNestedManyWithoutOrganizationInput
   events?: Prisma.FlareEventCreateNestedManyWithoutOrganizationInput
 }
 
-export type OrganizationProfileUncheckedCreateWithoutUserInput = {
+export type OrganizationProfileUncheckedCreateWithoutMembersInput = {
   id?: string
   orgName: string
   status?: $Enums.OrgStatus
-  locationId: string
+  locationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   socials?: Prisma.OrgSocialUncheckedCreateNestedOneWithoutOrganizationInput
@@ -524,39 +488,39 @@ export type OrganizationProfileUncheckedCreateWithoutUserInput = {
   events?: Prisma.FlareEventUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
-export type OrganizationProfileCreateOrConnectWithoutUserInput = {
+export type OrganizationProfileCreateOrConnectWithoutMembersInput = {
   where: Prisma.OrganizationProfileWhereUniqueInput
-  create: Prisma.XOR<Prisma.OrganizationProfileCreateWithoutUserInput, Prisma.OrganizationProfileUncheckedCreateWithoutUserInput>
+  create: Prisma.XOR<Prisma.OrganizationProfileCreateWithoutMembersInput, Prisma.OrganizationProfileUncheckedCreateWithoutMembersInput>
 }
 
-export type OrganizationProfileUpsertWithoutUserInput = {
-  update: Prisma.XOR<Prisma.OrganizationProfileUpdateWithoutUserInput, Prisma.OrganizationProfileUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.OrganizationProfileCreateWithoutUserInput, Prisma.OrganizationProfileUncheckedCreateWithoutUserInput>
+export type OrganizationProfileUpsertWithoutMembersInput = {
+  update: Prisma.XOR<Prisma.OrganizationProfileUpdateWithoutMembersInput, Prisma.OrganizationProfileUncheckedUpdateWithoutMembersInput>
+  create: Prisma.XOR<Prisma.OrganizationProfileCreateWithoutMembersInput, Prisma.OrganizationProfileUncheckedCreateWithoutMembersInput>
   where?: Prisma.OrganizationProfileWhereInput
 }
 
-export type OrganizationProfileUpdateToOneWithWhereWithoutUserInput = {
+export type OrganizationProfileUpdateToOneWithWhereWithoutMembersInput = {
   where?: Prisma.OrganizationProfileWhereInput
-  data: Prisma.XOR<Prisma.OrganizationProfileUpdateWithoutUserInput, Prisma.OrganizationProfileUncheckedUpdateWithoutUserInput>
+  data: Prisma.XOR<Prisma.OrganizationProfileUpdateWithoutMembersInput, Prisma.OrganizationProfileUncheckedUpdateWithoutMembersInput>
 }
 
-export type OrganizationProfileUpdateWithoutUserInput = {
+export type OrganizationProfileUpdateWithoutMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orgName?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  location?: Prisma.LocationUpdateOneRequiredWithoutOrganizationProfilesNestedInput
+  location?: Prisma.LocationUpdateOneWithoutOrganizationProfilesNestedInput
   socials?: Prisma.OrgSocialUpdateOneWithoutOrganizationNestedInput
   proofs?: Prisma.OrgProofFileUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.FlareEventUpdateManyWithoutOrganizationNestedInput
 }
 
-export type OrganizationProfileUncheckedUpdateWithoutUserInput = {
+export type OrganizationProfileUncheckedUpdateWithoutMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orgName?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
-  locationId?: Prisma.StringFieldUpdateOperationsInput | string
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   socials?: Prisma.OrgSocialUncheckedUpdateOneWithoutOrganizationNestedInput
@@ -570,20 +534,20 @@ export type OrganizationProfileCreateWithoutSocialsInput = {
   status?: $Enums.OrgStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutOrganizationProfileInput
-  location: Prisma.LocationCreateNestedOneWithoutOrganizationProfilesInput
+  members?: Prisma.OrganizationMemberCreateNestedManyWithoutOrganizationInput
+  location?: Prisma.LocationCreateNestedOneWithoutOrganizationProfilesInput
   proofs?: Prisma.OrgProofFileCreateNestedManyWithoutOrganizationInput
   events?: Prisma.FlareEventCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationProfileUncheckedCreateWithoutSocialsInput = {
   id?: string
-  userId: string
   orgName: string
   status?: $Enums.OrgStatus
-  locationId: string
+  locationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  members?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutOrganizationInput
   proofs?: Prisma.OrgProofFileUncheckedCreateNestedManyWithoutOrganizationInput
   events?: Prisma.FlareEventUncheckedCreateNestedManyWithoutOrganizationInput
 }
@@ -610,20 +574,20 @@ export type OrganizationProfileUpdateWithoutSocialsInput = {
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutOrganizationProfileNestedInput
-  location?: Prisma.LocationUpdateOneRequiredWithoutOrganizationProfilesNestedInput
+  members?: Prisma.OrganizationMemberUpdateManyWithoutOrganizationNestedInput
+  location?: Prisma.LocationUpdateOneWithoutOrganizationProfilesNestedInput
   proofs?: Prisma.OrgProofFileUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.FlareEventUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationProfileUncheckedUpdateWithoutSocialsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   orgName?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
-  locationId?: Prisma.StringFieldUpdateOperationsInput | string
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutOrganizationNestedInput
   proofs?: Prisma.OrgProofFileUncheckedUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.FlareEventUncheckedUpdateManyWithoutOrganizationNestedInput
 }
@@ -634,20 +598,20 @@ export type OrganizationProfileCreateWithoutProofsInput = {
   status?: $Enums.OrgStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutOrganizationProfileInput
-  location: Prisma.LocationCreateNestedOneWithoutOrganizationProfilesInput
+  members?: Prisma.OrganizationMemberCreateNestedManyWithoutOrganizationInput
+  location?: Prisma.LocationCreateNestedOneWithoutOrganizationProfilesInput
   socials?: Prisma.OrgSocialCreateNestedOneWithoutOrganizationInput
   events?: Prisma.FlareEventCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationProfileUncheckedCreateWithoutProofsInput = {
   id?: string
-  userId: string
   orgName: string
   status?: $Enums.OrgStatus
-  locationId: string
+  locationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  members?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutOrganizationInput
   socials?: Prisma.OrgSocialUncheckedCreateNestedOneWithoutOrganizationInput
   events?: Prisma.FlareEventUncheckedCreateNestedManyWithoutOrganizationInput
 }
@@ -674,20 +638,20 @@ export type OrganizationProfileUpdateWithoutProofsInput = {
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutOrganizationProfileNestedInput
-  location?: Prisma.LocationUpdateOneRequiredWithoutOrganizationProfilesNestedInput
+  members?: Prisma.OrganizationMemberUpdateManyWithoutOrganizationNestedInput
+  location?: Prisma.LocationUpdateOneWithoutOrganizationProfilesNestedInput
   socials?: Prisma.OrgSocialUpdateOneWithoutOrganizationNestedInput
   events?: Prisma.FlareEventUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationProfileUncheckedUpdateWithoutProofsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   orgName?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
-  locationId?: Prisma.StringFieldUpdateOperationsInput | string
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutOrganizationNestedInput
   socials?: Prisma.OrgSocialUncheckedUpdateOneWithoutOrganizationNestedInput
   events?: Prisma.FlareEventUncheckedUpdateManyWithoutOrganizationNestedInput
 }
@@ -698,20 +662,20 @@ export type OrganizationProfileCreateWithoutEventsInput = {
   status?: $Enums.OrgStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutOrganizationProfileInput
-  location: Prisma.LocationCreateNestedOneWithoutOrganizationProfilesInput
+  members?: Prisma.OrganizationMemberCreateNestedManyWithoutOrganizationInput
+  location?: Prisma.LocationCreateNestedOneWithoutOrganizationProfilesInput
   socials?: Prisma.OrgSocialCreateNestedOneWithoutOrganizationInput
   proofs?: Prisma.OrgProofFileCreateNestedManyWithoutOrganizationInput
 }
 
 export type OrganizationProfileUncheckedCreateWithoutEventsInput = {
   id?: string
-  userId: string
   orgName: string
   status?: $Enums.OrgStatus
-  locationId: string
+  locationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  members?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutOrganizationInput
   socials?: Prisma.OrgSocialUncheckedCreateNestedOneWithoutOrganizationInput
   proofs?: Prisma.OrgProofFileUncheckedCreateNestedManyWithoutOrganizationInput
 }
@@ -738,20 +702,20 @@ export type OrganizationProfileUpdateWithoutEventsInput = {
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutOrganizationProfileNestedInput
-  location?: Prisma.LocationUpdateOneRequiredWithoutOrganizationProfilesNestedInput
+  members?: Prisma.OrganizationMemberUpdateManyWithoutOrganizationNestedInput
+  location?: Prisma.LocationUpdateOneWithoutOrganizationProfilesNestedInput
   socials?: Prisma.OrgSocialUpdateOneWithoutOrganizationNestedInput
   proofs?: Prisma.OrgProofFileUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationProfileUncheckedUpdateWithoutEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   orgName?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
-  locationId?: Prisma.StringFieldUpdateOperationsInput | string
+  locationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutOrganizationNestedInput
   socials?: Prisma.OrgSocialUncheckedUpdateOneWithoutOrganizationNestedInput
   proofs?: Prisma.OrgProofFileUncheckedUpdateManyWithoutOrganizationNestedInput
 }
@@ -762,7 +726,7 @@ export type OrganizationProfileCreateWithoutLocationInput = {
   status?: $Enums.OrgStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutOrganizationProfileInput
+  members?: Prisma.OrganizationMemberCreateNestedManyWithoutOrganizationInput
   socials?: Prisma.OrgSocialCreateNestedOneWithoutOrganizationInput
   proofs?: Prisma.OrgProofFileCreateNestedManyWithoutOrganizationInput
   events?: Prisma.FlareEventCreateNestedManyWithoutOrganizationInput
@@ -770,11 +734,11 @@ export type OrganizationProfileCreateWithoutLocationInput = {
 
 export type OrganizationProfileUncheckedCreateWithoutLocationInput = {
   id?: string
-  userId: string
   orgName: string
   status?: $Enums.OrgStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  members?: Prisma.OrganizationMemberUncheckedCreateNestedManyWithoutOrganizationInput
   socials?: Prisma.OrgSocialUncheckedCreateNestedOneWithoutOrganizationInput
   proofs?: Prisma.OrgProofFileUncheckedCreateNestedManyWithoutOrganizationInput
   events?: Prisma.FlareEventUncheckedCreateNestedManyWithoutOrganizationInput
@@ -811,10 +775,9 @@ export type OrganizationProfileScalarWhereInput = {
   OR?: Prisma.OrganizationProfileScalarWhereInput[]
   NOT?: Prisma.OrganizationProfileScalarWhereInput | Prisma.OrganizationProfileScalarWhereInput[]
   id?: Prisma.StringFilter<"OrganizationProfile"> | string
-  userId?: Prisma.StringFilter<"OrganizationProfile"> | string
   orgName?: Prisma.StringFilter<"OrganizationProfile"> | string
   status?: Prisma.EnumOrgStatusFilter<"OrganizationProfile"> | $Enums.OrgStatus
-  locationId?: Prisma.StringFilter<"OrganizationProfile"> | string
+  locationId?: Prisma.StringNullableFilter<"OrganizationProfile"> | string | null
   createdAt?: Prisma.DateTimeFilter<"OrganizationProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"OrganizationProfile"> | Date | string
 }
@@ -825,7 +788,7 @@ export type OrganizationProfileUpdateWithoutLocationInput = {
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutOrganizationProfileNestedInput
+  members?: Prisma.OrganizationMemberUpdateManyWithoutOrganizationNestedInput
   socials?: Prisma.OrgSocialUpdateOneWithoutOrganizationNestedInput
   proofs?: Prisma.OrgProofFileUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.FlareEventUpdateManyWithoutOrganizationNestedInput
@@ -833,11 +796,11 @@ export type OrganizationProfileUpdateWithoutLocationInput = {
 
 export type OrganizationProfileUncheckedUpdateWithoutLocationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   orgName?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.OrganizationMemberUncheckedUpdateManyWithoutOrganizationNestedInput
   socials?: Prisma.OrgSocialUncheckedUpdateOneWithoutOrganizationNestedInput
   proofs?: Prisma.OrgProofFileUncheckedUpdateManyWithoutOrganizationNestedInput
   events?: Prisma.FlareEventUncheckedUpdateManyWithoutOrganizationNestedInput
@@ -845,7 +808,6 @@ export type OrganizationProfileUncheckedUpdateWithoutLocationInput = {
 
 export type OrganizationProfileCreateManyLocationInput = {
   id?: string
-  userId: string
   orgName: string
   status?: $Enums.OrgStatus
   createdAt?: Date | string
@@ -854,7 +816,6 @@ export type OrganizationProfileCreateManyLocationInput = {
 
 export type OrganizationProfileUncheckedUpdateManyWithoutLocationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
   orgName?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumOrgStatusFieldUpdateOperationsInput | $Enums.OrgStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -867,11 +828,13 @@ export type OrganizationProfileUncheckedUpdateManyWithoutLocationInput = {
  */
 
 export type OrganizationProfileCountOutputType = {
+  members: number
   proofs: number
   events: number
 }
 
 export type OrganizationProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  members?: boolean | OrganizationProfileCountOutputTypeCountMembersArgs
   proofs?: boolean | OrganizationProfileCountOutputTypeCountProofsArgs
   events?: boolean | OrganizationProfileCountOutputTypeCountEventsArgs
 }
@@ -884,6 +847,13 @@ export type OrganizationProfileCountOutputTypeDefaultArgs<ExtArgs extends runtim
    * Select specific fields to fetch from the OrganizationProfileCountOutputType
    */
   select?: Prisma.OrganizationProfileCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * OrganizationProfileCountOutputType without action
+ */
+export type OrganizationProfileCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrganizationMemberWhereInput
 }
 
 /**
@@ -903,14 +873,13 @@ export type OrganizationProfileCountOutputTypeCountEventsArgs<ExtArgs extends ru
 
 export type OrganizationProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
   orgName?: boolean
   status?: boolean
   locationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>
+  members?: boolean | Prisma.OrganizationProfile$membersArgs<ExtArgs>
+  location?: boolean | Prisma.OrganizationProfile$locationArgs<ExtArgs>
   socials?: boolean | Prisma.OrganizationProfile$socialsArgs<ExtArgs>
   proofs?: boolean | Prisma.OrganizationProfile$proofsArgs<ExtArgs>
   events?: boolean | Prisma.OrganizationProfile$eventsArgs<ExtArgs>
@@ -919,31 +888,26 @@ export type OrganizationProfileSelect<ExtArgs extends runtime.Types.Extensions.I
 
 export type OrganizationProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
   orgName?: boolean
   status?: boolean
   locationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>
+  location?: boolean | Prisma.OrganizationProfile$locationArgs<ExtArgs>
 }, ExtArgs["result"]["organizationProfile"]>
 
 export type OrganizationProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
   orgName?: boolean
   status?: boolean
   locationId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>
+  location?: boolean | Prisma.OrganizationProfile$locationArgs<ExtArgs>
 }, ExtArgs["result"]["organizationProfile"]>
 
 export type OrganizationProfileSelectScalar = {
   id?: boolean
-  userId?: boolean
   orgName?: boolean
   status?: boolean
   locationId?: boolean
@@ -951,39 +915,36 @@ export type OrganizationProfileSelectScalar = {
   updatedAt?: boolean
 }
 
-export type OrganizationProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "orgName" | "status" | "locationId" | "createdAt" | "updatedAt", ExtArgs["result"]["organizationProfile"]>
+export type OrganizationProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orgName" | "status" | "locationId" | "createdAt" | "updatedAt", ExtArgs["result"]["organizationProfile"]>
 export type OrganizationProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>
+  members?: boolean | Prisma.OrganizationProfile$membersArgs<ExtArgs>
+  location?: boolean | Prisma.OrganizationProfile$locationArgs<ExtArgs>
   socials?: boolean | Prisma.OrganizationProfile$socialsArgs<ExtArgs>
   proofs?: boolean | Prisma.OrganizationProfile$proofsArgs<ExtArgs>
   events?: boolean | Prisma.OrganizationProfile$eventsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrganizationProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>
+  location?: boolean | Prisma.OrganizationProfile$locationArgs<ExtArgs>
 }
 export type OrganizationProfileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  location?: boolean | Prisma.LocationDefaultArgs<ExtArgs>
+  location?: boolean | Prisma.OrganizationProfile$locationArgs<ExtArgs>
 }
 
 export type $OrganizationProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "OrganizationProfile"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
-    location: Prisma.$LocationPayload<ExtArgs>
+    members: Prisma.$OrganizationMemberPayload<ExtArgs>[]
+    location: Prisma.$LocationPayload<ExtArgs> | null
     socials: Prisma.$OrgSocialPayload<ExtArgs> | null
     proofs: Prisma.$OrgProofFilePayload<ExtArgs>[]
     events: Prisma.$FlareEventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    userId: string
     orgName: string
     status: $Enums.OrgStatus
-    locationId: string
+    locationId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["organizationProfile"]>
@@ -1380,8 +1341,8 @@ readonly fields: OrganizationProfileFieldRefs;
  */
 export interface Prisma__OrganizationProfileClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  location<T extends Prisma.LocationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LocationDefaultArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  members<T extends Prisma.OrganizationProfile$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationProfile$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  location<T extends Prisma.OrganizationProfile$locationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationProfile$locationArgs<ExtArgs>>): Prisma.Prisma__LocationClient<runtime.Types.Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   socials<T extends Prisma.OrganizationProfile$socialsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationProfile$socialsArgs<ExtArgs>>): Prisma.Prisma__OrgSocialClient<runtime.Types.Result.GetResult<Prisma.$OrgSocialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   proofs<T extends Prisma.OrganizationProfile$proofsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationProfile$proofsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrgProofFilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   events<T extends Prisma.OrganizationProfile$eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationProfile$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FlareEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1415,7 +1376,6 @@ export interface Prisma__OrganizationProfileClient<T, Null = never, ExtArgs exte
  */
 export interface OrganizationProfileFieldRefs {
   readonly id: Prisma.FieldRef<"OrganizationProfile", 'String'>
-  readonly userId: Prisma.FieldRef<"OrganizationProfile", 'String'>
   readonly orgName: Prisma.FieldRef<"OrganizationProfile", 'String'>
   readonly status: Prisma.FieldRef<"OrganizationProfile", 'OrgStatus'>
   readonly locationId: Prisma.FieldRef<"OrganizationProfile", 'String'>
@@ -1819,6 +1779,49 @@ export type OrganizationProfileDeleteManyArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many OrganizationProfiles to delete.
    */
   limit?: number
+}
+
+/**
+ * OrganizationProfile.members
+ */
+export type OrganizationProfile$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrganizationMember
+   */
+  select?: Prisma.OrganizationMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrganizationMember
+   */
+  omit?: Prisma.OrganizationMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationMemberInclude<ExtArgs> | null
+  where?: Prisma.OrganizationMemberWhereInput
+  orderBy?: Prisma.OrganizationMemberOrderByWithRelationInput | Prisma.OrganizationMemberOrderByWithRelationInput[]
+  cursor?: Prisma.OrganizationMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrganizationMemberScalarFieldEnum | Prisma.OrganizationMemberScalarFieldEnum[]
+}
+
+/**
+ * OrganizationProfile.location
+ */
+export type OrganizationProfile$locationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Location
+   */
+  select?: Prisma.LocationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Location
+   */
+  omit?: Prisma.LocationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LocationInclude<ExtArgs> | null
+  where?: Prisma.LocationWhereInput
 }
 
 /**
