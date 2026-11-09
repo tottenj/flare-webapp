@@ -16,6 +16,7 @@ jest.mock('@/lib/services/userContextService/userContextService', () => ({
   __esModule: true,
   UserContextService: {
     requireOrg: jest.fn(),
+    getOrgActor: jest.fn(),
   },
 }));
 
@@ -68,22 +69,26 @@ describe('createEvent', () => {
       id: 'userId',
       firebaseUid: 'uid123',
     },
-    profile: {
-      orgProfile: {
-        id: 'orgId',
-      },
-    },
   };
+
+  const membership = { organization: { id: 'orgId' }, role: 'EDITOR' };
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (UserContextService.requireOrg as jest.Mock).mockResolvedValue(ctx);
+    (UserContextService.requireOrg as jest.Mock).mockResolvedValue({ ctx, membership });
+    (UserContextService.getOrgActor as jest.Mock).mockReturnValue({
+      userId: 'userId',
+      firebaseUid: 'uid123',
+      orgId: 'orgId',
+    });
   });
 
   it('successfully creates an event', async () => {
-    const result = await createEvent(input);
+    const result = await createEvent('orgId', input);
 
     expect(result).toEqual({ ok: true, data: null });
+    expect(UserContextService.requireOrg).toHaveBeenCalledWith('orgId');
+    expect(UserContextService.getOrgActor).toHaveBeenCalledWith(ctx, membership);
     expect(EventService.createEvent).toHaveBeenCalledWith(
       { userId: 'userId', firebaseUid: 'uid123', orgId: 'orgId' },
       input
@@ -91,8 +96,14 @@ describe('createEvent', () => {
     expect(updateTag).toHaveBeenCalledWith('public-events');
   });
 
+  it('does not create an event for an organization outside the user’s memberships', async () => {
+    (UserContextService.requireOrg as jest.Mock).mockRejectedValueOnce(new Error('redirect'));
+    await expect(createEvent('other-org', input)).rejects.toThrow('redirect');
+    expect(EventService.createEvent).not.toHaveBeenCalled();
+  });
+
   it('accepts empty ticketLink input and normalizes it to undefined', async () => {
-    const result = await createEvent({ ...input, ticketLink: '' });
+    const result = await createEvent('orgId', { ...input, ticketLink: '' });
 
     expect(result).toEqual({ ok: true, data: null });
     expect(EventService.createEvent).toHaveBeenCalledWith(
@@ -104,7 +115,7 @@ describe('createEvent', () => {
   it('returns invalid input failure and deletes uploaded image when owned by user', async () => {
     const invalidInput = { ...input, eventName: '' };
 
-    const result = await createEvent(invalidInput);
+    const result = await createEvent('orgId', invalidInput);
 
     expect(result.ok).toBe(false);
     expect(expectFail(result as ActionResult<null>).code).toBe('INVALID_INPUT');
@@ -120,7 +131,7 @@ describe('createEvent', () => {
       image: { ...input.image, storagePath: 'invalid_path/image.jpg' },
     };
 
-    const result = await createEvent(invalidInput);
+    const result = await createEvent('orgId', invalidInput);
 
     expect(result.ok).toBe(false);
     expect(expectFail(result as ActionResult<null>).code).toBe('INVALID_INPUT');
@@ -131,7 +142,7 @@ describe('createEvent', () => {
     (ImageService.deleteByStoragePath as jest.Mock).mockRejectedValue(new Error('Deletion failed'));
     const invalidInput = { ...input, eventName: '' };
 
-    const result = await createEvent(invalidInput);
+    const result = await createEvent('orgId', invalidInput);
 
     expect(result.ok).toBe(false);
     expect(expectFail(result as ActionResult<null>).code).toBe('INVALID_INPUT');
@@ -144,7 +155,7 @@ describe('createEvent', () => {
   it('handles unknown event creation error', async () => {
     (EventService.createEvent as jest.Mock).mockRejectedValue(new Error('Creation failed'));
 
-    const error = expectFail(await createEvent(input));
+    const error = expectFail(await createEvent('orgId', input));
 
     expect(error.code).toBe('UNKNOWN');
     expect(updateTag).not.toHaveBeenCalled();
@@ -154,7 +165,7 @@ describe('createEvent', () => {
     const error = new MoneyError('Money error occurred');
     (EventService.createEvent as jest.Mock).mockRejectedValueOnce(error);
 
-    const result = expectFail(await createEvent(input));
+    const result = expectFail(await createEvent('orgId', input));
 
     expect(result.code).toBe('MONEY_ERROR');
   });
@@ -163,7 +174,7 @@ describe('createEvent', () => {
     const error = EventErrors.UnableToFetchEvents();
     (EventService.createEvent as jest.Mock).mockRejectedValueOnce(error);
 
-    const result = expectFail(await createEvent(input));
+    const result = expectFail(await createEvent('orgId', input));
 
     expect(result.code).toBe('UNABLE_TO_FETCH_EVENTS');
   });

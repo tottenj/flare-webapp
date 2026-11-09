@@ -28,7 +28,6 @@ export class OrgProfileService {
     });
     try {
       const org = await orgProfileDal.create(domain.props, tx);
-      await userDal.markOrg(user.id, tx);
       if (input.socials) {
         await orgSocialDal.create(org.id, input.socials, tx);
       }

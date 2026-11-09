@@ -44,6 +44,31 @@ describe('Edit Event Integration Tests', () => {
     });
   });
 
+  it('edits events in a second membership and denies events outside those memberships', async () => {
+    const { fakeOrg, authUser } = await createAuthOrgIntegration();
+    const { fakeOrg: secondOrg } = await createAuthOrgIntegration();
+    const { fakeOrg: unrelatedOrg } = await createAuthOrgIntegration();
+    await prisma.organizationMember.create({
+      data: { userId: authUser.userId, organizationId: secondOrg.org.id, role: 'EDITOR' },
+    });
+    const memberEvent = await createEventIntegration({ organizationId: secondOrg.org.id });
+    const unrelatedEvent = await createEventIntegration({ organizationId: unrelatedOrg.org.id });
+    const actor = {
+      userId: authUser.userId,
+      firebaseUid: authUser.firebaseUid,
+      organizationIds: [fakeOrg.org.id, secondOrg.org.id],
+    };
+    const input = editEventInputFactory({ eventName: 'Updated by editor' }, actor.firebaseUid);
+
+    await expect(EventService.editEvent(memberEvent.id, actor, input)).resolves.not.toThrow();
+    await expect(EventService.editEvent(unrelatedEvent.id, actor, input)).rejects.toMatchObject({
+      code: 'AUTH_UNAUTHORIZED',
+    });
+    const edited = await prisma.flareEvent.findUniqueOrThrow({ where: { id: memberEvent.id } });
+    expect(edited.title).toBe('Updated by editor');
+    expect(edited.organizationId).toBe(secondOrg.org.id);
+  });
+
   it('successfully updates location when placeId changes', async () => {
     const { fakeOrg, authUser } = await createAuthOrgIntegration();
     const originalEvent = await createEventIntegration({ organizationId: fakeOrg.org.id });

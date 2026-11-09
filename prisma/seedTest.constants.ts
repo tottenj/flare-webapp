@@ -4,7 +4,7 @@ export interface SeededBasicUser {
   email: string;
   password: string;
   status: 'ACTIVE' | 'PENDING';
-  role: 'USER' | 'ORG' | 'ADMIN';
+  role: 'USER' | 'ADMIN';
 }
 
 export interface SeededOrganization {
@@ -66,7 +66,7 @@ export const SEEDED_TEST_USERS = {
     email: 'unverifiedOrg@gmail.com',
     password: 'password123',
     status: 'ACTIVE',
-    role: 'ORG',
+    role: 'USER',
   },
   verifiedOrgUser: {
     id: '5',
@@ -74,7 +74,7 @@ export const SEEDED_TEST_USERS = {
     email: 'verifiedOrg@gmail.com',
     password: 'password123',
     status: 'ACTIVE',
-    role: 'ORG',
+    role: 'USER',
   },
   adminUser: {
     id: '4',

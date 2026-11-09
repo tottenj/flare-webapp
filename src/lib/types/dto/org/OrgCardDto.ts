@@ -11,13 +11,20 @@ export const OrgCardInclude = {
       address: true,
     },
   },
-  user: {
+  members: {
+    where: { role: 'OWNER' },
+    orderBy: [{ createdAt: 'asc' }, { userId: 'asc' }],
+    take: 1,
     select: {
-      profilePic: {
+      user: {
         select: {
-          imageAsset: {
+          profilePic: {
             select: {
-              storagePath: true,
+              imageAsset: {
+                select: {
+                  storagePath: true,
+                },
+              },
             },
           },
         },
@@ -30,7 +37,7 @@ export function mapOrgCardRowToDto(row: OrgCardRow): OrgCardDto {
   return {
     id: row.id,
     orgName: row.orgName,
-    location: row.location.address,
-    profilePicPath: row.user.profilePic?.imageAsset.storagePath ?? null,
+    location: row.location?.address ?? null,
+    profilePicPath: row.members[0]?.user.profilePic?.imageAsset.storagePath ?? null,
   };
 }

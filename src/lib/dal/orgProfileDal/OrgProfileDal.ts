@@ -9,7 +9,13 @@ export class OrgProfileDal {
   async create(input: OrgProfileDomainProps, tx?: Prisma.TransactionClient) {
     const client = tx ?? prisma;
     try {
-      const org = await client.organizationProfile.create({ data: input });
+      const { userId, ...profile } = input;
+      const org = await client.organizationProfile.create({
+        data: {
+          ...profile,
+          members: { create: { userId, role: 'OWNER' } },
+        },
+      });
       return org;
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {

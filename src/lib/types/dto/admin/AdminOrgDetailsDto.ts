@@ -20,14 +20,21 @@ export const adminOrgRowInclude = {
       },
     },
   },
-  user: {
+  members: {
+    where: { role: 'OWNER' },
+    orderBy: [{ createdAt: 'asc' }, { userId: 'asc' }],
+    take: 1,
     select: {
-      email: true,
-      profilePic: {
+      user: {
         select: {
-          imageAsset: {
+          email: true,
+          profilePic: {
             select: {
-              storagePath: true,
+              imageAsset: {
+                select: {
+                  storagePath: true,
+                },
+              },
             },
           },
         },
@@ -48,9 +55,9 @@ export function mapAdminOrgRowToDto(row: AdminOrgRow): AdminOrgDetailsDto {
   return {
     id: row.id,
     orgName: row.orgName,
-    email: row.user.email,
-    location: row.location.address,
-    profilePicPath: row.user.profilePic?.imageAsset.storagePath ?? null,
+    email: row.members[0]?.user.email ?? null,
+    location: row.location?.address ?? null,
+    profilePicPath: row.members[0]?.user.profilePic?.imageAsset.storagePath ?? null,
     socials: row.socials
       ? {
           facebookHandle: row.socials.facebookHandle ?? null,

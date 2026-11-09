@@ -113,11 +113,13 @@ describe('deleteAccount (integration)', () => {
       firebaseUid: fakeOrg.user.firebaseUid,
     });
     expect(mockedDeleteUser).toHaveBeenCalledWith(fakeOrg.user.firebaseUid);
-    expect(mockedDeleteManyByStoragePaths).toHaveBeenCalledWith([
-      `users/${firebaseUid}/profile-pic/pic1.jpg`,
-      `orgs/${firebaseUid}/proofs/proof1.jpg`,
-      `events/${fakeOrg.org.id}/eventPic.jpg`,
-    ]);
+    expect(mockedDeleteManyByStoragePaths).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        `users/${firebaseUid}/profile-pic/pic1.jpg`,
+        `orgs/${firebaseUid}/proofs/proof1.jpg`,
+        `events/${fakeOrg.org.id}/eventPic.jpg`,
+      ])
+    );
     const user = await prisma.user.findUnique({ where: { id: fakeOrg.user.id } });
     expect(user).toBeNull();
 
@@ -138,6 +140,36 @@ describe('deleteAccount (integration)', () => {
       },
     });
     expect(imageAssets).toHaveLength(0);
+  });
+
+  it('keeps shared organizations and their event assets when a member deletes their account', async () => {
+    const { user, org } = await createOrgIntegration();
+    const { org: otherOrg } = await createOrgIntegration();
+    const otherUser = await createUserIntegration();
+    await prisma.organizationMember.createMany({
+      data: [
+        { userId: otherUser.id, organizationId: org.id, role: 'ADMIN' },
+        { userId: user.id, organizationId: otherOrg.id, role: 'EDITOR' },
+      ],
+    });
+    const event = await createEventIntegration({
+      organizationId: org.id,
+      overrides: {
+        image: { create: { storagePath: 'events/shared/image.jpg' } },
+      },
+    });
+
+    await deleteUserUseCase({
+      authenticatedUser: { userId: user.id, firebaseUid: user.firebaseUid },
+      firebaseUid: user.firebaseUid,
+    });
+
+    expect(await prisma.organizationProfile.count()).toBe(2);
+    expect(await prisma.organizationMember.count({ where: { userId: user.id } })).toBe(0);
+    expect(await prisma.organizationMember.count({ where: { userId: otherUser.id } })).toBe(1);
+    expect(await prisma.flareEvent.findUnique({ where: { id: event.id } })).not.toBeNull();
+    expect(await prisma.imageAsset.count({ where: { id: event.imageId! } })).toBe(1);
+    expect(mockedDeleteManyByStoragePaths).not.toHaveBeenCalled();
   });
 
   it('Throws if UID does not match', async () => {

@@ -12,8 +12,11 @@ import { ActionResult } from '@/lib/types/responses/ActionResult';
 import { updateTag } from 'next/cache';
 import z from 'zod';
 
-export default async function createEvent(input: CreateEvent): Promise<ActionResult<null>> {
-  const ctx = await UserContextService.requireOrg();
+export default async function createEvent(
+  organizationId: string,
+  input: CreateEvent
+): Promise<ActionResult<null>> {
+  const { ctx, membership } = await UserContextService.requireOrg(organizationId);
   const sanitized = CreateEventSchema.safeParse(input);
 
   if (!sanitized.success) {
@@ -28,10 +31,7 @@ export default async function createEvent(input: CreateEvent): Promise<ActionRes
   }
 
   try {
-    await EventService.createEvent(
-      { userId: ctx.user.id, firebaseUid: ctx.user.firebaseUid, orgId: ctx.profile.orgProfile?.id },
-      sanitized.data
-    );
+    await EventService.createEvent(UserContextService.getOrgActor(ctx, membership), sanitized.data);
     updateTag('public-events');
   } catch (error) {
     if (error instanceof AppError) {

@@ -20,7 +20,15 @@ export class UserDal {
     return await client.user.findUnique({
       where: { firebaseUid },
       include: {
-        organizationProfile: true,
+        organizationMemberships: {
+          orderBy: [{ createdAt: 'asc' }, { organizationId: 'asc' }],
+          select: {
+            role: true,
+            organization: {
+              select: { id: true, orgName: true, status: true, locationId: true },
+            },
+          },
+        },
         profilePic: {
           include: { imageAsset: true },
         },
@@ -61,71 +69,63 @@ export class UserDal {
     });
   }
 
-  async markOrg(userId: string, tx?: Prisma.TransactionClient): Promise<User> {
-    const client = tx ?? prisma;
-    return await client.user.update({
-      where: { id: userId },
-      data: {
-        role: 'ORG',
-      },
-    });
-  }
-
   async deleteUser(userId: string, tx?: Prisma.TransactionClient): Promise<DeletedImageAsset[]> {
-    const client = tx ?? prisma;
+    if (!tx) {
+      return prisma.$transaction((client) => this.deleteUser(userId, client));
+    }
 
-    const user = await client.user.findUnique({
+    const user = await tx.user.findUnique({
       where: { id: userId },
       select: {
         profilePic: {
-          select: {
-            imageAsset: {
-              select: { id: true, storagePath: true },
-            },
-          },
-        },
-        organizationProfile: {
-          select: {
-            proofs: {
-              select: {
-                imageAsset: {
-                  select: { id: true, storagePath: true },
-                },
-              },
-            },
-            events: {
-              select: {
-                image: {
-                  select: { id: true, storagePath: true },
-                },
-              },
-            },
-          },
+          select: { imageAssetId: true },
         },
       },
     });
-
     if (!user) return [];
 
-    const assets: DeletedImageAsset[] = [];
+    // Delete only organizations where this user is the sole member and owns the organization.
+    const soleOwner = {
+      members: {
+        some: { userId, role: 'OWNER' },
+        every: { userId },
+      },
+    } satisfies Prisma.OrganizationProfileWhereInput;
+    const organizations = await tx.organizationProfile.findMany({
+      where: soleOwner,
+      select: {
+        id: true,
+        proofs: { select: { imageAssetId: true } },
+        events: { select: { imageId: true } },
+      },
+    });
 
-    if (user.profilePic?.imageAsset) {
-      assets.push(user.profilePic.imageAsset);
+    const assetIds: string[] = [];
+    if (user.profilePic) assetIds.push(user.profilePic.imageAssetId);
+    for (const organization of organizations) {
+      const deleted = await tx.organizationProfile.deleteMany({
+        where: { id: organization.id, ...soleOwner },
+      });
+      if (deleted.count === 0) continue;
+      assetIds.push(...organization.proofs.map(({ imageAssetId }) => imageAssetId));
+      for (const { imageId } of organization.events) {
+        if (imageId) assetIds.push(imageId);
+      }
     }
 
-    user.organizationProfile?.proofs.forEach((p) => {
-      if (p.imageAsset) assets.push(p.imageAsset);
-    });
+    await tx.user.delete({ where: { id: userId } });
 
-    user.organizationProfile?.events.forEach((e) => {
-      if (e.image) assets.push(e.image);
-    });
+    if (assetIds.length === 0) return [];
 
-    await client.user.delete({
-      where: { id: userId },
+    return tx.imageAsset.findMany({
+      where: {
+        id: { in: assetIds },
+        profilePics: { none: {} },
+        orgProofFiles: { none: {} },
+        events: { none: {} },
+      },
+      select: { id: true, storagePath: true },
     });
-
-    return assets;
   }
 }
 

@@ -18,7 +18,7 @@ export const AdminOrgSocialsSchema = z.object({
 export const AdminOrgDetailsSchema = z.object({
   id: z.string(),
   orgName: z.string(),
-  email: z.string(),
+  email: z.string().nullable(),
   location: z.string().nullable(),
   profilePicPath: z.string().nullable(),
   socials: AdminOrgSocialsSchema.nullable(),

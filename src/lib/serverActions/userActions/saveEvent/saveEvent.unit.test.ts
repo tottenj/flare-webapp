@@ -9,7 +9,7 @@ jest.mock('@/lib/services/userContextService/userContextService', () => ({
   __esModule: true,
   UserContextService: {
     requireUser: jest.fn(),
-    getUserActor: jest.fn(),
+    getEventActor: jest.fn(),
   },
 }));
 
@@ -34,6 +34,7 @@ describe('saveEvent', () => {
     const actor = {
       userId: 'user-1',
       firebaseUid: 'firebase-uid-1',
+      organizationIds: [],
     };
 
     const userCtx = {
@@ -41,57 +42,46 @@ describe('saveEvent', () => {
         id: 'user-1',
         firebaseUid: 'firebase-uid-1',
       },
-      profile: {
-        orgProfile: null,
-      },
-      flags: {
-        isOrg: false,
-      },
+      organizationMemberships: [],
     };
 
     (UserContextService.requireUser as jest.Mock).mockResolvedValue(userCtx);
-    (UserContextService.getUserActor as jest.Mock).mockReturnValue(actor);
+    (UserContextService.getEventActor as jest.Mock).mockReturnValue(actor);
     (EventService.saveEvent as jest.Mock).mockResolvedValue(undefined);
 
     const result = await saveEvent(input);
 
     expect(UserContextService.requireUser).toHaveBeenCalled();
-    expect(UserContextService.getUserActor).toHaveBeenCalledWith(userCtx);
+    expect(UserContextService.getEventActor).toHaveBeenCalledWith(userCtx);
     expect(EventService.saveEvent).toHaveBeenCalledWith(input.eventId, actor, input.save);
     expect(result).toEqual({ ok: true, data: undefined });
   });
 
-  it('successfully saves an event as an org user', async () => {
+  it('passes all memberships when saving an event', async () => {
     const userCtx = {
       user: {
         id: 'user-1',
         firebaseUid: 'firebase-uid-1',
       },
-      profile: {
-        orgProfile: {
-          id: 'org-1',
-        },
-      },
-      flags: {
-        isOrg: true,
-      },
+      organizationMemberships: [
+        { organization: { id: 'org-1' } },
+        { organization: { id: 'org-2' } },
+      ],
     };
 
     (UserContextService.requireUser as jest.Mock).mockResolvedValue(userCtx);
+    const actor = {
+      userId: 'user-1',
+      firebaseUid: 'firebase-uid-1',
+      organizationIds: ['org-1', 'org-2'],
+    };
+    (UserContextService.getEventActor as jest.Mock).mockReturnValue(actor);
     (EventService.saveEvent as jest.Mock).mockResolvedValue(undefined);
 
     const result = await saveEvent(input);
 
-    expect(UserContextService.getUserActor).not.toHaveBeenCalled();
-    expect(EventService.saveEvent).toHaveBeenCalledWith(
-      input.eventId,
-      {
-        orgId: 'org-1',
-        userId: 'user-1',
-        firebaseUid: 'firebase-uid-1',
-      },
-      input.save
-    );
+    expect(UserContextService.getEventActor).toHaveBeenCalledWith(userCtx);
+    expect(EventService.saveEvent).toHaveBeenCalledWith(input.eventId, actor, input.save);
     expect(result).toEqual({ ok: true, data: undefined });
   });
 
@@ -107,34 +97,11 @@ describe('saveEvent', () => {
     expect(EventService.saveEvent).not.toHaveBeenCalled();
   });
 
-  it('returns AUTH_UNAUTHORIZED when no actor can be derived', async () => {
-    const userCtx = {
-      user: {
-        userId: 'user-1',
-        firebaseUid: 'firebase-uid-1',
-      },
-      profile: {
-        orgProfile: null,
-      },
-      flags: {
-        isOrg: false,
-      },
-    };
-
-    (UserContextService.requireUser as jest.Mock).mockResolvedValue(userCtx);
-    (UserContextService.getUserActor as jest.Mock).mockReturnValue(null);
-
-    const result = await saveEvent(input);
-
-    const failed = expectFail(result);
-    expect(failed.code).toBe('AUTH_UNAUTHORIZED');
-    expect(EventService.saveEvent).not.toHaveBeenCalled();
-  });
-
   it('returns AppError from EventService when save fails with known error', async () => {
     const actor = {
       userId: 'user-1',
       firebaseUid: 'firebase-uid-1',
+      organizationIds: [],
     };
 
     const userCtx = {
@@ -142,16 +109,11 @@ describe('saveEvent', () => {
         id: 'user-1',
         firebaseUid: 'firebase-uid-1',
       },
-      profile: {
-        orgProfile: null,
-      },
-      flags: {
-        isOrg: false,
-      },
+      organizationMemberships: [],
     };
 
     (UserContextService.requireUser as jest.Mock).mockResolvedValue(userCtx);
-    (UserContextService.getUserActor as jest.Mock).mockReturnValue(actor);
+    (UserContextService.getEventActor as jest.Mock).mockReturnValue(actor);
     (EventService.saveEvent as jest.Mock).mockRejectedValue(EventErrors.CannotSaveOwnEvent());
 
     const result = await saveEvent(input);
@@ -164,6 +126,7 @@ describe('saveEvent', () => {
     const actor = {
       userId: 'user-1',
       firebaseUid: 'firebase-uid-1',
+      organizationIds: [],
     };
 
     const userCtx = {
@@ -171,16 +134,11 @@ describe('saveEvent', () => {
         id: 'user-1',
         firebaseUid: 'firebase-uid-1',
       },
-      profile: {
-        orgProfile: null,
-      },
-      flags: {
-        isOrg: false,
-      },
+      organizationMemberships: [],
     };
 
     (UserContextService.requireUser as jest.Mock).mockResolvedValue(userCtx);
-    (UserContextService.getUserActor as jest.Mock).mockReturnValue(actor);
+    (UserContextService.getEventActor as jest.Mock).mockReturnValue(actor);
     (EventService.saveEvent as jest.Mock).mockRejectedValue(new Error('oops'));
 
     const result = await saveEvent(input);

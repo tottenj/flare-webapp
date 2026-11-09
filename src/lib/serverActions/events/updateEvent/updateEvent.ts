@@ -15,8 +15,8 @@ export default async function editEvent(
   eventId: string,
   input: unknown
 ): Promise<ActionResult<void>> {
-  const ctx = await UserContextService.requireOrg();
-  const actor = UserContextService.getOrgActor(ctx);
+  const ctx = await UserContextService.requireUser();
+  const actor = UserContextService.getEventActor(ctx);
   const sanitized = EditEventInputSchema.safeParse(input);
 
   if (!sanitized.success) {

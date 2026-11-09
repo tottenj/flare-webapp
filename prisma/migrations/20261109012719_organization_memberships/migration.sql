@@ -1,9 +1,5 @@
-/*
-  Warnings:
+BEGIN;
 
-  - You are about to drop the column `userId` on the `OrganizationProfile` table. All the data in the column will be lost.
-
-*/
 -- CreateEnum
 CREATE TYPE "OrganizationMemberRole" AS ENUM ('OWNER', 'ADMIN', 'EDITOR');
 
@@ -20,9 +16,7 @@ ALTER TABLE "OrganizationProfile" DROP CONSTRAINT "OrganizationProfile_userId_fk
 DROP INDEX "OrganizationProfile_userId_key";
 
 -- AlterTable
-ALTER TABLE "OrganizationProfile" DROP COLUMN "userId",
-ALTER COLUMN "status" SET DEFAULT 'DRAFT',
-ALTER COLUMN "locationId" DROP NOT NULL;
+ALTER TABLE "OrganizationProfile" ALTER COLUMN "locationId" DROP NOT NULL;
 
 -- CreateTable
 CREATE TABLE "OrganizationMember" (
@@ -33,6 +27,12 @@ CREATE TABLE "OrganizationMember" (
 
     CONSTRAINT "OrganizationMember_pkey" PRIMARY KEY ("userId","organizationId")
 );
+
+-- Preserve the previous owner before dropping the single-user relation.
+INSERT INTO "OrganizationMember" ("userId", "organizationId", "role")
+SELECT "userId", "id", 'OWNER' FROM "OrganizationProfile";
+
+ALTER TABLE "OrganizationProfile" DROP COLUMN "userId";
 
 -- CreateIndex
 CREATE INDEX "OrganizationMember_organizationId_idx" ON "OrganizationMember"("organizationId");
@@ -45,3 +45,5 @@ ALTER TABLE "OrganizationMember" ADD CONSTRAINT "OrganizationMember_userId_fkey"
 
 -- AddForeignKey
 ALTER TABLE "OrganizationMember" ADD CONSTRAINT "OrganizationMember_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "OrganizationProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+COMMIT;

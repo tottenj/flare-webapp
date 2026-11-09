@@ -3,7 +3,7 @@ import EventCardPresentational, {
 } from '@/components/events/EventCard/presentational/EventCardPresentational';
 import { logger } from '@/lib/logger';
 import { EventService } from '@/lib/services/eventService/eventService';
-import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
+import EventPermission, { EventActor } from '@/lib/permissions/eventPermission/EventPermission';
 import mapEventDtoToEventCardViewModel from '@/lib/types/dto/event/mapEventDtoToEventCardViewModel/mapEventDtoToEventCardViewModel';
 
 export default async function EventCardContainer({
@@ -12,7 +12,7 @@ export default async function EventCardContainer({
   viewerUserId,
 }: {
   eventId: string;
-  actor?: AuthenticatedOrganization;
+  actor?: EventActor;
   viewerUserId?: string;
 }) {
   let event: EventCardViewModel | null;
@@ -27,7 +27,9 @@ export default async function EventCardContainer({
   try {
     event = await mapEventDtoToEventCardViewModel(eventDto, {
       userId: viewerUserId,
-      orgId: actor?.orgId,
+      orgId: EventPermission.isMember(eventDto.organization.id, actor)
+        ? eventDto.organization.id
+        : undefined,
     });
   } catch (error) {
     logger.error('Error mapping EventDto to EventCardViewModel', { eventId, error });

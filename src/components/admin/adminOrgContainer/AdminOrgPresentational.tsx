@@ -26,7 +26,7 @@ export default function AdminOrgPresentational({
       />
       <div data-cy="admin-org-contact-section">
         <h2 className="text-xl font-semibold">Contact</h2>
-        <p data-cy="admin-org-contact-email">{org.email}</p>
+        <p data-cy="admin-org-contact-email">{org.email ?? 'Unavailable'}</p>
       </div>
 
       <div data-cy="admin-org-socials-section">

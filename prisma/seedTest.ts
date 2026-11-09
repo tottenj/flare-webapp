@@ -149,17 +149,32 @@ export async function seedTest(prisma: PrismaClient) {
       email: SEEDED_TEST_USERS.pendingOrgUser.email,
       status: SEEDED_TEST_USERS.pendingOrgUser.status,
       role: SEEDED_TEST_USERS.pendingOrgUser.role,
+    },
+  });
 
-      organizationProfile: {
-        create: {
-          id: SEEDED_TEST_ORGS.pendingOrg.id,
-          orgName: SEEDED_TEST_ORGS.pendingOrg.orgName,
-          status: SEEDED_TEST_ORGS.pendingOrg.status,
-          location: {
-            connect: { id: SEEDED_TEST_LOCATIONS.primary.id },
-          },
-        },
+  await prisma.organizationProfile.upsert({
+    where: { id: SEEDED_TEST_ORGS.pendingOrg.id },
+    update: {},
+    create: {
+      id: SEEDED_TEST_ORGS.pendingOrg.id,
+      orgName: SEEDED_TEST_ORGS.pendingOrg.orgName,
+      status: SEEDED_TEST_ORGS.pendingOrg.status,
+      location: { connect: { id: SEEDED_TEST_LOCATIONS.primary.id } },
+    },
+  });
+
+  await prisma.organizationMember.upsert({
+    where: {
+      userId_organizationId: {
+        userId: unverifiedOrg.id,
+        organizationId: SEEDED_TEST_ORGS.pendingOrg.id,
       },
+    },
+    update: {},
+    create: {
+      userId: unverifiedOrg.id,
+      organizationId: SEEDED_TEST_ORGS.pendingOrg.id,
+      role: 'OWNER',
     },
   });
 
@@ -172,17 +187,32 @@ export async function seedTest(prisma: PrismaClient) {
       email: SEEDED_TEST_USERS.verifiedOrgUser.email,
       status: SEEDED_TEST_USERS.verifiedOrgUser.status,
       role: SEEDED_TEST_USERS.verifiedOrgUser.role,
+    },
+  });
 
-      organizationProfile: {
-        create: {
-          id: SEEDED_TEST_ORGS.verifiedOrg.id,
-          orgName: SEEDED_TEST_ORGS.verifiedOrg.orgName,
-          status: SEEDED_TEST_ORGS.verifiedOrg.status,
-          location: {
-            connect: { id: SEEDED_TEST_LOCATIONS.primary.id },
-          },
-        },
+  await prisma.organizationProfile.upsert({
+    where: { id: SEEDED_TEST_ORGS.verifiedOrg.id },
+    update: {},
+    create: {
+      id: SEEDED_TEST_ORGS.verifiedOrg.id,
+      orgName: SEEDED_TEST_ORGS.verifiedOrg.orgName,
+      status: SEEDED_TEST_ORGS.verifiedOrg.status,
+      location: { connect: { id: SEEDED_TEST_LOCATIONS.primary.id } },
+    },
+  });
+
+  await prisma.organizationMember.upsert({
+    where: {
+      userId_organizationId: {
+        userId: verifiedOrg.id,
+        organizationId: SEEDED_TEST_ORGS.verifiedOrg.id,
       },
+    },
+    update: {},
+    create: {
+      userId: verifiedOrg.id,
+      organizationId: SEEDED_TEST_ORGS.verifiedOrg.id,
+      role: 'OWNER',
     },
   });
 

@@ -19,7 +19,7 @@ import type { EventDto } from '@/lib/schemas/event/eventDtoSchema';
 import { mapEventRowToDto } from '@/lib/types/dto/event/EventDto';
 import { UserEventFilter, userEventFilterSchema } from '@/lib/types/UserEventFilter';
 import tagService from '@/lib/services/tagService/tagService';
-import EventPermission from '@/lib/permissions/eventPermission/EventPermission';
+import EventPermission, { EventActor } from '@/lib/permissions/eventPermission/EventPermission';
 import { EventErrors } from '@/lib/errors/eventErrors/EventErrors';
 import { EditEventData } from '@/lib/schemas/event/editEventDataSchema';
 import { EditEventInput } from '@/lib/schemas/event/editEventInputSchema';
@@ -31,7 +31,7 @@ import {
 } from '@/lib/types/dto/event/EventFilterDataDto';
 
 export class EventService {
-  private static async assertCanEdit(eventId: string, actor: AuthenticatedOrganization) {
+  private static async assertCanEdit(eventId: string, actor: EventActor) {
     const event = await eventDal.getOwnerInfo(eventId);
     if (!event) throw EventErrors.EventNotFound();
     if (!EventPermission.canEdit({ organizationId: event.organizationId }, actor))
@@ -97,7 +97,7 @@ export class EventService {
 
   static async getEventById(
     eventId: string,
-    actor?: AuthenticatedOrganization,
+    actor?: EventActor,
     viewerUserId?: string
   ): Promise<EventDto | null> {
     const event = await eventDal.getEvent(eventId);
@@ -126,7 +126,7 @@ export class EventService {
     return dto;
   }
 
-  static async getEditData(eventId: string, actor: AuthenticatedOrganization) {
+  static async getEditData(eventId: string, actor: EventActor) {
     await this.assertCanEdit(eventId, actor);
     const [eventRow, eventAssets] = await Promise.all([
       eventDal.getEvent(eventId),
@@ -179,11 +179,7 @@ export class EventService {
     return editData;
   }
 
-  static async editEvent(
-    eventId: string,
-    actor: AuthenticatedOrganization,
-    eventData: EditEventInput
-  ) {
+  static async editEvent(eventId: string, actor: EventActor, eventData: EditEventInput) {
     await this.assertCanEdit(eventId, actor);
     const prevEvent = await eventDal.getEvent(eventId);
     ensure(prevEvent, EventErrors.EventNotFound());
@@ -271,17 +267,15 @@ export class EventService {
     return mapEventFilterDataToDto({ location });
   }
 
-  static async saveEvent(
-    eventId: string,
-    actor: AuthenticatedOrganization | AuthenticatedUser,
-    save: boolean
-  ) {
+  static async saveEvent(eventId: string, actor: EventActor, save: boolean) {
     const event = await eventDal.getEvent(eventId);
     if (!event) throw EventErrors.EventNotFound();
 
-    if ('orgId' in actor && event.organizationId === actor.orgId) {
+    if (EventPermission.isMember(event.organizationId, actor)) {
       throw EventErrors.CannotSaveOwnEvent();
     }
+
+    if (save && !EventPermission.canView(event, actor)) throw AuthErrors.Unauthorized();
 
     await eventDal.saveEvent(eventId, actor.userId, save);
   }

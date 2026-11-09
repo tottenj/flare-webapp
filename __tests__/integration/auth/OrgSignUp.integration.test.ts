@@ -23,9 +23,9 @@ describe('signUpOrgUseCase (integration)', () => {
       where: { email: baseData.org.email },
     });
     expect(user).not.toBeNull();
-    expect(user!.role).toBe('ORG');
-    const org = await prisma.organizationProfile.findUnique({
-      where: { userId: user!.id },
+    expect(user!.role).toBe('USER');
+    const org = await prisma.organizationProfile.findFirst({
+      where: { members: { some: { userId: user!.id, role: 'OWNER' } } },
     });
     expect(org).not.toBeNull();
     const location = await prisma.location.findUnique({
@@ -45,9 +45,34 @@ describe('signUpOrgUseCase (integration)', () => {
     expect(location).not.toBeNull();
   });
 
+  it('adds a second organization to an existing account without changing global admin status', async () => {
+    const { user } = await createOrgIntegration({ user: { role: 'ADMIN' } });
+    const input = orgSignUpInputFactory();
+    jest.spyOn(AuthGateway, 'verifyIdToken').mockResolvedValue({
+      uid: user.firebaseUid,
+      email: user.email,
+      emailVerified: true,
+    });
+
+    await signUpOrgUseCase(input);
+
+    const updated = await prisma.user.findUniqueOrThrow({
+      where: { id: user.id },
+      include: { organizationMemberships: true },
+    });
+    expect(updated.role).toBe('ADMIN');
+    expect(updated.organizationMemberships).toHaveLength(2);
+    expect(updated.organizationMemberships.every(({ role }) => role === 'OWNER')).toBe(true);
+  });
+
   it('rolls back user creation on organization fail', async () => {
     const baseData = orgSignUpInputFactory();
 
+    jest.spyOn(AuthGateway, 'verifyIdToken').mockResolvedValue({
+      uid: `firebase-${baseData.org.email}`,
+      email: baseData.org.email,
+      emailVerified: true,
+    });
     const spy = jest.spyOn(orgProfileDal, 'create').mockImplementationOnce(() => {
       throw new Error('org creation failed');
     });
@@ -67,7 +92,7 @@ describe('signUpOrgUseCase (integration)', () => {
     spy.mockRestore();
   });
 
-  it('prevents duplicate organization signup for same user', async () => {
+  it('rejects the same email under a different Firebase account', async () => {
     const baseData = orgSignUpInputFactory();
     jest.spyOn(AuthGateway, 'verifyIdToken').mockResolvedValue({
       uid: `firebase-${baseData.org.email}`,
@@ -105,8 +130,8 @@ describe('signUpOrgUseCase (integration)', () => {
     const user = await prisma.user.findUnique({
       where: { email: enrichedData.org.email },
     });
-    const org = await prisma.organizationProfile.findUnique({
-      where: { userId: user!.id },
+    const org = await prisma.organizationProfile.findFirst({
+      where: { members: { some: { userId: user!.id, role: 'OWNER' } } },
     });
     const socials = await prisma.orgSocial.findMany({
       where: { organizationId: org!.id },

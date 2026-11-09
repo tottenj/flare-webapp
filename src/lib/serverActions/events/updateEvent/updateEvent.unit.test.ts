@@ -11,8 +11,8 @@ import { updateTag } from 'next/cache';
 
 jest.mock('@/lib/services/userContextService/userContextService', () => ({
   UserContextService: {
-    requireOrg: jest.fn(),
-    getOrgActor: jest.fn(),
+    requireUser: jest.fn(),
+    getEventActor: jest.fn(),
   },
 }));
 
@@ -42,15 +42,15 @@ describe('update event', () => {
       user: { firebaseUid: actor.firebaseUid },
     };
 
-    (UserContextService.requireOrg as jest.Mock).mockResolvedValue(ctx);
-    (UserContextService.getOrgActor as jest.Mock).mockReturnValue(actor);
+    (UserContextService.requireUser as jest.Mock).mockResolvedValue(ctx);
+    (UserContextService.getEventActor as jest.Mock).mockReturnValue(actor);
     (EventService.editEvent as jest.Mock).mockResolvedValue(undefined);
 
     const event = editEventInputFactory();
 
     await expect(editEvent('id', event)).resolves.toEqual({ ok: true, data: undefined });
-    expect(UserContextService.requireOrg).toHaveBeenCalled();
-    expect(UserContextService.getOrgActor).toHaveBeenCalled();
+    expect(UserContextService.requireUser).toHaveBeenCalled();
+    expect(UserContextService.getEventActor).toHaveBeenCalled();
     expect(EventService.editEvent).toHaveBeenCalledWith(
       'id',
       actor,
@@ -65,8 +65,8 @@ describe('update event', () => {
     const ctx = {
       user: { firebaseUid: actor.firebaseUid },
     };
-    (UserContextService.requireOrg as jest.Mock).mockResolvedValue(ctx);
-    (UserContextService.getOrgActor as jest.Mock).mockReturnValue(actor);
+    (UserContextService.requireUser as jest.Mock).mockResolvedValue(ctx);
+    (UserContextService.getEventActor as jest.Mock).mockReturnValue(actor);
 
     const invalidEvent = { ...editEventInputFactory(), eventName: '' };
 
@@ -81,8 +81,8 @@ describe('update event', () => {
     const ctx = {
       user: { firebaseUid: actor.firebaseUid },
     };
-    (UserContextService.requireOrg as jest.Mock).mockResolvedValue(ctx);
-    (UserContextService.getOrgActor as jest.Mock).mockReturnValue(actor);
+    (UserContextService.requireUser as jest.Mock).mockResolvedValue(ctx);
+    (UserContextService.getEventActor as jest.Mock).mockReturnValue(actor);
     (EventService.editEvent as jest.Mock).mockRejectedValue(new Error('Service error'));
 
     const event = editEventInputFactory();
@@ -98,8 +98,8 @@ describe('update event', () => {
     const ctx = {
       user: { firebaseUid: actor.firebaseUid },
     };
-    (UserContextService.requireOrg as jest.Mock).mockResolvedValue(ctx);
-    (UserContextService.getOrgActor as jest.Mock).mockReturnValue(actor);
+    (UserContextService.requireUser as jest.Mock).mockResolvedValue(ctx);
+    (UserContextService.getEventActor as jest.Mock).mockReturnValue(actor);
     (EventService.editEvent as jest.Mock).mockRejectedValue(
       new AppError({ code: 'APP_ERROR', clientMessage: 'App error' })
     );

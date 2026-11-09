@@ -23,7 +23,6 @@ jest.mock('@/lib/dal/userDal/UserDal', () => ({
   __esModule: true,
   userDal: {
     findByFirebaseUid: jest.fn(),
-    markOrg: jest.fn(),
   },
 }));
 
@@ -58,7 +57,6 @@ jest.mock('@/lib/dal/orgProofDal/OrgProofDal', () => ({
 describe('OrgProfileService.signup (unit)', () => {
   const mockVerify = AuthGateway.verifyIdToken as jest.Mock;
   const mockFindUser = userDal.findByFirebaseUid as jest.Mock;
-  const mockMarkOrg = userDal.markOrg as jest.Mock;
   const mockCreateLocation = locationDal.create as jest.Mock;
   const mockCreateOrg = orgProfileDal.create as jest.Mock;
 
@@ -83,7 +81,6 @@ describe('OrgProfileService.signup (unit)', () => {
       email: 'example@gmail.com',
     });
     mockFindUser.mockResolvedValue({ id: 'userId' });
-    mockMarkOrg.mockResolvedValue({ id: 'userId', role: 'ORG' });
     mockCreateLocation.mockResolvedValue({ id: 'locationId' });
     mockCreateOrg.mockResolvedValue({ id: 'orgId' });
   }
@@ -96,8 +93,10 @@ describe('OrgProfileService.signup (unit)', () => {
     expect(mockVerify).toHaveBeenCalledWith('token');
     expect(mockFindUser).toHaveBeenCalledWith('uid123', undefined);
     expect(mockCreateLocation).toHaveBeenCalledWith(input.org.location, undefined);
-    expect(mockCreateOrg).toHaveBeenCalledTimes(1);
-    expect(mockMarkOrg).toHaveBeenCalledWith('userId', undefined);
+    expect(mockCreateOrg).toHaveBeenCalledWith(
+      { userId: 'userId', orgName: input.org.name, status: 'PENDING', locationId: 'locationId' },
+      undefined
+    );
     expect(orgSocialDal.create).toHaveBeenCalledWith('orgId', input.socials, undefined);
     expect(orgProofDal.create).toHaveBeenCalledWith('orgId', input.proofs, undefined);
   });

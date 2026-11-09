@@ -6,7 +6,6 @@ import {
   EventModalSearchParamsSchema,
 } from '@/lib/schemas/routes/eventModalSearchParamsSchema';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
-import { AuthenticatedOrganization } from '@/lib/types/AuthenticatedOrganization';
 import { Suspense } from 'react';
 
 export default async function Page({
@@ -21,20 +20,12 @@ export default async function Page({
   const search = EventModalSearchParamsSchema.safeParse(searchRaw);
   const returnTo = search.success ? search.data.returnTo : undefined;
   const ctx = await UserContextService.requireNone();
-  const actor: AuthenticatedOrganization | undefined = ctx?.profile.orgProfile
-    ? {
-        orgId: ctx.profile.orgProfile.id,
-        userId: ctx.user.id,
-        firebaseUid: ctx.user.firebaseUid,
-      }
-    : undefined;
+  const actor = ctx ? UserContextService.getEventActor(ctx) : undefined;
 
   return (
     <>
       <ModalRouter returnTo={returnTo} returnToFallback="/events" modalProps={{ size: '5xl' }}>
-        <Suspense
-          fallback={<EventCardSkeleton/>}
-        >
+        <Suspense fallback={<EventCardSkeleton />}>
           <EventCardContainer eventId={eventId} actor={actor} viewerUserId={ctx?.user.id} />
         </Suspense>
       </ModalRouter>

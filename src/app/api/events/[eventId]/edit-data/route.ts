@@ -10,8 +10,8 @@ export async function GET(
   { params }: { params: Promise<{ eventId: string }> }
 ): Promise<NextResponse> {
   const { eventId } = await params;
-  const ctx = await UserContextService.requireOrg();
-  const actor = UserContextService.getOrgActor(ctx);
+  const ctx = await UserContextService.requireUser();
+  const actor = UserContextService.getEventActor(ctx);
 
   try {
     const editData = await EventService.getEditData(eventId, actor);
