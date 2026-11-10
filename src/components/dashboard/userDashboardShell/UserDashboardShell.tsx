@@ -1,37 +1,94 @@
-import DashboardInfoShellContainer from '@/components/dashboard/dashboardInfoShell/DashboardInfoShellContainer';
-import UserSettingsModalTrigger from '@/components/dashboard/settings/userSettings/UserSettingsModalTrigger';
-import EventListContainerSaved from '@/components/events/EventList/EventListContainerSaved';
-import EventListSkeleton from '@/components/events/EventList/presentational/EventListSkeleton';
+import FeaturedEventGrid from '@/components/dashboard/featuredEventGrid/FeaturedEventGrid';
+import type { DashboardEvent } from '@/components/dashboard/dashboardEventCard/DashboardEventCard';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
-import { Suspense } from 'react';
+
+const events: DashboardEvent[] = [
+  {
+    id: 'fixture-1',
+    title: 'Queer Arts Social',
+    imageUrl: '/stockEvent.jpg',
+    startDateLabel: 'Fri, Nov 13',
+    startTimeLabel: '6 PM',
+    monthLabel: 'Nov',
+    dayLabel: '13',
+    locationLabel: 'West Queen West',
+    priceLabel: 'Free',
+    organizerName: 'Community Arts Collective',
+  },
+  {
+    id: 'fixture-2',
+    title: 'An Evening of Art, Music, Conversation, and Community Across the City',
+    imageUrl: '/sampleEvent2.jpg',
+    startDateLabel: 'Sat, Nov 14',
+    startTimeLabel: '7 PM',
+    monthLabel: 'Nov',
+    dayLabel: '14',
+    locationLabel: 'Downtown',
+    priceLabel: '$15',
+  },
+  {
+    id: 'fixture-3',
+    title: 'Sunday Social',
+    startDateLabel: 'Sun, Nov 15',
+    startTimeLabel: '2 PM',
+    monthLabel: 'Nov',
+    dayLabel: '15',
+    locationLabel: 'The Junction',
+    priceLabel: 'Free',
+  },
+  {
+    id: 'fixture-4',
+    title: 'Community Film Night',
+    imageUrl: '/sampleEvent2.jpg',
+    startDateLabel: 'Fri, Nov 20',
+    startTimeLabel: '6 PM',
+    monthLabel: 'Nov',
+    dayLabel: '20',
+    locationLabel: 'Parkdale',
+    priceLabel: '$20',
+    organizerName: 'Community Arts Collective',
+  },
+  {
+    id: 'fixture-5',
+    title: 'Neighborhood Meetup',
+    imageUrl: '/stockEvent.jpg',
+    startDateLabel: 'Sat, Nov 21',
+    startTimeLabel: '4 PM',
+    monthLabel: 'Nov',
+    dayLabel: '21',
+    locationLabel: 'Roncesvalles',
+    priceLabel: 'Free',
+  },
+  {
+    id: 'fixture-6',
+    title: 'Creative Community Night',
+    imageUrl: '/sampleEvent2.jpg',
+    startDateLabel: 'Sun, Nov 22',
+    startTimeLabel: '7 PM',
+    monthLabel: 'Nov',
+    dayLabel: '22',
+    locationLabel: 'Downtown',
+    priceLabel: '$10',
+  },
+];
 
 export default async function UserDashboardShell() {
-  const ctx = await UserContextService.requireUser();
-  const actor = UserContextService.getUserActor(ctx);
+  await UserContextService.requireUser();
 
   return (
-    <div className="grid h-full w-full grid-cols-1 grid-rows-[1fr_3fr] gap-4 md:grid-cols-2">
-      <DashboardInfoShellContainer
-        profilePicPath={ctx.user.profilePic}
-        settingsTrigger={<UserSettingsModalTrigger />}
-        profileInfo={
-          <div>
-            <p>{ctx.user.email}</p>
-          </div>
-        }
-      />
-
-      <div
-        data-cy="saved-events-container"
-        className="row-span-2 h-full w-full rounded-2xl bg-white p-8 shadow-2xl"
-      >
-        <div className="flex items-center justify-between pb-4">
-          <h2>Saved Events</h2>
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
+          <h1 className="text-accent font-bold uppercase">Your Flare</h1>
+          <p className="font-heading text-4xl font-bold sm:text-5xl">Good to see you.</p>
         </div>
-        <Suspense fallback={<EventListSkeleton />}>
-          <EventListContainerSaved actor={actor} />
-        </Suspense>
+        <p className="text-muted text-sm">Your saved plans, all in one place.</p>
       </div>
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <h2 className="font-heading text-3xl font-bold">Next Up</h2>
+        <p className="text-accent">{events.length} saved events</p>
+      </div>
+      <FeaturedEventGrid events={events} />
     </div>
   );
 }

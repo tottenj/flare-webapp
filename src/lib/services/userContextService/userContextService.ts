@@ -50,9 +50,7 @@ export class UserContextService {
   static async requireOrg(organizationId: string) {
     const ctx = await this.requireUser();
     const membership = this.getMembership(ctx, organizationId);
-
     if (!membership) redirect('/dashboard');
-
     return { ctx, membership };
   }
 
