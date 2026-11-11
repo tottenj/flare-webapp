@@ -4,16 +4,20 @@ import { UserContextService } from '@/lib/services/userContextService/userContex
 import { logger } from '@/lib/logger';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import NavBarAvatarDropdown from './NavBarAvatarDropdown';
+import Link from 'next/link';
 
 export default async function NavBarAvatar() {
   const context = await UserContextService.requireNone();
   if (!context) {
     return (
-      <HeroAvatar color="accent" variant="soft">
-        <HeroAvatar.Fallback>
-          <FontAwesomeIcon aria-hidden="true" icon={faUser} />
-        </HeroAvatar.Fallback>
-      </HeroAvatar>
+      <Link href={"/signin"}>
+        <HeroAvatar color="accent" variant="soft">
+          <HeroAvatar.Fallback>
+            <FontAwesomeIcon aria-hidden="true" icon={faUser} />
+          </HeroAvatar.Fallback>
+        </HeroAvatar>
+      </Link>
     );
   }
 
@@ -38,11 +42,13 @@ export default async function NavBarAvatar() {
       .join('') || email[0].toUpperCase();
 
   return (
-    <HeroAvatar color="accent" variant="soft">
-      {profilePictureUrl && (
-        <HeroAvatar.Image alt={`Profile picture for ${email}`} src={profilePictureUrl} />
-      )}
-      <HeroAvatar.Fallback>{initials}</HeroAvatar.Fallback>
-    </HeroAvatar>
+    <NavBarAvatarDropdown>
+      <HeroAvatar color="accent" variant="soft">
+        {profilePictureUrl && (
+          <HeroAvatar.Image alt={`Profile picture for ${email}`} src={profilePictureUrl} />
+        )}
+        <HeroAvatar.Fallback>{initials}</HeroAvatar.Fallback>
+      </HeroAvatar>
+    </NavBarAvatarDropdown>
   );
 }

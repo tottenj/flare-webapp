@@ -1,5 +1,6 @@
 import FeaturedEventGrid from '@/components/dashboard/featuredEventGrid/FeaturedEventGrid';
 import type { DashboardEvent } from '@/components/dashboard/dashboardEventCard/DashboardEventCard';
+import PageHeading from '@/components/ui/PageHeading/PageHeading';
 import { UserContextService } from '@/lib/services/userContextService/userContextService';
 
 const events: DashboardEvent[] = [
@@ -77,13 +78,9 @@ export default async function UserDashboardShell() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-accent font-bold uppercase">Your Flare</h1>
-          <p className="font-heading text-4xl font-bold sm:text-5xl">Good to see you.</p>
-        </div>
-        <p className="text-muted text-sm">Your saved plans, all in one place.</p>
-      </div>
+      <PageHeading accentText="Your Flare" subText="Your saved plans, all in one place.">
+        Good to see you.
+      </PageHeading>
       <div className="flex flex-wrap items-end justify-between gap-2">
         <h2 className="font-heading text-3xl font-bold">Next Up</h2>
         <p className="text-accent">{events.length} saved events</p>

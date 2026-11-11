@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'firebase/auth';
-import { auth } from '@/lib/firebase/auth/configs/clientApp';
+import { signOutUser } from '@/lib/firebase/auth/signOutUser';
 
 export default function MainBannerMenu({
   children,
@@ -43,21 +42,7 @@ export default function MainBannerMenu({
 
   async function handleSignOut() {
     setOpen(false);
-
-    // Clear server session so SSR auth checks stay in sync with Firebase client auth.
-    try {
-      await fetch('/api/auth/signout', { method: 'POST' });
-    } catch (error) {
-      console.error('Failed to clear server session', error);
-    }
-
-    try {
-      await signOut(auth);
-      router.push('/signin');
-      router.refresh();
-    } catch (error) {
-      console.error('Failed to sign out', error);
-    }
+    await signOutUser(router);
   }
 
   return (
