@@ -2,15 +2,24 @@
 
 import { useEffect, useState } from 'react';
 import { useAsyncList } from '@react-stately/data';
-import { LocationInput } from '@/lib/schemas/LocationInputSchema';
+import type { ReactNode } from 'react';
+import type { LocationInput } from '@/lib/schemas/LocationInputSchema';
+import HeroAutocomplete, {
+  type HeroAutocompleteOption,
+} from '@/components/inputs/hero/autocomplete/HeroAutocomplete';
 
-interface placeOption {
+interface PlaceOption {
   label: string;
   value: string;
 }
 
-interface placeSearchProps {
+type GetPlaces = typeof import('@/lib/utils/places/getPlaces/getPlaces').default;
+type GetPlaceDetails =
+  typeof import('@/lib/utils/places/getPlaceDetails/getPlaceDetails').getPlaceDetails;
+
+interface PlaceSearchProps {
   label?: string;
+  description?: ReactNode;
   required?: boolean;
   z?: string;
   value?: LocationInput | null;
@@ -19,16 +28,36 @@ interface placeSearchProps {
 
 export default function PlaceSearch({
   label,
+  description,
   required = true,
   z,
   value,
   onChange,
-}: placeSearchProps) {
+}: PlaceSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [getPlaces, setGetPlaces] = useState<null | Function>(null);
-  const [getPlaceDetails, setGetPlaceDetails] = useState<null | Function>(null);
-  const [locationSelect, setLocationSelect] = useState<null | LocationInput>(value ?? null);
+  const [getPlaces, setGetPlaces] = useState<GetPlaces | null>(null);
+  const [getPlaceDetails, setGetPlaceDetails] = useState<GetPlaceDetails | null>(null);
+  const [locationSelect, setLocationSelect] = useState<LocationInput | null>(value ?? null);
+  const [selectedKey, setSelectedKey] = useState<string | null>(
+    value ? JSON.stringify(value) : null
+  );
   const [selectedLabel, setSelectedLabel] = useState<string>(value?.address ?? '');
+
+  const list = useAsyncList<PlaceOption>({
+    async load({ filterText }) {
+      if (!getPlaces || !filterText) return { items: [] };
+      const requestId = Date.now();
+      return {
+        items: await getPlaces(
+          filterText,
+          requestId,
+          requestId,
+          userLocation?.lat,
+          userLocation?.lng
+        ),
+      };
+    },
+  });
 
   // Get user location once
   useEffect(() => {
@@ -66,41 +95,51 @@ export default function PlaceSearch({
   useEffect(() => {
     if (value) {
       setLocationSelect(value);
+      setSelectedKey(JSON.stringify(value));
       setSelectedLabel(value.address);
       list.setFilterText(value.address);
       return;
     }
 
     setLocationSelect(null);
+    setSelectedKey(null);
     setSelectedLabel('');
     list.setFilterText('');
   }, [value]);
 
-  // Async list for autocomplete
-  let list = useAsyncList<placeOption>({
-    async load({ filterText }) {
-      if (!getPlaces || !filterText) return { items: [] };
-      const suggestions = await getPlaces(
-        filterText,
-        Date.now(),
-        Date.now(),
-        userLocation?.lat,
-        userLocation?.lng
-      );
-      return { items: suggestions };
-    },
-  });
+  function handleSearchValueChange(searchValue: string) {
+    list.setFilterText(searchValue);
+    if (searchValue !== selectedLabel) {
+      setLocationSelect(null);
+      setSelectedKey(null);
+      setSelectedLabel('');
+    }
+  }
 
-  async function handleSelection(key: React.Key | null) {
-    if (!key || !getPlaceDetails) return;
+  async function handleSelection(key: string | null) {
+    if (!key) {
+      setLocationSelect(null);
+      setSelectedKey(null);
+      setSelectedLabel('');
+      return;
+    }
+
+    if (locationSelect && key === JSON.stringify(locationSelect)) return;
+    if (!getPlaceDetails) return;
     const selected = list.items.find((item) => item.value === key);
     if (!selected) return;
 
+    setSelectedKey(selected.value);
     setSelectedLabel(selected.label);
     list.setFilterText(selected.label);
 
     const place = await getPlaceDetails(selected.value);
-    if (!place || !place.place.location) return;
+    if (!place?.place.location) {
+      setLocationSelect(null);
+      setSelectedKey(null);
+      setSelectedLabel('');
+      return;
+    }
 
     const location: LocationInput = {
       placeId: place.place.id,
@@ -111,41 +150,36 @@ export default function PlaceSearch({
     };
 
     setLocationSelect(location);
+    setSelectedKey(JSON.stringify(location));
     onChange(location);
+  }
+
+  const options: HeroAutocompleteOption[] = list.items.map((item) => ({
+    id: item.value,
+    label: item.label,
+  }));
+  if (selectedKey && !options.some((option) => option.id === selectedKey)) {
+    options.unshift({
+      id: selectedKey,
+      label: locationSelect?.address ?? selectedLabel,
+    });
   }
 
   return (
     <>
-      <label className="flex w-full flex-col gap-1">
-        <span>{label ?? 'Select Location'}</span>
-        <input
-          required={required}
-          placeholder="Type to search..."
-          value={list.filterText}
-          list="location-search-options"
-          data-cy="location-input"
-          onChange={(event) => {
-            const text = event.currentTarget.value;
-            list.setFilterText(text);
-            const selected = list.items.find((item) => item.label === text);
-            if (selected) {
-              void handleSelection(selected.value);
-              return;
-            }
-            if (text !== selectedLabel) {
-              setSelectedLabel('');
-              setLocationSelect(null);
-            }
-          }}
-          className="min-h-11 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2"
-        />
-        <datalist id="location-search-options">
-          {list.items.map((item) => (
-            <option key={item.value} value={item.label} />
-          ))}
-        </datalist>
-      </label>
-      <input type="hidden" name="location" value={JSON.stringify(locationSelect)} />
+      <HeroAutocomplete
+        label={label}
+        name={locationSelect ? 'location' : undefined}
+        placeholder="Type to search..."
+        description={description}
+        searchValue={list.filterText}
+        selectedKey={selectedKey}
+        options={options}
+        required={required}
+        isLoading={list.isLoading}
+        onSearchValueChange={handleSearchValueChange}
+        onSelectionChange={(key) => void handleSelection(key)}
+      />
     </>
   );
 }

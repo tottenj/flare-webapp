@@ -6,6 +6,29 @@ import type { ComponentProps } from 'react';
 import HeroInput from './HeroInput';
 
 jest.mock('@heroui/react', () => ({
+  TextField: ({
+    children,
+    name,
+    type,
+    isRequired,
+    isInvalid,
+  }: {
+    children: React.ReactNode;
+    name?: string;
+    type?: string;
+    isRequired?: boolean;
+    isInvalid?: boolean;
+  }) => (
+    <div
+      data-testid="text-field"
+      data-name={name}
+      data-type={type}
+      data-required={isRequired}
+      data-invalid={isInvalid}
+    >
+      {children}
+    </div>
+  ),
   Input: ({
     variant,
     fullWidth,
@@ -16,6 +39,8 @@ jest.mock('@heroui/react', () => ({
   Label: ({ isRequired, ...props }: ComponentProps<'label'> & { isRequired?: boolean }) => (
     <label {...props} data-required={isRequired} />
   ),
+  Description: ({ children, ...props }: ComponentProps<'p'>) => <p {...props}>{children}</p>,
+  FieldError: ({ children, ...props }: ComponentProps<'p'>) => <p {...props}>{children}</p>,
 }));
 
 describe('HeroInput', () => {
@@ -31,22 +56,31 @@ describe('HeroInput', () => {
       />
     );
 
-    const input = screen.getByRole('textbox', { name: 'Email' });
+    const input = screen.getByRole('textbox');
     expect(input).toHaveAttribute('data-cy', 'email-input');
-    expect(input).toHaveAttribute('type', 'email');
     expect(input).toHaveAttribute('placeholder', 'Email address');
     expect(input).toHaveAttribute('data-variant', 'secondary');
     expect(input).toHaveAttribute('data-full-width', 'true');
-    expect(input).toBeRequired();
+    expect(screen.getByTestId('text-field')).toHaveAttribute('data-name', 'email');
+    expect(screen.getByTestId('text-field')).toHaveAttribute('data-type', 'email');
+    expect(screen.getByTestId('text-field')).toHaveAttribute('data-required', 'true');
   });
 
   it('preserves invalid state, error text, and the fallback selector', () => {
     render(<HeroInput label="Name" isInvalid errorMessage="Name is invalid" />);
 
-    const input = screen.getByRole('textbox', { name: 'Name' });
+    const input = screen.getByRole('textbox');
     expect(input).toHaveAttribute('data-cy', 'input-input');
-    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByTestId('text-field')).toHaveAttribute('data-invalid', 'true');
     expect(screen.getByText('Name is invalid')).toBeInTheDocument();
+  });
+
+  it('renders a muted description below the input', () => {
+    render(<HeroInput label="Organization Name" description="Use the name people know you by." />);
+
+    const description = screen.getByText('Use the name people know you by.');
+    expect(description.tagName).toBe('P');
+    expect(description).toHaveClass('text-sm', 'text-muted');
   });
 
   it('forwards label props to the HeroUI label', () => {
@@ -61,6 +95,6 @@ describe('HeroInput', () => {
     const label = screen.getByTitle('Email label');
     expect(label).toHaveClass('custom-label');
     expect(label).toHaveAttribute('data-required', 'true');
-    expect(screen.getByRole('textbox', { name: 'Email' })).toHaveAttribute('name', 'email');
+    expect(screen.getByTestId('text-field')).toHaveAttribute('data-name', 'email');
   });
 });

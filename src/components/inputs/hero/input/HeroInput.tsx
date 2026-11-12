@@ -1,7 +1,8 @@
-import { Input } from '@heroui/react';
-import type { ComponentProps } from 'react';
+import { FieldError, Input, TextField } from '@heroui/react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import Label, { type LabelProps } from '../label/Label';
+import HeroDescription from '../description/HeroDescription';
 
 export type HeroInputProps = ComponentProps<typeof Input> & {
   label?: string;
@@ -9,6 +10,7 @@ export type HeroInputProps = ComponentProps<typeof Input> & {
   isRequired?: boolean;
   isInvalid?: boolean;
   errorMessage?: string;
+  description?: ReactNode;
 };
 
 export default function HeroInput({
@@ -17,25 +19,24 @@ export default function HeroInput({
   isRequired,
   isInvalid,
   errorMessage,
+  description,
   ...props
 }: HeroInputProps) {
-  const required = props.required ?? isRequired;
+  const { name, type, required: nativeRequired, ...inputProps } = props;
+  const required = nativeRequired ?? isRequired;
+
   return (
-    <div className="flex w-full flex-col gap-1">
-      <Label
-        {...labelProps}
-        className={`flex w-full flex-col gap-1 ${labelProps?.className ?? ''}`}
-      >
-        {labelProps?.children ?? label}
-        <Input
-          fullWidth
-          data-cy={`${props.name ?? 'input'}-input`}
-          aria-invalid={isInvalid || undefined}
-          required={required}
-          {...props}
-        />
-      </Label>
-      {errorMessage && <span className="text-sm text-red-700">{errorMessage}</span>}
-    </div>
+    <TextField
+      className="flex w-full flex-col gap-1"
+      name={name}
+      type={type}
+      isRequired={required}
+      isInvalid={isInvalid ?? (errorMessage != null ? true : undefined)}
+    >
+      <Label {...labelProps}>{labelProps?.children ?? label}</Label>
+      <Input fullWidth data-cy={`${name ?? 'input'}-input`} {...inputProps} />
+      {description != null && <HeroDescription>{description}</HeroDescription>}
+      <FieldError>{errorMessage}</FieldError>
+    </TextField>
   );
 }
