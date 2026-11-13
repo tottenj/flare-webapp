@@ -259,6 +259,9 @@ importers:
       get-orientation:
         specifier: ^1.1.2
         version: 1.1.2(supports-color@8.1.1)
+      little-state-machine:
+        specifier: ^5.0.1
+        version: 5.0.1(react@19.2.4)
       lodash:
         specifier: ^4.17.21
         version: 4.18.1
@@ -6514,6 +6517,11 @@ packages:
   listr2@9.0.5:
     resolution: {integrity: sha512-ME4Fb83LgEgwNw96RKNvKV4VTLuXfoKudAmm2lP8Kk87KaMK0/Xrx/aAkMWmT8mDb+3MlFDspfbCs7adjRxA2g==}
     engines: {node: '>=20.0.0'}
+
+  little-state-machine@5.0.1:
+    resolution: {integrity: sha512-EjP/l1oAq/Woy5ZQULvWjWfQwzTrf/PHA0we/XQHSC+1FVArlBb545n9wsOPky5qNI6mnvEkGsaIejfImO2+/g==}
+    peerDependencies:
+      react: ^18 || ^19
 
   loader-runner@4.3.1:
     resolution: {integrity: sha512-IWqP2SCPhyVFTBtRcgMHdzlf9ul25NwaFx4wCEH/KjAXuuHY4yNjvPXsBokp8jCB936PyWRaPKUNh8NvylLp2Q==}
@@ -15679,6 +15687,10 @@ snapshots:
       log-update: 6.1.0
       rfdc: 1.4.1
       wrap-ansi: 9.0.2
+
+  little-state-machine@5.0.1(react@19.2.4):
+    dependencies:
+      react: 19.2.4
 
   loader-runner@4.3.1: {}
 

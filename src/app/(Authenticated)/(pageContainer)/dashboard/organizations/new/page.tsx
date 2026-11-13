@@ -1,4 +1,4 @@
-import OrganizationForm from '@/components/forms/organizationForm/OrganizationForm';
+import OrganizationForm from '@/features/org-signup/components/OrganizationForm';
 import PageHeading from '@/components/ui/PageHeading/PageHeading';
 import PageSplitSection from '@/components/ui/PageSplitSection/PageSplitSection';
 

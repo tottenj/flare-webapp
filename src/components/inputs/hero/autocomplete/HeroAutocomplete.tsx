@@ -38,7 +38,7 @@ export default function HeroAutocomplete({
   return (
     <Autocomplete
       allowsEmptyCollection
-      className="w-full"
+      className="w-full rounded-md"
       fullWidth
       isRequired={required}
       name={selectedKey == null ? undefined : name}
@@ -52,22 +52,26 @@ export default function HeroAutocomplete({
       }}
     >
       <Label>{label}</Label>
-      <Autocomplete.Trigger>
+      <Autocomplete.Trigger className={'rounded-md pl-2'}>
         <Autocomplete.Value />
         <Autocomplete.ClearButton />
         <Autocomplete.Indicator />
       </Autocomplete.Trigger>
-      <Autocomplete.Popover>
+      <Autocomplete.Popover className={'rounded-md'}>
         <Autocomplete.Filter inputValue={searchValue} onInputChange={onSearchValueChange}>
           <SearchField autoFocus aria-label={`Search ${label.toLowerCase()}`} variant="secondary">
             <SearchField.Group>
               <SearchField.SearchIcon />
-              <SearchField.Input data-cy="location-input" placeholder={placeholder} />
+              <SearchField.Input
+                className={'rounded-sm'}
+                data-cy="location-input"
+                placeholder={placeholder}
+              />
               {isLoading ? <Spinner size="sm" /> : <SearchField.ClearButton />}
             </SearchField.Group>
           </SearchField>
           <ListBox
-            className="max-h-60 overflow-y-auto"
+            className="max-h-60 overflow-y-auto rounded-md"
             items={options}
             renderEmptyState={() => (
               <EmptyState>{isLoading ? 'Searching...' : 'No locations found'}</EmptyState>

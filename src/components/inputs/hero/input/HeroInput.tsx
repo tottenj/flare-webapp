@@ -34,7 +34,7 @@ export default function HeroInput({
       isInvalid={isInvalid ?? (errorMessage != null ? true : undefined)}
     >
       <Label {...labelProps}>{labelProps?.children ?? label}</Label>
-      <Input fullWidth data-cy={`${name ?? 'input'}-input`} {...inputProps} />
+      <Input fullWidth data-cy={`${name ?? 'input'}-input`} {...inputProps} className={`rounded-md ${props.className ?? ''}`} />
       {description != null && <HeroDescription>{description}</HeroDescription>}
       <FieldError>{errorMessage}</FieldError>
     </TextField>

@@ -99,6 +99,7 @@
     "framer-motion": "^12.16.0",
     "geofire-common": "^6.0.0",
     "get-orientation": "^1.1.2",
+    "little-state-machine": "^5.0.1",
     "lodash": "^4.17.21",
     "motion": "^12.23.7",
     "msw-storybook-addon": "^2.0.4",
