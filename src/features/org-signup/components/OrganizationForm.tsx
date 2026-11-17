@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import HeroButton from '@/components/buttons/heroButton/HeroButton';
 import HeroFieldset from '@/components/forms/hero/fieldset/HeroFieldset';
 import HeroForm from '@/components/forms/hero/form/HeroForm';
@@ -8,13 +8,19 @@ import PlaceSearch from '@/components/inputs/placeSearch/PlaceSearch';
 import HeroCard from '@/components/ui/HeroCard/HeroCard';
 import HeroTextArea from '@/components/inputs/hero/textArea/HeroTextArea';
 import HeroProgressBar from '@/components/ui/HeroProgressBar/HeroProgressBar';
-import SocialProof from './SocialProof';
+import { orgSocialProofSchema } from '../schemas/orgCreateSchema';
+import SocialProof, { type SocialProofProps } from './SocialProof';
 
 export default function OrganizationForm() {
   const [step, setStep] = useState(1);
+  const [socialProofErrors, setSocialProofErrors] = useState<SocialProofProps['errors']>();
+  const isFirstStep = step === 1;
+  const isLastStep = step === 3;
 
-  const title =
-    step === 1 ? 'Organization Details' : step === 2 ? 'Contact Information' : 'Social Proof';
+  const titles: Record<number, string> = {1: 'Organization Details', 2: 'Contact Information', 3: 'Social Proof'};
+  const title = titles[step];
+
+ 
 
   return (
     <HeroCard className="w-full border-2 p-8">
@@ -44,26 +50,35 @@ export default function OrganizationForm() {
             <HeroFieldset.Group className="flex flex-col gap-2">
               <HeroInput type="email" label="Organization Email" variant="secondary" />
               <HeroInput type="tel" label="Organization Phone" variant="secondary" />
-              <HeroInput label="Organization Website" variant="secondary" />
+              <HeroInput type="url" label="Organization Website" variant="secondary" />
             </HeroFieldset.Group>
           </HeroFieldset>
         )}
 
-        {step === 3 && (
+        <div hidden={step !== 3}>
           <HeroFieldset>
             <HeroFieldset.Group className="flex flex-col gap-2">
-              <SocialProof platform="twitter" />
+              <SocialProof errors={socialProofErrors} />
             </HeroFieldset.Group>
           </HeroFieldset>
-        )}
+        </div>
 
         <HeroFieldset.Actions>
-          <HeroButton type="button" variant="secondary" onPress={() => setStep((prev) => prev - 1)}>
-            Back
-          </HeroButton>
-          <HeroButton type="button" onPress={() => setStep((prev) => prev + 1)}>
-            Next
-          </HeroButton>
+          {!isFirstStep && (
+            <HeroButton
+              type="button"
+              variant="secondary"
+              onPress={() => setStep((prev) => prev - 1)}
+            >
+              Back
+            </HeroButton>
+          )}
+          {!isLastStep && (
+            <HeroButton type="button" onPress={() => setStep((prev) => prev + 1)}>
+              Next
+            </HeroButton>
+          )}
+          {isLastStep && <HeroButton type="submit">Submit</HeroButton>}
         </HeroFieldset.Actions>
       </HeroForm>
     </HeroCard>
