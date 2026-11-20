@@ -24,6 +24,7 @@ interface PlaceSearchProps {
   z?: string;
   value?: LocationInput | null;
   onChange: (location: LocationInput) => void;
+  onClear?: () => void;
 }
 
 export default function PlaceSearch({
@@ -33,6 +34,7 @@ export default function PlaceSearch({
   z,
   value,
   onChange,
+  onClear,
 }: PlaceSearchProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [getPlaces, setGetPlaces] = useState<GetPlaces | null>(null);
@@ -110,9 +112,11 @@ export default function PlaceSearch({
   function handleSearchValueChange(searchValue: string) {
     list.setFilterText(searchValue);
     if (searchValue !== selectedLabel) {
+      const hadSelection = locationSelect !== null;
       setLocationSelect(null);
       setSelectedKey(null);
       setSelectedLabel('');
+      if (hadSelection) onClear?.();
     }
   }
 
@@ -121,6 +125,7 @@ export default function PlaceSearch({
       setLocationSelect(null);
       setSelectedKey(null);
       setSelectedLabel('');
+      onClear?.();
       return;
     }
 
@@ -138,6 +143,7 @@ export default function PlaceSearch({
       setLocationSelect(null);
       setSelectedKey(null);
       setSelectedLabel('');
+      onClear?.();
       return;
     }
 

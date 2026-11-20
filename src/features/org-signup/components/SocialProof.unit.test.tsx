@@ -1,10 +1,11 @@
 import { expect } from '@jest/globals';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom/jest-globals';
 import type { ComponentProps, ReactNode } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import HeroTextArea from '@/components/inputs/hero/textArea/HeroTextArea';
-import { orgSocialProofSchema } from '../schemas/orgCreateSchema';
+import { orgSocialProofSchema, type orgCreateValues } from '../schemas/orgCreateSchema';
 import OrganizationForm from './OrganizationForm';
 import SocialProof from './SocialProof';
 
@@ -29,6 +30,28 @@ jest.mock(
       </button>
     )
 );
+
+function SocialProofTestForm() {
+  const methods = useForm<orgCreateValues>({
+    defaultValues: {
+      name: '',
+      location: undefined,
+      description: '',
+      email: '',
+      phone: '',
+      website: '',
+      socialProofType: 'twitter',
+      socialProofDetails: '',
+      socialProofFile: undefined,
+    },
+  });
+
+  return (
+    <FormProvider {...methods}>
+      <SocialProof />
+    </FormProvider>
+  );
+}
 
 jest.mock('@heroui/react', () => {
   const React = jest.requireActual<typeof import('react')>('react');
@@ -88,9 +111,14 @@ jest.mock('@heroui/react', () => {
         </div>
       </FieldNameContext.Provider>
     ),
-    TextArea: ({ fullWidth, ...props }: ComponentProps<'textarea'> & { fullWidth?: boolean }) => (
-      <textarea {...props} />
-    ),
+    TextArea: ({
+      fullWidth,
+      name,
+      ...props
+    }: ComponentProps<'textarea'> & { fullWidth?: boolean }) => {
+      const fieldName = React.useContext(FieldNameContext);
+      return <textarea {...props} name={name ?? fieldName} />;
+    },
     Input: ({ fullWidth, name, ...props }: ComponentProps<'input'> & { fullWidth?: boolean }) => {
       const fieldName = React.useContext(FieldNameContext);
       return <input {...props} name={name ?? fieldName} />;
@@ -124,8 +152,7 @@ describe('HeroTextArea', () => {
 
 describe('SocialProof', () => {
   it('switches proof types and forwards the selected file', () => {
-    const onChange = jest.fn();
-    render(<SocialProof onChange={onChange} />);
+    render(<SocialProofTestForm />);
 
     expect(screen.getByText('Twitter / X Handle')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Instagram' }));
@@ -148,24 +175,45 @@ describe('SocialProof', () => {
     expect(input).toHaveAttribute('type', 'file');
     expect(input).toHaveAttribute('name', 'socialProofFile');
     expect(input.files?.[0]).toBe(file);
-    expect(onChange).toHaveBeenCalledTimes(1);
   });
 
-  it('validates proof on submit and preserves it when navigating steps', () => {
+  it('validates proof on submit and preserves values when navigating steps', async () => {
     render(<OrganizationForm />);
 
+    fireEvent.change(document.querySelector('input[name="name"]')!, {
+      target: { value: 'Community Group' },
+    });
+    fireEvent.change(document.querySelector('textarea[name="description"]')!, {
+      target: { value: 'A local community group' },
+    });
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    await waitFor(() => expect(screen.getByText(/Step 2 of 3/)).toBeInTheDocument());
+
+    fireEvent.change(document.querySelector('input[name="email"]')!, {
+      target: { value: 'group@example.org' },
+    });
+    fireEvent.change(document.querySelector('input[name="phone"]')!, {
+      target: { value: '555-0100' },
+    });
+    fireEvent.change(document.querySelector('input[name="website"]')!, {
+      target: { value: 'https://example.org' },
+    });
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    await waitFor(() => expect(screen.getByText(/Step 3 of 3/)).toBeInTheDocument());
     fireEvent.click(screen.getByRole('button', { name: 'Other' }));
     fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
-    expect(screen.getByText('Enter a link, handle, or explanation')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText('Enter a link, handle, or explanation')).toBeInTheDocument()
+    );
 
     const details = within(screen.getByText('Proof description').parentElement!).getByRole(
       'textbox'
     );
     fireEvent.change(details, { target: { value: 'Community newsletter' } });
     fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
-    expect(screen.queryByText('Enter a link, handle, or explanation')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryByText('Enter a link, handle, or explanation')).not.toBeInTheDocument()
+    );
 
     const input = screen.getByLabelText('Proof file') as HTMLInputElement;
     const file = new File(['proof'], 'proof.png', { type: 'image/png' });
